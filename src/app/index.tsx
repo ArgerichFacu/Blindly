@@ -14,6 +14,7 @@ import {
   type Nivel,
   type Preset,
 } from "../lib/niveles";
+import { crearSala } from "../lib/salas";
 
 const SONIDO_CAMBIO = require("../../assets/sounds/campana.wav");
 
@@ -31,6 +32,7 @@ export default function Index() {
   const [acumulado, setAcumulado] = useState(0);
   const [inicio, setInicio] = useState<number | null>(null);
   const [ahora, setAhora] = useState(Date.now());
+  const [creando, setCreando] = useState(false);
 
   const corriendo = inicio !== null;
   const enReposo = !corriendo && acumulado === 0;
@@ -122,6 +124,25 @@ export default function Index() {
     ]);
   }
 
+  // Crea la sala en Supabase con los niveles elegidos y abre la pantalla del código y el QR
+  async function crearYAbrirSala() {
+    if (creando) return;
+    setCreando(true);
+    try {
+      const sala = await crearSala(niveles);
+      router.push({ pathname: "/sala", params: { codigo: sala.codigo } });
+    } catch (e) {
+      console.warn("crearSala falló:", e);
+      const mensaje =
+        typeof e === "object" && e !== null && "message" in e
+          ? String((e as { message: unknown }).message)
+          : "Probá de nuevo.";
+      Alert.alert("No se pudo crear la sala", mensaje);
+    } finally {
+      setCreando(false);
+    }
+  }
+
   const puedeRetroceder = transcurrido > 0;
   const puedeAvanzar = !estado.terminado && estado.indice < niveles.length - 1;
 
@@ -207,6 +228,12 @@ export default function Index() {
           <Text style={styles.textoNav}>Siguiente ▶</Text>
         </Pressable>
       </View>
+
+      {enReposo && (
+        <Pressable style={styles.botonSala} onPress={crearYAbrirSala} disabled={creando}>
+          <Text style={styles.textoSala}>{creando ? "Creando sala..." : "Crear sala"}</Text>
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -263,4 +290,13 @@ const styles = StyleSheet.create({
   },
   textoNav: { color: "#9fd8c0", fontSize: 16, fontWeight: "600" },
   deshabilitado: { opacity: 0.3 },
+  botonSala: {
+    marginTop: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 22,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#f5c542",
+  },
+  textoSala: { color: "#f5c542", fontSize: 17, fontWeight: "600" },
 });
