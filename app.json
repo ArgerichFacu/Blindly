@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "ciegas-poker",
-    "slug": "ciegas-poker",
+    "name": "blindly",
+    "slug": "blindly",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "ciegaspoker",
+    "scheme": "blindly",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
