@@ -230,9 +230,15 @@ export default function Index() {
       </View>
 
       {enReposo && (
-        <Pressable style={styles.botonSala} onPress={crearYAbrirSala} disabled={creando}>
-          <Text style={styles.textoSala}>{creando ? "Creando sala..." : "Crear sala"}</Text>
-        </Pressable>
+        <View style={styles.filaSala}>
+          <Pressable style={styles.botonSala} onPress={crearYAbrirSala} disabled={creando}>
+            <Text style={styles.textoSala}>{creando ? "Creando sala..." : "Crear sala"}</Text>
+          </Pressable>
+
+          <Pressable style={styles.botonSala} onPress={() => router.push("/unirse")}>
+            <Text style={styles.textoSala}>Unirme</Text>
+          </Pressable>
+        </View>
       )}
     </View>
   );
@@ -290,8 +296,8 @@ const styles = StyleSheet.create({
   },
   textoNav: { color: "#9fd8c0", fontSize: 16, fontWeight: "600" },
   deshabilitado: { opacity: 0.3 },
+  filaSala: { flexDirection: "row", gap: 12, marginTop: 20 },
   botonSala: {
-    marginTop: 20,
     paddingVertical: 12,
     paddingHorizontal: 22,
     borderRadius: 12,
