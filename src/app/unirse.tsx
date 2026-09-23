@@ -1,19 +1,35 @@
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { CameraView, useCameraPermissions } from "expo-camera";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  Vibration,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { unirseASala } from "../lib/jugadores";
+import { describir, estadoActual, numeroDeNivel } from "../lib/niveles";
+import { suscribirseASala, type Sala } from "../lib/salas";
+import { supabase } from "../lib/supabase";
+import { ahoraServidor, sincronizarReloj } from "../lib/tiempoServidor";
 
 const PREFIJO_QR = "BLINDLY:";
+const SONIDO_CAMBIO = require("../../assets/sounds/campana.wav");
+
+function formatear(ms: number) {
+  const totalSegundos = Math.ceil(ms / 1000);
+  const min = Math.floor(totalSegundos / 60);
+  const seg = totalSegundos % 60;
+  return `${String(min).padStart(2, "0")}:${String(seg).padStart(2, "0")}`;
+}
 
 export default function Unirse() {
   const router = useRouter();
@@ -21,7 +37,7 @@ export default function Unirse() {
   const [nombre, setNombre] = useState("");
   const [codigo, setCodigo] = useState("");
   const [uniendo, setUniendo] = useState(false);
-  const [unidoA, setUnidoA] = useState<string | null>(null);
+  const [sala, setSala] = useState<Sala | null>(null);
   const [escaneando, setEscaneando] = useState(false);
   const [aviso, setAviso] = useState<string | null>(null);
   const ultimoLeido = useRef(0);
@@ -38,7 +54,6 @@ export default function Unirse() {
     setEscaneando(true);
   }
 
-  // Se llama varias veces por segundo mientras el QR esté a la vista
   function alLeerQr({ data }: { data: string }) {
     const ahora = Date.now();
     if (ahora - ultimoLeido.current < 1500) return;
@@ -67,8 +82,9 @@ export default function Unirse() {
     setAviso(null);
     setUniendo(true);
     try {
-      const sala = await unirseASala(codigo, nombre);
-      setUnidoA(sala.codigo);
+      await sincronizarReloj();
+      const salaUnida = await unirseASala(codigo, nombre);
+      setSala(salaUnida);
     } catch (e) {
       setAviso(
         typeof e === "object" && e !== null && "message" in e
@@ -80,17 +96,9 @@ export default function Unirse() {
     }
   }
 
-  if (unidoA) {
-    return (
-      <SafeAreaView style={[styles.contenedor, styles.centrado]}>
-        <Text style={styles.titulo}>¡Listo, {nombre.trim()}!</Text>
-        <Text style={styles.codigoGrande}>{unidoA}</Text>
-        <Text style={styles.ayuda}>Ya estás en la sala. Esperando que el host arranque la partida.</Text>
-        <Pressable style={styles.botonSecundario} onPress={() => router.back()}>
-          <Text style={styles.textoSecundario}>Volver</Text>
-        </Pressable>
-      </SafeAreaView>
-    );
+  // Ya unido: se suscribe a la sala para ver el reloj en vivo
+  if (sala) {
+    return <VistaJugador salaInicial={sala} nombre={nombre.trim()} onVolver={() => router.back()} />;
   }
 
   if (escaneando) {
@@ -163,12 +171,107 @@ export default function Unirse() {
   );
 }
 
+// Pantalla que ve el jugador una vez unido: el reloj de la sala en vivo
+function VistaJugador({
+  salaInicial,
+  nombre,
+  onVolver,
+}: {
+  salaInicial: Sala;
+  nombre: string;
+  onVolver: () => void;
+}) {
+  const [sala, setSala] = useState(salaInicial);
+  const [ahora, setAhora] = useState(Date.now());
+
+  useEffect(() => {
+    const canal = suscribirseASala(salaInicial.id, setSala);
+    return () => {
+      supabase.removeChannel(canal);
+    };
+  }, [salaInicial.id]);
+
+  const corriendo = sala.estado === "jugando";
+
+  useEffect(() => {
+    if (!corriendo) return;
+    const id = setInterval(() => setAhora(Date.now()), 250);
+    return () => clearInterval(id);
+  }, [corriendo]);
+
+  useEffect(() => {
+    if (!corriendo) return;
+    activateKeepAwakeAsync().catch(() => {});
+    return () => {
+      deactivateKeepAwake();
+    };
+  }, [corriendo]);
+
+  const transcurrido =
+    sala.acumulado_ms +
+    (sala.inicio_en
+      ? Math.max(0, ahora + (ahoraServidor() - ahora) - new Date(sala.inicio_en).getTime())
+      : 0);
+  const estado = estadoActual(sala.niveles, transcurrido);
+  const nivel = sala.niveles[estado.indice];
+  const siguienteNivel = sala.niveles[estado.indice + 1];
+
+  const indiceAnterior = useRef(estado.indice);
+  const player = useAudioPlayer(SONIDO_CAMBIO);
+
+  useEffect(() => {
+    setAudioModeAsync({ playsInSilentMode: true });
+  }, []);
+
+  useEffect(() => {
+    if (estado.indice > indiceAnterior.current) {
+      Vibration.vibrate([0, 400, 200, 400]);
+      player.seekTo(0);
+      player.play();
+    }
+    indiceAnterior.current = estado.indice;
+  }, [estado.indice]);
+
+  const titulo =
+    sala.estado === "esperando"
+      ? "ESPERANDO AL HOST"
+      : estado.terminado
+        ? "FIN DE LA LISTA"
+        : nivel.esBreak
+          ? "BREAK"
+          : `NIVEL ${numeroDeNivel(sala.niveles, estado.indice)}`;
+
+  return (
+    <SafeAreaView style={styles.contenedor}>
+      <ScrollView contentContainerStyle={styles.contenidoJugador}>
+        <Text style={styles.bienvenida}>{nombre}</Text>
+        <Text style={styles.codigoChico}>Sala {sala.codigo}</Text>
+
+        <Text style={styles.etiqueta}>{titulo}</Text>
+        <Text style={styles.tiempo}>{formatear(estado.msRestantes)}</Text>
+
+        {sala.estado !== "esperando" && !nivel.esBreak && (
+          <Text style={styles.ciegas}>
+            Ciegas {nivel.smallBlind} / {nivel.bigBlind}
+          </Text>
+        )}
+        {sala.estado !== "esperando" && siguienteNivel && (
+          <Text style={styles.siguiente}>Siguiente: {describir(siguienteNivel)}</Text>
+        )}
+
+        <Pressable style={styles.botonSecundario} onPress={onVolver}>
+          <Text style={styles.textoSecundario}>Salir</Text>
+        </Pressable>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
 const styles = StyleSheet.create({
   contenedor: { flex: 1, backgroundColor: "#0b3d2e" },
-  centrado: { alignItems: "center", justifyContent: "center", padding: 20 },
   formulario: { flex: 1, padding: 20, justifyContent: "center" },
   titulo: { color: "#ffffff", fontSize: 26, fontWeight: "bold", marginBottom: 24 },
-  etiqueta: { color: "#9fd8c0", fontSize: 14, marginBottom: 6, letterSpacing: 1 },
+  etiqueta: { color: "#9fd8c0", fontSize: 18, letterSpacing: 4, marginTop: 8 },
   input: {
     backgroundColor: "#0f4d3a",
     color: "#ffffff",
@@ -199,7 +302,7 @@ const styles = StyleSheet.create({
   },
   textoPrincipal: { color: "#0b3d2e", fontSize: 20, fontWeight: "bold" },
   botonSecundario: {
-    marginTop: 16,
+    marginTop: 24,
     paddingVertical: 12,
     paddingHorizontal: 28,
     borderRadius: 12,
@@ -208,14 +311,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textoSecundario: { color: "#9fd8c0", fontSize: 18, fontWeight: "600" },
-  codigoGrande: {
-    color: "#f5c542",
-    fontSize: 56,
-    fontWeight: "bold",
-    letterSpacing: 8,
-    marginVertical: 12,
-  },
-  ayuda: { color: "#9fd8c0", fontSize: 16, textAlign: "center", marginTop: 8 },
   camara: { flex: 1, backgroundColor: "#000000" },
   capa: {
     ...StyleSheet.absoluteFill,
@@ -241,4 +336,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     marginBottom: 12,
   },
+  contenidoJugador: { flexGrow: 1, alignItems: "center", justifyContent: "center", padding: 20 },
+  bienvenida: { color: "#ffffff", fontSize: 24, fontWeight: "bold" },
+  codigoChico: { color: "#9fd8c0", fontSize: 16, letterSpacing: 2, marginTop: 4, marginBottom: 24 },
+  tiempo: { color: "#ffffff", fontSize: 80, fontWeight: "bold" },
+  ciegas: { color: "#f5c542", fontSize: 26, marginTop: 6 },
+  siguiente: { color: "#9fd8c0", fontSize: 16, marginTop: 14 },
 });
