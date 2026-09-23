@@ -1,45 +1,80 @@
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
-    Alert,
     KeyboardAvoidingView,
     Platform,
     Pressable,
     StyleSheet,
     Text,
-    TextInput
+    TextInput,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { unirseASala } from "../lib/jugadores";
 
+const PREFIJO_QR = "BLINDLY:";
+
 export default function Unirse() {
   const router = useRouter();
+  const [permiso, pedirPermiso] = useCameraPermissions();
   const [nombre, setNombre] = useState("");
   const [codigo, setCodigo] = useState("");
   const [uniendo, setUniendo] = useState(false);
   const [unidoA, setUnidoA] = useState<string | null>(null);
+  const [escaneando, setEscaneando] = useState(false);
+  const [aviso, setAviso] = useState<string | null>(null);
+  const ultimoLeido = useRef(0);
+
+  async function abrirCamara() {
+    setAviso(null);
+    if (!permiso?.granted) {
+      const respuesta = await pedirPermiso();
+      if (!respuesta.granted) {
+        setAviso("Sin permiso de cámara no se puede escanear. Podés escribir el código a mano.");
+        return;
+      }
+    }
+    setEscaneando(true);
+  }
+
+  // Se llama varias veces por segundo mientras el QR esté a la vista
+  function alLeerQr({ data }: { data: string }) {
+    const ahora = Date.now();
+    if (ahora - ultimoLeido.current < 1500) return;
+    ultimoLeido.current = ahora;
+
+    if (data.startsWith(PREFIJO_QR)) {
+      setCodigo(data.slice(PREFIJO_QR.length).trim().toUpperCase());
+      setAviso(null);
+      setEscaneando(false);
+    } else {
+      setAviso("Ese QR no es de una sala de Blindly.");
+    }
+  }
 
   async function unirme() {
     if (uniendo) return;
     if (!nombre.trim()) {
-      Alert.alert("Falta tu nombre", "Escribí cómo querés que te vean en la mesa.");
+      setAviso("Escribí cómo querés que te vean en la mesa.");
       return;
     }
     if (!codigo.trim()) {
-      Alert.alert("Falta el código", "Escribí el código que muestra el host.");
+      setAviso("Escribí el código de la sala o escaneá el QR del host.");
       return;
     }
 
+    setAviso(null);
     setUniendo(true);
     try {
       const sala = await unirseASala(codigo, nombre);
       setUnidoA(sala.codigo);
     } catch (e) {
-      const mensaje =
+      setAviso(
         typeof e === "object" && e !== null && "message" in e
           ? String((e as { message: unknown }).message)
-          : "Probá de nuevo.";
-      Alert.alert("No se pudo unir", mensaje);
+          : "No se pudo unir. Probá de nuevo."
+      );
     } finally {
       setUniendo(false);
     }
@@ -55,6 +90,28 @@ export default function Unirse() {
           <Text style={styles.textoSecundario}>Volver</Text>
         </Pressable>
       </SafeAreaView>
+    );
+  }
+
+  if (escaneando) {
+    return (
+      <View style={styles.camara}>
+        <CameraView
+          style={StyleSheet.absoluteFill}
+          facing="back"
+          barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
+          onBarcodeScanned={alLeerQr}
+        />
+        <SafeAreaView style={styles.capa}>
+          <View style={styles.cartel}>
+            <Text style={styles.cartelTexto}>Apuntá al QR de la sala</Text>
+            {aviso && <Text style={styles.cartelAviso}>{aviso}</Text>}
+          </View>
+          <Pressable style={styles.botonCancelarCamara} onPress={() => setEscaneando(false)}>
+            <Text style={styles.textoSecundario}>Cancelar</Text>
+          </Pressable>
+        </SafeAreaView>
+      </View>
     );
   }
 
@@ -88,6 +145,12 @@ export default function Unirse() {
           maxLength={5}
         />
 
+        <Pressable style={styles.botonEscanear} onPress={abrirCamara}>
+          <Text style={styles.textoEscanear}>📷 Escanear QR</Text>
+        </Pressable>
+
+        {aviso && <Text style={styles.aviso}>{aviso}</Text>}
+
         <Pressable style={styles.botonPrincipal} onPress={unirme} disabled={uniendo}>
           <Text style={styles.textoPrincipal}>{uniendo ? "Uniéndome..." : "Unirme"}</Text>
         </Pressable>
@@ -117,7 +180,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
   },
-  inputCodigo: { letterSpacing: 6, fontWeight: "bold", textAlign: "center", fontSize: 28 },
+  inputCodigo: { letterSpacing: 6, fontWeight: "bold", textAlign: "center", fontSize: 28, marginBottom: 12 },
+  botonEscanear: {
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#f5c542",
+    paddingVertical: 12,
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  textoEscanear: { color: "#f5c542", fontSize: 18, fontWeight: "600" },
+  aviso: { color: "#ff8a80", fontSize: 15, marginBottom: 14, textAlign: "center" },
   botonPrincipal: {
     backgroundColor: "#f5c542",
     borderRadius: 12,
@@ -143,4 +216,29 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   ayuda: { color: "#9fd8c0", fontSize: 16, textAlign: "center", marginTop: 8 },
+  camara: { flex: 1, backgroundColor: "#000000" },
+  capa: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,
+  },
+  cartel: {
+    backgroundColor: "rgba(11, 61, 46, 0.85)",
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    alignItems: "center",
+  },
+  cartelTexto: { color: "#ffffff", fontSize: 18, fontWeight: "600" },
+  cartelAviso: { color: "#ff8a80", fontSize: 15, marginTop: 6, textAlign: "center" },
+  botonCancelarCamara: {
+    backgroundColor: "rgba(11, 61, 46, 0.85)",
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#9fd8c0",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    marginBottom: 12,
+  },
 });
