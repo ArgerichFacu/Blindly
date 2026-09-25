@@ -8,8 +8,8 @@ import {
   guardarPresetId,
 } from "../lib/almacenamiento";
 import { NIVELES_REGULAR, type Nivel } from "../lib/niveles";
+import { useTema } from "../lib/TemaContext";
 
-// Mientras se edita, los números se guardan como texto para poder borrar y escribir libremente
 type Fila = { id: number; sb: string; bb: string; min: string; esBreak: boolean };
 
 let contador = 0;
@@ -32,16 +32,27 @@ function Campo({
   etiqueta,
   valor,
   onChange,
+  colorEtiqueta,
+  colorInput,
+  colorBorde,
+  colorFondo,
 }: {
   etiqueta: string;
   valor: string;
   onChange: (texto: string) => void;
+  colorEtiqueta: string;
+  colorInput: string;
+  colorBorde: string;
+  colorFondo: string;
 }) {
   return (
     <View style={styles.campo}>
-      <Text style={styles.etiquetaCampo}>{etiqueta}</Text>
+      <Text style={[styles.etiquetaCampo, { color: colorEtiqueta }]}>{etiqueta}</Text>
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          { color: colorInput, borderColor: colorBorde, backgroundColor: colorFondo },
+        ]}
         value={valor}
         onChangeText={onChange}
         keyboardType="numeric"
@@ -53,6 +64,7 @@ function Campo({
 
 export default function Editor() {
   const router = useRouter();
+  const { tema } = useTema();
   const [filas, setFilas] = useState<Fila[]>([]);
 
   useEffect(() => {
@@ -124,14 +136,14 @@ export default function Editor() {
   }
 
   return (
-    <SafeAreaView style={styles.contenedor}>
+    <SafeAreaView style={[styles.contenedor, { backgroundColor: tema.fondo }]}>
       <View style={styles.encabezado}>
         <Pressable onPress={() => router.back()}>
-          <Text style={styles.cancelar}>Cancelar</Text>
+          <Text style={[styles.cancelar, { color: tema.textoSuave }]}>Cancelar</Text>
         </Pressable>
-        <Text style={styles.titulo}>Mis niveles</Text>
+        <Text style={[styles.titulo, { color: tema.textoFuerte }]}>Mis niveles</Text>
         <Pressable onPress={guardar}>
-          <Text style={styles.guardar}>Guardar</Text>
+          <Text style={[styles.guardar, { color: tema.acento }]}>Guardar</Text>
         </Pressable>
       </View>
 
@@ -139,35 +151,65 @@ export default function Editor() {
         {filas.map((f, i) => {
           const numeroNivel = filas.slice(0, i + 1).filter((x) => !x.esBreak).length;
           return (
-            <View key={f.id} style={styles.fila}>
+            <View key={f.id} style={[styles.fila, { backgroundColor: tema.fondoTarjeta }]}>
               <View style={styles.filaTitulo}>
-                <Text style={styles.filaNombre}>
+                <Text style={[styles.filaNombre, { color: tema.acento }]}>
                   {f.esBreak ? "Break" : `Nivel ${numeroNivel}`}
                 </Text>
                 <Pressable onPress={() => borrar(f.id)}>
-                  <Text style={styles.borrar}>Borrar</Text>
+                  <Text style={[styles.borrar, { color: tema.error }]}>Borrar</Text>
                 </Pressable>
               </View>
 
               <View style={styles.campos}>
                 {!f.esBreak && (
                   <>
-                    <Campo etiqueta="Small" valor={f.sb} onChange={(t) => cambiar(f.id, { sb: t })} />
-                    <Campo etiqueta="Big" valor={f.bb} onChange={(t) => cambiar(f.id, { bb: t })} />
+                    <Campo
+                      etiqueta="Small"
+                      valor={f.sb}
+                      onChange={(t) => cambiar(f.id, { sb: t })}
+                      colorEtiqueta={tema.textoSuave}
+                      colorInput={tema.textoFuerte}
+                      colorBorde={tema.textoSuave}
+                      colorFondo={tema.fondo}
+                    />
+                    <Campo
+                      etiqueta="Big"
+                      valor={f.bb}
+                      onChange={(t) => cambiar(f.id, { bb: t })}
+                      colorEtiqueta={tema.textoSuave}
+                      colorInput={tema.textoFuerte}
+                      colorBorde={tema.textoSuave}
+                      colorFondo={tema.fondo}
+                    />
                   </>
                 )}
-                <Campo etiqueta="Minutos" valor={f.min} onChange={(t) => cambiar(f.id, { min: t })} />
+                <Campo
+                  etiqueta="Minutos"
+                  valor={f.min}
+                  onChange={(t) => cambiar(f.id, { min: t })}
+                  colorEtiqueta={tema.textoSuave}
+                  colorInput={tema.textoFuerte}
+                  colorBorde={tema.textoSuave}
+                  colorFondo={tema.fondo}
+                />
               </View>
             </View>
           );
         })}
 
         <View style={styles.agregar}>
-          <Pressable style={styles.botonAgregar} onPress={() => agregar(false)}>
-            <Text style={styles.textoAgregar}>+ Nivel</Text>
+          <Pressable
+            style={[styles.botonAgregar, { borderColor: tema.textoSuave }]}
+            onPress={() => agregar(false)}
+          >
+            <Text style={[styles.textoAgregar, { color: tema.textoSuave }]}>+ Nivel</Text>
           </Pressable>
-          <Pressable style={styles.botonAgregar} onPress={() => agregar(true)}>
-            <Text style={styles.textoAgregar}>+ Break</Text>
+          <Pressable
+            style={[styles.botonAgregar, { borderColor: tema.textoSuave }]}
+            onPress={() => agregar(true)}
+          >
+            <Text style={[styles.textoAgregar, { color: tema.textoSuave }]}>+ Break</Text>
           </Pressable>
         </View>
       </ScrollView>
@@ -176,7 +218,7 @@ export default function Editor() {
 }
 
 const styles = StyleSheet.create({
-  contenedor: { flex: 1, backgroundColor: "#0b3d2e" },
+  contenedor: { flex: 1 },
   encabezado: {
     flexDirection: "row",
     alignItems: "center",
@@ -184,28 +226,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
   },
-  titulo: { color: "#ffffff", fontSize: 20, fontWeight: "bold" },
-  cancelar: { color: "#9fd8c0", fontSize: 17 },
-  guardar: { color: "#f5c542", fontSize: 17, fontWeight: "bold" },
+  titulo: { fontSize: 20, fontWeight: "bold" },
+  cancelar: { fontSize: 17 },
+  guardar: { fontSize: 17, fontWeight: "bold" },
   lista: { padding: 16, gap: 12 },
-  fila: {
-    backgroundColor: "#0f4d3a",
-    borderRadius: 12,
-    padding: 14,
-    gap: 10,
-  },
+  fila: { borderRadius: 12, padding: 14, gap: 10 },
   filaTitulo: { flexDirection: "row", justifyContent: "space-between" },
-  filaNombre: { color: "#f5c542", fontSize: 16, fontWeight: "bold" },
-  borrar: { color: "#ff8a80", fontSize: 15 },
+  filaNombre: { fontSize: 16, fontWeight: "bold" },
+  borrar: { fontSize: 15 },
   campos: { flexDirection: "row", gap: 10 },
   campo: { flex: 1 },
-  etiquetaCampo: { color: "#9fd8c0", fontSize: 13, marginBottom: 4 },
+  etiquetaCampo: { fontSize: 13, marginBottom: 4 },
   input: {
-    backgroundColor: "#0b3d2e",
-    color: "#ffffff",
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#9fd8c0",
     paddingVertical: 8,
     paddingHorizontal: 12,
     fontSize: 18,
@@ -217,8 +251,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: "#9fd8c0",
     borderStyle: "dashed",
   },
-  textoAgregar: { color: "#9fd8c0", fontSize: 17, fontWeight: "600" },
+  textoAgregar: { fontSize: 17, fontWeight: "600" },
 });

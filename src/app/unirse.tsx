@@ -15,10 +15,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { unirseASala } from "../lib/jugadores";
+import { listarJugadores, unirseASala, type Jugador } from "../lib/jugadores";
 import { describir, estadoActual, numeroDeNivel } from "../lib/niveles";
 import { suscribirseASala, type Sala } from "../lib/salas";
 import { supabase } from "../lib/supabase";
+import { useTema } from "../lib/TemaContext";
 import { ahoraServidor, sincronizarReloj } from "../lib/tiempoServidor";
 
 const PREFIJO_QR = "BLINDLY:";
@@ -33,11 +34,13 @@ function formatear(ms: number) {
 
 export default function Unirse() {
   const router = useRouter();
+  const { tema } = useTema();
   const [permiso, pedirPermiso] = useCameraPermissions();
   const [nombre, setNombre] = useState("");
   const [codigo, setCodigo] = useState("");
   const [uniendo, setUniendo] = useState(false);
   const [sala, setSala] = useState<Sala | null>(null);
+  const [jugadorId, setJugadorId] = useState<string | null>(null);
   const [escaneando, setEscaneando] = useState(false);
   const [aviso, setAviso] = useState<string | null>(null);
   const ultimoLeido = useRef(0);
@@ -83,8 +86,9 @@ export default function Unirse() {
     setUniendo(true);
     try {
       await sincronizarReloj();
-      const salaUnida = await unirseASala(codigo, nombre);
+      const { sala: salaUnida, jugadorId: id } = await unirseASala(codigo, nombre);
       setSala(salaUnida);
+      setJugadorId(id);
     } catch (e) {
       setAviso(
         typeof e === "object" && e !== null && "message" in e
@@ -96,9 +100,15 @@ export default function Unirse() {
     }
   }
 
-  // Ya unido: se suscribe a la sala para ver el reloj en vivo
-  if (sala) {
-    return <VistaJugador salaInicial={sala} nombre={nombre.trim()} onVolver={() => router.back()} />;
+  if (sala && jugadorId) {
+    return (
+      <VistaJugador
+        salaInicial={sala}
+        jugadorId={jugadorId}
+        nombre={nombre.trim()}
+        onVolver={() => router.back()}
+      />
+    );
   }
 
   if (escaneando) {
@@ -115,8 +125,8 @@ export default function Unirse() {
             <Text style={styles.cartelTexto}>Apuntá al QR de la sala</Text>
             {aviso && <Text style={styles.cartelAviso}>{aviso}</Text>}
           </View>
-          <Pressable style={styles.botonCancelarCamara} onPress={() => setEscaneando(false)}>
-            <Text style={styles.textoSecundario}>Cancelar</Text>
+          <Pressable style={[styles.botonCancelarCamara, { borderColor: tema.textoSuave }]} onPress={() => setEscaneando(false)}>
+            <Text style={[styles.textoSecundario, { color: tema.textoSuave }]}>Cancelar</Text>
           </Pressable>
         </SafeAreaView>
       </View>
@@ -124,70 +134,93 @@ export default function Unirse() {
   }
 
   return (
-    <SafeAreaView style={styles.contenedor}>
+    <SafeAreaView style={[styles.contenedor, { backgroundColor: tema.fondo }]}>
       <KeyboardAvoidingView
         style={styles.formulario}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <Text style={styles.titulo}>Unirme a una sala</Text>
+        <Text style={[styles.titulo, { color: tema.textoFuerte }]}>Unirme a una sala</Text>
 
-        <Text style={styles.etiqueta}>Tu nombre</Text>
+        <Text style={[styles.etiqueta, { color: tema.textoSuave }]}>Tu nombre</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: tema.fondoTarjeta, borderColor: tema.textoSuave, color: tema.textoFuerte }]}
           value={nombre}
           onChangeText={setNombre}
           placeholder="Ej: Facu"
-          placeholderTextColor="#5f9c86"
+          placeholderTextColor={tema.textoSuave}
           maxLength={30}
         />
 
-        <Text style={styles.etiqueta}>Código de sala</Text>
+        <Text style={[styles.etiqueta, { color: tema.textoSuave }]}>Código de sala</Text>
         <TextInput
-          style={[styles.input, styles.inputCodigo]}
+          style={[
+            styles.input,
+            styles.inputCodigo,
+            { backgroundColor: tema.fondoTarjeta, borderColor: tema.textoSuave, color: tema.textoFuerte },
+          ]}
           value={codigo}
           onChangeText={(t) => setCodigo(t.toUpperCase())}
           placeholder="XXXXX"
-          placeholderTextColor="#5f9c86"
+          placeholderTextColor={tema.textoSuave}
           autoCapitalize="characters"
           autoCorrect={false}
           maxLength={5}
         />
 
-        <Pressable style={styles.botonEscanear} onPress={abrirCamara}>
-          <Text style={styles.textoEscanear}>📷 Escanear QR</Text>
+        <Pressable style={[styles.botonEscanear, { borderColor: tema.acento }]} onPress={abrirCamara}>
+          <Text style={[styles.textoEscanear, { color: tema.acento }]}>📷 Escanear QR</Text>
         </Pressable>
 
-        {aviso && <Text style={styles.aviso}>{aviso}</Text>}
+        {aviso && <Text style={[styles.aviso, { color: tema.error }]}>{aviso}</Text>}
 
-        <Pressable style={styles.botonPrincipal} onPress={unirme} disabled={uniendo}>
-          <Text style={styles.textoPrincipal}>{uniendo ? "Uniéndome..." : "Unirme"}</Text>
+        <Pressable
+          style={[styles.botonPrincipal, { backgroundColor: tema.acento }]}
+          onPress={unirme}
+          disabled={uniendo}
+        >
+          <Text style={[styles.textoPrincipal, { color: tema.acentoTexto }]}>
+            {uniendo ? "Uniéndome..." : "Unirme"}
+          </Text>
         </Pressable>
 
-        <Pressable style={styles.botonSecundario} onPress={() => router.back()}>
-          <Text style={styles.textoSecundario}>Cancelar</Text>
+        <Pressable style={[styles.botonSecundario, { borderColor: tema.textoSuave }]} onPress={() => router.back()}>
+          <Text style={[styles.textoSecundario, { color: tema.textoSuave }]}>Cancelar</Text>
         </Pressable>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
-// Pantalla que ve el jugador una vez unido: el reloj de la sala en vivo
 function VistaJugador({
   salaInicial,
+  jugadorId,
   nombre,
   onVolver,
 }: {
   salaInicial: Sala;
+  jugadorId: string;
   nombre: string;
   onVolver: () => void;
 }) {
+  const { tema } = useTema();
   const [sala, setSala] = useState(salaInicial);
   const [ahora, setAhora] = useState(Date.now());
+  const [jugadores, setJugadores] = useState<Jugador[]>([]);
 
   useEffect(() => {
-    const canal = suscribirseASala(salaInicial.id, setSala);
+    const canalSala = suscribirseASala(salaInicial.id, setSala);
+
+    const recargarJugadores = () => listarJugadores(salaInicial.id).then(setJugadores);
+    recargarJugadores();
+
+    const canalTodos = supabase
+      .channel(`jugadores-de-${salaInicial.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "jugadores" }, recargarJugadores)
+      .subscribe();
+
     return () => {
-      supabase.removeChannel(canal);
+      supabase.removeChannel(canalSala);
+      supabase.removeChannel(canalTodos);
     };
   }, [salaInicial.id]);
 
@@ -242,25 +275,50 @@ function VistaJugador({
           : `NIVEL ${numeroDeNivel(sala.niveles, estado.indice)}`;
 
   return (
-    <SafeAreaView style={styles.contenedor}>
+    <SafeAreaView style={[styles.contenedor, { backgroundColor: tema.fondo }]}>
       <ScrollView contentContainerStyle={styles.contenidoJugador}>
-        <Text style={styles.bienvenida}>{nombre}</Text>
-        <Text style={styles.codigoChico}>Sala {sala.codigo}</Text>
+        <Text style={[styles.bienvenida, { color: tema.textoFuerte }]}>{nombre}</Text>
+        <Text style={[styles.codigoChico, { color: tema.textoSuave }]}>Sala {sala.codigo}</Text>
 
-        <Text style={styles.etiqueta}>{titulo}</Text>
-        <Text style={styles.tiempo}>{formatear(estado.msRestantes)}</Text>
+        <Text style={[styles.etiqueta, { color: tema.textoSuave }]}>{titulo}</Text>
+        <Text style={[styles.tiempo, { color: tema.textoFuerte }]}>{formatear(estado.msRestantes)}</Text>
 
         {sala.estado !== "esperando" && !nivel.esBreak && (
-          <Text style={styles.ciegas}>
+          <Text style={[styles.ciegas, { color: tema.acento }]}>
             Ciegas {nivel.smallBlind} / {nivel.bigBlind}
           </Text>
         )}
         {sala.estado !== "esperando" && siguienteNivel && (
-          <Text style={styles.siguiente}>Siguiente: {describir(siguienteNivel)}</Text>
+          <Text style={[styles.siguiente, { color: tema.textoSuave }]}>Siguiente: {describir(siguienteNivel)}</Text>
         )}
 
-        <Pressable style={styles.botonSecundario} onPress={onVolver}>
-          <Text style={styles.textoSecundario}>Salir</Text>
+        <Text style={[styles.subtitulo, { color: tema.textoFuerte }]}>Mesa ({jugadores.length})</Text>
+        {jugadores.map((j) => (
+          <View
+            key={j.id}
+            style={[
+              styles.filaMesa,
+              { backgroundColor: tema.fondoTarjeta },
+              j.id === jugadorId && { borderWidth: 1.5, borderColor: tema.acento },
+            ]}
+          >
+            <Text
+              style={[
+                styles.nombre,
+                { color: tema.textoFuerte },
+                j.eliminado_en && { color: tema.textoSuave, textDecorationLine: "line-through" },
+              ]}
+            >
+              {j.nombre}
+              {j.user_id === sala.host_id ? " (host)" : ""}
+              {j.eliminado_en ? " (eliminado)" : ""}
+            </Text>
+            <Text style={[styles.fichas, { color: tema.acento }]}>{j.fichas.toLocaleString("es-AR")}</Text>
+          </View>
+        ))}
+
+        <Pressable style={[styles.botonSecundario, { borderColor: tema.textoSuave }]} onPress={onVolver}>
+          <Text style={[styles.textoSecundario, { color: tema.textoSuave }]}>Salir</Text>
         </Pressable>
       </ScrollView>
     </SafeAreaView>
@@ -268,56 +326,28 @@ function VistaJugador({
 }
 
 const styles = StyleSheet.create({
-  contenedor: { flex: 1, backgroundColor: "#0b3d2e" },
+  contenedor: { flex: 1 },
   formulario: { flex: 1, padding: 20, justifyContent: "center" },
-  titulo: { color: "#ffffff", fontSize: 26, fontWeight: "bold", marginBottom: 24 },
-  etiqueta: { color: "#9fd8c0", fontSize: 18, letterSpacing: 4, marginTop: 8 },
-  input: {
-    backgroundColor: "#0f4d3a",
-    color: "#ffffff",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#9fd8c0",
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    fontSize: 20,
-    marginBottom: 20,
-  },
+  titulo: { fontSize: 26, fontWeight: "bold", marginBottom: 24 },
+  etiqueta: { fontSize: 18, letterSpacing: 4, marginTop: 8 },
+  input: { borderRadius: 10, borderWidth: 1, paddingVertical: 12, paddingHorizontal: 14, fontSize: 20, marginBottom: 20 },
   inputCodigo: { letterSpacing: 6, fontWeight: "bold", textAlign: "center", fontSize: 28, marginBottom: 12 },
-  botonEscanear: {
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: "#f5c542",
-    paddingVertical: 12,
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  textoEscanear: { color: "#f5c542", fontSize: 18, fontWeight: "600" },
-  aviso: { color: "#ff8a80", fontSize: 15, marginBottom: 14, textAlign: "center" },
-  botonPrincipal: {
-    backgroundColor: "#f5c542",
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: "center",
-  },
-  textoPrincipal: { color: "#0b3d2e", fontSize: 20, fontWeight: "bold" },
+  botonEscanear: { borderRadius: 12, borderWidth: 2, paddingVertical: 12, alignItems: "center", marginBottom: 16 },
+  textoEscanear: { fontSize: 18, fontWeight: "600" },
+  aviso: { fontSize: 15, marginBottom: 14, textAlign: "center" },
+  botonPrincipal: { borderRadius: 12, paddingVertical: 14, alignItems: "center" },
+  textoPrincipal: { fontSize: 20, fontWeight: "bold" },
   botonSecundario: {
     marginTop: 24,
     paddingVertical: 12,
     paddingHorizontal: 28,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: "#9fd8c0",
     alignItems: "center",
   },
-  textoSecundario: { color: "#9fd8c0", fontSize: 18, fontWeight: "600" },
+  textoSecundario: { fontSize: 18, fontWeight: "600" },
   camara: { flex: 1, backgroundColor: "#000000" },
-  capa: {
-    ...StyleSheet.absoluteFill,
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 20,
-  },
+  capa: { ...StyleSheet.absoluteFill, justifyContent: "space-between", alignItems: "center", padding: 20 },
   cartel: {
     backgroundColor: "rgba(11, 61, 46, 0.85)",
     borderRadius: 12,
@@ -331,15 +361,26 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(11, 61, 46, 0.85)",
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: "#9fd8c0",
     paddingVertical: 12,
     paddingHorizontal: 32,
     marginBottom: 12,
   },
-  contenidoJugador: { flexGrow: 1, alignItems: "center", justifyContent: "center", padding: 20 },
-  bienvenida: { color: "#ffffff", fontSize: 24, fontWeight: "bold" },
-  codigoChico: { color: "#9fd8c0", fontSize: 16, letterSpacing: 2, marginTop: 4, marginBottom: 24 },
-  tiempo: { color: "#ffffff", fontSize: 80, fontWeight: "bold" },
-  ciegas: { color: "#f5c542", fontSize: 26, marginTop: 6 },
-  siguiente: { color: "#9fd8c0", fontSize: 16, marginTop: 14 },
+  contenidoJugador: { flexGrow: 1, alignItems: "center", padding: 20, paddingTop: 40 },
+  bienvenida: { fontSize: 24, fontWeight: "bold" },
+  codigoChico: { fontSize: 16, letterSpacing: 2, marginTop: 4, marginBottom: 20 },
+  tiempo: { fontSize: 64, fontWeight: "bold" },
+  ciegas: { fontSize: 22, marginTop: 4 },
+  siguiente: { fontSize: 15, marginTop: 10 },
+  subtitulo: { fontSize: 20, fontWeight: "bold", marginTop: 32, marginBottom: 12, alignSelf: "flex-start" },
+  filaMesa: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    alignSelf: "stretch",
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: 8,
+  },
+  nombre: { fontSize: 18 },
+  fichas: { fontSize: 18, fontWeight: "bold" },
 });
