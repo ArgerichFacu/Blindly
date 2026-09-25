@@ -15,7 +15,6 @@ export type Sala = {
   creada_en: string;
 };
 
-// Sin 0/O ni 1/I para que no se confundan al dictar el código
 const ALFABETO = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 function generarCodigo(largo = 5) {
@@ -37,7 +36,7 @@ export async function crearSala(niveles: Nivel[]): Promise<Sala> {
       .single();
 
     if (!error) return data as Sala;
-    if (error.code !== "23505") throw error; // 23505 = código repetido: se reintenta con otro
+    if (error.code !== "23505") throw error;
   }
   throw new Error("No se pudo generar un código libre. Probá de nuevo.");
 }
@@ -52,6 +51,12 @@ export async function obtenerSalaPorCodigo(codigoTexto: string): Promise<Sala> {
   if (error) throw error;
   if (!data) throw new Error("No existe una sala con ese código.");
   return data as Sala;
+}
+
+// Guarda los niveles elegidos antes de arrancar la partida
+export async function actualizarNivelesSala(salaId: string, niveles: Nivel[]) {
+  const { error } = await supabase.from("salas").update({ niveles }).eq("id", salaId);
+  if (error) throw error;
 }
 
 export async function comenzarSala(sala: Sala) {
@@ -76,7 +81,6 @@ export async function pausarSala(sala: Sala) {
   if (error) throw error;
 }
 
-// Mueve el reloj de la sala al comienzo del nivel de destino
 export async function saltarNivelSala(sala: Sala, indiceDestino: number) {
   const corriendo = sala.estado === "jugando";
   const { error } = await supabase
@@ -90,7 +94,6 @@ export async function saltarNivelSala(sala: Sala, indiceDestino: number) {
   if (error) throw error;
 }
 
-// Avisa con la sala completa cada vez que cambia una fila de esa sala puntual
 export function suscribirseASala(salaId: string, alCambiar: (sala: Sala) => void) {
   return supabase
     .channel(`sala-${salaId}`)

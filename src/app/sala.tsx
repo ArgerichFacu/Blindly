@@ -17,7 +17,7 @@ import {
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { cargarDenominaciones, guardarDenominaciones } from "../lib/almacenamiento";
-import { darFichas, listarJugadores, unirseASala, type Jugador } from "../lib/jugadores";
+import { darFichas, listarJugadores, type Jugador } from "../lib/jugadores";
 import { describir, estadoActual, numeroDeNivel } from "../lib/niveles";
 import {
   comenzarSala,
@@ -52,8 +52,6 @@ export default function SalaHost() {
   const [editando, setEditando] = useState<Jugador | null>(null);
   const [montoFichas, setMontoFichas] = useState("");
   const [montoPersonalizado, setMontoPersonalizado] = useState("");
-  const [nombrePropio, setNombrePropio] = useState("");
-  const [uniendoPropio, setUniendoPropio] = useState(false);
   const [denominaciones, setDenominaciones] = useState<number[]>([25, 100, 500, 1000, 5000]);
   const [editandoValores, setEditandoValores] = useState(false);
   const [valoresTexto, setValoresTexto] = useState<string[]>([]);
@@ -69,6 +67,7 @@ export default function SalaHost() {
     let canalJugadores: RealtimeChannel | null = null;
 
     async function iniciar() {
+      setError(null);
       await sincronizarReloj();
 
       const salaActual = await obtenerSalaPorCodigo(codigo).catch(() => null);
@@ -85,6 +84,11 @@ export default function SalaHost() {
         });
       recargarJugadores();
 
+      // Por si quedó un canal con el mismo nombre de un montaje anterior (modo desarrollo)
+      supabase.removeAllChannels();
+
+      if (!activo) return;
+
       canalJugadores = supabase
         .channel(`jugadores-de-${salaActual.id}`)
         .on("postgres_changes", { event: "*", schema: "public", table: "jugadores" }, recargarJugadores)
@@ -95,7 +99,9 @@ export default function SalaHost() {
       });
     }
 
-    iniciar().catch(() => setError("No se pudo cargar la sala."));
+    iniciar().catch(() => {
+      if (activo) setError("No se pudo cargar la sala.");
+    });
 
     return () => {
       activo = false;
@@ -105,6 +111,7 @@ export default function SalaHost() {
   }, [codigo]);
 
   const corriendo = sala?.estado === "jugando";
+  const enEspera = sala?.estado === "esperando";
 
   useEffect(() => {
     if (!corriendo) return;
@@ -229,23 +236,6 @@ export default function SalaHost() {
     setEditandoValores(false);
   }
 
-  async function sumarmeALaPartida() {
-    if (!sala || uniendoPropio) return;
-    if (!nombrePropio.trim()) {
-      Alert.alert("Falta tu nombre", "Escribí cómo querés que te vean en la mesa.");
-      return;
-    }
-    setUniendoPropio(true);
-    try {
-      await unirseASala(sala.codigo, nombrePropio);
-    } catch (e) {
-      console.warn("sumarmeALaPartida falló:", e);
-      Alert.alert("No se pudo unir", "Probá de nuevo.");
-    } finally {
-      setUniendoPropio(false);
-    }
-  }
-
   if (error) {
     return (
       <SafeAreaView style={[styles.contenedor, styles.centrado, { backgroundColor: tema.fondo }]}>
@@ -273,8 +263,6 @@ export default function SalaHost() {
       ? "BREAK"
       : `NIVEL ${numeroDeNivel(sala.niveles, estado.indice)}`;
 
-  const jugadorPropio = jugadores.find((j) => j.user_id === sala.host_id) ?? null;
-
   return (
     <SafeAreaView style={[styles.contenedor, { backgroundColor: tema.fondo }]}>
       <ScrollView contentContainerStyle={styles.contenido}>
@@ -295,6 +283,15 @@ export default function SalaHost() {
         )}
         {siguienteNivel && (
           <Text style={[styles.siguiente, { color: tema.textoSuave }]}>Siguiente: {describir(siguienteNivel)}</Text>
+        )}
+
+        {enEspera && (
+          <Pressable
+            style={[styles.botonConfigurar, { borderColor: tema.acento }]}
+            onPress={() => router.push({ pathname: "/configurar", params: { codigo: sala.codigo } })}
+          >
+            <Text style={[styles.textoConfigurar, { color: tema.acento }]}>⚙ Configurar ciegas y fichas</Text>
+          </Pressable>
         )}
 
         <View style={styles.botones}>
@@ -328,32 +325,6 @@ export default function SalaHost() {
             <Text style={[styles.textoNav, { color: tema.textoSuave }]}>Siguiente ▶</Text>
           </Pressable>
         </View>
-
-        {!jugadorPropio && (
-          <View style={[styles.panelSumarme, { backgroundColor: tema.fondoTarjeta }]}>
-            <Text style={[styles.etiquetaFichas, { color: tema.textoSuave }]}>¿TAMBIÉN JUGÁS?</Text>
-            <TextInput
-              style={[
-                styles.inputNombrePropio,
-                { backgroundColor: tema.fondo, borderColor: tema.textoSuave, color: tema.textoFuerte },
-              ]}
-              value={nombrePropio}
-              onChangeText={setNombrePropio}
-              placeholder="Tu nombre en la mesa"
-              placeholderTextColor={tema.textoSuave}
-              maxLength={30}
-            />
-            <Pressable
-              style={[styles.botonSumarme, { backgroundColor: tema.acento }]}
-              onPress={sumarmeALaPartida}
-              disabled={uniendoPropio}
-            >
-              <Text style={[styles.textoPrincipalModal, { color: tema.acentoTexto }]}>
-                {uniendoPropio ? "Uniéndome..." : "Sumarme a la partida"}
-              </Text>
-            </Pressable>
-          </View>
-        )}
 
         <View style={styles.filaSubtitulo}>
           <Text style={[styles.subtitulo, { color: tema.textoFuerte }]}>Jugadores ({jugadores.length})</Text>
@@ -539,6 +510,8 @@ const styles = StyleSheet.create({
   tiempo: { fontSize: 72, fontWeight: "bold" },
   ciegas: { fontSize: 24, marginTop: 4 },
   siguiente: { fontSize: 15, marginTop: 10 },
+  botonConfigurar: { marginTop: 18, paddingVertical: 10, paddingHorizontal: 18, borderRadius: 10, borderWidth: 1.5 },
+  textoConfigurar: { fontSize: 14, fontWeight: "600" },
   botones: { flexDirection: "row", gap: 16, marginTop: 24 },
   boton: { paddingVertical: 14, paddingHorizontal: 28, borderRadius: 12, borderWidth: 2 },
   textoBoton: { fontSize: 20, fontWeight: "600" },
@@ -546,19 +519,6 @@ const styles = StyleSheet.create({
   botonNav: { paddingVertical: 10, paddingHorizontal: 18, borderRadius: 10, borderWidth: 1.5 },
   textoNav: { fontSize: 16, fontWeight: "600" },
   deshabilitado: { opacity: 0.3 },
-  panelSumarme: { alignSelf: "stretch", borderRadius: 16, padding: 20, marginTop: 28, alignItems: "center" },
-  etiquetaFichas: { fontSize: 14, letterSpacing: 3 },
-  inputNombrePropio: {
-    alignSelf: "stretch",
-    borderRadius: 10,
-    borderWidth: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    fontSize: 18,
-    marginTop: 10,
-    marginBottom: 12,
-  },
-  botonSumarme: { alignSelf: "stretch", alignItems: "center", paddingVertical: 12, borderRadius: 10 },
   filaSubtitulo: {
     alignSelf: "stretch",
     flexDirection: "row",

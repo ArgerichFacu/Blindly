@@ -14,7 +14,7 @@ export default function Menu() {
       <View style={styles.botones}>
         <Pressable
           style={[styles.boton, { backgroundColor: tema.acento }]}
-          onPress={() => router.push("/configurar")}
+          onPress={() => router.push("/crear-sala")}
         >
           <Text style={[styles.textoBoton, { color: tema.acentoTexto }]}>Crear sala</Text>
         </Pressable>

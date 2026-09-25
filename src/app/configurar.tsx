@@ -1,6 +1,6 @@
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
-import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, Vibration, View } from "react-native";
 import { cargarPersonalizado, cargarPresetId, guardarPresetId } from "../lib/almacenamiento";
@@ -14,7 +14,7 @@ import {
   type Nivel,
   type Preset,
 } from "../lib/niveles";
-import { crearSala } from "../lib/salas";
+import { actualizarNivelesSala, comenzarSala, obtenerSalaPorCodigo } from "../lib/salas";
 import { useTema } from "../lib/TemaContext";
 
 const SONIDO_CAMBIO = require("../../assets/sounds/campana.wav");
@@ -29,12 +29,13 @@ function formatear(ms: number) {
 export default function Configurar() {
   const router = useRouter();
   const { tema } = useTema();
+  const { codigo } = useLocalSearchParams<{ codigo: string }>();
   const [presetId, setPresetId] = useState("regular");
   const [personalizado, setPersonalizado] = useState<Nivel[] | null>(null);
   const [acumulado, setAcumulado] = useState(0);
   const [inicio, setInicio] = useState<number | null>(null);
   const [ahora, setAhora] = useState(Date.now());
-  const [creando, setCreando] = useState(false);
+  const [guardando, setGuardando] = useState(false);
 
   const corriendo = inicio !== null;
   const enReposo = !corriendo && acumulado === 0;
@@ -125,21 +126,24 @@ export default function Configurar() {
     ]);
   }
 
-  async function crearYAbrirSala() {
-    if (creando) return;
-    setCreando(true);
+  // Guarda los niveles elegidos en la sala existente y arranca el reloj de verdad
+  async function guardarYComenzar() {
+    if (guardando || !codigo) return;
+    setGuardando(true);
     try {
-      const sala = await crearSala(niveles);
-      router.push({ pathname: "/sala", params: { codigo: sala.codigo } });
+      const sala = await obtenerSalaPorCodigo(codigo);
+      await actualizarNivelesSala(sala.id, niveles);
+      await comenzarSala(sala);
+      router.replace({ pathname: "/sala", params: { codigo } });
     } catch (e) {
-      console.warn("crearSala falló:", e);
+      console.warn("guardarYComenzar falló:", e);
       const mensaje =
         typeof e === "object" && e !== null && "message" in e
           ? String((e as { message: unknown }).message)
           : "Probá de nuevo.";
-      Alert.alert("No se pudo crear la sala", mensaje);
+      Alert.alert("No se pudo iniciar la partida", mensaje);
     } finally {
-      setCreando(false);
+      setGuardando(false);
     }
   }
 
@@ -156,7 +160,7 @@ export default function Configurar() {
     <View style={[styles.contenedor, { backgroundColor: tema.fondo }]}>
       {enReposo && (
         <Pressable style={styles.botonMenu} onPress={() => router.back()}>
-          <Text style={[styles.textoMenu, { color: tema.textoSuave }]}>← Menú</Text>
+          <Text style={[styles.textoMenu, { color: tema.textoSuave }]}>← Sala</Text>
         </Pressable>
       )}
 
@@ -210,7 +214,9 @@ export default function Configurar() {
           style={[styles.boton, { backgroundColor: tema.acento, borderColor: tema.acento }]}
           onPress={corriendo ? pausar : iniciar}
         >
-          <Text style={[styles.textoBoton, { color: tema.acentoTexto }]}>{corriendo ? "Pausar" : "Iniciar"}</Text>
+          <Text style={[styles.textoBoton, { color: tema.acentoTexto }]}>
+            {corriendo ? "Pausar" : "Iniciar (probar)"}
+          </Text>
         </Pressable>
 
         <Pressable style={[styles.boton, { borderColor: tema.textoSuave }]} onPress={reiniciar}>
@@ -245,14 +251,14 @@ export default function Configurar() {
         </Pressable>
       </View>
 
-      {enReposo && (
+      {enReposo && codigo && (
         <Pressable
           style={[styles.botonSala, { borderColor: tema.acento }]}
-          onPress={crearYAbrirSala}
-          disabled={creando}
+          onPress={guardarYComenzar}
+          disabled={guardando}
         >
           <Text style={[styles.textoSala, { color: tema.acento }]}>
-            {creando ? "Creando sala..." : "Crear sala"}
+            {guardando ? "Iniciando..." : "Iniciar partida"}
           </Text>
         </Pressable>
       )}
