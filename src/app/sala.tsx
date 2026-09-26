@@ -85,7 +85,7 @@ export default function SalaHost() {
       recargarJugadores();
 
       // Por si quedó un canal con el mismo nombre de un montaje anterior (modo desarrollo)
-      supabase.removeAllChannels();
+      await supabase.removeAllChannels();
 
       if (!activo) return;
 
