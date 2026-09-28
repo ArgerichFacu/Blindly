@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "blindly",
+    "slug": "blindly",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/blindly-logo.png",
+    "scheme": "blindly",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "com.blindly.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0A1713",
+        "foregroundImage": "./assets/images/blindly-logo-transparent.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.blindly.app"
+    },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0A1713",
+          "image": "./assets/images/blindly-logo.png",
+          "imageWidth": 360,
+          "resizeMode": "contain",
+          "dark": {
+            "backgroundColor": "#0A1713",
+            "image": "./assets/images/blindly-logo.png"
+          }
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "enableBackgroundRecording": false,
+          "enableBackgroundPlayback": false
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Blindly usa la cámara para escanear el QR de una sala.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
