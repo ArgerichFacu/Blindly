@@ -213,7 +213,7 @@ export function Mesa({ codigo }: { codigo: string }) {
             : "Tu mesa",
       )}
       pie={
-        !esperando && !finalizada && virtual ? (
+        !esperando && !finalizada ? (
           <>
             <View
               accessibilityLiveRegion="polite"
@@ -253,7 +253,7 @@ export function Mesa({ codigo }: { codigo: string }) {
                   {t("Mano {n}", { n: sala.mano })}
                 </Texto>
               </View>
-              {yo && (
+              {virtual && yo && (
                 <View style={{ alignItems: "flex-end" }}>
                   <Texto suave style={{ fontSize: 10 }}>
                     {t("Tu stack")}
@@ -264,7 +264,12 @@ export function Mesa({ codigo }: { codigo: string }) {
                 </View>
               )}
             </View>
-            {miTurno && corriendo && yo && !yo.retirado && !yo.eliminado_en && (
+            {virtual &&
+              miTurno &&
+              corriendo &&
+              yo &&
+              !yo.retirado &&
+              !yo.eliminado_en && (
               <PanelApuesta
                 key={sala.mano + "-" + sala.calle}
                 faltan={faltan}
@@ -279,11 +284,53 @@ export function Mesa({ codigo }: { codigo: string }) {
                 actuar={apostar}
               />
             )}
-            {dealer && sala.calle === "reparto" && (
+            {!virtual &&
+              miTurno &&
+              corriendo &&
+              yo &&
+              !yo.retirado &&
+              !yo.eliminado_en &&
+              (["pasar", "igualar", "subir", "retirarse"] as const).map(
+                (tipo) => (
+                  <Boton
+                    key={tipo}
+                    titulo={t(
+                      tipo === "subir"
+                        ? "Apostar / subir"
+                        : tipo === "retirarse"
+                          ? "Retirarse"
+                          : tipo === "igualar"
+                            ? "Igualar"
+                            : "Pasar",
+                    )}
+                    disabled={accion.ocupado}
+                    onPress={() =>
+                      accion.ejecutar("turno_fisico", {
+                        ...datosTurno,
+                        tipo,
+                      })
+                    }
+                  />
+                ),
+              )}
+            {virtual && dealer && sala.calle === "reparto" && (
               <Boton
                 titulo={t("Repartir pozo")}
                 disabled={accion.ocupado}
                 onPress={abrirReparto}
+              />
+            )}
+            {!virtual && dealer && sala.calle === "reparto" && (
+              <Boton
+                titulo={t("Cerrar mano y rotar ciegas")}
+                disabled={accion.ocupado}
+                onPress={() =>
+                  accion.ejecutar("cerrar_mano", {
+                    mano: sala.mano,
+                    pozo: sala.pozo,
+                    premios: [],
+                  })
+                }
               />
             )}
             {host && !corriendo && (
@@ -416,49 +463,9 @@ export function Mesa({ codigo }: { codigo: string }) {
             <>
               <Texto suave>
                 {t(
-                  "Las apuestas y el reparto se realizan con las fichas de la mesa.",
+                  "Cada jugador registra su propia acción desde el celular. El dealer solo cierra la mano y entrega el pozo.",
                 )}
               </Texto>
-              {dealer && sala.turno_id && (
-                <Tarjeta>
-                  <Texto>
-                    {t("Registrar acción de {nombre}", {
-                      nombre:
-                        jugadores.find((j) => j.id === sala.turno_id)?.nombre ??
-                        "",
-                    })}
-                  </Texto>
-                  {(["pasar", "subir", "retirarse"] as const).map((tipo) => (
-                    <Boton
-                      key={tipo}
-                      titulo={t(
-                        tipo === "pasar"
-                          ? "Pasó / igualó"
-                          : tipo === "subir"
-                            ? "Apostó / subió"
-                            : "Se retiró",
-                      )}
-                      disabled={accion.ocupado || !corriendo}
-                      onPress={() =>
-                        accion.ejecutar("turno_fisico", { ...datosTurno, tipo })
-                      }
-                    />
-                  ))}
-                </Tarjeta>
-              )}
-              {dealer && (
-                <Boton
-                  titulo={t("Cerrar mano y rotar ciegas")}
-                  disabled={accion.ocupado || sala.calle !== "reparto"}
-                  onPress={() =>
-                    accion.ejecutar("cerrar_mano", {
-                      mano: sala.mano,
-                      pozo: sala.pozo,
-                      premios: [],
-                    })
-                  }
-                />
-              )}
             </>
           )}
           {entrega && (

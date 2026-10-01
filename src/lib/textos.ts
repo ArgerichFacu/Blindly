@@ -792,3 +792,14 @@ Object.assign(textos, {
       "A recuperação por email está sendo preparada. Você pode continuar jogando como convidado.",
     ],
 });
+
+Object.assign(textos, {
+  Pasar: ["Check", "Passar"],
+  Igualar: ["Call", "Pagar"],
+  Retirarse: ["Fold", "Desistir"],
+  "Apostar / subir": ["Bet / raise", "Apostar / aumentar"],
+  "Cada jugador registra su propia acción desde el celular. El dealer solo cierra la mano y entrega el pozo.": [
+    "Each player records their own action from their phone. The dealer only closes the hand and awards the pot.",
+    "Cada jogador registra a própria ação pelo celular. O dealer apenas encerra a mão e entrega o pote.",
+  ],
+});

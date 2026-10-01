@@ -1,9 +1,41 @@
-import { View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { Texto } from "./Controles";
 import { useTema } from "../lib/TemaContext";
 import { usePreferencias } from "../lib/Preferencias";
 import { rolesMesa } from "../lib/mesa";
 import type { Jugador } from "../lib/jugadores";
+
+const fichasRol: Record<string, { fondo: string; texto: string }> = {
+  DR: { fondo: "#111827", texto: "#FFFFFF" },
+  BTN: { fondo: "#FBBF24", texto: "#422006" },
+  SB: { fondo: "#94A3B8", texto: "#0F172A" },
+  BB: { fondo: "#2563EB", texto: "#FFFFFF" },
+};
+
+function FichasRol({ roles }: { roles: string }) {
+  const lista = roles.split(" / ").filter(Boolean);
+  if (!lista.length) return null;
+  return (
+    <View pointerEvents="none" style={styles.roles}>
+      {lista.map((rol) => {
+        const color = fichasRol[rol] ?? fichasRol.DR;
+        return (
+          <View
+            key={rol}
+            style={[
+              styles.fichaRol,
+              { backgroundColor: color.fondo, borderColor: color.texto },
+            ]}
+          >
+            <View style={[styles.fichaInterior, { borderColor: color.texto }]} />
+            <Text style={[styles.textoRol, { color: color.texto }]}>{rol}</Text>
+          </View>
+        );
+      })}
+    </View>
+  );
+}
+
 export function MesaAsientos({
   jugadores,
   orden,
@@ -87,6 +119,7 @@ export function MesaAsientos({
               },
             ]}
           >
+            <FichasRol roles={roles[id] ?? ""} />
             <Texto
               numberOfLines={1}
               style={{
@@ -142,6 +175,34 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   linea: { position: "absolute", inset: 10, borderRadius: 110, borderWidth: 1 },
+  roles: {
+    position: "absolute",
+    top: -14,
+    flexDirection: "row",
+    gap: 2,
+    zIndex: 2,
+  },
+  fichaRol: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000000",
+    shadowOpacity: 0.22,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 1 },
+    elevation: 3,
+  },
+  fichaInterior: {
+    position: "absolute",
+    inset: 2,
+    borderRadius: 9,
+    borderWidth: 1,
+    opacity: 0.55,
+  },
+  textoRol: { fontSize: 7, lineHeight: 9, fontWeight: "900" },
   asiento: {
     position: "absolute",
     width: 84,

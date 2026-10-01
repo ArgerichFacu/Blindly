@@ -36,7 +36,7 @@ async function falla(fn, texto) {
     await db.query("insert into auth.users values($1)", [uid(n)]);
   for (const archivo of fs
     .readdirSync(raiz + "/supabase")
-    .filter((f) => /^0[1-8]_.*\.sql$/.test(f))
+    .filter((f) => /^\d{2}_.*\.sql$/.test(f))
     .sort())
     await db.exec(fs.readFileSync(raiz + "/supabase/" + archivo, "utf8"));
 
@@ -89,6 +89,19 @@ async function falla(fn, texto) {
       });
       return estado;
     };
+    const jugarFisico = async (tipo = "pasar") => {
+      await leer();
+      const num = ids.indexOf(estado.turno_id) + 1;
+      if (num < 1) throw new Error("TURNO_FISICO_INVALIDO");
+      await como(num);
+      estado = await accion(id, "turno_fisico", {
+        tipo,
+        mano: estado.mano,
+        calle: estado.calle,
+        revision: estado.revision,
+      });
+      return estado;
+    };
     const cerrar = async (ganador = 0) => {
       await como(1);
       await leer();
@@ -112,7 +125,7 @@ async function falla(fn, texto) {
       });
       return estado;
     };
-    return { id, ids, leer, jugar, cerrar };
+    return { id, ids, leer, jugar, jugarFisico, cerrar };
   }
   const m = await mesa();
   let s = await m.leer();
@@ -241,11 +254,13 @@ async function falla(fn, texto) {
       ]),
     "permission denied",
   );
-  // Physical: only fixed dealer advances the tracker; no chip deductions.
+  // Physical: every player declares their own action; no chip deductions.
   const f = await mesa(3, "fisicas");
   s = await f.leer();
   assert.equal(s.pozo, 0);
-  await como(2);
+  const primerTurno = s.turno_id;
+  const ajeno = f.ids.findIndex((id) => id !== primerTurno) + 1;
+  await como(ajeno);
   await falla(
     () =>
       accion(f.id, "turno_fisico", {
@@ -254,19 +269,21 @@ async function falla(fn, texto) {
         revision: s.revision,
         tipo: "pasar",
       }),
+    "TURNO_AJENO",
+  );
+  for (let i = 0; i < 12; i++)
+    s = await f.jugarFisico(i === 0 ? "igualar" : "pasar");
+  assert.equal(s.calle, "reparto");
+  await como(2);
+  await falla(
+    () =>
+      accion(f.id, "cerrar_mano", {
+        mano: s.mano,
+        pozo: s.pozo,
+        premios: [],
+      }),
     "SOLO_DEALER",
   );
-  await como(1);
-  for (let i = 0; i < 12; i++) {
-    s = await f.leer();
-    s = await accion(f.id, "turno_fisico", {
-      mano: s.mano,
-      calle: s.calle,
-      revision: s.revision,
-      tipo: "pasar",
-    });
-  }
-  assert.equal(s.calle, "reparto");
   s = await f.cerrar();
   assert.equal(s.dealer_id, f.ids[0]);
   assert.equal(s.boton_id, f.ids[1]);
@@ -283,15 +300,7 @@ async function falla(fn, texto) {
   const trans = await mesa(3, "fisicas");
   await como(1);
   await accion(trans.id, "fichas", { jugador: trans.ids[0], monto: 0 });
-  for (let i = 0; i < 8; i++) {
-    s = await trans.leer();
-    s = await accion(trans.id, "turno_fisico", {
-      mano: s.mano,
-      calle: s.calle,
-      revision: s.revision,
-      tipo: "pasar",
-    });
-  }
+  for (let i = 0; i < 8; i++) s = await trans.jugarFisico();
   s = await trans.cerrar();
   assert.equal(s.bb_id, trans.ids[1]);
   assert.equal(s.boton_id, trans.ids[2]);
@@ -304,7 +313,7 @@ async function falla(fn, texto) {
   s = await accion(keep.id, "fichas", { jugador: keep.ids[1], monto: 0 });
   assert.equal(s.turno_id, original);
   console.log(
-    "OK: turnos Texas, dealer fijo, ciegas, heads-up, rondas, all-in, pozos, permisos e idempotencia",
+    "OK: turnos propios, dealer fijo, ciegas, heads-up, rondas, all-in, pozos, permisos e idempotencia",
   );
   await db.close();
 })().catch((e) => {

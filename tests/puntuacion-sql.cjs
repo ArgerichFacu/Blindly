@@ -36,7 +36,7 @@ async function falla(fn, texto) {
     await db.query("insert into auth.users values($1)", [uid(n)]);
   for (const archivo of fs
     .readdirSync(raiz + "/supabase")
-    .filter((f) => /^0[1-9]_.*\.sql$/.test(f))
+    .filter((f) => /^\d{2}_.*\.sql$/.test(f))
     .sort())
     await db.exec(fs.readFileSync(raiz + "/supabase/" + archivo, "utf8"));
 

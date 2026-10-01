@@ -14,7 +14,7 @@ Aplicación desarrollada con Expo, React Native, TypeScript y Supabase. La rama 
 - Configurar los asientos, el stack inicial, el modo de fichas y los niveles de ciegas.
 - Usar presets de torneo o editar niveles y descansos; controlar el reloj con avisos sonoros y vibración.
 - Mantener un dealer fijo mientras el botón y las ciegas rotan entre los jugadores, incluido el caso de dos participantes.
-- Seguir el turno de apuesta y el estado de la mesa en tiempo real.
+- Seguir el turno de apuesta y el estado de la mesa en tiempo real; cada jugador declara su propia acción desde el celular.
 - Consultar las combinaciones de poker con ejemplos de cartas y criterios de desempate.
 - Elegir tema verde, rojo o negro e idioma español, inglés o portugués.
 - Activar música de ambiente y consultar tu puntuación e historial personal.
@@ -26,7 +26,7 @@ Blindly acompaña la mesa: las cartas se reparten físicamente y el dealer deter
 | Modo | Funcionamiento |
 | --- | --- |
 | **Virtuales** | La app lleva stacks, ciegas, apuestas y pozos. Los jugadores pueden pasar, igualar, subir, retirarse o ir all-in según su turno. El dealer se encarga de repartir los pozos entre los jugadores habilitados. |
-| **Físicas** | Las fichas y apuestas se manejan en la mesa. La app ayuda a organizar su distribución inicial, seguir la partida y registrar los stacks. |
+| **Físicas** | Las fichas y apuestas se manejan en la mesa. Cada jugador declara pasar, igualar, subir o retirarse desde su celular; el dealer únicamente cierra la mano y entrega el pozo. |
 
 El flujo virtual contempla las rondas de apuestas, las subidas mínimas, los all-in y los pozos secundarios. Las acciones y repartos se validan en Supabase; los jugadores no pueden asignarse fichas por su cuenta.
 
@@ -103,7 +103,7 @@ Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md).
 
 ## Supabase
 
-Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `09`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos.
+Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `10`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos.
 
 | Scripts | Área |
 | --- | --- |
@@ -111,6 +111,7 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `07_diagrama.sql` | Flujo de mesa y administración de la partida |
 | `08_turnos.sql` | Turnos, apuestas y validaciones |
 | `09_puntuacion.sql` | Resultados, puntuación y consultas privadas |
+| `10_acciones_jugador.sql` | Acciones propias en mesas físicas y autoridad final del dealer |
 
 La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas.
 
