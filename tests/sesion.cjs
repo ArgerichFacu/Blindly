@@ -8,7 +8,9 @@ let id = "guest",
   sessionError = null,
   calls = [],
   historial = 0,
-  activas = [];
+  activas = [],
+  functionError = null,
+  deleted = 0;
 const auth = {
   getSession: async () => ({
     data: { session: id ? { user: { id, is_anonymous: anonymous } } : null },
@@ -28,6 +30,11 @@ const auth = {
     calls.push(["otp", d]);
     return { data: {} };
   },
+  signOut: async (options) => {
+    calls.push(["signout", options]);
+    id = null;
+    return { error: null };
+  },
   verifyOtp: async (d) => {
     calls.push(["verify", d]);
     return {
@@ -43,6 +50,14 @@ const auth = {
 };
 const sb = {
   auth,
+  functions: {
+    invoke: async (name, options) => {
+      calls.push(["function", name, options]);
+      if (functionError) return { error: functionError };
+      deleted++;
+      return { data: { ok: true }, error: null };
+    },
+  },
   rpc: async () => ({ data: { partidas: historial } }),
   from: () => ({
     select: () => ({
@@ -95,8 +110,15 @@ vm.runInNewContext(
     () => exportsAuth.confirmarCodigo(s, "123456"),
     /SESION_CAMBIO/,
   );
+  id = "linked";
+  anonymous = false;
+  await exportsAuth.eliminarCuenta();
+  assert.equal(deleted, 1);
+  assert.deepEqual(calls.at(-2), ["function", "eliminar-cuenta", { method: "POST" }]);
+  assert.deepEqual(calls.at(-1), ["signout", { scope: "local" }]);
+  assert.equal(id, null);
   console.log(
-    "OK: invitado único, error sin reemplazo de identidad, vinculación conserva UUID, recuperación sin alta, historial protegido y sesión cambiada.",
+    "OK: invitado único, recuperación segura, historial protegido y eliminación local tras borrar la cuenta.",
   );
 })().catch((e) => {
   console.error(e);

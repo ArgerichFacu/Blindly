@@ -11,7 +11,11 @@
       ]
     }
   },
-  "exclude": ["node_modules", "example"],
+  "exclude": [
+    "node_modules",
+    "example",
+    "supabase/functions"
+  ],
   "include": [
     "**/*.ts",
     "**/*.tsx",

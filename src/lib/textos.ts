@@ -867,3 +867,29 @@ Object.assign(textos, {
     "Compras e assinaturas ainda não estão ativas.",
   ],
 });
+
+Object.assign(textos, {
+  "Eliminar mi cuenta": ["Delete my account", "Excluir minha conta"],
+  "Elimina tu identidad, tus puntos y tu historial. No se puede deshacer.": [
+    "Deletes your identity, points and history. This cannot be undone.",
+    "Exclui sua identidade, pontos e histórico. Esta ação não pode ser desfeita.",
+  ],
+  "Confirmá solo si querés borrar definitivamente todos tus datos de Blindly.": [
+    "Confirm only if you want to permanently delete all your Blindly data.",
+    "Confirme apenas se quiser excluir definitivamente todos os seus dados do Blindly.",
+  ],
+  "Eliminar definitivamente": ["Delete permanently", "Excluir definitivamente"],
+  "Terminá o abandoná la partida activa antes de eliminar tu cuenta.": [
+    "Finish or leave the active game before deleting your account.",
+    "Termine ou saia da partida ativa antes de excluir sua conta.",
+  ],
+  "No se pudo eliminar la cuenta. Probá de nuevo.": [
+    "The account could not be deleted. Please try again.",
+    "Não foi possível excluir a conta. Tente novamente.",
+  ],
+});
+Object.assign(errores, {
+  PARTIDA_ACTIVA_CUENTA:
+    "Terminá o abandoná la partida activa antes de eliminar tu cuenta.",
+  CUENTA_NO_ELIMINADA: "No se pudo eliminar la cuenta. Probá de nuevo.",
+});

@@ -72,7 +72,12 @@ export function useSala(codigo: string) {
           )
           .on(
             "postgres_changes",
-            { event: "*", schema: "public", table: "jugadores" },
+            {
+              event: "*",
+              schema: "public",
+              table: "jugadores",
+              filter: `sala_id=eq.${salaId}`,
+            },
             () => {
               if (activo && version === generacion) void refrescar();
             },

@@ -12,6 +12,7 @@ import {
   asegurarSesion,
   solicitarCodigo,
   confirmarCodigo,
+  eliminarCuenta,
   type SolicitudCuenta,
 } from "../lib/sesion";
 import { usePreferencias } from "../lib/Preferencias";
@@ -26,7 +27,8 @@ export default function Cuenta() {
     [recuperar, setRecuperar] = useState(false),
     [ocupado, setOcupado] = useState(false),
     [error, setError] = useState<unknown>(null),
-    [revision, setRevision] = useState(0);
+    [revision, setRevision] = useState(0),
+    [confirmarBorrado, setConfirmarBorrado] = useState(false);
   const cerrojo = useRef(false);
   useFocusEffect(
     useCallback(() => {
@@ -197,6 +199,47 @@ export default function Cuenta() {
               )}
             </Texto>
           )}
+          <Tarjeta style={{ borderColor: "#B91C1C" }}>
+            <Texto style={{ fontWeight: "700" }}>{t("Eliminar mi cuenta")}</Texto>
+            <Texto suave>
+              {t(
+                "Elimina tu identidad, tus puntos y tu historial. No se puede deshacer.",
+              )}
+            </Texto>
+            {confirmarBorrado ? (
+              <>
+                <Texto>
+                  {t(
+                    "Confirmá solo si querés borrar definitivamente todos tus datos de Blindly.",
+                  )}
+                </Texto>
+                <Boton
+                  titulo={t("Eliminar definitivamente")}
+                  disabled={ocupado}
+                  onPress={() =>
+                    void ejecutar(async () => {
+                      await eliminarCuenta();
+                      setUsuario(null);
+                      router.replace("/");
+                    })
+                  }
+                />
+                <Boton
+                  secundario
+                  titulo={t("Cancelar")}
+                  disabled={ocupado}
+                  onPress={() => setConfirmarBorrado(false)}
+                />
+              </>
+            ) : (
+              <Boton
+                secundario
+                titulo={t("Eliminar mi cuenta")}
+                disabled={ocupado}
+                onPress={() => setConfirmarBorrado(true)}
+              />
+            )}
+          </Tarjeta>
           <Boton
             secundario
             titulo={t("Volver al inicio")}

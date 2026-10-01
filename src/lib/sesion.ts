@@ -81,3 +81,21 @@ export async function confirmarCodigo(
     throw new Error("SESION_CAMBIO");
   return data.user;
 }
+
+export async function eliminarCuenta() {
+  await asegurarSesion();
+  const { error } = await supabase.functions.invoke("eliminar-cuenta", {
+    method: "POST",
+  });
+  if (error) {
+    const contexto = (
+      error as { context?: { json?: () => Promise<{ code?: string }> } }
+    ).context;
+    const respuesta = contexto?.json
+      ? await contexto.json().catch(() => null)
+      : null;
+    throw new Error(respuesta?.code ?? "CUENTA_NO_ELIMINADA");
+  }
+  const salida = await supabase.auth.signOut({ scope: "local" });
+  if (salida.error) throw salida.error;
+}

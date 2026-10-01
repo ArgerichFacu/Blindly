@@ -95,7 +95,7 @@ npm ci
 
 Podés entrar como invitado sin registrar un correo. La sesión anónima se conserva en el dispositivo, pero borrar sus datos o cambiar de equipo puede hacer que pierdas el acceso a esa identidad.
 
-La interfaz **Mi cuenta** y el flujo de vinculación por código de correo están implementados para conservar el UUID y la puntuación. La recuperación no fusiona cuentas y tiene controles para evitar reemplazar un invitado con partidas puntuadas o cambiar de identidad durante una partida activa.
+La interfaz **Mi cuenta** y el flujo de vinculación por código de correo están implementados para conservar el UUID y la puntuación. La recuperación no fusiona cuentas y tiene controles para evitar reemplazar un invitado con partidas puntuadas o cambiar de identidad durante una partida activa. Desde **Mi cuenta** también se puede eliminar la identidad, la puntuación y el historial; una Edge Function autenticada impide hacerlo mientras exista una partida activa.
 
 **La recuperación por correo todavía está deshabilitada por defecto.** Falta configurar un proveedor SMTP, aplicar las plantillas y verificar el envío y la recuperación en dispositivos reales. Solo después debe habilitarse `EXPO_PUBLIC_EMAIL_AUTH_READY=true`. Hasta completar esa preparación, no debe considerarse un mecanismo operativo de respaldo.
 
@@ -147,7 +147,7 @@ src/app/           Rutas y pantallas de Expo Router
 src/components/    Mesa, apuestas, cartas, audio, logos y sesión nativa
 src/lib/           Sesiones, acceso a datos, lógica, preferencias y traducciones
 assets/            Imágenes, sonidos y créditos de recursos
-supabase/          Esquema SQL, funciones, seguridad y plantillas de correo
+supabase/          Esquema SQL, Edge Functions, seguridad y plantillas de correo
 tests/             Pruebas de lógica, SQL y sesiones
 docs/              Guías de instalación y preparación nativa
 app.json           Configuración Expo y plugins nativos
