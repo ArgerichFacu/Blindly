@@ -10,6 +10,8 @@ Estado auditado el 1 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Puntuación, empates, privacidad y persistencia del historial.
 - [x] Sesión anónima única y flujo preparado para vincular y recuperar por correo.
 - [x] Eliminación de cuenta y datos desde la app, bloqueada durante partidas activas.
+- [x] Política de privacidad accesible dentro de la app y documentación inicial de tiendas.
+- [x] Nombre, fondo, iconos adaptativos y declaración de cifrado preparados para builds nativas.
 - [x] Permisos mínimos de tablas y funciones auxiliares.
 - [x] Índices de las claves foráneas usadas en consultas de sala.
 - [x] Empaquetado web de producción en CI.

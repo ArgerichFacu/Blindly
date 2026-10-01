@@ -893,3 +893,53 @@ Object.assign(errores, {
     "Terminá o abandoná la partida activa antes de eliminar tu cuenta.",
   CUENTA_NO_ELIMINADA: "No se pudo eliminar la cuenta. Probá de nuevo.",
 });
+
+Object.assign(textos, {
+  "Política de privacidad": ["Privacy policy", "Política de privacidade"],
+  "Última actualización: 1 de octubre de 2026": [
+    "Last updated: October 1, 2026",
+    "Última atualização: 1 de outubro de 2026",
+  ],
+  "Datos que guarda Blindly": ["Data Blindly stores", "Dados que o Blindly armazena"],
+  "Guardamos un identificador de cuenta, tu nombre de jugador, salas, acciones de mesa, stacks, puntuación e historial. El email es opcional y solo se guarda si protegés tu cuenta.": [
+    "We store an account identifier, player name, rooms, table actions, stacks, score and history. Email is optional and is stored only when you protect your account.",
+    "Armazenamos um identificador de conta, nome de jogador, salas, ações da mesa, stacks, pontuação e histórico. O email é opcional e só é salvo quando você protege a conta.",
+  ],
+  "Para qué se usan": ["How data is used", "Como os dados são usados"],
+  "Los datos permiten autenticarte, sincronizar la partida entre celulares, calcular rangos, recuperar tu historial y proteger la integridad de fichas y puntos.": [
+    "Data is used to authenticate you, sync games across phones, calculate ranks, restore history and protect chip and score integrity.",
+    "Os dados permitem autenticar você, sincronizar partidas entre celulares, calcular posições, recuperar o histórico e proteger fichas e pontos.",
+  ],
+  "Cámara y dispositivo": ["Camera and device", "Câmera e dispositivo"],
+  "La cámara solo lee códigos QR de salas. Blindly no guarda ni envía fotos. El tema, el idioma y el volumen se guardan localmente en tu dispositivo.": [
+    "The camera only reads room QR codes. Blindly does not store or send photos. Theme, language and volume are stored locally on your device.",
+    "A câmera apenas lê códigos QR das salas. O Blindly não salva nem envia fotos. Tema, idioma e volume ficam armazenados localmente no dispositivo.",
+  ],
+  Servicios: ["Services", "Serviços"],
+  "Supabase aloja la autenticación y la base de datos. Apple, Google y Expo pueden procesar datos técnicos al distribuir o ejecutar la app. Blindly no vende datos ni usa publicidad.": [
+    "Supabase hosts authentication and the database. Apple, Google and Expo may process technical data when distributing or running the app. Blindly does not sell data or use advertising.",
+    "O Supabase hospeda a autenticação e o banco de dados. Apple, Google e Expo podem processar dados técnicos ao distribuir ou executar o app. O Blindly não vende dados nem usa publicidade.",
+  ],
+  "Conservación y eliminación": ["Retention and deletion", "Retenção e exclusão"],
+  "Los datos se conservan mientras exista tu cuenta. Desde Mi cuenta podés eliminar la identidad, los puntos y el historial. Una partida activa debe finalizar antes para no romper la mesa de otros jugadores.": [
+    "Data is retained while your account exists. In My account you can delete your identity, points and history. An active game must finish first to avoid disrupting other players.",
+    "Os dados são mantidos enquanto a conta existir. Em Minha conta, você pode excluir identidade, pontos e histórico. Uma partida ativa deve terminar antes para não interromper os outros jogadores.",
+  ],
+  "Tus opciones": ["Your choices", "Suas opções"],
+  "Podés jugar sin email, vincular uno para recuperar la cuenta o eliminar todos tus datos. La cámara es opcional porque también podés ingresar el código de sala.": [
+    "You can play without email, link one to recover the account, or delete all your data. Camera access is optional because you can enter the room code instead.",
+    "Você pode jogar sem email, vincular um para recuperar a conta ou excluir todos os dados. A câmera é opcional porque também é possível digitar o código da sala.",
+  ],
+  "Para consultas de privacidad, usá el canal de soporte publicado en el repositorio oficial de Blindly.": [
+    "For privacy questions, use the support channel published in the official Blindly repository.",
+    "Para dúvidas de privacidade, use o canal de suporte publicado no repositório oficial do Blindly.",
+  ],
+  "Blindly organiza partidas presenciales entre amigos. No procesa apuestas con dinero real ni premios. Los jugadores acuerdan las reglas y el dealer valida los resultados.": [
+    "Blindly organizes in-person games with friends. It does not process real-money wagers or prizes. Players agree on the rules and the dealer validates results.",
+    "O Blindly organiza partidas presenciais entre amigos. Não processa apostas com dinheiro real nem prêmios. Os jogadores combinam as regras e o dealer valida os resultados.",
+  ],
+  "Blindly Plus podrá ofrecer funciones digitales opcionales mediante las tiendas oficiales. La partida esencial seguirá disponible sin una suscripción.": [
+    "Blindly Plus may offer optional digital features through official stores. Essential gameplay will remain available without a subscription.",
+    "O Blindly Plus poderá oferecer recursos digitais opcionais pelas lojas oficiais. A partida essencial continuará disponível sem assinatura.",
+  ],
+});

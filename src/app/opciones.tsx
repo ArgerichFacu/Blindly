@@ -104,6 +104,11 @@ export default function Opciones() {
         onPress={() => router.push("/creditos")}
       />
       <Boton
+        titulo={t("Política de privacidad")}
+        secundario
+        onPress={() => router.push("/privacidad")}
+      />
+      <Boton
         titulo={t("Términos y condiciones")}
         secundario
         onPress={() => router.push("/terminos")}

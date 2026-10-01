@@ -99,7 +99,7 @@ La interfaz **Mi cuenta** y el flujo de vinculación por código de correo está
 
 **La recuperación por correo todavía está deshabilitada por defecto.** Falta configurar un proveedor SMTP, aplicar las plantillas y verificar el envío y la recuperación en dispositivos reales. Solo después debe habilitarse `EXPO_PUBLIC_EMAIL_AUTH_READY=true`. Hasta completar esa preparación, no debe considerarse un mecanismo operativo de respaldo.
 
-Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md).
+Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md). La [política de privacidad](PRIVACY.md) y las [instrucciones de eliminación](ACCOUNT_DELETION.md) también están disponibles dentro de la app.
 
 ## Supabase
 
@@ -130,6 +130,8 @@ No actives `EXPO_PUBLIC_PLUS_READY` hasta configurar productos reales, restaurac
 `app.json` configura el nombre, los identificadores, permisos e imágenes. El splash nativo usa `assets/images/blindly-logo.png` sobre fondo verde fijo. El menú y las pantallas React usan el logo transparente para adaptarse al tema.
 
 `eas.json` incluye perfiles `preview` y `production`. Antes de la primera compilación hay que vincular una cuenta y proyecto Expo, configurar las variables de entorno y confirmar los identificadores de la app. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md).
+
+La ficha y las declaraciones iniciales para las tiendas están en [docs/store-listing.md](docs/store-listing.md).
 
 Con esa configuración lista:
 
