@@ -103,7 +103,7 @@ Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md).
 
 ## Supabase
 
-Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `11`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos.
+Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `12`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos.
 
 | Scripts | Área |
 | --- | --- |
@@ -113,6 +113,7 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `09_puntuacion.sql` | Resultados, puntuación y consultas privadas |
 | `10_acciones_jugador.sql` | Acciones propias en mesas físicas y autoridad final del dealer |
 | `11_seguridad_rendimiento.sql` | Permisos mínimos, política consolidada e índices de acceso |
+| `12_helper_privado.sql` | Helper de RLS fuera de la API pública |
 
 La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas.
 

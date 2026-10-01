@@ -22,13 +22,15 @@ const db = new PGlite();
       select
         has_function_privilege('anon', 'public.hora_servidor()', 'execute') as anon_hora,
         has_function_privilege('authenticated', 'public.hora_servidor()', 'execute') as auth_hora,
-        has_function_privilege('anon', 'public.soy_jugador_de(uuid)', 'execute') as anon_mesa,
-        has_function_privilege('authenticated', 'public.soy_jugador_de(uuid)', 'execute') as auth_mesa
+        to_regprocedure('public.soy_jugador_de(uuid)') is null as helper_publico_ausente,
+        has_function_privilege('anon', 'private.soy_jugador_de(uuid)', 'execute') as anon_mesa,
+        has_function_privilege('authenticated', 'private.soy_jugador_de(uuid)', 'execute') as auth_mesa
     `)
   ).rows[0];
   assert.deepEqual(privileges, {
     anon_hora: false,
     auth_hora: true,
+    helper_publico_ausente: true,
     anon_mesa: false,
     auth_mesa: true,
   });
