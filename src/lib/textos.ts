@@ -803,3 +803,67 @@ Object.assign(textos, {
     "Cada jogador registra a própria ação pelo celular. O dealer apenas encerra a mão e entrega o pote.",
   ],
 });
+
+Object.assign(textos, {
+  "Blindly Plus": ["Blindly Plus", "Blindly Plus"],
+  "Más personalización, estadísticas y herramientas para el host.": [
+    "More customization, statistics and host tools.",
+    "Mais personalização, estatísticas e ferramentas para o host.",
+  ],
+  "Una experiencia más completa para quienes organizan y juegan seguido.": [
+    "A richer experience for people who host and play often.",
+    "Uma experiência mais completa para quem organiza e joga com frequência.",
+  ],
+  PLUS: ["PLUS", "PLUS"],
+  "Tu mesa, a tu manera.": ["Your table, your way.", "Sua mesa, do seu jeito."],
+  "Blindly Plus ampliará la personalización y el análisis sin quitar funciones esenciales de la versión gratuita.": [
+    "Blindly Plus will expand customization and insights without removing essential features from the free version.",
+    "Blindly Plus ampliará a personalização e as análises sem remover recursos essenciais da versão gratuita.",
+  ],
+  "Estadísticas avanzadas": ["Advanced statistics", "Estatísticas avançadas"],
+  "Analizá resultados, evolución y rendimiento de tus partidas.": [
+    "Analyze results, progress and performance across your games.",
+    "Analise resultados, evolução e desempenho das suas partidas.",
+  ],
+  "Temas y ambientaciones premium": [
+    "Premium themes and ambience",
+    "Temas e ambientações premium",
+  ],
+  "Personalizá la mesa, los sonidos y la experiencia del torneo.": [
+    "Customize the table, sounds and tournament experience.",
+    "Personalize a mesa, os sons e a experiência do torneio.",
+  ],
+  "Presets ilimitados": ["Unlimited presets", "Predefinições ilimitadas"],
+  "Guardá estructuras de ciegas y configuraciones para volver a usarlas.": [
+    "Save blind structures and settings to use again.",
+    "Salve estruturas de blinds e configurações para reutilizar.",
+  ],
+  "Herramientas avanzadas para el host": [
+    "Advanced host tools",
+    "Ferramentas avançadas para o host",
+  ],
+  "Administrá torneos frecuentes con más control y menos preparación.": [
+    "Run recurring tournaments with more control and less setup.",
+    "Gerencie torneios frequentes com mais controle e menos preparação.",
+  ],
+  "El poker entre amigos sigue siendo gratis": [
+    "Poker with friends stays free",
+    "O poker entre amigos continua grátis",
+  ],
+  "Crear y unirse a salas, gestionar turnos, usar fichas físicas o virtuales y repartir el pozo seguirán disponibles para todos.": [
+    "Creating and joining rooms, managing turns, using physical or virtual chips and awarding the pot will remain available to everyone.",
+    "Criar e entrar em salas, gerenciar turnos, usar fichas físicas ou virtuais e entregar o pote continuarão disponíveis para todos.",
+  ],
+  "Ver planes de Blindly Plus": [
+    "View Blindly Plus plans",
+    "Ver planos do Blindly Plus",
+  ],
+  "Blindly Plus está en preparación": [
+    "Blindly Plus is being prepared",
+    "Blindly Plus está em preparação",
+  ],
+  "Todavía no hay compras ni suscripciones activas.": [
+    "Purchases and subscriptions are not active yet.",
+    "Compras e assinaturas ainda não estão ativas.",
+  ],
+});

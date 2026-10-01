@@ -117,6 +117,12 @@ La seguridad depende de las políticas RLS y las funciones de Supabase, no de oc
 
 Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren configuración en el servicio de correo. No incluyen credenciales.
 
+## Blindly Plus
+
+La app incluye una primera pantalla de Blindly Plus sin compras activas. El juego esencial seguirá disponible gratis; Plus está reservado para personalización, estadísticas y herramientas avanzadas. La integración de pagos prevista usa compras nativas administradas mediante RevenueCat y requiere una development build.
+
+No actives `EXPO_PUBLIC_PLUS_READY` hasta configurar productos reales, restauración de compras y pruebas de tienda. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
+
 ## Android e iOS
 
 `app.json` configura el nombre, los identificadores, permisos e imágenes. El splash nativo usa `assets/images/blindly-logo.png` sobre fondo verde fijo. El menú y las pantallas React usan el logo transparente para adaptarse al tema.
@@ -165,6 +171,7 @@ Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migr
 - Vincular el proyecto EAS y generar builds nativas para dispositivos físicos.
 - Validar el splash en arranque en frío, la pausa de música al pasar a segundo plano y la reconexión después de bloquear el teléfono o perder la red.
 - Completar una partida con varios celulares y verificar apuestas, reparto de pozos y cierre del torneo.
+- Configurar los productos de Blindly Plus en las tiendas, integrar RevenueCat y probar compra y restauración en builds nativas.
 
 La configuración nativa y las pruebas automatizadas están preparadas; estas verificaciones físicas siguen pendientes.
 

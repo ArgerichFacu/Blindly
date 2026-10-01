@@ -53,6 +53,12 @@ export default function Menu() {
         simbolo="♜"
         onPress={() => router.push("/puntuacion")}
       />
+      <Acceso
+        titulo={t("Blindly Plus")}
+        detalle={t("Más personalización, estadísticas y herramientas para el host.")}
+        simbolo="♛"
+        onPress={() => router.push("/plus")}
+      />
       <View style={{ flexDirection: "row", gap: 10, marginTop: 4 }}>
         <Boton
           titulo={t("Cómo jugar")}

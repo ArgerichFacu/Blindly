@@ -109,6 +109,11 @@ export default function Opciones() {
         onPress={() => router.push("/terminos")}
       />
       <Boton
+        titulo={t("Blindly Plus")}
+        secundario
+        onPress={() => router.push("/plus")}
+      />
+      <Boton
         titulo={t("Mi cuenta")}
         secundario
         onPress={() => router.push("/cuenta")}
