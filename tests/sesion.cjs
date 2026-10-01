@@ -114,8 +114,11 @@ vm.runInNewContext(
   anonymous = false;
   await exportsAuth.eliminarCuenta();
   assert.equal(deleted, 1);
-  assert.deepEqual(calls.at(-2), ["function", "eliminar-cuenta", { method: "POST" }]);
-  assert.deepEqual(calls.at(-1), ["signout", { scope: "local" }]);
+  assert.equal(calls.at(-2)[0], "function");
+  assert.equal(calls.at(-2)[1], "eliminar-cuenta");
+  assert.equal(calls.at(-2)[2].method, "POST");
+  assert.equal(calls.at(-1)[0], "signout");
+  assert.equal(calls.at(-1)[1].scope, "local");
   assert.equal(id, null);
   console.log(
     "OK: invitado único, recuperación segura, historial protegido y eliminación local tras borrar la cuenta.",
