@@ -18,7 +18,7 @@ export default function Privacidad() {
     ],
     [
       "Servicios",
-      "Supabase aloja la autenticación y la base de datos. Apple, Google y Expo pueden procesar datos técnicos al distribuir o ejecutar la app. Blindly no vende datos ni usa publicidad.",
+      "Supabase aloja la autenticación y la base de datos. RevenueCat gestiona el estado de Blindly Plus cuando está activado. Apple, Google y Expo pueden procesar datos técnicos al distribuir o ejecutar la app. Blindly no vende datos ni usa publicidad.",
     ],
     [
       "Conservación y eliminación",

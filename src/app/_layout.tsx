@@ -6,6 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { TemaProvider } from "../lib/TemaContext";
 import { PreferenciasProvider } from "../lib/Preferencias";
 import { PantallaCarga } from "../components/PantallaCarga";
+import { PlusProvider } from "../lib/PlusContext";
 if (Platform.OS !== "web")
   void SplashScreen.preventAutoHideAsync().catch(() => {});
 export default function RootLayout() {
@@ -18,19 +19,21 @@ export default function RootLayout() {
   return (
     <TemaProvider>
       <PreferenciasProvider>
-        <SesionNativa />
-        {lista ? (
-          <View style={{ flex: 1 }} onLayout={alMostrar}>
-            <Stack
-              screenOptions={{
-                headerShown: false,
-                contentStyle: { backgroundColor: "#0A1713" },
-              }}
-            />
-          </View>
-        ) : (
-          <PantallaCarga onLoadEnd={alCargar} />
-        )}
+        <PlusProvider>
+          <SesionNativa />
+          {lista ? (
+            <View style={{ flex: 1 }} onLayout={alMostrar}>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  contentStyle: { backgroundColor: "#0A1713" },
+                }}
+              />
+            </View>
+          ) : (
+            <PantallaCarga onLoadEnd={alCargar} />
+          )}
+        </PlusProvider>
       </PreferenciasProvider>
     </TemaProvider>
   );

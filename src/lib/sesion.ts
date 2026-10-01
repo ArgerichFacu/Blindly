@@ -1,4 +1,5 @@
 import type { User } from "@supabase/supabase-js";
+import { tienePlusActivo } from "./plus";
 import { supabase } from "./supabase";
 let iniciando: Promise<User> | null = null;
 export async function asegurarSesion(): Promise<User> {
@@ -24,7 +25,10 @@ export type SolicitudCuenta = {
   usuario: string;
 };
 async function validarCambioCuenta(usuario: User) {
-  const puntos = await supabase.rpc("mi_puntuacion");
+  const [puntos, plusActivo] = await Promise.all([
+    supabase.rpc("mi_puntuacion"),
+    tienePlusActivo(),
+  ]);
   if (puntos.error) throw puntos.error;
   const partidas = await supabase
     .from("jugadores")
@@ -35,7 +39,8 @@ async function validarCambioCuenta(usuario: User) {
   if (partidas.error) throw partidas.error;
   if (
     (usuario.is_anonymous && puntos.data?.partidas > 0) ||
-    partidas.data?.length
+    partidas.data?.length ||
+    plusActivo
   )
     throw new Error("PROTEGER_INVITADO");
 }

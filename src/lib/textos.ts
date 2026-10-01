@@ -776,7 +776,7 @@ Object.assign(errores, {
   identity_already_exists:
     "Este email ya tiene una cuenta. Usá otro para proteger este invitado.",
   PROTEGER_INVITADO:
-    "Primero protegé este invitado y terminá sus partidas antes de recuperar otra cuenta.",
+    "Primero protegé este invitado y terminá sus partidas o suscripciones antes de recuperar otra cuenta.",
   email_provider_disabled:
     "El servicio de correo requiere configuración. Probá más tarde.",
   email_address_not_authorized:
@@ -820,6 +820,20 @@ Object.assign(textos, {
     "Blindly Plus will expand customization and insights without removing essential features from the free version.",
     "Blindly Plus ampliará a personalização e as análises sem remover recursos essenciais da versão gratuita.",
   ],
+  "Blindly Plus amplía la personalización y el análisis sin quitar funciones esenciales de la versión gratuita.": [
+    "Blindly Plus expands customization and insights without removing essential features from the free version.",
+    "Blindly Plus amplia a personalização e as análises sem remover recursos essenciais da versão gratuita.",
+  ],
+  "PLUS ACTIVO": ["PLUS ACTIVE", "PLUS ATIVO"],
+  "Tu mesa ya es Plus.": ["Your table is now Plus.", "Sua mesa agora é Plus."],
+  "Las funciones Plus están habilitadas para esta cuenta.": [
+    "Plus features are enabled for this account.",
+    "Os recursos Plus estão habilitados para esta conta.",
+  ],
+  "Acceso vigente hasta {fecha}": [
+    "Access valid until {fecha}",
+    "Acesso válido até {fecha}",
+  ],
   "Estadísticas avanzadas": ["Advanced statistics", "Estatísticas avançadas"],
   "Analizá resultados, evolución y rendimiento de tus partidas.": [
     "Analyze results, progress and performance across your games.",
@@ -858,6 +872,11 @@ Object.assign(textos, {
     "View Blindly Plus plans",
     "Ver planos do Blindly Plus",
   ],
+  "Administrar suscripción": [
+    "Manage subscription",
+    "Gerenciar assinatura",
+  ],
+  "Restaurar compras": ["Restore purchases", "Restaurar compras"],
   "Blindly Plus está en preparación": [
     "Blindly Plus is being prepared",
     "Blindly Plus está em preparação",
@@ -887,11 +906,26 @@ Object.assign(textos, {
     "The account could not be deleted. Please try again.",
     "Não foi possível excluir a conta. Tente novamente.",
   ],
+  "Eliminar tu cuenta no cancela tu suscripción de Apple o Google. Administrala antes de borrar la cuenta.": [
+    "Deleting your account does not cancel your Apple or Google subscription. Manage it before deleting the account.",
+    "Excluir sua conta não cancela a assinatura da Apple ou do Google. Gerencie-a antes de excluir a conta.",
+  ],
+  "Blindly Plus todavía no está disponible en este dispositivo.": [
+    "Blindly Plus is not available on this device yet.",
+    "O Blindly Plus ainda não está disponível neste dispositivo.",
+  ],
+  "No se pudo abrir la administración de la suscripción.": [
+    "Subscription management could not be opened.",
+    "Não foi possível abrir o gerenciamento da assinatura.",
+  ],
 });
 Object.assign(errores, {
   PARTIDA_ACTIVA_CUENTA:
     "Terminá o abandoná la partida activa antes de eliminar tu cuenta.",
   CUENTA_NO_ELIMINADA: "No se pudo eliminar la cuenta. Probá de nuevo.",
+  PLUS_NO_CONFIGURADO:
+    "Blindly Plus todavía no está disponible en este dispositivo.",
+  PLUS_SIN_GESTION: "No se pudo abrir la administración de la suscripción.",
 });
 
 Object.assign(textos, {
@@ -916,9 +950,9 @@ Object.assign(textos, {
     "A câmera apenas lê códigos QR das salas. O Blindly não salva nem envia fotos. Tema, idioma e volume ficam armazenados localmente no dispositivo.",
   ],
   Servicios: ["Services", "Serviços"],
-  "Supabase aloja la autenticación y la base de datos. Apple, Google y Expo pueden procesar datos técnicos al distribuir o ejecutar la app. Blindly no vende datos ni usa publicidad.": [
-    "Supabase hosts authentication and the database. Apple, Google and Expo may process technical data when distributing or running the app. Blindly does not sell data or use advertising.",
-    "O Supabase hospeda a autenticação e o banco de dados. Apple, Google e Expo podem processar dados técnicos ao distribuir ou executar o app. O Blindly não vende dados nem usa publicidade.",
+  "Supabase aloja la autenticación y la base de datos. RevenueCat gestiona el estado de Blindly Plus cuando está activado. Apple, Google y Expo pueden procesar datos técnicos al distribuir o ejecutar la app. Blindly no vende datos ni usa publicidad.": [
+    "Supabase hosts authentication and the database. RevenueCat manages Blindly Plus status when enabled. Apple, Google and Expo may process technical data when distributing or running the app. Blindly does not sell data or use advertising.",
+    "O Supabase hospeda a autenticação e o banco de dados. A RevenueCat gerencia o estado do Blindly Plus quando ativado. Apple, Google e Expo podem processar dados técnicos ao distribuir ou executar o app. O Blindly não vende dados nem usa publicidade.",
   ],
   "Conservación y eliminación": ["Retention and deletion", "Retenção e exclusão"],
   "Los datos se conservan mientras exista tu cuenta. Desde Mi cuenta podés eliminar la identidad, los puntos y el historial. Una partida activa debe finalizar antes para no romper la mesa de otros jugadores.": [

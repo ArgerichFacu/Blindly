@@ -9,6 +9,7 @@ let id = "guest",
   calls = [],
   historial = 0,
   activas = [],
+  plusActivo = false,
   functionError = null,
   deleted = 0;
 const auth = {
@@ -70,7 +71,13 @@ vm.runInNewContext(
   ts.transpileModule(fs.readFileSync("src/lib/sesion.ts", "utf8"), {
     compilerOptions: { module: ts.ModuleKind.CommonJS },
   }).outputText,
-  { exports: exportsAuth, require: () => ({ supabase: sb }) },
+  {
+    exports: exportsAuth,
+    require: (modulo) =>
+      modulo.endsWith("/plus")
+        ? { tienePlusActivo: async () => plusActivo }
+        : { supabase: sb },
+  },
 );
 (async () => {
   id = null;
@@ -101,6 +108,12 @@ vm.runInNewContext(
     /PROTEGER_INVITADO/,
   );
   activas = [];
+  plusActivo = true;
+  await assert.rejects(
+    () => exportsAuth.solicitarCodigo("test@example.com", true),
+    /PROTEGER_INVITADO/,
+  );
+  plusActivo = false;
   s = await exportsAuth.solicitarCodigo("test@example.com", true);
   assert.equal(calls.at(-1)[1].options.shouldCreateUser, false);
   assert.equal((await exportsAuth.confirmarCodigo(s, "123456")).id, "restored");
@@ -121,7 +134,7 @@ vm.runInNewContext(
   assert.equal(calls.at(-1)[1].scope, "local");
   assert.equal(id, null);
   console.log(
-    "OK: invitado único, recuperación segura, historial protegido y eliminación local tras borrar la cuenta.",
+    "OK: invitado único, recuperación segura, historial y compras protegidos, y eliminación local tras borrar la cuenta.",
   );
 })().catch((e) => {
   console.error(e);

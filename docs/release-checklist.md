@@ -14,7 +14,11 @@ Estado auditado el 1 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Nombre, fondo, iconos adaptativos y declaración de cifrado preparados para builds nativas.
 - [x] Permisos mínimos de tablas y funciones auxiliares.
 - [x] Índices de las claves foráneas usadas en consultas de sala.
-- [x] Empaquetado web de producción en CI.
+- [x] Empaquetado JavaScript de web, Android e iOS en CI.
+- [x] SDK de Blindly Plus, paywall, restauración y administración de suscripción integrados y desactivados por variable pública.
+- [x] Borrado opcional del perfil de RevenueCat desde la eliminación autenticada de cuenta.
+- [x] Perfiles EAS de development, preview y production preparados.
+- [x] Proyecto `@facuargerich/blindly` vinculado y variables públicas creadas en los tres entornos EAS.
 - [x] Proyecto Supabase aislado en la organización Blindly.
 - [x] GitHub conectado a Supabase sobre la rama main.
 
@@ -22,11 +26,10 @@ Estado auditado el 1 de octubre de 2026. Esta lista separa lo validado por códi
 
 - [ ] Configurar un proveedor SMTP y un dominio remitente.
 - [ ] Aplicar las plantillas de correo y activar `EXPO_PUBLIC_EMAIL_AUTH_READY`.
-- [ ] Vincular el proyecto con una cuenta Expo mediante `eas init`.
-- [ ] Crear variables preview y production en EAS.
 - [ ] Generar builds Android e iOS e instalarlas en dispositivos reales.
 - [ ] Crear productos de suscripción en App Store Connect y Google Play Console.
 - [ ] Configurar RevenueCat, sus entitlements y claves públicas.
+- [ ] Guardar `REVENUECAT_SECRET_KEY` en la Edge Function y validar la eliminación del perfil de cliente.
 - [ ] Activar `EXPO_PUBLIC_PLUS_READY` después de validar compra y restauración.
 
 ## Prueba física de aceptación

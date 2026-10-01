@@ -21,7 +21,11 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.blindly.app"
+      "package": "com.blindly.app",
+      "permissions": [
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "output": "single",
@@ -58,7 +62,8 @@
           "microphonePermission": false,
           "recordAudioAndroid": false
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -67,6 +72,13 @@
     "description": "Mesa de poker presencial con turnos, ciegas, fichas y puntuación sincronizados.",
     "backgroundColor": "#0A1713",
     "primaryColor": "#0A1713",
-    "githubUrl": "https://github.com/ArgerichFacu/Blindly"
+    "githubUrl": "https://github.com/ArgerichFacu/Blindly",
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9f3c10b7-f501-45d8-8d64-b1ffe5569667"
+      }
+    },
+    "owner": "facuargerich"
   }
 }

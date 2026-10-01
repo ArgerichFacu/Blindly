@@ -60,6 +60,19 @@ Deno.serve(async (request: Request) => {
   if ((comoJugador.data?.length ?? 0) > 0 || (comoHost.data?.length ?? 0) > 0)
     return json({ code: "PARTIDA_ACTIVA_CUENTA" }, 409);
 
+  const revenueCatSecret = Deno.env.get("REVENUECAT_SECRET_KEY");
+  if (revenueCatSecret) {
+    const revenueCat = await fetch(
+      `https://api.revenuecat.com/v1/subscribers/${encodeURIComponent(userId)}`,
+      {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${revenueCatSecret}` },
+      },
+    );
+    if (revenueCat.status !== 200 && revenueCat.status !== 404)
+      return json({ code: "CUENTA_NO_ELIMINADA" }, 500);
+  }
+
   const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
   if (deleteError) return json({ code: "CUENTA_NO_ELIMINADA" }, 500);
 

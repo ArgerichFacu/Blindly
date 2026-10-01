@@ -16,10 +16,12 @@ import {
   type SolicitudCuenta,
 } from "../lib/sesion";
 import { usePreferencias } from "../lib/Preferencias";
+import { usePlus } from "../lib/PlusContext";
 const correoListo = process.env.EXPO_PUBLIC_EMAIL_AUTH_READY === "true";
 export default function Cuenta() {
   const { t, mensajeError } = usePreferencias(),
-    router = useRouter();
+    router = useRouter(),
+    plus = usePlus();
   const [usuario, setUsuario] = useState<User | null>(null),
     [email, setEmail] = useState(""),
     [codigo, setCodigo] = useState(""),
@@ -101,6 +103,21 @@ export default function Cuenta() {
                 "Vinculá tu email para conservar tus puntos e historial al cambiar de celular. Podés seguir jugando como invitado.",
               )}
             </Texto>
+            {plus.activo && (
+              <>
+                <Texto>
+                  {t(
+                    "Eliminar tu cuenta no cancela tu suscripción de Apple o Google. Administrala antes de borrar la cuenta.",
+                  )}
+                </Texto>
+                <Boton
+                  secundario
+                  titulo={t("Administrar suscripción")}
+                  disabled={ocupado}
+                  onPress={() => void ejecutar(plus.gestionar)}
+                />
+              </>
+            )}
           </Tarjeta>
           {(usuario.is_anonymous || recuperar) && (
             <Tarjeta>

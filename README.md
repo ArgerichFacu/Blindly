@@ -121,7 +121,7 @@ Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren con
 
 ## Blindly Plus
 
-La app incluye una primera pantalla de Blindly Plus sin compras activas. El juego esencial seguirá disponible gratis; Plus está reservado para personalización, estadísticas y herramientas avanzadas. La integración de pagos prevista usa compras nativas administradas mediante RevenueCat y requiere una development build.
+La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis. Las compras continúan desactivadas hasta crear los productos comerciales y validarlas en una development build.
 
 No actives `EXPO_PUBLIC_PLUS_READY` hasta configurar productos reales, restauración de compras y pruebas de tienda. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
 
@@ -129,7 +129,7 @@ No actives `EXPO_PUBLIC_PLUS_READY` hasta configurar productos reales, restaurac
 
 `app.json` configura el nombre, los identificadores, permisos e imágenes. El splash nativo usa `assets/images/blindly-logo.png` sobre fondo verde fijo. El menú y las pantallas React usan el logo transparente para adaptarse al tema.
 
-`eas.json` incluye perfiles `preview` y `production`. Antes de la primera compilación hay que vincular una cuenta y proyecto Expo, configurar las variables de entorno y confirmar los identificadores de la app. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md).
+`eas.json` incluye perfiles `development`, `preview` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Los interruptores de correo y Plus permanecen desactivados hasta verificar sus servicios. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md).
 
 La ficha y las declaraciones iniciales para las tiendas están en [docs/store-listing.md](docs/store-listing.md).
 
@@ -166,6 +166,7 @@ eas.json           Perfiles de compilación
 | `npm run ios` | Iniciar Expo para iOS |
 | `npm run typecheck` | Verificar tipos de TypeScript |
 | `npm run build:web` | Generar el paquete web de producción |
+| `npm run build:bundles` | Verificar los paquetes JavaScript de web, Android e iOS |
 | `npm test` | Ejecutar las pruebas automatizadas |
 
 Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migraciones. Cubren turnos, permisos, conservación de fichas, pozos, puntuación, privacidad y operaciones repetidas. Las pruebas de sesión usan dobles de Supabase: no envían correos ni sustituyen una prueba de autenticación real.
@@ -173,10 +174,10 @@ Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migr
 ## Pendientes antes de publicar
 
 - Configurar SMTP, aplicar las plantillas y probar la vinculación y recuperación de una identidad con puntos.
-- Vincular el proyecto EAS y generar builds nativas para dispositivos físicos.
+- Generar builds EAS nativas e instalarlas en dispositivos físicos.
 - Validar el splash en arranque en frío, la pausa de música al pasar a segundo plano y la reconexión después de bloquear el teléfono o perder la red.
 - Completar una partida con varios celulares y verificar apuestas, reparto de pozos y cierre del torneo.
-- Configurar los productos de Blindly Plus en las tiendas, integrar RevenueCat y probar compra y restauración en builds nativas.
+- Configurar los productos de Blindly Plus en las tiendas y RevenueCat, y probar compra, restauración y eliminación en builds nativas.
 
 La configuración nativa y las pruebas automatizadas están preparadas; estas verificaciones físicas siguen pendientes.
 

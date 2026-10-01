@@ -2,7 +2,7 @@
 
 ## Identidad
 
-Mi cuenta está en Opciones y Mi puntuación. Proteger este invitado usa updateUser(email) y verifyOtp(email_change): conserva el UUID, sin migrar puntos ni modificar RLS. Recuperar usa signInWithOtp(shouldCreateUser:false) y verifyOtp(email). No fusiona cuentas. Se bloquea la recuperación si el invitado tiene partidas puntuadas o el usuario tiene una partida jugando/pausada. El invitado sigue disponible sin email.
+Mi cuenta está en Opciones y Mi puntuación. Proteger este invitado usa updateUser(email) y verifyOtp(email_change): conserva el UUID, sin migrar puntos ni modificar RLS. Recuperar usa signInWithOtp(shouldCreateUser:false) y verifyOtp(email). No fusiona cuentas. Se bloquea la recuperación si el invitado tiene partidas puntuadas o Blindly Plus activo, o si el usuario tiene una partida jugando/pausada. El invitado sigue disponible sin email.
 
 Antes de probar correo en Supabase:
 1. Authentication > Sign In / Providers: Email y Confirm email habilitados; Allow manual linking ya fue activado con autorización del usuario; Confirm email sigue habilitado.
@@ -12,27 +12,30 @@ Antes de probar correo en Supabase:
 
 ## EAS
 
-Perfiles en eas.json: preview (APK Android instalable, distribución interna iOS) y production. Identificadores propuestos com.blindly.app; confirmar que sean los definitivos antes de publicar.
+Perfiles en eas.json: development (cliente de desarrollo interno), preview (APK Android instalable y distribución interna iOS) y production. Identificadores propuestos `com.blindly.app`; confirmar que sean los definitivos antes de publicar.
 
-Primera configuración con tu cuenta Expo:
+El proyecto ya está vinculado a [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), con ID `9f3c10b7-f501-45d8-8d64-b1ffe5569667`. Los entornos `development`, `preview` y `production` contienen `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_KEY`, `EXPO_PUBLIC_EMAIL_AUTH_READY=false` y `EXPO_PUBLIC_PLUS_READY=false`.
+
+Para revisar esa configuración:
 
 ```powershell
-npx eas-cli@latest login
-npx eas-cli@latest init
-npx eas-cli@latest env:create --environment preview --name EXPO_PUBLIC_SUPABASE_URL --visibility plaintext
-npx eas-cli@latest env:create --environment preview --name EXPO_PUBLIC_SUPABASE_KEY --visibility plaintext
+npx eas-cli@latest project:info
+npx eas-cli@latest env:list development
+npx eas-cli@latest env:list preview
+npx eas-cli@latest env:list production
 ```
 
-Introducir los valores públicos existentes de .env en las preguntas del CLI. Nunca usar service_role. .env está ignorado por Git y no se debe asumir que se sube a EAS. Crear también las dos variables en production cuando corresponda. No se agregó un projectId ficticio: eas init enlaza el proyecto real.
+Las claves públicas de RevenueCat se agregan cuando existan los proyectos de las tiendas; `REVENUECAT_SECRET_KEY` se guarda únicamente como secreto de la Edge Function de Supabase. Nunca usar `service_role` en EAS ni en variables `EXPO_PUBLIC`.
 
 Una vez enlazado y con variables configuradas:
 
 ```powershell
+npx eas-cli@latest build --platform android --profile development
 npx eas-cli@latest build --platform android --profile preview
 npx eas-cli@latest build --platform ios --profile preview
 ```
 
-iOS físico necesita cuenta Apple Developer y registrar el dispositivo/provisionamiento cuando EAS lo solicite. No se ejecutó ninguna compilación remota ni publicación.
+iOS físico necesita cuenta Apple Developer y registrar el dispositivo/provisionamiento cuando EAS lo solicite. El proyecto está listo para solicitar la compilación remota; la instalación y aceptación en hardware siguen siendo obligatorias.
 
 ## Configuración y verificación física
 
