@@ -6,7 +6,7 @@ Blindly organiza partidas presenciales de poker entre amigos. No procesa apuesta
 
 ## Datos que tratamos
 
-Blindly crea un identificador de cuenta para permitir la sincronización. Guarda el nombre elegido por el jugador, las salas a las que pertenece, la configuración y las acciones de la mesa, los stacks, la puntuación, el rango y el historial de partidas. El correo electrónico es opcional y solo se guarda cuando el usuario decide proteger o recuperar su cuenta.
+Blindly crea un identificador de cuenta para permitir la sincronización. Guarda el nombre elegido por el jugador, las salas a las que pertenece, la configuración y las acciones de la mesa, los stacks, la puntuación, el rango y el historial de partidas. El correo electrónico es opcional y solo se guarda cuando el usuario decide proteger o recuperar su cuenta. Si usa una clave de recuperación, la clave completa se muestra una sola vez: Supabase Auth conserva una contraseña derivada de forma segura y un alias técnico interno, no una copia legible de la clave.
 
 La cámara se usa únicamente para leer el código QR de una sala. Blindly no almacena ni transmite fotografías. El tema, el idioma y los volúmenes se guardan localmente en el dispositivo.
 

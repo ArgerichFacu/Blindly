@@ -7,7 +7,7 @@ const db = new PGlite();
 
 (async () => {
   await db.exec(
-    "create role anon; create role authenticated; create schema auth; create table auth.users(id uuid primary key); create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;",
+    "create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key); create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;",
   );
 
   for (const file of fs
@@ -15,6 +15,14 @@ const db = new PGlite();
     .filter((name) => /^\d{2}_.*\.sql$/.test(name))
     .sort()) {
     await db.exec(fs.readFileSync(path.join(root, "supabase", file), "utf8"));
+  }
+  for (const file of fs
+    .readdirSync(path.join(root, "supabase", "migrations"))
+    .filter((name) => name.endsWith(".sql"))
+    .sort()) {
+    await db.exec(
+      fs.readFileSync(path.join(root, "supabase", "migrations", file), "utf8"),
+    );
   }
 
   const privileges = (
@@ -25,6 +33,8 @@ const db = new PGlite();
         to_regprocedure('public.soy_jugador_de(uuid)') is null as helper_publico_ausente,
         has_function_privilege('anon', 'private.soy_jugador_de(uuid)', 'execute') as anon_mesa,
         has_function_privilege('authenticated', 'private.soy_jugador_de(uuid)', 'execute') as auth_mesa
+        ,has_table_privilege('service_role', 'public.salas', 'select') as servicio_salas
+        ,has_table_privilege('service_role', 'public.jugadores', 'select') as servicio_jugadores
     `)
   ).rows[0];
   assert.deepEqual(privileges, {
@@ -33,6 +43,8 @@ const db = new PGlite();
     helper_publico_ausente: true,
     anon_mesa: false,
     auth_mesa: true,
+    servicio_salas: true,
+    servicio_jugadores: true,
   });
 
   const indexes = (
@@ -84,7 +96,7 @@ const db = new PGlite();
   );
 
   console.log(
-    "OK: auxiliares privados, política única de lectura e índices para claves foráneas.",
+    "OK: auxiliares privados, política única, índices y lecturas mínimas de Edge Functions.",
   );
   await db.close();
 })().catch(async (error) => {

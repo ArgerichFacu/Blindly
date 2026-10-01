@@ -17,7 +17,7 @@ Blindly sincroniza ciegas, turnos, fichas y puntuación para partidas presencial
 
 Blindly no reparte cartas, no determina manos ganadoras y no procesa dinero real, apuestas ni premios. Las cartas y la decisión del ganador permanecen en la mesa física. La cámara es opcional y solo escanea el QR de la sala; el código también puede ingresarse manualmente.
 
-La app crea una identidad de invitado para sincronizar datos. La eliminación está disponible en Opciones > Mi cuenta. El email es opcional y su recuperación debe habilitarse únicamente después de configurar SMTP.
+La app crea una identidad de invitado para sincronizar datos. El usuario puede convertirla en una identidad recuperable con una clave privada sin registrar datos de contacto. La eliminación está disponible en Opciones > Mi cuenta. El email es opcional y su recuperación debe habilitarse únicamente después de configurar SMTP.
 
 ## Declaración orientativa de datos
 

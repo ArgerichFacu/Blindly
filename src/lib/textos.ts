@@ -791,6 +791,10 @@ Object.assign(textos, {
       "Email recovery is being set up. You can keep playing as a guest.",
       "A recuperação por email está sendo preparada. Você pode continuar jogando como convidado.",
     ],
+  "El correo está en preparación. La clave de recuperación ya está disponible.": [
+    "Email is being set up. The recovery key is already available.",
+    "O email está sendo preparado. A chave de recuperação já está disponível.",
+  ],
 });
 
 Object.assign(textos, {
@@ -919,6 +923,46 @@ Object.assign(textos, {
 
 Object.assign(textos, {
   "Eliminar mi cuenta": ["Delete my account", "Excluir minha conta"],
+  "Cuenta protegida con clave": [
+    "Account protected with a recovery key",
+    "Conta protegida com chave de recuperação",
+  ],
+  "Protección sin correo": [
+    "Protection without email",
+    "Proteção sem email",
+  ],
+  "Tu cuenta tiene una clave de recuperación": [
+    "Your account has a recovery key",
+    "Sua conta tem uma chave de recuperação",
+  ],
+  "Guardá una clave privada para recuperar este mismo usuario, sus puntos, historial y compras en otro celular.": [
+    "Save a private key to recover this same user, points, history and purchases on another phone.",
+    "Guarde uma chave privada para recuperar este mesmo usuário, pontos, histórico e compras em outro celular.",
+  ],
+  "Guardala ahora en un lugar seguro. Blindly no puede mostrarla de nuevo; crear otra reemplaza la anterior.": [
+    "Save it somewhere safe now. Blindly cannot show it again; creating another key replaces the previous one.",
+    "Guarde-a agora em um local seguro. O Blindly não pode exibi-la novamente; criar outra substitui a anterior.",
+  ],
+  "Crear una clave nueva": ["Create a new key", "Criar uma nova chave"],
+  "Crear clave de recuperación": [
+    "Create recovery key",
+    "Criar chave de recuperação",
+  ],
+  "Ya tengo una clave": ["I already have a key", "Já tenho uma chave"],
+  "Clave de recuperación": ["Recovery key", "Chave de recuperação"],
+  "Agregar un email": ["Add an email", "Adicionar um email"],
+  "Tu identidad ya se puede recuperar con la clave privada. También podrás agregar un email cuando el correo esté habilitado.": [
+    "Your identity can now be recovered with the private key. You can also add an email when email service is enabled.",
+    "Sua identidade já pode ser recuperada com a chave privada. Você também poderá adicionar um email quando o serviço estiver habilitado.",
+  ],
+  "La clave no es válida. Revisala o creá una nueva desde el dispositivo donde todavía tenés acceso.": [
+    "The key is invalid. Check it or create a new one on a device where you still have access.",
+    "A chave é inválida. Confira-a ou crie uma nova em um dispositivo no qual você ainda tenha acesso.",
+  ],
+  "No se pudo crear la clave de recuperación. Probá de nuevo.": [
+    "The recovery key could not be created. Try again.",
+    "Não foi possível criar a chave de recuperação. Tente novamente.",
+  ],
   "Elimina tu identidad, tus puntos y tu historial. No se puede deshacer.": [
     "Deletes your identity, points and history. This cannot be undone.",
     "Exclui sua identidade, pontos e histórico. Esta ação não pode ser desfeita.",
@@ -956,6 +1000,9 @@ Object.assign(errores, {
   PLUS_NO_CONFIGURADO:
     "Blindly Plus todavía no está disponible en este dispositivo.",
   PLUS_SIN_GESTION: "No se pudo abrir la administración de la suscripción.",
+  CLAVE_INVALIDA:
+    "La clave no es válida. Revisala o creá una nueva desde el dispositivo donde todavía tenés acceso.",
+  CLAVE_NO_CREADA: "No se pudo crear la clave de recuperación. Probá de nuevo.",
 });
 
 Object.assign(textos, {

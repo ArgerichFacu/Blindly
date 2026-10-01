@@ -4,6 +4,7 @@ const fs = require("node:fs"),
   assert = require("node:assert/strict");
 let id = "guest",
   anonymous = true,
+  emailActual = null,
   creates = 0,
   sessionError = null,
   calls = [],
@@ -14,7 +15,11 @@ let id = "guest",
   deleted = 0;
 const auth = {
   getSession: async () => ({
-    data: { session: id ? { user: { id, is_anonymous: anonymous } } : null },
+    data: {
+      session: id
+        ? { user: { id, is_anonymous: anonymous, email: emailActual } }
+        : null,
+    },
     error: sessionError,
   }),
   signInAnonymously: async () => {
@@ -48,6 +53,21 @@ const auth = {
       },
     };
   },
+  refreshSession: async () => ({
+    data: { user: { id, is_anonymous: anonymous, email: emailActual } },
+    error: null,
+  }),
+  signInWithPassword: async ({ email, password }) => {
+    calls.push(["password", email, password]);
+    const recuperado = email.split("@")[0];
+    id = recuperado;
+    anonymous = false;
+    emailActual = email;
+    return {
+      data: { user: { id, is_anonymous: false, email } },
+      error: null,
+    };
+  },
 };
 const sb = {
   auth,
@@ -55,6 +75,17 @@ const sb = {
     invoke: async (name, options) => {
       calls.push(["function", name, options]);
       if (functionError) return { error: functionError };
+      if (name === "crear-recuperacion") {
+        const usuario = id;
+        anonymous = false;
+        emailActual = `${usuario}@recovery.blindly.invalid`;
+        return {
+          data: {
+            clave: `BLINDLY1:${usuario}:abcdefghijklmnopqrstuvwxyz123456`,
+          },
+          error: null,
+        };
+      }
       deleted++;
       return { data: { ok: true }, error: null };
     },
@@ -123,8 +154,27 @@ vm.runInNewContext(
     () => exportsAuth.confirmarCodigo(s, "123456"),
     /SESION_CAMBIO/,
   );
+  id = "11111111-1111-4111-8111-111111111111";
+  anonymous = true;
+  emailActual = null;
+  const protegida = await exportsAuth.crearClaveRecuperacion();
+  assert.match(protegida.clave, /^BLINDLY1:/);
+  assert.equal(protegida.usuario.id, id);
+  assert.equal(protegida.usuario.is_anonymous, false);
+  assert.equal(exportsAuth.cuentaConClave(protegida.usuario), true);
+  id = "22222222-2222-4222-8222-222222222222";
+  anonymous = true;
+  emailActual = null;
+  await assert.rejects(
+    () => exportsAuth.recuperarConClave("incorrecta"),
+    /CLAVE_INVALIDA/,
+  );
+  const recuperado = await exportsAuth.recuperarConClave(protegida.clave);
+  assert.equal(recuperado.id, "11111111-1111-4111-8111-111111111111");
+  assert.equal(calls.at(-1)[0], "password");
   id = "linked";
   anonymous = false;
+  emailActual = "test@example.com";
   await exportsAuth.eliminarCuenta();
   assert.equal(deleted, 1);
   assert.equal(calls.at(-2)[0], "function");

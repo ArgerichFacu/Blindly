@@ -9,6 +9,7 @@ Estado auditado el 1 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Acciones propias de cada jugador y cierre exclusivo del dealer.
 - [x] Puntuación, empates, privacidad y persistencia del historial.
 - [x] Sesión anónima única y flujo preparado para vincular y recuperar por correo.
+- [x] Recuperación operativa sin correo mediante una clave privada rotatoria y una Edge Function autenticada.
 - [x] Eliminación de cuenta y datos desde la app, bloqueada durante partidas activas.
 - [x] Política de privacidad accesible dentro de la app y documentación inicial de tiendas.
 - [x] Nombre, fondo, iconos adaptativos y declaración de cifrado preparados para builds nativas.

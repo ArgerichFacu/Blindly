@@ -24,6 +24,21 @@ export type SolicitudCuenta = {
   tipo: "email_change" | "email";
   usuario: string;
 };
+const DOMINIO_RECUPERACION = "@recovery.blindly.invalid";
+
+export function cuentaConClave(usuario: User) {
+  return usuario.email?.endsWith(DOMINIO_RECUPERACION) ?? false;
+}
+
+async function codigoFuncion(error: unknown, fallback: string) {
+  const contexto = (
+    error as { context?: { json?: () => Promise<{ code?: string }> } }
+  ).context;
+  const respuesta = contexto?.json
+    ? await contexto.json().catch(() => null)
+    : null;
+  return respuesta?.code ?? fallback;
+}
 async function validarCambioCuenta(usuario: User) {
   const [puntos, plusActivo] = await Promise.all([
     supabase.rpc("mi_puntuacion"),
@@ -52,7 +67,7 @@ export async function solicitarCodigo(
   email = email.trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     throw new Error("EMAIL_INVALIDO");
-  if (!recuperar && !usuario.is_anonymous)
+  if (!recuperar && !usuario.is_anonymous && !cuentaConClave(usuario))
     throw new Error("CUENTA_YA_VINCULADA");
   if (recuperar) await validarCambioCuenta(usuario);
   const { error } = recuperar
@@ -67,6 +82,41 @@ export async function solicitarCodigo(
     tipo: recuperar ? "email" : "email_change",
     usuario: usuario.id,
   };
+}
+
+export async function crearClaveRecuperacion() {
+  await asegurarSesion();
+  const { data, error } = await supabase.functions.invoke("crear-recuperacion", {
+    method: "POST",
+  });
+  if (error) throw new Error(await codigoFuncion(error, "CLAVE_NO_CREADA"));
+  if (typeof data?.clave !== "string") throw new Error("CLAVE_NO_CREADA");
+  const actualizada = await supabase.auth.refreshSession();
+  if (actualizada.error || !actualizada.data.user)
+    throw actualizada.error ?? new Error("SESION_REQUERIDA");
+  return { clave: data.clave as string, usuario: actualizada.data.user };
+}
+
+export async function recuperarConClave(clave: string) {
+  const actual = await asegurarSesion();
+  await validarCambioCuenta(actual);
+  const partes = clave.trim().split(":");
+  if (
+    partes.length !== 3 ||
+    partes[0].toUpperCase() !== "BLINDLY1" ||
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      partes[1],
+    ) ||
+    !/^[A-Za-z0-9_-]{24,}$/.test(partes[2])
+  )
+    throw new Error("CLAVE_INVALIDA");
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: `${partes[1]}${DOMINIO_RECUPERACION}`,
+    password: partes[2],
+  });
+  if (error || !data.user || data.user.id !== partes[1])
+    throw new Error("CLAVE_INVALIDA");
+  return data.user;
 }
 export async function confirmarCodigo(
   solicitud: SolicitudCuenta,
@@ -93,13 +143,7 @@ export async function eliminarCuenta() {
     method: "POST",
   });
   if (error) {
-    const contexto = (
-      error as { context?: { json?: () => Promise<{ code?: string }> } }
-    ).context;
-    const respuesta = contexto?.json
-      ? await contexto.json().catch(() => null)
-      : null;
-    throw new Error(respuesta?.code ?? "CUENTA_NO_ELIMINADA");
+    throw new Error(await codigoFuncion(error, "CUENTA_NO_ELIMINADA"));
   }
   const salida = await supabase.auth.signOut({ scope: "local" });
   if (salida.error) throw salida.error;

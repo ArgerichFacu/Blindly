@@ -93,11 +93,11 @@ npm ci
 
 ## Identidad y recuperación
 
-Podés entrar como invitado sin registrar un correo. La sesión anónima se conserva en el dispositivo, pero borrar sus datos o cambiar de equipo puede hacer que pierdas el acceso a esa identidad.
+Podés entrar como invitado sin registrar un correo. Desde **Mi cuenta** podés generar una clave privada para recuperar el mismo UUID, puntos, historial y compras en otro dispositivo. La clave se muestra una sola vez y puede rotarse; Blindly solo conserva su hash seguro dentro de Supabase Auth.
 
-La interfaz **Mi cuenta** y el flujo de vinculación por código de correo están implementados para conservar el UUID y la puntuación. La recuperación no fusiona cuentas y tiene controles para evitar reemplazar un invitado con partidas puntuadas o cambiar de identidad durante una partida activa. Desde **Mi cuenta** también se puede eliminar la identidad, la puntuación y el historial; una Edge Function autenticada impide hacerlo mientras exista una partida activa.
+La recuperación por clave ya funciona sin un proveedor externo. La interfaz también incluye vinculación por código de correo para conservar el UUID y la puntuación cuando se configure SMTP. Los cambios de identidad no fusionan cuentas y tienen controles para evitar reemplazar un invitado con partidas puntuadas, compras o una partida activa. Desde **Mi cuenta** también se puede eliminar la identidad, la puntuación y el historial; una Edge Function autenticada impide hacerlo mientras exista una partida activa.
 
-**La recuperación por correo todavía está deshabilitada por defecto.** Falta configurar un proveedor SMTP, aplicar las plantillas y verificar el envío y la recuperación en dispositivos reales. Solo después debe habilitarse `EXPO_PUBLIC_EMAIL_AUTH_READY=true`. Hasta completar esa preparación, no debe considerarse un mecanismo operativo de respaldo.
+**La recuperación por correo todavía está deshabilitada por defecto**, pero ya no bloquea la identidad recuperable porque la clave privada cubre ese caso. Falta configurar un proveedor SMTP, aplicar las plantillas y verificar el envío. Solo después debe habilitarse `EXPO_PUBLIC_EMAIL_AUTH_READY=true`.
 
 Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md). La [política de privacidad](PRIVACY.md) y las [instrucciones de eliminación](ACCOUNT_DELETION.md) también están disponibles dentro de la app.
 

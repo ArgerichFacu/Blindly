@@ -12,6 +12,9 @@ import {
   asegurarSesion,
   solicitarCodigo,
   confirmarCodigo,
+  crearClaveRecuperacion,
+  recuperarConClave,
+  cuentaConClave,
   eliminarCuenta,
   type SolicitudCuenta,
 } from "../lib/sesion";
@@ -25,6 +28,9 @@ export default function Cuenta() {
   const [usuario, setUsuario] = useState<User | null>(null),
     [email, setEmail] = useState(""),
     [codigo, setCodigo] = useState(""),
+    [clave, setClave] = useState(""),
+    [claveGenerada, setClaveGenerada] = useState(""),
+    [mostrarRecuperacion, setMostrarRecuperacion] = useState(false),
     [solicitud, setSolicitud] = useState<SolicitudCuenta | null>(null),
     [recuperar, setRecuperar] = useState(false),
     [ocupado, setOcupado] = useState(false),
@@ -67,7 +73,7 @@ export default function Cuenta() {
         <Tarjeta>
           <Texto>
             {t(
-              "La recuperación por correo está en preparación. Podés seguir jugando como invitado.",
+              "El correo está en preparación. La clave de recuperación ya está disponible.",
             )}
           </Texto>
         </Tarjeta>
@@ -94,13 +100,19 @@ export default function Cuenta() {
               {t(
                 usuario.is_anonymous
                   ? "Jugás como invitado"
-                  : "Cuenta recuperable",
+                  : cuentaConClave(usuario)
+                    ? "Cuenta protegida con clave"
+                    : "Cuenta recuperable",
               )}
             </Texto>
-            {!usuario.is_anonymous && <Texto>{usuario.email}</Texto>}
+            {!usuario.is_anonymous && !cuentaConClave(usuario) && (
+              <Texto>{usuario.email}</Texto>
+            )}
             <Texto suave>
               {t(
-                "Vinculá tu email para conservar tus puntos e historial al cambiar de celular. Podés seguir jugando como invitado.",
+                cuentaConClave(usuario)
+                  ? "Tu identidad ya se puede recuperar con la clave privada. También podrás agregar un email cuando el correo esté habilitado."
+                  : "Vinculá tu email para conservar tus puntos e historial al cambiar de celular. Podés seguir jugando como invitado.",
               )}
             </Texto>
             {plus.activo && (
@@ -119,7 +131,83 @@ export default function Cuenta() {
               </>
             )}
           </Tarjeta>
-          {(usuario.is_anonymous || recuperar) && (
+          {(usuario.is_anonymous || cuentaConClave(usuario)) && (
+            <Tarjeta>
+              <Texto style={{ fontWeight: "700" }}>
+                {t(
+                  cuentaConClave(usuario)
+                    ? "Tu cuenta tiene una clave de recuperación"
+                    : "Protección sin correo",
+                )}
+              </Texto>
+              <Texto suave>
+                {t(
+                  "Guardá una clave privada para recuperar este mismo usuario, sus puntos, historial y compras en otro celular.",
+                )}
+              </Texto>
+              {!!claveGenerada && (
+                <>
+                  <Texto selectable style={{ fontWeight: "700" }}>
+                    {claveGenerada}
+                  </Texto>
+                  <Texto>
+                    {t(
+                      "Guardala ahora en un lugar seguro. Blindly no puede mostrarla de nuevo; crear otra reemplaza la anterior.",
+                    )}
+                  </Texto>
+                </>
+              )}
+              <Boton
+                titulo={t(
+                  cuentaConClave(usuario)
+                    ? "Crear una clave nueva"
+                    : "Crear clave de recuperación",
+                )}
+                disabled={ocupado}
+                onPress={() =>
+                  void ejecutar(async () => {
+                    const resultado = await crearClaveRecuperacion();
+                    setUsuario(resultado.usuario);
+                    setClaveGenerada(resultado.clave);
+                  })
+                }
+              />
+              {usuario.is_anonymous && (
+                <Boton
+                  secundario
+                  titulo={t("Ya tengo una clave")}
+                  disabled={ocupado}
+                  onPress={() => setMostrarRecuperacion((valor) => !valor)}
+                />
+              )}
+              {mostrarRecuperacion && usuario.is_anonymous && (
+                <>
+                  <Campo
+                    etiqueta={t("Clave de recuperación")}
+                    value={clave}
+                    onChangeText={setClave}
+                    autoCapitalize="characters"
+                    autoCorrect={false}
+                    editable={!ocupado}
+                  />
+                  <Boton
+                    titulo={t("Recuperar mi cuenta")}
+                    disabled={ocupado || !clave.trim()}
+                    onPress={() =>
+                      void ejecutar(async () => {
+                        const recuperado = await recuperarConClave(clave);
+                        setUsuario(recuperado);
+                        setClave("");
+                        setMostrarRecuperacion(false);
+                        router.replace("/cuenta");
+                      })
+                    }
+                  />
+                </>
+              )}
+            </Tarjeta>
+          )}
+          {(usuario.is_anonymous || cuentaConClave(usuario) || recuperar) && (
             <Tarjeta>
               {!solicitud ? (
                 <>
@@ -127,7 +215,9 @@ export default function Cuenta() {
                     {t(
                       recuperar
                         ? "Recuperar mi cuenta"
-                        : "Proteger este invitado",
+                        : cuentaConClave(usuario)
+                          ? "Agregar un email"
+                          : "Proteger este invitado",
                     )}
                   </Texto>
                   {recuperar && (
@@ -209,7 +299,7 @@ export default function Cuenta() {
               )}
             </Tarjeta>
           )}
-          {!usuario.is_anonymous && (
+          {!usuario.is_anonymous && !cuentaConClave(usuario) && (
             <Texto suave>
               {t(
                 "En otro celular, elegí Ya tengo una cuenta e ingresá este mismo correo.",

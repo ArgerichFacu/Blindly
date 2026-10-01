@@ -55,8 +55,13 @@ Deno.serve(async (request: Request) => {
       .limit(1),
   ]);
 
-  if (comoJugador.error || comoHost.error)
+  if (comoJugador.error || comoHost.error) {
+    console.error("No se pudo validar la actividad de la cuenta", {
+      jugador: comoJugador.error?.message,
+      host: comoHost.error?.message,
+    });
     return json({ code: "CUENTA_NO_ELIMINADA" }, 500);
+  }
   if ((comoJugador.data?.length ?? 0) > 0 || (comoHost.data?.length ?? 0) > 0)
     return json({ code: "PARTIDA_ACTIVA_CUENTA" }, 409);
 
@@ -69,12 +74,17 @@ Deno.serve(async (request: Request) => {
         headers: { Authorization: `Bearer ${revenueCatSecret}` },
       },
     );
-    if (revenueCat.status !== 200 && revenueCat.status !== 404)
+    if (revenueCat.status !== 200 && revenueCat.status !== 404) {
+      console.error("RevenueCat rechazó la eliminación", revenueCat.status);
       return json({ code: "CUENTA_NO_ELIMINADA" }, 500);
+    }
   }
 
   const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
-  if (deleteError) return json({ code: "CUENTA_NO_ELIMINADA" }, 500);
+  if (deleteError) {
+    console.error("Supabase Auth rechazó la eliminación", deleteError.message);
+    return json({ code: "CUENTA_NO_ELIMINADA" }, 500);
+  }
 
   return json({ ok: true });
 });
