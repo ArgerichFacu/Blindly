@@ -4,7 +4,7 @@ Blindly seguirá siendo utilizable sin pagar. La creación y unión a salas, los
 
 ## Alcance propuesto
 
-Plus puede incorporar estadísticas avanzadas, temas y ambientaciones premium, presets ilimitados y herramientas adicionales para hosts frecuentes. Ninguna de estas funciones debe impedir que un jugador gratuito participe de una mesa.
+Plus incorpora métricas avanzadas, temas premium y la edición de niveles de ciegas y descansos. Mientras `EXPO_PUBLIC_PLUS_READY=false`, estas funciones permanecen abiertas para facilitar el desarrollo y las pruebas; al activar productos reales, RevenueCat controla su acceso. Ninguna de estas funciones impide que un jugador gratuito participe de una mesa, use los modos estándar o administre el pozo.
 
 ## Arquitectura de compras implementada
 

@@ -13,6 +13,7 @@ import { useAccionMesa } from "../lib/useAccionMesa";
 import { usePreferencias } from "../lib/Preferencias";
 import { PRESETS, type Nivel } from "../lib/niveles";
 import { cargarPersonalizado } from "../lib/almacenamiento";
+import { usePlus } from "../lib/PlusContext";
 import {
   adaptarNiveles,
   recomendarModo,
@@ -23,7 +24,8 @@ import {
 export default function ModoJuego() {
   const { codigo } = useLocalSearchParams<{ codigo: string }>(),
     router = useRouter(),
-    { t, mensajeError } = usePreferencias();
+    { t, mensajeError } = usePreferencias(),
+    plus = usePlus();
   const mesa = useSala(codigo),
     { sala, jugadores } = mesa,
     accion = useAccionMesa(sala, mesa.aplicar);
@@ -58,6 +60,10 @@ export default function ModoJuego() {
       niveles = adaptarNiveles(base, elegido ?? "", fichas, jugadores.length);
   } catch {}
   function guardar() {
+    if (elegido === "personalizado" && plus.disponible && !plus.activo) {
+      router.push("/plus");
+      return;
+    }
     if (!elegido || !niveles || !validarNiveles(niveles)) {
       setError(t("Niveles inválidos"));
       return;
@@ -92,7 +98,7 @@ export default function ModoJuego() {
           key={id}
           titulo={
             id === "personalizado"
-              ? t("Personalizado")
+              ? `${t("Personalizado")} · Plus`
               : id === "deep"
                 ? "Deep stack"
                 : id === "turbo"
@@ -118,7 +124,11 @@ export default function ModoJuego() {
                   : "≡"
           }
           activo={elegido === id}
-          onPress={() => setElegido(id)}
+          onPress={() =>
+            id === "personalizado" && plus.disponible && !plus.activo
+              ? router.push("/plus")
+              : setElegido(id)
+          }
         />
       ))}
       {elegido === "personalizado" && (

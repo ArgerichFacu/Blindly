@@ -19,6 +19,8 @@ import { NIVELES_REGULAR, type Nivel } from "../lib/niveles";
 import { useTema } from "../lib/TemaContext";
 import { usePreferencias } from "../lib/Preferencias";
 import { validarNiveles } from "../lib/mesa";
+import { usePlus } from "../lib/PlusContext";
+import { Boton, Pantalla, Texto } from "../components/Controles";
 
 type Fila = {
   id: number;
@@ -88,6 +90,7 @@ export default function Editor() {
   const { t } = usePreferencias();
   const router = useRouter();
   const { tema } = useTema();
+  const plus = usePlus();
   const [filas, setFilas] = useState<Fila[]>([]);
 
   useEffect(() => {
@@ -159,6 +162,16 @@ export default function Editor() {
       Alert.alert(t("No se pudo completar. Probá de nuevo."));
     }
   }
+
+  if (plus.disponible && !plus.activo)
+    return (
+      <Pantalla titulo={t("Estructura personalizada")}>
+        <Texto>
+          {t("Crear niveles y descansos personalizados es una función de Blindly Plus.")}
+        </Texto>
+        <Boton titulo={t("Ver planes de Blindly Plus")} onPress={() => router.replace("/plus")} />
+      </Pantalla>
+    );
 
   return (
     <SafeAreaView style={[styles.contenedor, { backgroundColor: tema.fondo }]}>

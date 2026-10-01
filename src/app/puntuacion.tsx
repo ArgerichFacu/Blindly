@@ -12,10 +12,12 @@ import {
 import { miPuntuacion, PUNTOS_F1, type Puntuacion } from "../lib/puntuacion";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
+import { usePlus } from "../lib/PlusContext";
 export default function MiPuntuacion() {
   const router = useRouter();
   const { t, mensajeError, preferencias } = usePreferencias(),
-    { tema } = useTema();
+    { tema } = useTema(),
+    plus = usePlus();
   const [datos, setDatos] = useState<Puntuacion | null>(null),
     [error, setError] = useState<unknown>(null),
     [revision, setRevision] = useState(0),
@@ -38,6 +40,19 @@ export default function MiPuntuacion() {
   );
   const numero = (n: number) =>
     n.toLocaleString(preferencias.idioma, { maximumFractionDigits: 3 });
+  const metricas = datos
+    ? [
+        ["Puntos por partida", datos.partidas ? datos.puntos / datos.partidas : 0],
+        ["Victorias en las últimas 30", datos.historial.filter((h) => h.puesto === 1).length],
+        ["Podios en las últimas 30", datos.historial.filter((h) => h.puesto <= 3).length],
+        [
+          "Mejor puesto en las últimas 30",
+          datos.historial.length
+            ? Math.min(...datos.historial.map((h) => h.puesto))
+            : null,
+        ],
+      ] as const
+    : [];
   return (
     <Pantalla titulo={t("Mi puntuación")}>
       <Etiqueta>{t("SOLO VOS PODÉS VER TUS PUNTOS")}</Etiqueta>
@@ -85,6 +100,39 @@ export default function MiPuntuacion() {
               )}
             </Texto>
           </Tarjeta>
+          {(!plus.disponible || plus.activo) && (
+            <Seccion titulo={t("Métricas Plus")} inicial>
+              <Tarjeta>
+                {metricas.map(([etiqueta, valor]) => (
+                  <View
+                    key={etiqueta}
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      gap: 12,
+                    }}
+                  >
+                    <Texto suave>{t(etiqueta)}</Texto>
+                    <Texto style={{ color: tema.acento, fontWeight: "700" }}>
+                      {valor === null ? "—" : numero(valor)}
+                    </Texto>
+                  </View>
+                ))}
+              </Tarjeta>
+            </Seccion>
+          )}
+          {plus.disponible && !plus.activo && (
+            <Tarjeta>
+              <Texto style={{ fontWeight: "700" }}>{t("Métricas Plus")}</Texto>
+              <Texto suave>
+                {t("Activá Blindly Plus para ver promedios, victorias, podios y tu mejor resultado.")}
+              </Texto>
+              <Boton
+                titulo={t("Ver planes de Blindly Plus")}
+                onPress={() => router.push("/plus")}
+              />
+            </Tarjeta>
+          )}
           <Seccion titulo={t("Mis últimas partidas")} inicial>
             {datos.historial.length === 0 ? (
               <Texto suave>

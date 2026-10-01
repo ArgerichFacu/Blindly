@@ -3,6 +3,7 @@ export type TemaId = "verde" | "rojo" | "negro";
 export type PaletaTema = {
   id: TemaId;
   nombre: string;
+  plus?: boolean;
   fondo: string;
   fondoTarjeta: string;
   acento: string;
@@ -31,6 +32,7 @@ export const TEMAS: PaletaTema[] = [
   {
     id: "rojo",
     nombre: "Rojo",
+    plus: true,
     fondo: "#1D1016",
     fondoTarjeta: "#301B23",
     acento: "#E8C77A",
@@ -44,6 +46,7 @@ export const TEMAS: PaletaTema[] = [
   {
     id: "negro",
     nombre: "Negro",
+    plus: true,
     fondo: "#101315",
     fondoTarjeta: "#1B2125",
     acento: "#E8C77A",

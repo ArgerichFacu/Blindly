@@ -4,10 +4,12 @@ import { Pantalla, Boton, Texto, Tarjeta } from "../components/Controles";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 import { TEMAS } from "../lib/temas";
+import { usePlus } from "../lib/PlusContext";
 export default function Opciones() {
   const router = useRouter(),
     { t, preferencias, cambiar } = usePreferencias(),
-    { tema, elegirTema } = useTema();
+    { tema, elegirTema } = useTema(),
+    plus = usePlus();
   return (
     <Pantalla titulo={t("Opciones")}>
       <Tarjeta>
@@ -79,14 +81,19 @@ export default function Opciones() {
       </Tarjeta>
       <Tarjeta>
         <Texto>{t("Tema")}</Texto>
-        {TEMAS.map((paleta) => (
-          <Boton
-            key={paleta.id}
-            titulo={t(paleta.nombre)}
-            secundario={tema.id !== paleta.id}
-            onPress={() => elegirTema(paleta.id)}
-          />
-        ))}
+        {TEMAS.map((paleta) => {
+          const bloqueado = !!paleta.plus && plus.disponible && !plus.activo;
+          return (
+            <Boton
+              key={paleta.id}
+              titulo={`${t(paleta.nombre)}${paleta.plus ? " · Plus" : ""}`}
+              secundario={tema.id !== paleta.id}
+              onPress={() =>
+                bloqueado ? router.push("/plus") : elegirTema(paleta.id)
+              }
+            />
+          );
+        })}
       </Tarjeta>
       <Boton
         titulo={t("Instrucciones")}

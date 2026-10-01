@@ -121,7 +121,7 @@ Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren con
 
 ## Blindly Plus
 
-La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis. Las compras continúan desactivadas hasta crear los productos comerciales y validarlas en una development build.
+La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Plus habilita métricas avanzadas, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis. Las compras continúan desactivadas hasta crear los productos comerciales y validarlas en una development build.
 
 No actives `EXPO_PUBLIC_PLUS_READY` hasta configurar productos reales, restauración de compras y pruebas de tienda. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
 

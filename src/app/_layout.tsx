@@ -17,9 +17,9 @@ export default function RootLayout() {
       void SplashScreen.hideAsync().catch(() => {});
   }, [lista]);
   return (
-    <TemaProvider>
-      <PreferenciasProvider>
-        <PlusProvider>
+    <PlusProvider>
+      <TemaProvider>
+        <PreferenciasProvider>
           <SesionNativa />
           {lista ? (
             <View style={{ flex: 1 }} onLayout={alMostrar}>
@@ -33,8 +33,8 @@ export default function RootLayout() {
           ) : (
             <PantallaCarga onLoadEnd={alCargar} />
           )}
-        </PlusProvider>
-      </PreferenciasProvider>
-    </TemaProvider>
+        </PreferenciasProvider>
+      </TemaProvider>
+    </PlusProvider>
   );
 }

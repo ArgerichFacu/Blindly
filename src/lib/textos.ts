@@ -877,6 +877,36 @@ Object.assign(textos, {
     "Gerenciar assinatura",
   ],
   "Restaurar compras": ["Restore purchases", "Restaurar compras"],
+  "Estructura personalizada": [
+    "Custom blind structure",
+    "Estrutura personalizada",
+  ],
+  "Creá tus propios niveles de ciegas y descansos para la mesa.": [
+    "Create your own blind levels and breaks for the table.",
+    "Crie seus próprios níveis de blinds e intervalos para a mesa.",
+  ],
+  "Crear niveles y descansos personalizados es una función de Blindly Plus.": [
+    "Creating custom levels and breaks is a Blindly Plus feature.",
+    "Criar níveis e intervalos personalizados é um recurso do Blindly Plus.",
+  ],
+  "Métricas Plus": ["Plus metrics", "Métricas Plus"],
+  "Puntos por partida": ["Points per game", "Pontos por partida"],
+  "Victorias en las últimas 30": [
+    "Wins in the last 30",
+    "Vitórias nas últimas 30",
+  ],
+  "Podios en las últimas 30": [
+    "Podiums in the last 30",
+    "Pódios nas últimas 30",
+  ],
+  "Mejor puesto en las últimas 30": [
+    "Best finish in the last 30",
+    "Melhor posição nas últimas 30",
+  ],
+  "Activá Blindly Plus para ver promedios, victorias, podios y tu mejor resultado.": [
+    "Activate Blindly Plus to see averages, wins, podiums and your best result.",
+    "Ative o Blindly Plus para ver médias, vitórias, pódios e seu melhor resultado.",
+  ],
   "Blindly Plus está en preparación": [
     "Blindly Plus is being prepared",
     "Blindly Plus está em preparação",

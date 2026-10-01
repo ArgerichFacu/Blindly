@@ -64,12 +64,7 @@ export const BENEFICIOS_PLUS = [
   },
   {
     simbolo: "♜",
-    titulo: "Presets ilimitados",
-    detalle: "Guardá estructuras de ciegas y configuraciones para volver a usarlas.",
-  },
-  {
-    simbolo: "♛",
-    titulo: "Herramientas avanzadas para el host",
-    detalle: "Administrá torneos frecuentes con más control y menos preparación.",
+    titulo: "Estructura personalizada",
+    detalle: "Creá tus propios niveles de ciegas y descansos para la mesa.",
   },
 ] as const;
