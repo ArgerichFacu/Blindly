@@ -32,3 +32,11 @@ jobs:
 
       - name: Ejecutar pruebas
         run: npm test
+
+      - name: Empaquetar aplicación web
+        run: npm run build:web
+        env:
+          EXPO_PUBLIC_SUPABASE_URL: https://ci.supabase.co
+          EXPO_PUBLIC_SUPABASE_KEY: public-ci-placeholder
+          EXPO_PUBLIC_EMAIL_AUTH_READY: "false"
+          EXPO_PUBLIC_PLUS_READY: "false"

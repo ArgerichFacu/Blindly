@@ -43,14 +43,15 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
-    "test": "node tests/mesa-logica.cjs && node tests/mesa-sql.cjs && node tests/turnos-sql.cjs && node tests/puntuacion-sql.cjs && node tests/sesion.cjs",
+    "test": "node tests/mesa-logica.cjs && node tests/mesa-sql.cjs && node tests/turnos-sql.cjs && node tests/puntuacion-sql.cjs && node tests/seguridad-sql.cjs && node tests/sesion.cjs",
     "typecheck": "tsc --noEmit",
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "build:web": "expo export --platform web"
   },
   "private": true
 }

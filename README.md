@@ -103,7 +103,7 @@ Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md).
 
 ## Supabase
 
-Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `10`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos.
+Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `11`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos.
 
 | Scripts | Área |
 | --- | --- |
@@ -112,6 +112,7 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `08_turnos.sql` | Turnos, apuestas y validaciones |
 | `09_puntuacion.sql` | Resultados, puntuación y consultas privadas |
 | `10_acciones_jugador.sql` | Acciones propias en mesas físicas y autoridad final del dealer |
+| `11_seguridad_rendimiento.sql` | Permisos mínimos, política consolidada e índices de acceso |
 
 La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas.
 
@@ -161,6 +162,7 @@ eas.json           Perfiles de compilación
 | `npm run android` | Iniciar Expo para Android |
 | `npm run ios` | Iniciar Expo para iOS |
 | `npm run typecheck` | Verificar tipos de TypeScript |
+| `npm run build:web` | Generar el paquete web de producción |
 | `npm test` | Ejecutar las pruebas automatizadas |
 
 Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migraciones. Cubren turnos, permisos, conservación de fichas, pozos, puntuación, privacidad y operaciones repetidas. Las pruebas de sesión usan dobles de Supabase: no envían correos ni sustituyen una prueba de autenticación real.
