@@ -24,6 +24,8 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] APK Android preview generado por EAS con firma remota y RevenueCat Test Store activo.
 - [x] RevenueCat Test Store configurado con entitlement `blindly_plus`, tres productos, oferta predeterminada y paywall publicado en español, inglés y portugués.
 - [x] Enlaces del paywall conectados a la política de privacidad y los términos públicos de Blindly.
+- [x] Ícono y gráfico de funciones de Google Play generados y validados en sus dimensiones y formatos requeridos.
+- [x] Permiso de Google Play Billing y `launchMode=singleTop` garantizados por config plugin y prueba de manifiesto.
 - [x] Proyecto Supabase aislado en la organización Blindly.
 - [x] GitHub conectado a Supabase sobre la rama main.
 
@@ -32,6 +34,9 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [ ] Configurar un proveedor SMTP y un dominio remitente.
 - [ ] Aplicar las plantillas de correo y activar `EXPO_PUBLIC_EMAIL_AUTH_READY`.
 - [ ] Instalar el APK Android en dispositivos reales y completar la prueba física.
+- [ ] Capturar al menos dos pantallas reales del APK aceptado para la ficha de Google Play.
+- [ ] Definir un correo público de soporte y privacidad.
+- [ ] Crear `com.blindly.app` en Play Console y completar acceso, clasificación, público objetivo y seguridad de datos.
 - [ ] Generar la IPA privada cuando haya credenciales de Apple Developer y estén registrados los iPhone de prueba, o preparar el grupo cerrado de TestFlight.
 - [ ] Crear los productos comerciales de Blindly Plus en Google Play Console y vincularlos con RevenueCat.
 - [ ] Si Plus se prueba con compras reales en iPhone, crear también los productos equivalentes en App Store Connect; la distribución privada sin compras reales puede usar Test Store.

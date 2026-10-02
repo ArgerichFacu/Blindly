@@ -3,11 +3,14 @@
 ## Identidad
 
 - Nombre: **Blindly**
-- Categoría sugerida: entretenimiento / juegos de cartas auxiliares
+- Posicionamiento: herramienta auxiliar para partidas presenciales de cartas
 - Descripción corta: **Tu mesa de poker presencial, conectada.**
 - Repositorio: https://github.com/ArgerichFacu/Blindly
 - Política de privacidad: https://github.com/ArgerichFacu/Blindly/blob/main/PRIVACY.md
 - Eliminación de cuenta: https://github.com/ArgerichFacu/Blindly/blob/main/ACCOUNT_DELETION.md
+- Términos: https://github.com/ArgerichFacu/Blindly/blob/main/TERMS.md
+- Tipo en Google Play: aplicación
+- Categoría sugerida: entretenimiento
 
 ## Descripción breve
 
@@ -21,11 +24,36 @@ La app crea una identidad de invitado para sincronizar datos. El usuario puede c
 
 ## Declaración orientativa de datos
 
-- Identificadores de usuario: necesarios para funcionalidad de cuenta.
-- Nombre elegido, contenido de sala, acciones, puntuación e historial: funcionalidad de la app.
-- Email: opcional, para autenticación y recuperación.
-- Cámara: acceso efímero; las imágenes no se recopilan.
-- Compras: declarar solo después de activar Blindly Plus.
-- Publicidad y seguimiento: no se usan.
+- **Información personal:** nombre elegido e identificador de usuario, necesarios para la cuenta y la funcionalidad de la sala. El email es opcional y se usa únicamente para autenticación y recuperación cuando se habilite SMTP.
+- **Actividad de la aplicación:** contenido de sala, acciones, puntuación e historial, necesarios para sincronizar la partida y mostrar resultados.
+- **Información financiera:** historial de compras, recopilado por RevenueCat para ofrecer, validar, analizar y restaurar Blindly Plus. No se recopilan números de tarjeta.
+- **Cámara:** acceso efímero para escanear un QR; las imágenes no se recopilan ni se comparten.
+- **Publicidad, ubicación y seguimiento:** no se usan.
+- **Seguridad:** los datos se cifran en tránsito. La eliminación se inicia desde **Opciones > Mi cuenta** o desde el enlace público indicado arriba.
 
-Antes de enviar, revisar estas respuestas contra la build exacta y completar los formularios de privacidad de cada tienda.
+Estas respuestas deben revisarse en Play Console contra el AAB exacto. La declaración debe incluir también cualquier dato que recopilen versiones activas anteriores y cualquier integración futura de RevenueCat.
+
+## Recursos preparados para Google Play
+
+- Ícono: [`assets/store/play-icon.png`](../assets/store/play-icon.png), PNG de 512 × 512, 32 bits con alfa y menos de 1 MB.
+- Gráfico de funciones: [`assets/store/play-feature-graphic.png`](../assets/store/play-feature-graphic.png), PNG de 1024 × 500, 24 bits sin alfa.
+- Texto alternativo sugerido para el gráfico: **Mesa verde de poker con cuatro celulares sincronizados alrededor de las cartas y las fichas.**
+- Capturas: todavía deben obtenerse del APK aceptado. Google Play exige al menos dos; usar PNG de 24 bits o JPEG, entre 320 y 3840 px, sin mostrar datos reales ni funciones inexistentes.
+
+## Pendientes de Play Console
+
+1. Definir un correo público de soporte y privacidad.
+2. Crear la aplicación `com.blindly.app` y completar acceso, anuncios, clasificación de contenido, público objetivo y seguridad de datos.
+3. Cargar el ícono, el gráfico de funciones, al menos dos capturas reales y los textos localizados.
+4. Cargar el AAB de producción en una pista interna antes de avanzar a pruebas cerradas o producción.
+5. Ingresar la URL pública de eliminación de cuenta y comprobar que el formulario reconoce que Blindly crea cuentas.
+6. Crear y vincular los productos de Blindly Plus descritos en [`blindly-plus.md`](blindly-plus.md).
+
+Antes de enviar, revisar estas respuestas contra la build exacta y completar los formularios de Google Play.
+
+## Referencias vigentes
+
+- [Recursos gráficos de la ficha de Google Play](https://support.google.com/googleplay/android-developer/answer/9866151)
+- [Formulario de seguridad de datos](https://support.google.com/googleplay/android-developer/answer/10787469)
+- [Eliminación de cuentas](https://support.google.com/googleplay/android-developer/answer/13327111)
+- [Declaración de datos de RevenueCat](https://www.revenuecat.com/docs/platform-resources/google-platform-resources/google-plays-data-safety)

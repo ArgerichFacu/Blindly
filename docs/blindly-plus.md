@@ -27,11 +27,12 @@ La Edge Function `eliminar-cuenta` también puede borrar el perfil de cliente de
 ## Activación
 
 1. Crear la aplicación y el entitlement `blindly_plus` en RevenueCat.
-2. Crear los productos correspondientes en App Store Connect y Google Play Console.
+2. Crear en Google Play Console la suscripción `blindly_plus` con los planes base `monthly` y `annual`, y el producto único no consumible `blindly_plus_lifetime`. Los identificadores no pueden cambiarse ni reutilizarse después de crearlos.
 3. Cargar las claves públicas de plataforma en los entornos EAS y `REVENUECAT_SECRET_KEY` en Supabase.
-4. Generar una development build; Expo Go no procesa compras reales.
-5. Probar compra, renovación, cancelación, reembolso, restauración, eliminación de cuenta y cambio de dispositivo.
-6. Activar `EXPO_PUBLIC_PLUS_READY=true` solo después de completar esas pruebas.
+4. Importar los productos en RevenueCat, asociarlos al entitlement `blindly_plus` y a los paquetes mensual, anual y vitalicio de la oferta `default`.
+5. Generar una development build; Expo Go no procesa compras reales.
+6. Probar compra, renovación, cancelación, reembolso, restauración, eliminación de cuenta y cambio de dispositivo.
+7. Activar `EXPO_PUBLIC_PLUS_READY=true` solo después de completar esas pruebas.
 
 El código de compra está completo y mantiene los cobros desactivados hasta que existan productos reales y una build nativa verificada. Si un invitado tiene Plus activo, la app bloquea el cambio hacia otra cuenta para no separar la compra de su identidad actual; primero debe proteger ese mismo invitado.
 
@@ -39,6 +40,12 @@ El código de compra está completo y mantiene los cobros desactivados hasta que
 
 El proyecto `Blindly` ya existe en RevenueCat. Su Test Store tiene el entitlement `blindly_plus`, una oferta `default` con paquetes mensual, anual y vitalicio, y un paywall `Blindly Plus` vinculado a esa oferta. Los entornos EAS `development` y `preview` usan la clave pública de Test Store y `EXPO_PUBLIC_PLUS_READY=true`; `production` permanece con Plus desactivado y sin claves de tienda.
 
-El Test Store no procesa dinero real. Sirve para validar el paywall, la compra simulada, la restauración, el cambio de dispositivo y el bloqueo de funciones premium antes de crear productos en App Store Connect y Google Play Console. El paywall debe estar publicado en RevenueCat para aparecer en la app interna.
+El Test Store no procesa dinero real. Sirve para validar el paywall, la compra simulada, la restauración, el cambio de dispositivo y el bloqueo de funciones premium antes de crear productos en Google Play Console. También permite probar Plus en las copias privadas de iPhone sin habilitar compras reales allí. El paywall debe estar publicado en RevenueCat para aparecer en la app interna.
 
 La clave privada V1 de RevenueCat se usa solo como secreto `REVENUECAT_SECRET_KEY` de Supabase para que `eliminar-cuenta` quite también el perfil de cliente. Nunca se copia al repositorio, a EAS ni a una variable `EXPO_PUBLIC`.
+
+## Configuración nativa Android
+
+El plugin local `plugins/with-revenuecat-android.js` garantiza el permiso `com.android.vending.BILLING` y cambia `MainActivity` a `singleTop`. RevenueCat recomienda `standard` o `singleTop` para que una verificación bancaria en otra aplicación no cancele la compra al volver. `tests/native-config.cjs` inspecciona el manifiesto generado por Expo y bloquea CI si cualquiera de esas condiciones se pierde.
+
+Referencias: [instalación de RevenueCat para React Native](https://www.revenuecat.com/docs/getting-started/installation/reactnative) y [suscripciones de Google Play](https://support.google.com/googleplay/android-developer/answer/140504).
