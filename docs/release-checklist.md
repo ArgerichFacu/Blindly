@@ -33,13 +33,15 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [ ] Aplicar las plantillas de correo y activar `EXPO_PUBLIC_EMAIL_AUTH_READY`.
 - [ ] Instalar el APK Android en dispositivos reales y completar la prueba física.
 - [ ] Generar la IPA privada cuando haya credenciales de Apple Developer y estén registrados los iPhone de prueba, o preparar el grupo cerrado de TestFlight.
-- [ ] Crear productos de suscripción en App Store Connect y Google Play Console.
+- [ ] Crear los productos comerciales de Blindly Plus en Google Play Console y vincularlos con RevenueCat.
+- [ ] Si Plus se prueba con compras reales en iPhone, crear también los productos equivalentes en App Store Connect; la distribución privada sin compras reales puede usar Test Store.
 - [ ] Validar compra y restauración con RevenueCat Test Store en un dispositivo físico.
 - [x] Guardar `REVENUECAT_SECRET_KEY` en la Edge Function y validar la eliminación autenticada del perfil de cliente.
+- [ ] Revocar la clave privada actual de RevenueCat, generar un reemplazo y actualizar el secreto de Supabase después de recibir autorización explícita.
 - [ ] Activar `EXPO_PUBLIC_PLUS_READY` en `production` después de validar compra y restauración con productos reales.
 
 ## Prueba física de aceptación
 
-Usar al menos tres celulares y completar una partida en modo virtual y otra en modo físico. Verificar ingreso por QR/código, rotación de BTN/SB/BB, turnos simultáneos, reconexión tras perder Internet, bloqueo y retorno de la app, pausa de música, reparto de pozos, cierre del torneo y puntuación final.
+Usar al menos tres celulares y completar una partida en modo virtual y otra en modo físico. Verificar ingreso por QR/código, fichas visuales DR/BTN/SB/BB, rotación de BTN/SB/BB, indicador de turno, acciones propias de cada jugador, rechazo de acciones fuera de turno, edición de stacks exclusiva del dealer, reconexión tras perder Internet, bloqueo y retorno de la app, pausa de música, reparto de pozos, cierre del torneo y puntuación final.
 
 El splash se valida desde un arranque en frío de la build nativa. Expo Go y el navegador no reproducen todo el ciclo nativo.

@@ -27,7 +27,7 @@ npx eas-cli@latest env:list preview
 npx eas-cli@latest env:list production
 ```
 
-Las claves públicas de RevenueCat se agregan cuando existan los proyectos de las tiendas; `REVENUECAT_SECRET_KEY` se guarda únicamente como secreto de la Edge Function de Supabase. Nunca usar `service_role` en EAS ni en variables `EXPO_PUBLIC`.
+Las claves públicas de RevenueCat se agregan cuando existan los proyectos de las tiendas; `REVENUECAT_SECRET_KEY` se guarda únicamente como secreto de la Edge Function de Supabase. La clave privada actual debe rotarse porque apareció en un registro de automatización; revocarla, generar el reemplazo y actualizar Supabase requiere autorización explícita. Nunca usar `service_role` en EAS ni en variables `EXPO_PUBLIC`.
 
 Una vez enlazado y con variables configuradas:
 
@@ -44,6 +44,8 @@ No se puede instalar un APK en iPhone. La distribución prevista queda así:
 - Android público: AAB de `production` en Google Play.
 - Android de prueba: APK de `preview` mediante el enlace interno de EAS.
 - iPhone privado: IPA `preview` para dispositivos registrados o TestFlight para un grupo cerrado.
+
+La publicación comercial inicial solo requiere productos de Blindly Plus en Google Play Console. App Store Connect será necesario para distribuir mediante TestFlight y para probar compras reales en iPhone; una IPA *ad hoc* con Test Store no necesita una publicación pública en App Store.
 
 Dos previews Android firmados terminaron correctamente en EAS. El más reciente incorpora `EXPO_PUBLIC_PLUS_READY=true` y las claves públicas de RevenueCat Test Store para validar Plus sin cobros reales. Está disponible como [APK interno hasta el 16 de octubre de 2026](https://expo.dev/artifacts/eas/nnxtTjswrQ8-70Yhs6o9ZhXeNNpJcEffO7SdCXjuuBQ.apk). Después de esa fecha, usar el historial de builds de [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly/builds) para descargar o generar el preview más reciente.
 
