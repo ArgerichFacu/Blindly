@@ -2,6 +2,8 @@
 
 Blindly seguirá siendo utilizable sin pagar. La creación y unión a salas, los turnos, las fichas físicas y virtuales y el reparto del pozo forman parte del producto principal.
 
+El paywall `Blindly Plus` está publicado en RevenueCat con textos en español, inglés y portugués. Sus enlaces de privacidad y términos apuntan a los documentos públicos de este repositorio. Los builds internos usan Test Store; todavía falta validar compra y restauración en hardware real antes de crear los productos comerciales de Google Play.
+
 ## Alcance propuesto
 
 Plus incorpora métricas avanzadas, temas premium y la edición de niveles de ciegas y descansos. Mientras `EXPO_PUBLIC_PLUS_READY=false`, estas funciones permanecen abiertas para facilitar el desarrollo y las pruebas; al activar productos reales, RevenueCat controla su acceso. Ninguna de estas funciones impide que un jugador gratuito participe de una mesa, use los modos estándar o administre el pozo.

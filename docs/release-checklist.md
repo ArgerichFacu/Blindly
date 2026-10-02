@@ -22,7 +22,8 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Perfiles EAS de development, preview y production preparados.
 - [x] Proyecto `@facuargerich/blindly` vinculado y variables públicas creadas en los tres entornos EAS.
 - [x] APK Android preview generado por EAS con firma remota y RevenueCat Test Store activo.
-- [x] RevenueCat Test Store configurado con entitlement `blindly_plus`, tres productos, oferta predeterminada y paywall vinculado.
+- [x] RevenueCat Test Store configurado con entitlement `blindly_plus`, tres productos, oferta predeterminada y paywall publicado en español, inglés y portugués.
+- [x] Enlaces del paywall conectados a la política de privacidad y los términos públicos de Blindly.
 - [x] Proyecto Supabase aislado en la organización Blindly.
 - [x] GitHub conectado a Supabase sobre la rama main.
 
@@ -33,8 +34,8 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [ ] Instalar el APK Android en dispositivos reales y completar la prueba física.
 - [ ] Generar la IPA privada cuando haya credenciales de Apple Developer y estén registrados los iPhone de prueba, o preparar el grupo cerrado de TestFlight.
 - [ ] Crear productos de suscripción en App Store Connect y Google Play Console.
-- [ ] Publicar el paywall interno de RevenueCat y validar compra/restauración con Test Store.
-- [ ] Guardar `REVENUECAT_SECRET_KEY` en la Edge Function y validar la eliminación del perfil de cliente.
+- [ ] Validar compra y restauración con RevenueCat Test Store en un dispositivo físico.
+- [x] Guardar `REVENUECAT_SECRET_KEY` en la Edge Function y validar la eliminación autenticada del perfil de cliente.
 - [ ] Activar `EXPO_PUBLIC_PLUS_READY` en `production` después de validar compra y restauración con productos reales.
 
 ## Prueba física de aceptación
