@@ -42,18 +42,20 @@ Estas respuestas deben revisarse en Play Console contra el AAB exacto. La declar
 
 ## Pendientes de Play Console
 
-1. Definir un correo público de soporte y privacidad.
-2. Crear la aplicación `com.blindly.app` y completar acceso, anuncios, clasificación de contenido, público objetivo y seguridad de datos.
-3. Cargar el ícono, el gráfico de funciones, al menos dos capturas reales y los textos localizados.
-4. Cargar el AAB de producción en una pista interna antes de avanzar a pruebas cerradas o producción.
-5. Ingresar la URL pública de eliminación de cuenta y comprobar que el formulario reconoce que Blindly crea cuentas.
-6. Crear y vincular los productos de Blindly Plus descritos en [`blindly-plus.md`](blindly-plus.md).
+1. Crear una cuenta personal de distribución completa cuando se pueda pagar la tarifa única de USD 25. Google también ofrece distribución limitada gratuita para un máximo de 20 dispositivos, pero ese plan no puede convertirse después en distribución completa y no sirve para el lanzamiento público previsto. Mientras tanto, usar el APK interno de EAS para las pruebas privadas.
+2. Definir un correo público de soporte y privacidad.
+3. Crear la aplicación `com.blindly.app` y completar acceso, anuncios, clasificación de contenido, público objetivo y seguridad de datos.
+4. Cargar el ícono, el gráfico de funciones, al menos dos capturas reales y los textos localizados.
+5. Cargar el AAB de producción en una pista interna antes de avanzar a pruebas cerradas o producción.
+6. Ingresar la URL pública de eliminación de cuenta y comprobar que el formulario reconoce que Blindly crea cuentas.
+7. Crear y vincular los productos de Blindly Plus descritos en [`blindly-plus.md`](blindly-plus.md).
 
 Antes de enviar, revisar estas respuestas contra la build exacta y completar los formularios de Google Play.
 
 ## Referencias vigentes
 
 - [Recursos gráficos de la ficha de Google Play](https://support.google.com/googleplay/android-developer/answer/9866151)
+- [Distribución completa o limitada de Android](https://support.google.com/android-developer-console/answer/16640817)
 - [Formulario de seguridad de datos](https://support.google.com/googleplay/android-developer/answer/10787469)
 - [Eliminación de cuentas](https://support.google.com/googleplay/android-developer/answer/13327111)
 - [Declaración de datos de RevenueCat](https://www.revenuecat.com/docs/platform-resources/google-platform-resources/google-plays-data-safety)

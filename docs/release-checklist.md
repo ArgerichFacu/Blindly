@@ -31,6 +31,7 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 
 ## Preparado y pendiente de un servicio externo
 
+- [ ] Crear una cuenta de distribución completa en Google Play cuando esté disponible la tarifa única de USD 25. No se eligió la distribución limitada gratuita porque admite como máximo 20 dispositivos y Google no permite convertir ese plan en distribución completa.
 - [ ] Configurar un proveedor SMTP y un dominio remitente.
 - [ ] Aplicar las plantillas de correo y activar `EXPO_PUBLIC_EMAIL_AUTH_READY`.
 - [ ] Instalar el APK Android en dispositivos reales y completar la prueba física.
