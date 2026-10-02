@@ -4,7 +4,7 @@
     "slug": "blindly",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/blindly-logo.png",
+    "icon": "./assets/images/blindly-app-icon.png",
     "scheme": "blindly",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -17,8 +17,8 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#0A1713",
-        "foregroundImage": "./assets/images/blindly-logo-transparent.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./assets/images/blindly-icon-foreground.png",
+        "monochromeImage": "./assets/images/blindly-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.blindly.app",

@@ -38,4 +38,21 @@ assert.deepEqual(
 assert.equal(grafico.profundidad, 8);
 assert.equal(grafico.tipoColor, 2, "El gráfico debe ser RGB de 24 bits sin alfa");
 
-console.log("Recursos de Google Play validados");
+const iconoNativo = leerPng(
+  path.join("assets", "images", "blindly-app-icon.png"),
+);
+assert.deepEqual(
+  { ancho: iconoNativo.ancho, alto: iconoNativo.alto },
+  { ancho: 1024, alto: 1024 },
+);
+assert.equal(iconoNativo.tipoColor, 2, "El ícono nativo debe ser RGB sin alfa");
+
+for (const nombre of [
+  "blindly-icon-foreground.png",
+  "blindly-icon-monochrome.png",
+]) {
+  const imagen = leerPng(path.join("assets", "images", nombre));
+  assert.equal(imagen.tipoColor, 6, `${nombre} debe conservar transparencia RGBA`);
+}
+
+console.log("Recursos nativos y de Google Play validados");

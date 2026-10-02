@@ -9,3 +9,11 @@ Graphic design asset. Extremely crisp flat 2D vector-style logo on a perfectly u
 Native splash configuration requires a new app build. Expo Go does not reproduce the standalone native splash faithfully. The web/React loading view and home menu use the asset immediately.
 
 Theme fix: blindly-logo-transparent.png was generated with the built-in image tool from the original. Prompt: Remove the dark green background completely; preserve the gold b/spade and blindly. wordmark; transparent surrounding areas and holes, no glow or shadow. LogoBlindly now has no fixed background. Native launch still uses the original image on its fixed green background.
+
+## Launcher nativo
+
+`blindly-app-icon.png` usa únicamente la `b` con pique dorada sobre el fondo verde de Blindly, en un lienzo RGB de 1024 × 1024. Se generó con el built-in `image_gen` a partir del logo original y luego se ajustó de forma determinista al tamaño nativo. Prompt final: crear un ícono cuadrado premium derivado del logo, conservar la `b` con pique dorada, eliminar el wordmark, centrar el símbolo con margen seguro y mantener el fondo verde oscuro `#0A1713`, sin texto, insignias, precio, marco ni watermark.
+
+`blindly-icon-foreground.png` es el foreground adaptativo RGBA. Prompt final: aislar únicamente la `b` dorada con el pique calado, eliminar el wordmark y todo el fondo, centrarla con margen seguro para máscaras Android y conservar transparencia real, sin sombra exterior, borde ni watermark.
+
+`blindly-icon-monochrome.png` deriva de la silueta alfa del foreground y reemplaza el símbolo monocromático de Expo que todavía quedaba en la plantilla. Android 13+ puede teñirlo cuando el usuario activa íconos temáticos.
