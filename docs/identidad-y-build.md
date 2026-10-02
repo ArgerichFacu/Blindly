@@ -39,6 +39,8 @@ npx eas-cli@latest build --platform ios --profile preview
 
 iOS físico necesita cuenta Apple Developer y registrar el dispositivo/provisionamiento cuando EAS lo solicite. El proyecto está listo para solicitar la compilación remota; la instalación y aceptación en hardware siguen siendo obligatorias.
 
+El primer preview Android firmado terminó correctamente en EAS. El segundo preview incorpora `EXPO_PUBLIC_PLUS_READY=true` y las claves públicas de RevenueCat Test Store para validar Plus sin cobros reales. Los enlaces directos de los APK expiran; usar el historial de builds de [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly/builds) para descargar el build preview más reciente.
+
 ## Configuración y verificación física
 
 Splash nativo: assets/images/blindly-logo.png sobre #0A1713; requiere nueva build, no Expo Go. El logo del menú es transparente y se adapta al tema. El splash del sistema es fijo antes de cargar las preferencias; las pantallas React respetan el tema.

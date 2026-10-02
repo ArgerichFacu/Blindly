@@ -99,7 +99,7 @@ La recuperación por clave ya funciona sin un proveedor externo. La interfaz tam
 
 **La recuperación por correo todavía está deshabilitada por defecto**, pero ya no bloquea la identidad recuperable porque la clave privada cubre ese caso. Falta configurar un proveedor SMTP, aplicar las plantillas y verificar el envío. Solo después debe habilitarse `EXPO_PUBLIC_EMAIL_AUTH_READY=true`.
 
-Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md). La [política de privacidad](PRIVACY.md) y las [instrucciones de eliminación](ACCOUNT_DELETION.md) también están disponibles dentro de la app.
+Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md). La [política de privacidad](PRIVACY.md), los [términos de uso](TERMS.md) y las [instrucciones de eliminación](ACCOUNT_DELETION.md) también están disponibles públicamente.
 
 ## Supabase
 
@@ -121,15 +121,15 @@ Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren con
 
 ## Blindly Plus
 
-La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Plus habilita métricas avanzadas, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis. Las compras continúan desactivadas hasta crear los productos comerciales y validarlas en una development build.
+La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Plus habilita métricas avanzadas, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis.
 
-No actives `EXPO_PUBLIC_PLUS_READY` hasta configurar productos reales, restauración de compras y pruebas de tienda. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
+RevenueCat Test Store está activo solamente en los entornos internos `development` y `preview`, sin cobros reales. `production` continúa desactivado hasta configurar productos comerciales y validar compras reales. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
 
 ## Android e iOS
 
 `app.json` configura el nombre, los identificadores, permisos e imágenes. El splash nativo usa `assets/images/blindly-logo.png` sobre fondo verde fijo. El menú y las pantallas React usan el logo transparente para adaptarse al tema.
 
-`eas.json` incluye perfiles `development`, `preview` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Los interruptores de correo y Plus permanecen desactivados hasta verificar sus servicios. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md).
+`eas.json` incluye perfiles `development`, `preview` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus está activo con Test Store en los builds internos y desactivado en producción. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
 
 La ficha y las declaraciones iniciales para las tiendas están en [docs/store-listing.md](docs/store-listing.md).
 
@@ -177,7 +177,7 @@ Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migr
 - Generar builds EAS nativas e instalarlas en dispositivos físicos.
 - Validar el splash en arranque en frío, la pausa de música al pasar a segundo plano y la reconexión después de bloquear el teléfono o perder la red.
 - Completar una partida con varios celulares y verificar apuestas, reparto de pozos y cierre del torneo.
-- Configurar los productos de Blindly Plus en las tiendas y RevenueCat, y probar compra, restauración y eliminación en builds nativas.
+- Probar compra, restauración y eliminación con RevenueCat Test Store; después crear los productos comerciales en las tiendas.
 
 La configuración nativa y las pruebas automatizadas están preparadas; estas verificaciones físicas siguen pendientes.
 

@@ -1,6 +1,6 @@
 # Lista de lanzamiento de Blindly
 
-Estado auditado el 1 de octubre de 2026. Esta lista separa lo validado por código de las comprobaciones que requieren cuentas comerciales o dispositivos físicos.
+Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por código de las comprobaciones que requieren cuentas comerciales o dispositivos físicos.
 
 ## Validado automáticamente
 
@@ -20,6 +20,8 @@ Estado auditado el 1 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Borrado opcional del perfil de RevenueCat desde la eliminación autenticada de cuenta.
 - [x] Perfiles EAS de development, preview y production preparados.
 - [x] Proyecto `@facuargerich/blindly` vinculado y variables públicas creadas en los tres entornos EAS.
+- [x] APK Android preview generado por EAS con firma remota.
+- [x] RevenueCat Test Store configurado con entitlement `blindly_plus`, tres productos, oferta predeterminada y paywall vinculado.
 - [x] Proyecto Supabase aislado en la organización Blindly.
 - [x] GitHub conectado a Supabase sobre la rama main.
 
@@ -27,11 +29,12 @@ Estado auditado el 1 de octubre de 2026. Esta lista separa lo validado por códi
 
 - [ ] Configurar un proveedor SMTP y un dominio remitente.
 - [ ] Aplicar las plantillas de correo y activar `EXPO_PUBLIC_EMAIL_AUTH_READY`.
-- [ ] Generar builds Android e iOS e instalarlas en dispositivos reales.
+- [ ] Instalar el APK Android en dispositivos reales y completar la prueba física.
+- [ ] Generar el build iOS cuando haya credenciales de Apple Developer y un dispositivo registrado.
 - [ ] Crear productos de suscripción en App Store Connect y Google Play Console.
-- [ ] Configurar RevenueCat, sus entitlements y claves públicas.
+- [ ] Publicar el paywall interno de RevenueCat y validar compra/restauración con Test Store.
 - [ ] Guardar `REVENUECAT_SECRET_KEY` en la Edge Function y validar la eliminación del perfil de cliente.
-- [ ] Activar `EXPO_PUBLIC_PLUS_READY` después de validar compra y restauración.
+- [ ] Activar `EXPO_PUBLIC_PLUS_READY` en `production` después de validar compra y restauración con productos reales.
 
 ## Prueba física de aceptación
 
