@@ -70,22 +70,73 @@ const db = new PGlite();
 
   const policies = (
     await db.query(`
-      select cmd, policyname
+      select cmd, policyname, qual
       from pg_policies
-      where schemaname = 'public' and tablename = 'jugadores'
-      order by cmd, policyname
+      where schemaname = 'public'
+        and tablename in ('jugadores', 'salas')
+      order by tablename, cmd, policyname
     `)
   ).rows;
-  assert.equal(policies.filter((policy) => policy.cmd === "SELECT").length, 1);
-  assert.equal(policies.filter((policy) => policy.cmd === "UPDATE").length, 0);
+  assert.equal(
+    policies.filter(
+      (policy) =>
+        policy.cmd === "SELECT" &&
+        policy.policyname === "ver jugadores autorizados",
+    ).length,
+    1,
+  );
   assert.ok(
     policies.some(
       (policy) =>
         policy.cmd === "SELECT" &&
-        policy.policyname === "ver jugadores autorizados",
+        policy.policyname === "ver salas autorizadas" &&
+        /private\.soy_jugador_de\(id\)/i.test(policy.qual) &&
+        !/^true$/i.test(policy.qual),
     ),
   );
+  assert.equal(
+    policies.filter(
+      (policy) =>
+        policy.cmd === "UPDATE" &&
+        policy.policyname.includes("jugador"),
+    ).length,
+    0,
+  );
 
+  const host = "00000000-0000-0000-0000-000000000001";
+  const invitado = "00000000-0000-0000-0000-000000000002";
+  await db.exec("reset role");
+  await db.query("insert into auth.users(id) values ($1), ($2)", [host, invitado]);
+  await db.query("select set_config('request.jwt.claim.sub',$1,false)", [host]);
+  await db.exec("set role authenticated");
+  await db.query(
+    "insert into public.salas(codigo, host_id, niveles) values ('SECRE', $1, '[]')",
+    [host],
+  );
+  assert.equal(
+    (await db.query("select count(*)::int as total from public.salas")).rows[0]
+      .total,
+    1,
+  );
+
+  await db.exec("reset role");
+  await db.query("select set_config('request.jwt.claim.sub',$1,false)", [invitado]);
+  await db.exec("set role authenticated");
+  assert.equal(
+    (await db.query("select count(*)::int as total from public.salas")).rows[0]
+      .total,
+    0,
+    "otra identidad no debe poder enumerar códigos de sala",
+  );
+  await db.query("select public.unirse_mesa('SECRE', 'Invitado')");
+  assert.equal(
+    (await db.query("select count(*)::int as total from public.salas")).rows[0]
+      .total,
+    1,
+    "unirse mediante el RPC debe habilitar la lectura de esa sala",
+  );
+
+  await db.exec("reset role");
   await db.exec("set role anon");
   await assert.rejects(
     () => db.query("select public.hora_servidor()"),

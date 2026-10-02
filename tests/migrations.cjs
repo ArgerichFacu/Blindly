@@ -22,6 +22,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261001184017_helper_privado.sql",
     "20261001232717_grant_edge_account_cleanup.sql",
     "20261002194847_stack_solo_dealer.sql",
+    "20261002200358_salas_privadas.sql",
   ]);
 
   const baseSources = fs
@@ -46,6 +47,10 @@ const read = (file) => fs.readFileSync(file, "utf8");
   assert.equal(
     normalize(read(path.join(migrationDir, migrationFiles[4]))),
     normalize(read(path.join(sqlDir, "13_stack_solo_dealer.sql"))),
+  );
+  assert.equal(
+    normalize(read(path.join(migrationDir, migrationFiles[5]))),
+    normalize(read(path.join(sqlDir, "14_salas_privadas.sql"))),
   );
 
   await db.exec(
