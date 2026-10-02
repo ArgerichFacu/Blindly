@@ -530,7 +530,7 @@ export function Mesa({ codigo }: { codigo: string }) {
                     {t("Apuesta de esta mano")}: {j.apuesta_mano}
                   </Texto>
                 )}
-                {host && !virtual && !finalizada && (
+                {dealer && !virtual && !finalizada && (
                   <Boton
                     titulo={t("Actualizar stack físico")}
                     secundario

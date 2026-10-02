@@ -26,7 +26,7 @@ Blindly acompaña la mesa: las cartas se reparten físicamente y el dealer deter
 | Modo | Funcionamiento |
 | --- | --- |
 | **Virtuales** | La app lleva stacks, ciegas, apuestas y pozos. Los jugadores pueden pasar, igualar, subir, retirarse o ir all-in según su turno. El dealer se encarga de repartir los pozos entre los jugadores habilitados. |
-| **Físicas** | Las fichas y apuestas se manejan en la mesa. Cada jugador declara pasar, igualar, subir o retirarse desde su celular; el dealer únicamente cierra la mano y entrega el pozo. |
+| **Físicas** | Las fichas y apuestas se manejan en la mesa. Cada jugador declara pasar, igualar, subir o retirarse desde su celular; solo el dealer puede corregir stacks, cerrar la mano y entregar el pozo. |
 
 El flujo virtual contempla las rondas de apuestas, las subidas mínimas, los all-in y los pozos secundarios. Las acciones y repartos se validan en Supabase; los jugadores no pueden asignarse fichas por su cuenta.
 
@@ -103,7 +103,7 @@ Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md). La 
 
 ## Supabase
 
-Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `12`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos.
+Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `13`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos.
 
 | Scripts | Área |
 | --- | --- |
@@ -114,6 +114,7 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `10_acciones_jugador.sql` | Acciones propias en mesas físicas y autoridad final del dealer |
 | `11_seguridad_rendimiento.sql` | Permisos mínimos, política consolidada e índices de acceso |
 | `12_helper_privado.sql` | Helper de RLS fuera de la API pública |
+| `13_stack_solo_dealer.sql` | Ajuste de stacks físicos autorizado exclusivamente al dealer |
 
 La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas.
 
@@ -129,7 +130,7 @@ RevenueCat Test Store está activo solamente en los entornos internos `developme
 
 `app.json` configura el nombre, los identificadores, permisos e imágenes. El splash nativo usa `assets/images/blindly-logo.png` sobre fondo verde fijo. El menú y las pantallas React usan el logo transparente para adaptarse al tema.
 
-`eas.json` incluye perfiles `development`, `preview` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus está activo con Test Store en los builds internos y desactivado en producción. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
+`eas.json` incluye perfiles `development`, `preview` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus está activo con Test Store en los builds internos y desactivado en producción. Android se publicará en Google Play; los iPhone de amigos pueden recibir una IPA privada o una invitación cerrada de TestFlight sin publicar Blindly en App Store. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
 
 La ficha y las declaraciones iniciales para las tiendas están en [docs/store-listing.md](docs/store-listing.md).
 

@@ -216,7 +216,7 @@ export const errores: Record<string, string> = {
   PARTIDA_INICIADA: "La partida ya comenzó.",
   NO_PERTENECES: "No pertenecés a esta sala.",
   SOLO_HOST: "Solo el host puede hacer esto.",
-  SOLO_DEALER: "Solo el dealer puede repartir fichas.",
+  SOLO_DEALER: "Solo el dealer puede repartir o ajustar fichas.",
   ORDEN_INVALIDO: "Revisá y guardá los asientos de todos los jugadores.",
   DEALER_INVALIDO: "Elegí un dealer.",
   JUGADORES_INVALIDOS: "Se necesitan entre 2 y 10 jugadores.",
@@ -253,6 +253,10 @@ Object.assign(textos, {
   "Solo el dealer puede repartir fichas.": [
     "Only the dealer can distribute chips.",
     "Somente o dealer pode distribuir fichas.",
+  ],
+  "Solo el dealer puede repartir o ajustar fichas.": [
+    "Only the dealer can distribute or adjust chips.",
+    "Somente o dealer pode distribuir ou ajustar fichas.",
   ],
   "Revisá y guardá los asientos de todos los jugadores.": [
     "Review and save every player’s seat.",

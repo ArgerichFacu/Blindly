@@ -16,7 +16,7 @@ Antes de probar correo en Supabase:
 
 Perfiles en eas.json: development (cliente de desarrollo interno), preview (APK Android instalable y distribución interna iOS) y production. Identificadores propuestos `com.blindly.app`; confirmar que sean los definitivos antes de publicar.
 
-El proyecto ya está vinculado a [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), con ID `9f3c10b7-f501-45d8-8d64-b1ffe5569667`. Los entornos `development`, `preview` y `production` contienen `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_KEY`, `EXPO_PUBLIC_EMAIL_AUTH_READY=false` y `EXPO_PUBLIC_PLUS_READY=false`.
+El proyecto ya está vinculado a [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), con ID `9f3c10b7-f501-45d8-8d64-b1ffe5569667`. Los entornos `development`, `preview` y `production` contienen `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_KEY` y `EXPO_PUBLIC_EMAIL_AUTH_READY=false`. Blindly Plus está activo con RevenueCat Test Store en `development` y `preview`; `production` mantiene `EXPO_PUBLIC_PLUS_READY=false` hasta configurar las tiendas reales.
 
 Para revisar esa configuración:
 
@@ -37,9 +37,15 @@ npx eas-cli@latest build --platform android --profile preview
 npx eas-cli@latest build --platform ios --profile preview
 ```
 
-iOS físico necesita cuenta Apple Developer y registrar el dispositivo/provisionamiento cuando EAS lo solicite. El proyecto está listo para solicitar la compilación remota; la instalación y aceptación en hardware siguen siendo obligatorias.
+iOS físico necesita una cuenta Apple Developer. Para una descarga privada entre amigos, el perfil `preview` genera una IPA *ad hoc*: EAS solicita registrar el UDID de cada iPhone y firma la aplicación solo para esos dispositivos. TestFlight es la alternativa recomendada cuando se quiere invitar por correo o enlace sin registrar cada UDID; requiere crear Blindly en App Store Connect, pero no obliga a publicar la aplicación en App Store.
 
-El primer preview Android firmado terminó correctamente en EAS. El segundo preview incorpora `EXPO_PUBLIC_PLUS_READY=true` y las claves públicas de RevenueCat Test Store para validar Plus sin cobros reales. Los enlaces directos de los APK expiran; usar el historial de builds de [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly/builds) para descargar el build preview más reciente.
+No se puede instalar un APK en iPhone. La distribución prevista queda así:
+
+- Android público: AAB de `production` en Google Play.
+- Android de prueba: APK de `preview` mediante el enlace interno de EAS.
+- iPhone privado: IPA `preview` para dispositivos registrados o TestFlight para un grupo cerrado.
+
+Dos previews Android firmados terminaron correctamente en EAS. El más reciente incorpora `EXPO_PUBLIC_PLUS_READY=true` y las claves públicas de RevenueCat Test Store para validar Plus sin cobros reales. Está disponible como [APK interno hasta el 16 de octubre de 2026](https://expo.dev/artifacts/eas/nnxtTjswrQ8-70Yhs6o9ZhXeNNpJcEffO7SdCXjuuBQ.apk). Después de esa fecha, usar el historial de builds de [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly/builds) para descargar o generar el preview más reciente.
 
 ## Configuración y verificación física
 

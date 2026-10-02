@@ -41,7 +41,7 @@ async function falla(fn, texto) {
     await db.exec(fs.readFileSync(raiz + "/supabase/" + archivo, "utf8"));
 
   let fixtureN = 0;
-  async function mesa(n = 3, tipo = "virtuales") {
+  async function mesa(n = 3, tipo = "virtuales", dealerNumero = 1) {
     await como(1);
     const codigo = "T" + String(++fixtureN).padStart(4, "0");
     const id = (
@@ -59,7 +59,10 @@ async function falla(fn, texto) {
       );
     }
     await como(1);
-    await accion(id, "ordenar", { orden: ids, dealer: ids[0] });
+    await accion(id, "ordenar", {
+      orden: ids,
+      dealer: ids[dealerNumero - 1],
+    });
     await accion(id, "configurar", {
       seccion: "fichas",
       valor:
@@ -312,6 +315,43 @@ async function falla(fn, texto) {
   await como(1);
   s = await accion(keep.id, "fichas", { jugador: keep.ids[1], monto: 0 });
   assert.equal(s.turno_id, original);
+
+  // El host y cualquier otro jugador no pueden tocar stacks ajenos. El dealer
+  // sí puede hacerlo aunque no sea el host de la sala.
+  const permisos = await mesa(3, "fisicas", 2);
+  await como(1);
+  await falla(
+    () =>
+      accion(permisos.id, "fichas", {
+        jugador: permisos.ids[2],
+        monto: 700,
+      }),
+    "SOLO_DEALER",
+  );
+  await como(3);
+  await falla(
+    () =>
+      accion(permisos.id, "fichas", {
+        jugador: permisos.ids[0],
+        monto: 700,
+      }),
+    "SOLO_DEALER",
+  );
+  await como(2);
+  await accion(permisos.id, "fichas", {
+    jugador: permisos.ids[0],
+    monto: 700,
+  });
+  assert.equal(
+    Number(
+      (
+        await consulta("select fichas from jugadores where id=$1", [
+          permisos.ids[0],
+        ])
+      )[0].fichas,
+    ),
+    700,
+  );
   console.log(
     "OK: turnos propios, dealer fijo, ciegas, heads-up, rondas, all-in, pozos, permisos e idempotencia",
   );

@@ -27,6 +27,34 @@ function FichasRol({ roles }: { roles: string }) {
               { backgroundColor: color.fondo, borderColor: color.texto },
             ]}
           >
+            <View
+              style={[
+                styles.marcaFicha,
+                styles.marcaArriba,
+                { backgroundColor: color.texto },
+              ]}
+            />
+            <View
+              style={[
+                styles.marcaFicha,
+                styles.marcaDerecha,
+                { backgroundColor: color.texto },
+              ]}
+            />
+            <View
+              style={[
+                styles.marcaFicha,
+                styles.marcaAbajo,
+                { backgroundColor: color.texto },
+              ]}
+            />
+            <View
+              style={[
+                styles.marcaFicha,
+                styles.marcaIzquierda,
+                { backgroundColor: color.texto },
+              ]}
+            />
             <View style={[styles.fichaInterior, { borderColor: color.texto }]} />
             <Text style={[styles.textoRol, { color: color.texto }]}>{rol}</Text>
           </View>
@@ -202,6 +230,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     opacity: 0.55,
   },
+  marcaFicha: { position: "absolute", width: 4, height: 2, borderRadius: 1 },
+  marcaArriba: { top: 0, transform: [{ rotate: "90deg" }] },
+  marcaDerecha: { right: 0 },
+  marcaAbajo: { bottom: 0, transform: [{ rotate: "90deg" }] },
+  marcaIzquierda: { left: 0 },
   textoRol: { fontSize: 7, lineHeight: 9, fontWeight: "900" },
   asiento: {
     position: "absolute",

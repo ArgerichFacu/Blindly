@@ -7,6 +7,7 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Tipos TypeScript.
 - [x] Reglas de turnos, ciegas, all-in, pozos e idempotencia.
 - [x] Acciones propias de cada jugador y cierre exclusivo del dealer.
+- [x] Ajuste de stacks físicos protegido en Supabase y disponible solo para el dealer.
 - [x] Puntuación, empates, privacidad y persistencia del historial.
 - [x] Sesión anónima única y flujo preparado para vincular y recuperar por correo.
 - [x] Recuperación operativa sin correo mediante una clave privada rotatoria y una Edge Function autenticada.
@@ -20,7 +21,7 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Borrado opcional del perfil de RevenueCat desde la eliminación autenticada de cuenta.
 - [x] Perfiles EAS de development, preview y production preparados.
 - [x] Proyecto `@facuargerich/blindly` vinculado y variables públicas creadas en los tres entornos EAS.
-- [x] APK Android preview generado por EAS con firma remota.
+- [x] APK Android preview generado por EAS con firma remota y RevenueCat Test Store activo.
 - [x] RevenueCat Test Store configurado con entitlement `blindly_plus`, tres productos, oferta predeterminada y paywall vinculado.
 - [x] Proyecto Supabase aislado en la organización Blindly.
 - [x] GitHub conectado a Supabase sobre la rama main.
@@ -30,7 +31,7 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [ ] Configurar un proveedor SMTP y un dominio remitente.
 - [ ] Aplicar las plantillas de correo y activar `EXPO_PUBLIC_EMAIL_AUTH_READY`.
 - [ ] Instalar el APK Android en dispositivos reales y completar la prueba física.
-- [ ] Generar el build iOS cuando haya credenciales de Apple Developer y un dispositivo registrado.
+- [ ] Generar la IPA privada cuando haya credenciales de Apple Developer y estén registrados los iPhone de prueba, o preparar el grupo cerrado de TestFlight.
 - [ ] Crear productos de suscripción en App Store Connect y Google Play Console.
 - [ ] Publicar el paywall interno de RevenueCat y validar compra/restauración con Test Store.
 - [ ] Guardar `REVENUECAT_SECRET_KEY` en la Edge Function y validar la eliminación del perfil de cliente.

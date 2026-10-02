@@ -22,12 +22,12 @@ Usá el APK `preview` más reciente del [historial de EAS](https://expo.dev/acco
 1. Creá una sala, uní los otros celulares por código o QR y elegí fichas virtuales.
 2. Confirmá dealer fijo, rotación de BTN/SB/BB e indicador visible del turno.
 3. Desde cada celular ejecutá pasar, igualar, subir, retirarse y all-in cuando corresponda.
-4. Comprobá que un jugador no pueda actuar fuera de turno ni modificar el stack de otro.
+4. Comprobá que un jugador no pueda actuar fuera de turno ni modificar stacks; verificá que esa corrección solo aparezca y funcione en el celular del dealer.
 5. Activá modo avión en el jugador de turno durante al menos diez segundos y volvé a conectarlo.
 6. Confirmá que la app indique la desconexión, recupere el estado real y no duplique apuestas.
 7. Repetí bloqueando y desbloqueando el teléfono.
 8. Cerrá la mano desde el dealer, repartí todos los pozos y verificá la conservación total de fichas.
-9. Repetí una mano con fichas físicas: cada jugador declara su acción y el dealer solo cierra la mano y entrega el pozo.
+9. Repetí una mano con fichas físicas: cada jugador declara su acción y el dealer supervisa los stacks, cierra la mano y entrega el pozo.
 
 ## 4. Audio
 
