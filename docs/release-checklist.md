@@ -13,6 +13,7 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Recuperación operativa sin correo mediante una clave privada rotatoria y una Edge Function autenticada.
 - [x] Eliminación de cuenta y datos desde la app, bloqueada durante partidas activas.
 - [x] Política de privacidad accesible dentro de la app y documentación inicial de tiendas.
+- [x] Páginas públicas sin rastreadores preparadas para privacidad, términos y eliminación de cuenta.
 - [x] Nombre, fondo, iconos adaptativos y declaración de cifrado preparados para builds nativas.
 - [x] Permisos mínimos de tablas y funciones auxiliares.
 - [x] Índices de las claves foráneas usadas en consultas de sala.

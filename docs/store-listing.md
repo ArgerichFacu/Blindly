@@ -6,9 +6,9 @@
 - Posicionamiento: herramienta auxiliar para partidas presenciales de cartas
 - Descripción corta: **Tu mesa de poker presencial, conectada.**
 - Repositorio: https://github.com/ArgerichFacu/Blindly
-- Política de privacidad: https://github.com/ArgerichFacu/Blindly/blob/main/PRIVACY.md
-- Eliminación de cuenta: https://github.com/ArgerichFacu/Blindly/blob/main/ACCOUNT_DELETION.md
-- Términos: https://github.com/ArgerichFacu/Blindly/blob/main/TERMS.md
+- Política de privacidad: https://argerichfacu.github.io/Blindly/privacy.html
+- Eliminación de cuenta: https://argerichfacu.github.io/Blindly/account-deletion.html
+- Términos: https://argerichfacu.github.io/Blindly/terms.html
 - Tipo en Google Play: aplicación
 - Categoría sugerida: entretenimiento
 
