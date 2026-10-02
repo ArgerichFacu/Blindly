@@ -15,7 +15,12 @@ const clave =
       ? process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY
       : undefined;
 
-export const PLUS_DISPONIBLE = PLUS_HABILITADO && !!clave;
+// RevenueCat cierra intencionalmente las builds release que usan Test Store.
+// Esta defensa evita que una variable EAS mal configurada vuelva a inutilizar
+// una APK preview o una build enviada a tienda.
+const CLAVE_TEST_STORE = clave?.startsWith("test_") ?? false;
+export const PLUS_DISPONIBLE =
+  PLUS_HABILITADO && !!clave && (__DEV__ || !CLAVE_TEST_STORE);
 
 let preparando: Promise<CustomerInfo> | null = null;
 

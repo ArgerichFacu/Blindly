@@ -16,15 +16,17 @@ const db = new PGlite();
     .sort()) {
     await db.exec(fs.readFileSync(path.join(root, "supabase", file), "utf8"));
   }
-  for (const file of fs
-    .readdirSync(path.join(root, "supabase", "migrations"))
-    .filter((name) => name.endsWith(".sql"))
-    .sort()) {
-    await db.exec(
-      fs.readFileSync(path.join(root, "supabase", "migrations", file), "utf8"),
-    );
-  }
-
+  await db.exec(
+    fs.readFileSync(
+      path.join(
+        root,
+        "supabase",
+        "migrations",
+        "20261001232717_grant_edge_account_cleanup.sql",
+      ),
+      "utf8",
+    ),
+  );
   const privileges = (
     await db.query(`
       select

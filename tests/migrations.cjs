@@ -1,0 +1,99 @@
+const { PGlite } = require("@electric-sql/pglite");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+
+const root = path.resolve(__dirname, "..");
+const sqlDir = path.join(root, "supabase");
+const migrationDir = path.join(sqlDir, "migrations");
+const db = new PGlite();
+const normalize = (value) => value.replace(/\r\n/g, "\n").trim();
+const read = (file) => fs.readFileSync(file, "utf8");
+
+(async () => {
+  const migrationFiles = fs
+    .readdirSync(migrationDir)
+    .filter((name) => name.endsWith(".sql"))
+    .sort();
+
+  assert.deepEqual(migrationFiles, [
+    "20261001180424_acciones_jugador.sql",
+    "20261001183749_seguridad_rendimiento.sql",
+    "20261001184017_helper_privado.sql",
+    "20261001232717_grant_edge_account_cleanup.sql",
+    "20261002194847_stack_solo_dealer.sql",
+  ]);
+
+  const baseSources = fs
+    .readdirSync(sqlDir)
+    .filter((name) => /^(0[1-9]|10)_.*\.sql$/.test(name))
+    .sort()
+    .map((name) => read(path.join(sqlDir, name)))
+    .join("\n");
+  assert.equal(
+    normalize(read(path.join(migrationDir, migrationFiles[0]))),
+    normalize(baseSources),
+    "la migración base debe reflejar exactamente 01-10",
+  );
+  assert.equal(
+    normalize(read(path.join(migrationDir, migrationFiles[1]))),
+    normalize(read(path.join(sqlDir, "11_seguridad_rendimiento.sql"))),
+  );
+  assert.equal(
+    normalize(read(path.join(migrationDir, migrationFiles[2]))),
+    normalize(read(path.join(sqlDir, "12_helper_privado.sql"))),
+  );
+  assert.equal(
+    normalize(read(path.join(migrationDir, migrationFiles[4]))),
+    normalize(read(path.join(sqlDir, "13_stack_solo_dealer.sql"))),
+  );
+
+  await db.exec(
+    "create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key); create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;",
+  );
+
+  for (const file of migrationFiles) {
+    await db.exec(read(path.join(migrationDir, file)));
+  }
+
+  const schema = (
+    await db.query(`
+      select
+        to_regclass('public.salas') is not null as salas,
+        to_regclass('public.jugadores') is not null as jugadores,
+        to_regclass('public.puntuacion_partidas') is not null as puntuacion,
+        to_regprocedure('public.accion_mesa(uuid,text,jsonb,text)') is not null as accion,
+        to_regprocedure('public.accion_mesa_con_puntuacion(uuid,text,jsonb,text)') is not null as accion_base,
+        to_regprocedure('private.soy_jugador_de(uuid)') is not null as helper_privado,
+        has_table_privilege('service_role', 'public.salas', 'select') as servicio_salas,
+        has_table_privilege('service_role', 'public.jugadores', 'select') as servicio_jugadores
+    `)
+  ).rows[0];
+  assert.deepEqual(schema, {
+    salas: true,
+    jugadores: true,
+    puntuacion: true,
+    accion: true,
+    accion_base: true,
+    helper_privado: true,
+    servicio_salas: true,
+    servicio_jugadores: true,
+  });
+
+  const functionDefinition = (
+    await db.query(
+      "select pg_get_functiondef('public.accion_mesa(uuid,text,jsonb,text)'::regprocedure) as definition",
+    )
+  ).rows[0].definition;
+  assert.match(functionDefinition, /SOLO_DEALER/);
+  assert.match(functionDefinition, /j\.id is distinct from s\.dealer_id/i);
+
+  console.log(
+    "OK: historial Supabase completo, reproducible y con stack exclusivo del dealer.",
+  );
+  await db.close();
+})().catch(async (error) => {
+  console.error(error);
+  await db.close();
+  process.exitCode = 1;
+});

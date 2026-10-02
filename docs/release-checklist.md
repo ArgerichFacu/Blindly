@@ -21,7 +21,7 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Borrado opcional del perfil de RevenueCat desde la eliminación autenticada de cuenta.
 - [x] Perfiles EAS de development, preview y production preparados.
 - [x] Proyecto `@facuargerich/blindly` vinculado y variables públicas creadas en los tres entornos EAS.
-- [x] APK Android preview generado por EAS con firma remota y RevenueCat Test Store activo.
+- [ ] Regenerar e instalar el APK Android preview con firma remota y Plus desactivado; los previews anteriores con Test Store se cierran por diseño de RevenueCat.
 - [x] RevenueCat Test Store configurado con entitlement `blindly_plus`, tres productos, oferta predeterminada y paywall publicado en español, inglés y portugués.
 - [x] Enlaces del paywall conectados a la política de privacidad y los términos públicos de Blindly.
 - [x] Ícono y gráfico de funciones de Google Play generados y validados en sus dimensiones y formatos requeridos.
@@ -40,8 +40,8 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [ ] Crear `com.blindly.app` en Play Console y completar acceso, clasificación, público objetivo y seguridad de datos.
 - [ ] Generar la IPA privada cuando haya credenciales de Apple Developer y estén registrados los iPhone de prueba, o preparar el grupo cerrado de TestFlight.
 - [ ] Crear los productos comerciales de Blindly Plus en Google Play Console y vincularlos con RevenueCat.
-- [ ] Si Plus se prueba con compras reales en iPhone, crear también los productos equivalentes en App Store Connect; la distribución privada sin compras reales puede usar Test Store.
-- [ ] Validar compra y restauración con RevenueCat Test Store en un dispositivo físico.
+- [ ] Si Plus se prueba con compras reales en iPhone, crear también los productos equivalentes en App Store Connect; una IPA release privada mantiene Plus desactivado y Test Store se usa solo en `development`.
+- [ ] Validar compra y restauración con RevenueCat Test Store en una build `development` depurable sobre un dispositivo físico.
 - [x] Guardar `REVENUECAT_SECRET_KEY` en la Edge Function y validar la eliminación autenticada del perfil de cliente.
 - [ ] Revocar la clave privada actual de RevenueCat, generar un reemplazo y actualizar el secreto de Supabase después de recibir autorización explícita.
 - [ ] Activar `EXPO_PUBLIC_PLUS_READY` en `production` después de validar compra y restauración con productos reales.

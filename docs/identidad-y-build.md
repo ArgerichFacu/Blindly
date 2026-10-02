@@ -16,7 +16,7 @@ Antes de probar correo en Supabase:
 
 Perfiles en eas.json: development (cliente de desarrollo interno), preview (APK Android instalable y distribución interna iOS) y production. Identificadores propuestos `com.blindly.app`; confirmar que sean los definitivos antes de publicar.
 
-El proyecto ya está vinculado a [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), con ID `9f3c10b7-f501-45d8-8d64-b1ffe5569667`. Los entornos `development`, `preview` y `production` contienen `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_KEY` y `EXPO_PUBLIC_EMAIL_AUTH_READY=false`. Blindly Plus está activo con RevenueCat Test Store en `development` y `preview`; `production` mantiene `EXPO_PUBLIC_PLUS_READY=false` hasta configurar las tiendas reales.
+El proyecto ya está vinculado a [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), con ID `9f3c10b7-f501-45d8-8d64-b1ffe5569667`. Los entornos `development`, `preview` y `production` contienen `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_KEY` y `EXPO_PUBLIC_EMAIL_AUTH_READY=false`. Blindly Plus está activo con RevenueCat Test Store solamente en `development`; `preview` y `production` mantienen `EXPO_PUBLIC_PLUS_READY=false` hasta configurar las tiendas reales.
 
 Para revisar esa configuración:
 
@@ -45,9 +45,9 @@ No se puede instalar un APK en iPhone. La distribución prevista queda así:
 - Android de prueba: APK de `preview` mediante el enlace interno de EAS.
 - iPhone privado: IPA `preview` para dispositivos registrados o TestFlight para un grupo cerrado.
 
-La publicación comercial inicial solo requiere productos de Blindly Plus en Google Play Console. App Store Connect será necesario para distribuir mediante TestFlight y para probar compras reales en iPhone; una IPA *ad hoc* con Test Store no necesita una publicación pública en App Store.
+La publicación comercial inicial solo requiere productos de Blindly Plus en Google Play Console. App Store Connect será necesario para distribuir mediante TestFlight y para probar compras reales en iPhone. Una IPA *ad hoc* no necesita una publicación pública en App Store, pero debe mantener Plus desactivado hasta disponer de una clave real de plataforma porque Test Store no funciona en builds release.
 
-Dos previews Android firmados terminaron correctamente en EAS. El más reciente incorpora `EXPO_PUBLIC_PLUS_READY=true` y las claves públicas de RevenueCat Test Store para validar Plus sin cobros reales. Está disponible como [APK interno hasta el 16 de octubre de 2026](https://expo.dev/artifacts/eas/nnxtTjswrQ8-70Yhs6o9ZhXeNNpJcEffO7SdCXjuuBQ.apk). Después de esa fecha, usar el historial de builds de [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly/builds) para descargar o generar el preview más reciente.
+Los previews anteriores que incluían una clave Test Store quedaron obsoletos: RevenueCat cierra deliberadamente las builds release que usan esa clave. El nuevo APK `preview` se genera con Plus desactivado y se publicará en esta sección cuando termine. Para probar compras simuladas se debe usar una build `development` depurable. El historial completo está en [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly/builds).
 
 ## Configuración y verificación física
 

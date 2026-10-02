@@ -2,7 +2,7 @@
 
 Blindly seguirá siendo utilizable sin pagar. La creación y unión a salas, los turnos, las fichas físicas y virtuales y el reparto del pozo forman parte del producto principal.
 
-El paywall `Blindly Plus` está publicado en RevenueCat con textos en español, inglés y portugués. Sus enlaces de privacidad y términos apuntan a los documentos públicos de este repositorio. Los builds internos usan Test Store; todavía falta validar compra y restauración en hardware real antes de crear los productos comerciales de Google Play.
+El paywall `Blindly Plus` está publicado en RevenueCat con textos en español, inglés y portugués. Sus enlaces de privacidad y términos apuntan a los documentos públicos de este repositorio. El perfil `development` usa Test Store; las APK `preview` son builds release y mantienen Plus desactivado. Todavía falta validar compra y restauración con una build de desarrollo en hardware real antes de crear los productos comerciales de Google Play.
 
 ## Alcance propuesto
 
@@ -38,9 +38,9 @@ El código de compra está completo y mantiene los cobros desactivados hasta que
 
 ## Estado de pruebas internas
 
-El proyecto `Blindly` ya existe en RevenueCat. Su Test Store tiene el entitlement `blindly_plus`, una oferta `default` con paquetes mensual, anual y vitalicio, y un paywall `Blindly Plus` vinculado a esa oferta. Los entornos EAS `development` y `preview` usan la clave pública de Test Store y `EXPO_PUBLIC_PLUS_READY=true`; `production` permanece con Plus desactivado y sin claves de tienda.
+El proyecto `Blindly` ya existe en RevenueCat. Su Test Store tiene el entitlement `blindly_plus`, una oferta `default` con paquetes mensual, anual y vitalicio, y un paywall `Blindly Plus` vinculado a esa oferta. Solo el entorno EAS `development` usa la clave pública de Test Store con `EXPO_PUBLIC_PLUS_READY=true`. `preview` y `production` mantienen `EXPO_PUBLIC_PLUS_READY=false` hasta disponer de claves y productos reales de plataforma.
 
-El Test Store no procesa dinero real. Sirve para validar el paywall, la compra simulada, la restauración, el cambio de dispositivo y el bloqueo de funciones premium antes de crear productos en Google Play Console. También permite probar Plus en las copias privadas de iPhone sin habilitar compras reales allí. El paywall debe estar publicado en RevenueCat para aparecer en la app interna.
+El Test Store no procesa dinero real. Sirve para validar el paywall, la compra simulada, la restauración, el cambio de dispositivo y el bloqueo de funciones premium antes de crear productos en Google Play Console. RevenueCat solo admite su clave `test_` en builds depurables; una build release muestra un error y se cierra deliberadamente. Por eso estas pruebas se hacen con `development`, mientras las copias privadas release de Android o iPhone mantienen Plus desactivado hasta usar una clave real de plataforma.
 
 La clave privada V1 de RevenueCat se usa solo como secreto `REVENUECAT_SECRET_KEY` de Supabase para que `eliminar-cuenta` quite también el perfil de cliente. Nunca se copia al repositorio, a EAS ni a una variable `EXPO_PUBLIC`.
 

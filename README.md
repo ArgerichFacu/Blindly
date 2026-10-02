@@ -124,13 +124,13 @@ Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren con
 
 La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Plus habilita métricas avanzadas, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis.
 
-RevenueCat Test Store está activo solamente en los entornos internos `development` y `preview`, sin cobros reales. `production` continúa desactivado hasta configurar productos comerciales y validar compras reales. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
+RevenueCat Test Store está activo solamente en `development`, donde la build es depurable y no procesa cobros reales. Las APK `preview` y las builds `production` mantienen Plus desactivado hasta configurar productos comerciales: RevenueCat cierra intencionalmente una build release que use una clave Test Store. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
 
 ## Android e iOS
 
 `app.json` configura el nombre, los identificadores, permisos e imágenes. El splash nativo usa `assets/images/blindly-logo.png` sobre fondo verde fijo. El menú y las pantallas React usan el logo transparente para adaptarse al tema.
 
-`eas.json` incluye perfiles `development`, `preview` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus está activo con Test Store en los builds internos y desactivado en producción. Android se publicará en Google Play; los iPhone de amigos pueden recibir una IPA privada o una invitación cerrada de TestFlight sin publicar Blindly en App Store. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
+`eas.json` incluye perfiles `development`, `preview` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus usa Test Store solo en development; preview y production permanecen desactivados hasta disponer de productos reales. Android se publicará en Google Play; los iPhone de amigos pueden recibir una IPA privada o una invitación cerrada de TestFlight sin publicar Blindly en App Store. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
 
 La ficha y las declaraciones iniciales para las tiendas están en [docs/store-listing.md](docs/store-listing.md).
 
@@ -178,7 +178,7 @@ Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migr
 - Generar builds EAS nativas e instalarlas en dispositivos físicos.
 - Validar el splash en arranque en frío, la pausa de música al pasar a segundo plano y la reconexión después de bloquear el teléfono o perder la red.
 - Completar una partida con varios celulares y verificar apuestas, reparto de pozos y cierre del torneo.
-- Probar compra, restauración y eliminación con RevenueCat Test Store; después crear los productos comerciales en las tiendas.
+- Probar compra, restauración y eliminación con RevenueCat Test Store en una build `development`; después crear los productos comerciales en las tiendas.
 
 La configuración nativa y las pruebas automatizadas están preparadas; estas verificaciones físicas siguen pendientes.
 

@@ -1,6 +1,6 @@
 # Prueba física de aceptación
 
-Usá el APK `preview` más reciente del [historial de EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds). El Test Store de RevenueCat no cobra dinero real. Para una prueba completa hacen falta al menos tres celulares Android conectados a Internet.
+Usá el APK `preview` más reciente del [historial de EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds). Ese APK mantiene Plus desactivado y permite probar el juego completo sin cobros. Para una prueba completa hacen falta al menos tres celulares Android conectados a Internet.
 
 ## 1. Instalación y arranque
 
@@ -43,6 +43,8 @@ Usá el APK `preview` más reciente del [historial de EAS](https://expo.dev/acco
 3. Cada usuario debe ver únicamente su historial. Al compartir otra sala, los jugadores solo deben ver su rango dentro de esa mesa.
 
 ## 6. Blindly Plus con Test Store
+
+Esta sección requiere una build `development` depurable. No uses una APK `preview`: RevenueCat bloquea las claves Test Store en cualquier build release. El APK preview mantiene Plus desactivado y sirve para validar todo el juego sin compras.
 
 1. Abrí **Blindly Plus** y mostrá el paywall publicado.
 2. Realizá una compra simulada mensual o anual.
