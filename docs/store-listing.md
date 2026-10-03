@@ -16,6 +16,26 @@
 
 Blindly sincroniza ciegas, turnos, fichas y puntuación para partidas presenciales de Texas Hold’em. Cada jugador participa desde su celular y el dealer entrega el pozo.
 
+## Textos localizados para Google Play
+
+### Español (Argentina)
+
+- **Nombre:** Blindly
+- **Descripción corta:** Tu mesa de poker presencial, conectada.
+- **Descripción completa:** Blindly organiza tus partidas presenciales de Texas Hold’em. Creá una sala, invitá a tus amigos con un código o QR y mantené sincronizados los turnos, las ciegas, los stacks, los pozos y la puntuación. Cada jugador confirma sus propias acciones desde su celular y el dealer reparte el pozo al final de la mano. Podés jugar con fichas físicas o llevarlas de forma virtual. Blindly no reparte cartas, no decide ganadores y no usa dinero real.
+
+### English (United States)
+
+- **Name:** Blindly
+- **Short description:** Your in-person poker table, connected.
+- **Full description:** Blindly organizes your in-person Texas Hold’em games. Create a room, invite friends with a code or QR, and keep turns, blinds, stacks, pots, and scores in sync. Each player confirms their own actions from their phone, while the dealer awards the pot at the end of the hand. Play with physical chips or track them virtually. Blindly does not deal cards, decide winners, or use real money.
+
+### Português (Brasil)
+
+- **Nome:** Blindly
+- **Descrição curta:** Sua mesa de poker presencial, conectada.
+- **Descrição completa:** Blindly organiza suas partidas presenciais de Texas Hold’em. Crie uma sala, convide amigos com um código ou QR e mantenha turnos, blinds, stacks, potes e pontuação sincronizados. Cada jogador confirma suas próprias ações pelo celular, enquanto o dealer distribui o pote no fim da mão. Jogue com fichas físicas ou controle tudo virtualmente. Blindly não distribui cartas, não decide vencedores e não usa dinheiro real.
+
 ## Notas para revisión
 
 Blindly no reparte cartas, no determina manos ganadoras y no procesa dinero real, apuestas ni premios. Las cartas y la decisión del ganador permanecen en la mesa física. La cámara es opcional y solo escanea el QR de la sala; el código también puede ingresarse manualmente.

@@ -44,3 +44,8 @@ example
 /ios
 /android
 
+# Local release artifacts (distributed through EAS / Google Play)
+/release/
+*.apk
+*.aab
+
