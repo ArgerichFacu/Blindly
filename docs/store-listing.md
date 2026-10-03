@@ -65,6 +65,7 @@ Estas respuestas deben revisarse en Play Console contra el AAB exacto. La declar
 1. Crear una cuenta personal de distribución completa cuando se pueda pagar la tarifa única de USD 25. Google también ofrece distribución limitada gratuita para un máximo de 20 dispositivos, pero ese plan no puede convertirse después en distribución completa y no sirve para el lanzamiento público previsto. Mientras tanto, usar el APK interno de EAS para las pruebas privadas.
 2. Definir un correo público de soporte y privacidad.
 3. Crear la aplicación `com.blindly.app` y completar acceso, anuncios, clasificación de contenido, público objetivo y seguridad de datos.
+   En el cuestionario IARC, declarar de forma exacta la temática de poker y el uso de fichas virtuales; no seleccionar público infantil. Blindly no admite dinero, premios de valor real, anuncios de apuestas ni enlaces a casinos.
 4. Cargar el ícono, el gráfico de funciones, al menos dos capturas reales y los textos localizados.
 5. Cargar el AAB de producción en una pista interna antes de avanzar a pruebas cerradas o producción.
 6. Ingresar la URL pública de eliminación de cuenta y comprobar que el formulario reconoce que Blindly crea cuentas.
