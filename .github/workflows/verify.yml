@@ -27,6 +27,14 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      - name: Verificar compatibilidad con Expo 57
+        run: |
+          npx expo install --check
+          npx expo-doctor
+
+      - name: Bloquear vulnerabilidades críticas
+        run: npm audit --omit=dev --audit-level=critical
+
       - name: Verificar TypeScript
         run: npm run typecheck
 
