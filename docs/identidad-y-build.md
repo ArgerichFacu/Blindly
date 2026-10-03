@@ -14,7 +14,7 @@ Antes de probar correo en Supabase:
 
 ## EAS
 
-Perfiles en eas.json: development (cliente de desarrollo interno), preview (APK Android instalable y distribución interna iOS) y production. Identificadores propuestos `com.blindly.app`; confirmar que sean los definitivos antes de publicar.
+Perfiles en eas.json: development (cliente de desarrollo interno), preview (APK Android instalable y distribución interna iOS) y production. El identificador definitivo de Android e iOS es `com.blindly.app`. Expo SDK 57 compila y apunta a Android API 36.
 
 El proyecto ya está vinculado a [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), con ID `9f3c10b7-f501-45d8-8d64-b1ffe5569667`. Los entornos `development`, `preview` y `production` contienen `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_KEY` y `EXPO_PUBLIC_EMAIL_AUTH_READY=false`. Blindly Plus está activo con RevenueCat Test Store solamente en `development`; `preview` y `production` mantienen `EXPO_PUBLIC_PLUS_READY=false` hasta configurar las tiendas reales.
 
