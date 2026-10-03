@@ -87,6 +87,9 @@ export const textos: Record<string, [string, string]> = {
     "For virtual chips, Regular offers a balanced pace; you can choose another format.",
     "Com fichas virtuais, Regular oferece um ritmo equilibrado; você pode escolher outro modo.",
   ],
+  "Deep stack": ["Deep stack", "Stack profundo"],
+  Turbo: ["Turbo", "Turbo"],
+  Regular: ["Regular", "Regular"],
   Personalizado: ["Custom", "Personalizado"],
   "Editar niveles": ["Edit levels", "Editar níveis"],
   "Nivel {n}": ["Level {n}", "Nível {n}"],
@@ -775,10 +778,10 @@ Object.assign(textos, {
     "This account is already linked.",
     "Esta conta já está vinculada.",
   ],
-  "Primero protegé este invitado y terminá sus partidas antes de recuperar otra cuenta.":
+  "Primero protegé este invitado y terminá sus partidas o suscripciones antes de recuperar otra cuenta.":
     [
-      "Protect this guest and finish its games before recovering another account.",
-      "Proteja este convidado e termine suas partidas antes de recuperar outra conta.",
+      "Protect this guest and finish its games or subscriptions before recovering another account.",
+      "Proteja este convidado e finalize suas partidas ou assinaturas antes de recuperar outra conta.",
     ],
   "El servicio de correo requiere configuración. Probá más tarde.": [
     "The email service needs configuration. Try again later.",

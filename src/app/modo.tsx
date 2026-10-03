@@ -78,12 +78,13 @@ export default function ModoJuego() {
     <Pantalla titulo={t("Modo de juego")}>
       <Texto>
         {t("Recomendado: {modo}", {
-          modo:
+          modo: t(
             recomendado === "deep"
               ? "Deep stack"
               : recomendado === "turbo"
                 ? "Turbo"
                 : "Regular",
+          ),
         })}
       </Texto>
       <Texto suave>
@@ -100,10 +101,10 @@ export default function ModoJuego() {
             id === "personalizado"
               ? `${t("Personalizado")} · Plus`
               : id === "deep"
-                ? "Deep stack"
+                ? t("Deep stack")
                 : id === "turbo"
-                  ? "Turbo"
-                  : "Regular"
+                  ? t("Turbo")
+                  : t("Regular")
           }
           detalle={t(
             id === "turbo"

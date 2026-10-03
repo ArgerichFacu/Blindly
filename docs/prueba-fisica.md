@@ -1,6 +1,6 @@
 # Prueba física de aceptación
 
-Usá el APK `preview` más reciente del [historial de EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds). Ese APK mantiene Plus desactivado y permite probar el juego completo sin cobros. Para una prueba completa hacen falta al menos tres celulares Android conectados a Internet.
+Usá el [APK preview aceptado de Blindly 1.0.0](https://expo.dev/artifacts/eas/zmUry6WZBGkGU9Q5EXXQBGcJE5i3MVJQWSQs648Bsi4.apk). Su SHA-256 es `DA13EF411EF9415464CF9174B8080DDD5486EC06F0940151F75D289C3EF4712C`; verificá ese valor si descargaste más de una build. Este APK mantiene Plus desactivado y permite probar el juego completo sin cobros. Para una prueba completa hacen falta al menos tres celulares Android conectados a Internet.
 
 ## 1. Instalación y arranque
 
