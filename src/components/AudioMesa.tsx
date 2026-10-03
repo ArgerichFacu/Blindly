@@ -30,7 +30,10 @@ export function AudioMesa({
     }).catch(() => {});
   }, []);
   useEffect(() => {
+    // Expo AudioPlayer expone estas propiedades nativas como configuración mutable.
+    // eslint-disable-next-line react-hooks/immutability
     campana.volume = preferencias.sonido ? preferencias.volumenRonda : 0;
+    // eslint-disable-next-line react-hooks/immutability
     ambiente.volume = preferencias.volumenMusica;
     ambiente.loop = true;
   }, [preferencias, campana, ambiente]);

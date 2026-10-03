@@ -20,7 +20,7 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Permisos mínimos de tablas y funciones auxiliares.
 - [x] Índices de las claves foráneas usadas en consultas de sala.
 - [x] Empaquetado JavaScript de web, Android e iOS en CI.
-- [x] CI verifica compatibilidad exacta con Expo 57, Expo Doctor y bloquea vulnerabilidades críticas de dependencias.
+- [x] CI verifica compatibilidad exacta con Expo 57, Expo Doctor, TypeScript y ESLint; además bloquea vulnerabilidades críticas de dependencias.
 - [x] SDK de Blindly Plus, paywall, restauración y administración de suscripción integrados y desactivados por variable pública.
 - [x] Borrado opcional del perfil de RevenueCat desde la eliminación autenticada de cuenta.
 - [x] Perfiles EAS de development, preview y production preparados.

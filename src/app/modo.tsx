@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter, useFocusEffect } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Pantalla,
   Boton,
@@ -37,10 +37,7 @@ export default function ModoJuego() {
       void cargarPersonalizado().then(setPersonalizado);
     }, []),
   );
-  useEffect(() => {
-    if (sala?.configuracion.modo && !elegido)
-      setElegido(sala.configuracion.modo.id);
-  }, [sala]);
+  const seleccion = elegido ?? sala?.configuracion.modo?.id ?? null;
   let recomendado: Modo["id"] = "regular";
   const fichas = sala?.configuracion.fichas;
   if (fichas?.tipo === "fisicas") {
@@ -51,26 +48,26 @@ export default function ModoJuego() {
     } catch {}
   }
   const base =
-    elegido === "personalizado"
+    seleccion === "personalizado"
       ? (personalizado ?? sala?.configuracion.modo?.niveles)
-      : PRESETS.find((p) => p.id === elegido)?.niveles;
+      : PRESETS.find((p) => p.id === seleccion)?.niveles;
   let niveles = base;
   try {
     if (base)
-      niveles = adaptarNiveles(base, elegido ?? "", fichas, jugadores.length);
+      niveles = adaptarNiveles(base, seleccion ?? "", fichas, jugadores.length);
   } catch {}
   function guardar() {
-    if (elegido === "personalizado" && plus.disponible && !plus.activo) {
+    if (seleccion === "personalizado" && plus.disponible && !plus.activo) {
       router.push("/plus");
       return;
     }
-    if (!elegido || !niveles || !validarNiveles(niveles)) {
+    if (!seleccion || !niveles || !validarNiveles(niveles)) {
       setError(t("Niveles inválidos"));
       return;
     }
     accion.ejecutar(
       "configurar",
-      { seccion: "modo", valor: { id: elegido, niveles } },
+      { seccion: "modo", valor: { id: seleccion, niveles } },
       () => router.back(),
     );
   }
@@ -124,7 +121,7 @@ export default function ModoJuego() {
                   ? "◷"
                   : "≡"
           }
-          activo={elegido === id}
+          activo={seleccion === id}
           onPress={() =>
             id === "personalizado" && plus.disponible && !plus.activo
               ? router.push("/plus")
@@ -132,7 +129,7 @@ export default function ModoJuego() {
           }
         />
       ))}
-      {elegido === "personalizado" && (
+      {seleccion === "personalizado" && (
         <Boton
           titulo={t("Editar niveles")}
           secundario
@@ -166,7 +163,7 @@ export default function ModoJuego() {
       <Boton
         titulo={t("Guardar")}
         disabled={
-          !elegido ||
+          !seleccion ||
           !niveles ||
           accion.ocupado ||
           sala?.host_id !== mesa.usuario ||

@@ -23,6 +23,8 @@ export function TemaProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (plus.disponible && !plus.cargando && !plus.activo && tema.plus) {
+      // La pérdida externa del entitlement invalida inmediatamente el tema premium.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTema(TEMA_DEFECTO);
       void guardarTemaId(TEMA_DEFECTO.id);
     }

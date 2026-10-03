@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View } from "react-native";
 import {
   Pantalla,
@@ -19,32 +19,32 @@ export default function ValorFichas() {
   const mesa = useSala(codigo),
     { sala, jugadores } = mesa,
     accion = useAccionMesa(sala, mesa.aplicar);
-  const [tipo, setTipo] = useState<"fisicas" | "virtuales">("fisicas"),
-    [stack, setStack] = useState("5000"),
+  const [tipoElegido, setTipoElegido] = useState<
+      "fisicas" | "virtuales" | null
+    >(null),
+    [stackEditado, setStackEditado] = useState<string | null>(null),
     [error, setError] = useState("");
-  const [filas, setFilas] = useState(
-    [25, 50, 100, 500, 1000].map((valor) => ({
-      valor: String(valor),
-      cantidad: "0",
-    })),
-  );
-  const [cargado, setCargado] = useState(false);
-  useEffect(() => {
-    if (!sala || cargado) return;
-    const f = sala.configuracion.fichas;
-    if (f) {
-      setTipo(f.tipo);
-      if (f.tipo === "virtuales") setStack(String(f.stack));
-      else
-        setFilas(
-          f.denominaciones.map((d) => ({
-            valor: String(d.valor),
-            cantidad: String(d.cantidad),
-          })),
-        );
-    }
-    setCargado(true);
-  }, [sala, cargado]);
+  const [filasEditadas, setFilasEditadas] = useState<
+    { valor: string; cantidad: string }[] | null
+  >(null);
+  const fichasGuardadas = sala?.configuracion.fichas;
+  const tipo = tipoElegido ?? fichasGuardadas?.tipo ?? "fisicas";
+  const stack =
+    stackEditado ??
+    (fichasGuardadas?.tipo === "virtuales"
+      ? String(fichasGuardadas.stack)
+      : "5000");
+  const filas =
+    filasEditadas ??
+    (fichasGuardadas?.tipo === "fisicas"
+      ? fichasGuardadas.denominaciones.map((d) => ({
+          valor: String(d.valor),
+          cantidad: String(d.cantidad),
+        }))
+      : [25, 50, 100, 500, 1000].map((valor) => ({
+          valor: String(valor),
+          cantidad: "0",
+        })));
   function leer(): Fichas {
     return tipo === "virtuales"
       ? { tipo, stack: entero(stack, 1) }
@@ -87,7 +87,7 @@ export default function ValorFichas() {
               valor === "fisicas" ? "Fichas físicas" : "Fichas virtuales",
             )}
             secundario={tipo !== valor}
-            onPress={() => setTipo(valor)}
+            onPress={() => setTipoElegido(valor)}
           />
         ))}
       </View>
@@ -106,14 +106,14 @@ export default function ValorFichas() {
                 compacto
                 secundario={Number(stack) !== n}
                 style={{ flex: 1 }}
-                onPress={() => setStack(String(n))}
+                onPress={() => setStackEditado(String(n))}
               />
             ))}
           </View>
           <Campo
             etiqueta={t("Stack inicial por jugador")}
             value={stack}
-            onChangeText={setStack}
+            onChangeText={setStackEditado}
             keyboardType="number-pad"
           />
         </>
@@ -132,8 +132,8 @@ export default function ValorFichas() {
                   value={f.valor}
                   keyboardType="number-pad"
                   onChangeText={(valor) =>
-                    setFilas((prev) =>
-                      prev.map((fila, n) =>
+                    setFilasEditadas(
+                      filas.map((fila, n) =>
                         n === i ? { ...fila, valor } : fila,
                       ),
                     )
@@ -144,8 +144,8 @@ export default function ValorFichas() {
                   value={f.cantidad}
                   keyboardType="number-pad"
                   onChangeText={(cantidad) =>
-                    setFilas((prev) =>
-                      prev.map((fila, n) =>
+                    setFilasEditadas(
+                      filas.map((fila, n) =>
                         n === i ? { ...fila, cantidad } : fila,
                       ),
                     )

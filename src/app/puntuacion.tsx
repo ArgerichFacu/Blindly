@@ -36,6 +36,8 @@ export default function MiPuntuacion() {
       return () => {
         activo = false;
       };
+      // `revision` es un contador intencional para reintentar la carga en foco.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [revision]),
   );
   const numero = (n: number) =>

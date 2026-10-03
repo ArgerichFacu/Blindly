@@ -69,15 +69,14 @@ export function PlusProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let vivo = true;
     let listener: CustomerInfoUpdateListener | null = null;
-    if (!PLUS_DISPONIBLE) {
-      setCargando(false);
-      return;
-    }
+    if (!PLUS_DISPONIBLE) return;
     listener = (nueva) => {
       if (vivo) setInfo(nueva);
     };
     Purchases.addCustomerInfoUpdateListener(listener);
-    void cargar();
+    const inicio = setTimeout(() => {
+      if (vivo) void cargar();
+    }, 0);
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_evento, sesion) => {
@@ -91,6 +90,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     });
     return () => {
       vivo = false;
+      clearTimeout(inicio);
       subscription.unsubscribe();
       if (listener) Purchases.removeCustomerInfoUpdateListener(listener);
     };

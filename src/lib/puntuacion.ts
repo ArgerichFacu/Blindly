@@ -57,6 +57,8 @@ export function useRangosMesa(
       return () => {
         activo = false;
       };
+      // Estos cambios remotos fuerzan una nueva consulta aunque no sean parámetros RPC.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [salaId, mano, estado, cantidad]),
   );
   return { rangos, error };

@@ -12,7 +12,6 @@ import {
   Campo,
   Tarjeta,
   Seccion,
-  Etiqueta,
   Pasos,
 } from "./Controles";
 import { PanelApuesta } from "./PanelApuesta";
@@ -68,7 +67,6 @@ export function Mesa({ codigo }: { codigo: string }) {
   );
   useEffect(() => {
     if (!corriendo || !enfocada) return;
-    setAhora(ahoraServidor());
     const reloj = setInterval(() => setAhora(ahoraServidor()), 250);
     void activateKeepAwakeAsync("mesa-blindly").catch(() => {});
     return () => {

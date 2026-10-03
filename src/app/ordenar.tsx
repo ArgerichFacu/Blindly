@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View } from "react-native";
 import {
   Pantalla,
@@ -18,37 +18,24 @@ export default function Ordenar() {
     { t, mensajeError } = usePreferencias();
   const mesa = useSala(codigo),
     { sala, jugadores, usuario } = mesa;
-  const [orden, setOrden] = useState<string[]>([]),
-    [dealer, setDealer] = useState("");
-  const firma = jugadores
-    .map((j) => j.id)
-    .sort()
-    .join(",");
-  useEffect(() => {
-    if (!jugadores.length) return;
-    setOrden((actual) => {
-      const vigente = actual.length ? actual : (sala?.orden ?? []);
-      return [
-        ...vigente.filter((id) => jugadores.some((j) => j.id === id)),
-        ...jugadores.map((j) => j.id).filter((id) => !vigente.includes(id)),
-      ];
-    });
-    setDealer((actual) =>
-      jugadores.some((j) => j.id === actual)
-        ? actual
-        : (sala?.dealer_id ?? jugadores[0].id),
-    );
-  }, [firma]);
+  const [ordenElegido, setOrdenElegido] = useState<string[]>([]),
+    [dealerElegido, setDealerElegido] = useState("");
+  const ordenVigente = ordenElegido.length ? ordenElegido : (sala?.orden ?? []);
+  const orden = [
+    ...ordenVigente.filter((id) => jugadores.some((j) => j.id === id)),
+    ...jugadores.map((j) => j.id).filter((id) => !ordenVigente.includes(id)),
+  ];
+  const dealer = jugadores.some((j) => j.id === dealerElegido)
+    ? dealerElegido
+    : (sala?.dealer_id ?? jugadores[0]?.id ?? "");
   const accion = useAccionMesa(sala, mesa.aplicar);
   function mover(indice: number, direccion: number) {
-    setOrden((prev) => {
-      const copia = [...prev];
-      [copia[indice], copia[indice + direccion]] = [
-        copia[indice + direccion],
-        copia[indice],
-      ];
-      return copia;
-    });
+    const copia = [...orden];
+    [copia[indice], copia[indice + direccion]] = [
+      copia[indice + direccion],
+      copia[indice],
+    ];
+    setOrdenElegido(copia);
   }
   return (
     <Pantalla titulo={t("Ordenar sala")}>
@@ -93,7 +80,7 @@ export default function Ordenar() {
                     )}
                     secundario
                     disabled={accion.ocupado}
-                    onPress={() => setDealer(id)}
+                    onPress={() => setDealerElegido(id)}
                   />
                 </View>
               </Tarjeta>

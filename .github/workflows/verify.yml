@@ -38,6 +38,9 @@ jobs:
       - name: Verificar TypeScript
         run: npm run typecheck
 
+      - name: Verificar ESLint
+        run: npm run lint
+
       - name: Ejecutar pruebas
         run: npm test
 
