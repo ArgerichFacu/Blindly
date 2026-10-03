@@ -47,7 +47,7 @@ No se puede instalar un APK en iPhone. La distribución prevista queda así:
 
 La publicación comercial inicial solo requiere productos de Blindly Plus en Google Play Console. App Store Connect será necesario para distribuir mediante TestFlight y para probar compras reales en iPhone. Una IPA *ad hoc* no necesita una publicación pública en App Store, pero debe mantener Plus desactivado hasta disponer de una clave real de plataforma porque Test Store no funciona en builds release.
 
-Los previews anteriores que incluían una clave Test Store quedaron obsoletos: RevenueCat cierra deliberadamente las builds release que usan esa clave. El nuevo APK `preview` se genera con Plus desactivado y se publicará en esta sección cuando termine. Para probar compras simuladas se debe usar una build `development` depurable. El historial completo está en [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly/builds).
+Los previews anteriores que incluían una clave Test Store quedaron obsoletos: RevenueCat cierra deliberadamente las builds release que usan esa clave. El [APK preview aceptado por EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/5c01f942-48fa-403f-a16a-3fac1d035e58) mantiene Plus desactivado y sirve para probar el juego. El [AAB de producción](https://expo.dev/accounts/facuargerich/projects/blindly/builds/b1aca8b7-3598-4f57-8652-db7861e418e7) usa `versionCode 2` y está preparado para la pista interna de Google Play. Para probar compras simuladas se debe usar una build `development` depurable. El historial completo está en [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly/builds).
 
 ## Configuración y verificación física
 

@@ -24,7 +24,8 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Borrado opcional del perfil de RevenueCat desde la eliminación autenticada de cuenta.
 - [x] Perfiles EAS de development, preview y production preparados.
 - [x] Proyecto `@facuargerich/blindly` vinculado y variables públicas creadas en los tres entornos EAS.
-- [ ] Regenerar e instalar el APK Android preview con firma remota y Plus desactivado; los previews anteriores con Test Store se cierran por diseño de RevenueCat.
+- [x] APK Android preview regenerado con firma remota y Plus desactivado ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/5c01f942-48fa-403f-a16a-3fac1d035e58)); falta instalarlo en hardware real.
+- [x] AAB de producción para Google Play generado con `versionCode 2` y firma remota ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/b1aca8b7-3598-4f57-8652-db7861e418e7)).
 - [x] RevenueCat Test Store configurado con entitlement `blindly_plus`, tres productos, oferta predeterminada y paywall publicado en español, inglés y portugués.
 - [x] Enlaces del paywall conectados a la política de privacidad y los términos públicos de Blindly.
 - [x] Ícono y gráfico de funciones de Google Play generados y validados en sus dimensiones y formatos requeridos.
