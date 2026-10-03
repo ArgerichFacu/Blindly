@@ -1,6 +1,6 @@
 # Prueba física de aceptación
 
-Usá el [APK preview aceptado de Blindly 1.0.0](https://expo.dev/artifacts/eas/zmUry6WZBGkGU9Q5EXXQBGcJE5i3MVJQWSQs648Bsi4.apk). Su SHA-256 es `DA13EF411EF9415464CF9174B8080DDD5486EC06F0940151F75D289C3EF4712C`; verificá ese valor si descargaste más de una build. Este APK mantiene Plus desactivado y permite probar el juego completo sin cobros. Para una prueba completa hacen falta al menos tres celulares Android conectados a Internet.
+Usá el [APK preview final de Blindly 1.0.0](https://expo.dev/artifacts/eas/PssT7o1DRFg6YPlxDOSiXl0Y5gMWDPbQ6xT4PVYJpzg.apk). Su SHA-256 es `9D25B27DC466C0F957AEE16A92ED2A43F85740C9F0DC3CC0533509C620BC914A`; verificá ese valor si descargaste más de una build. Este APK mantiene Plus desactivado y permite probar el juego completo sin cobros. Para una prueba completa hacen falta al menos tres celulares Android conectados a Internet.
 
 ## 1. Instalación y arranque
 
@@ -44,7 +44,7 @@ Usá el [APK preview aceptado de Blindly 1.0.0](https://expo.dev/artifacts/eas/z
 
 ## 6. Blindly Plus con Test Store
 
-Esta sección requiere una build `development` depurable. No uses una APK `preview`: RevenueCat bloquea las claves Test Store en cualquier build release. El APK preview mantiene Plus desactivado y sirve para validar todo el juego sin compras.
+Esta sección requiere la [build `development` depurable](https://expo.dev/artifacts/eas/cO1utrQC2gAeLE63VkH1TfjxUIe-O-5DDPS4nsYguUM.apk), SHA-256 `9C3CD74DBC14724A173FBF14D4944589B1E6B814A33758D103AC0737CC6EAA8E`. No uses una APK `preview`: RevenueCat bloquea las claves Test Store en cualquier build release. El APK preview mantiene Plus desactivado y sirve para validar todo el juego sin compras.
 
 1. Abrí **Blindly Plus** y mostrá el paywall publicado.
 2. Realizá una compra simulada mensual o anual.

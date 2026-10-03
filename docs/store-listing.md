@@ -36,6 +36,20 @@ Blindly sincroniza ciegas, turnos, fichas y puntuación para partidas presencial
 - **Descrição curta:** Sua mesa de poker presencial, conectada.
 - **Descrição completa:** Blindly organiza suas partidas presenciais de Texas Hold’em. Crie uma sala, convide amigos com um código ou QR e mantenha turnos, blinds, stacks, potes e pontuação sincronizados. Cada jogador confirma suas próprias ações pelo celular, enquanto o dealer distribui o pote no fim da mão. Jogue com fichas físicas ou controle tudo virtualmente. Blindly não distribui cartas, não decide vencedores e não usa dinheiro real.
 
+## Notas de la versión 1.0.0
+
+### Español (Argentina)
+
+Primera versión de Blindly. Creá mesas presenciales de 2 a 10 jugadores, invitá por código o QR y sincronizá ciegas, turnos, fichas y puntuación. Cada jugador confirma sus propias acciones y el dealer reparte el pozo. Incluye fichas físicas o virtuales, recuperación de cuenta, tres idiomas y temas de mesa.
+
+### English (United States)
+
+Blindly's first release. Create in-person tables for 2–10 players, invite friends by code or QR, and keep blinds, turns, chips, and scores in sync. Each player confirms their own actions while the dealer awards the pot. Includes physical or virtual chips, account recovery, three languages, and table themes.
+
+### Português (Brasil)
+
+Primeira versão do Blindly. Crie mesas presenciais para 2 a 10 jogadores, convide por código ou QR e sincronize blinds, turnos, fichas e pontuação. Cada jogador confirma suas próprias ações e o dealer distribui o pote. Inclui fichas físicas ou virtuais, recuperação de conta, três idiomas e temas de mesa.
+
 ## Notas para revisión
 
 Blindly no reparte cartas, no determina manos ganadoras y no procesa dinero real, apuestas ni premios. Las cartas y la decisión del ganador permanecen en la mesa física. La cámara es opcional y solo escanea el QR de la sala; el código también puede ingresarse manualmente.
