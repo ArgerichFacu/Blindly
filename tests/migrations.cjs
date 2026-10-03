@@ -23,6 +23,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261001232717_grant_edge_account_cleanup.sql",
     "20261002194847_stack_solo_dealer.sql",
     "20261002200358_salas_privadas.sql",
+    "20261003005104_monto_igualar.sql",
   ]);
 
   const baseSources = fs
@@ -52,6 +53,10 @@ const read = (file) => fs.readFileSync(file, "utf8");
     normalize(read(path.join(migrationDir, migrationFiles[5]))),
     normalize(read(path.join(sqlDir, "14_salas_privadas.sql"))),
   );
+  assert.equal(
+    normalize(read(path.join(migrationDir, migrationFiles[6]))),
+    normalize(read(path.join(sqlDir, "15_monto_igualar.sql"))),
+  );
 
   await db.exec(
     "create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key); create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;",
@@ -69,6 +74,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
         to_regclass('public.puntuacion_partidas') is not null as puntuacion,
         to_regprocedure('public.accion_mesa(uuid,text,jsonb,text)') is not null as accion,
         to_regprocedure('public.accion_mesa_con_puntuacion(uuid,text,jsonb,text)') is not null as accion_base,
+        to_regprocedure('public.accion_mesa_con_stack_dealer(uuid,text,jsonb,text)') is not null as accion_stack,
         to_regprocedure('private.soy_jugador_de(uuid)') is not null as helper_privado,
         has_table_privilege('service_role', 'public.salas', 'select') as servicio_salas,
         has_table_privilege('service_role', 'public.jugadores', 'select') as servicio_jugadores
@@ -80,6 +86,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     puntuacion: true,
     accion: true,
     accion_base: true,
+    accion_stack: true,
     helper_privado: true,
     servicio_salas: true,
     servicio_jugadores: true,
@@ -90,11 +97,17 @@ const read = (file) => fs.readFileSync(file, "utf8");
       "select pg_get_functiondef('public.accion_mesa(uuid,text,jsonb,text)'::regprocedure) as definition",
     )
   ).rows[0].definition;
-  assert.match(functionDefinition, /SOLO_DEALER/);
-  assert.match(functionDefinition, /j\.id is distinct from s\.dealer_id/i);
+  assert.match(functionDefinition, /MONTO_IGUALAR_INVALIDO/);
+  const stackDefinition = (
+    await db.query(
+      "select pg_get_functiondef('public.accion_mesa_con_stack_dealer(uuid,text,jsonb,text)'::regprocedure) as definition",
+    )
+  ).rows[0].definition;
+  assert.match(stackDefinition, /SOLO_DEALER/);
+  assert.match(stackDefinition, /j\.id is distinct from s\.dealer_id/i);
 
   console.log(
-    "OK: historial Supabase completo, reproducible y con stack exclusivo del dealer.",
+    "OK: historial Supabase completo, reproducible, stacks protegidos y montos de igualada validados.",
   );
   await db.close();
 })().catch(async (error) => {

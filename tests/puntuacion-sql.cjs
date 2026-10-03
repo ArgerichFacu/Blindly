@@ -80,6 +80,18 @@ async function falla(fn, texto) {
     const jugar = async (num, tipo, monto) => {
       await como(num);
       await leer();
+      if (tipo === "igualar" && monto == null) {
+        const jugador = (
+          await consulta(
+            "select aporte_calle,fichas from jugadores where id=$1",
+            [ids[num - 1]],
+          )
+        )[0];
+        monto = Math.min(
+          Number(jugador.aporte_calle) + Number(jugador.fichas),
+          Number(estado.apuesta_actual),
+        );
+      }
       estado = await accion(id, "apostar", {
         tipo,
         mano: estado.mano,

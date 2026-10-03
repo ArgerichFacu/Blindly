@@ -7,6 +7,8 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Tipos TypeScript.
 - [x] Reglas de turnos, ciegas, all-in, pozos e idempotencia.
 - [x] Acciones propias de cada jugador y cierre exclusivo del dealer.
+- [x] Ingreso del total apostado para igualar o subir, validado también en Supabase.
+- [x] Stack propio destacado y stacks de toda la mesa con fichas más legibles.
 - [x] Ajuste de stacks físicos protegido en Supabase y disponible solo para el dealer.
 - [x] Puntuación, empates, privacidad y persistencia del historial.
 - [x] Sesión anónima única y flujo preparado para vincular y recuperar por correo.

@@ -25,7 +25,7 @@ Blindly acompaña la mesa: las cartas se reparten físicamente y el dealer deter
 
 | Modo | Funcionamiento |
 | --- | --- |
-| **Virtuales** | La app lleva stacks, ciegas, apuestas y pozos. Los jugadores pueden pasar, igualar, subir, retirarse o ir all-in según su turno. El dealer se encarga de repartir los pozos entre los jugadores habilitados. |
+| **Virtuales** | La app lleva stacks, ciegas, apuestas y pozos. En su turno, cada jugador confirma el monto para igualar o ingresa el total de su subida; también puede pasar, retirarse o ir all-in. El dealer se encarga de repartir los pozos entre los jugadores habilitados. |
 | **Físicas** | Las fichas y apuestas se manejan en la mesa. Cada jugador declara pasar, igualar, subir o retirarse desde su celular; solo el dealer puede corregir stacks, cerrar la mano y entregar el pozo. |
 
 El flujo virtual contempla las rondas de apuestas, las subidas mínimas, los all-in y los pozos secundarios. Las acciones y repartos se validan en Supabase; los jugadores no pueden asignarse fichas por su cuenta.
@@ -115,6 +115,7 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `11_seguridad_rendimiento.sql` | Permisos mínimos, política consolidada e índices de acceso |
 | `12_helper_privado.sql` | Helper de RLS fuera de la API pública |
 | `13_stack_solo_dealer.sql` | Ajuste de stacks físicos autorizado exclusivamente al dealer |
+| `15_monto_igualar.sql` | Confirmación y validación del monto exacto al igualar |
 
 La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas.
 

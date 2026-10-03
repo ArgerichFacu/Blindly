@@ -83,6 +83,18 @@ async function falla(fn, texto) {
     const jugar = async (num, tipo, monto) => {
       await como(num);
       await leer();
+      if (tipo === "igualar" && monto == null) {
+        const jugador = (
+          await consulta(
+            "select aporte_calle,fichas from jugadores where id=$1",
+            [ids[num - 1]],
+          )
+        )[0];
+        monto = Math.min(
+          Number(jugador.aporte_calle) + Number(jugador.fichas),
+          Number(estado.apuesta_actual),
+        );
+      }
       estado = await accion(id, "apostar", {
         tipo,
         mano: estado.mano,
@@ -137,6 +149,28 @@ async function falla(fn, texto) {
   assert.equal(s.boton_id, m.ids[0]);
   await falla(() => m.jugar(2, "igualar"), "TURNO_AJENO");
   await falla(() => m.jugar(1, "pasar"), "APUESTA_PENDIENTE");
+  await como(1);
+  await falla(
+    () =>
+      accion(m.id, "apostar", {
+        tipo: "igualar",
+        mano: s.mano,
+        calle: s.calle,
+        revision: s.revision,
+      }),
+    "MONTO_INVALIDO",
+  );
+  await falla(
+    () =>
+      accion(m.id, "apostar", {
+        tipo: "igualar",
+        monto: 9,
+        mano: s.mano,
+        calle: s.calle,
+        revision: s.revision,
+      }),
+    "MONTO_IGUALAR_INVALIDO",
+  );
   await falla(() => m.cerrar(), "APUESTAS_ABIERTAS");
   s = await m.jugar(1, "igualar");
   assert.equal(s.turno_id, m.ids[1]);
@@ -240,6 +274,7 @@ async function falla(fn, texto) {
     calle: s.calle,
     revision: s.revision,
     tipo: "igualar",
+    monto: 10,
   };
   const first = await accion(z.id, "apostar", datos, "repeticion-segura");
   const second = await accion(z.id, "apostar", datos, "repeticion-segura");

@@ -66,6 +66,7 @@ function FichasRol({ roles }: { roles: string }) {
 
 export function MesaAsientos({
   jugadores,
+  jugadorActual,
   orden,
   dealer,
   boton = dealer,
@@ -75,6 +76,7 @@ export function MesaAsientos({
   calle,
 }: {
   jugadores: Jugador[];
+  jugadorActual?: string;
   orden: string[];
   dealer: string | null;
   boton?: string | null;
@@ -132,6 +134,7 @@ export function MesaAsientos({
         const x = larga ? (izquierda ? 0 : 216) : 108 + 104 * Math.cos(angulo),
           y = larga ? 6 + idx * 76 : 112 + 108 * Math.sin(angulo);
         const activo = id === turno;
+        const esYo = id === jugadorActual;
         return (
           <View
             key={id}
@@ -143,6 +146,7 @@ export function MesaAsientos({
                 top: y,
                 backgroundColor: activo ? tema.acento : tema.fondoTarjeta,
                 borderColor: activo ? tema.acento : tema.borde,
+                borderWidth: esYo ? 2 : 1,
                 opacity: j?.eliminado_en || j?.retirado ? 0.55 : 1,
               },
             ]}
@@ -161,16 +165,37 @@ export function MesaAsientos({
               {j?.nombre ?? i + 1}
             </Texto>
             {pozo !== undefined && (
-              <Texto
-                style={{
-                  fontSize: 12,
-                  lineHeight: 17,
-                  fontWeight: "700",
-                  color: activo ? tema.acentoTexto : tema.textoFuerte,
-                }}
+              <View
+                style={[
+                  styles.stack,
+                  {
+                    backgroundColor: activo
+                      ? tema.acentoTexto + "20"
+                      : esYo
+                        ? tema.acento + "20"
+                        : tema.fondo,
+                    borderColor: activo ? tema.acentoTexto : esYo ? tema.acento : tema.borde,
+                  },
+                ]}
               >
-                {j?.fichas.toLocaleString()}
-              </Texto>
+                <View
+                  style={[
+                    styles.fichaStack,
+                    { borderColor: activo ? tema.acentoTexto : tema.acento },
+                  ]}
+                />
+                <Texto
+                  style={{
+                    fontSize: esYo ? 16 : 14,
+                    lineHeight: 19,
+                    fontWeight: "800",
+                    color: activo ? tema.acentoTexto : tema.textoFuerte,
+                    fontVariant: ["tabular-nums"],
+                  }}
+                >
+                  {j?.fichas.toLocaleString()}
+                </Texto>
+              </View>
             )}
             <Texto
               numberOfLines={1}
@@ -245,5 +270,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     paddingVertical: 7,
     alignItems: "center",
+  },
+  stack: {
+    minWidth: 58,
+    minHeight: 25,
+    paddingHorizontal: 7,
+    borderWidth: 1,
+    borderRadius: 13,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 5,
+  },
+  fichaStack: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    borderWidth: 3,
   },
 });

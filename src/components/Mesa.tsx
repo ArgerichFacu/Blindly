@@ -132,7 +132,7 @@ export function Mesa({ codigo }: { codigo: string }) {
   function apostar(tipo: string) {
     try {
       const cantidad =
-        tipo === "subir"
+        tipo === "subir" || tipo === "igualar"
           ? entero(monto, 1, (yo?.fichas ?? 0) + (yo?.aporte_calle ?? 0))
           : undefined;
       setAviso("");
@@ -448,6 +448,7 @@ export function Mesa({ codigo }: { codigo: string }) {
       {!!sala.orden.length && (
         <MesaAsientos
           jugadores={jugadores}
+          jugadorActual={yo?.id}
           orden={sala.orden}
           dealer={sala.dealer_id}
           boton={sala.boton_id ?? sala.dealer_id}

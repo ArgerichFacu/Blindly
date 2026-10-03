@@ -276,6 +276,10 @@ Object.assign(textos, {
     "Enter a valid whole number within your stack.",
     "Insira um número inteiro válido que não ultrapasse seu stack.",
   ],
+  "Ingresá el monto exacto necesario para igualar.": [
+    "Enter the exact amount required to call.",
+    "Insira o valor exato necessário para pagar.",
+  ],
   "La mano o el pozo cambiaron. Revisá los datos.": [
     "The hand or pot changed. Review the values.",
     "A mão ou o pote mudaram. Revise os valores.",
@@ -318,6 +322,18 @@ Object.assign(textos, {
   "Subir a (total de la ronda)": [
     "Raise to (round total)",
     "Aumentar para (total da rodada)",
+  ],
+  "Total apostado en la ronda": [
+    "Total wagered this round",
+    "Total apostado na rodada",
+  ],
+  "Monto exacto para igualar: {n}": [
+    "Exact amount to call: {n}",
+    "Valor exato para pagar: {n}",
+  ],
+  "Confirmar igualar a {n}": [
+    "Confirm call to {n}",
+    "Confirmar pagamento para {n}",
   ],
   "Subida mínima a {n}": ["Minimum raise to {n}", "Aumento mínimo para {n}"],
   "Listo para repartir": ["Ready for payout", "Pronto para distribuir"],
@@ -384,6 +400,7 @@ Object.assign(errores, {
     "Revisá el mínimo de subida y los jugadores que pueden responder.",
   SUBIDA_NO_REABIERTA: "Esta subida corta no reabre tu derecho a subir.",
   APUESTAS_ABIERTAS: "Todavía hay apuestas por resolver.",
+  MONTO_IGUALAR_INVALIDO: "Ingresá el monto exacto necesario para igualar.",
 });
 
 Object.assign(textos, {
@@ -463,6 +480,7 @@ Object.assign(textos, {
   "Control de partida": ["Game controls", "Controles da partida"],
   "POZO TOTAL": ["TOTAL POT", "POTE TOTAL"],
   "Cancelar subida": ["Cancel raise", "Cancelar aumento"],
+  "Cancelar monto": ["Cancel amount", "Cancelar valor"],
   "Confirmar all-in": ["Confirm all-in", "Confirmar all-in"],
   "Subir a {n}": ["Raise to {n}", "Aumentar para {n}"],
   "Más acción, ciegas más rápidas.": [

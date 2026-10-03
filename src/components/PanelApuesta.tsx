@@ -26,56 +26,73 @@ export function PanelApuesta({
   actuar: (tipo: string) => void;
 }) {
   const { t } = usePreferencias();
-  const [subiendo, setSubiendo] = useState(false);
+  const [editor, setEditor] = useState<"igualar" | "subir" | null>(null);
   const max = stack + aporte,
-    min = actual + minima;
-  const valido =
+    min = actual + minima,
+    totalIgualar = Math.min(actual, max);
+  const subidaValida =
     /^\d+$/.test(monto) &&
     Number(monto) > actual &&
     Number(monto) <= max &&
     (Number(monto) >= min || Number(monto) === max);
+  const igualadaValida =
+    /^\d+$/.test(monto) && Number(monto) === totalIgualar;
+  const cerrarEditor = () => {
+    setEditor(null);
+    cambiar("");
+  };
   return (
     <View style={{ gap: 10 }}>
-      {subiendo && (
+      {editor && (
         <>
           <View style={{ flexDirection: "row", gap: 8 }}>
             <Campo
-              etiqueta={t("Subir a (total de la ronda)")}
+              etiqueta={t("Total apostado en la ronda")}
               keyboardType="number-pad"
               value={monto}
               onChangeText={cambiar}
             />
             <Boton
               titulo="×"
-              accesibilidad={t("Cancelar subida")}
+              accesibilidad={t("Cancelar monto")}
               secundario
               compacto
-              onPress={() => setSubiendo(false)}
+              onPress={cerrarEditor}
             />
           </View>
-          <View style={{ flexDirection: "row", gap: 8 }}>
-            {[
-              ...new Set([Math.min(min, max), Math.min(min * 2, max), max]),
-            ].map((n) => (
-              <Boton
-                key={n}
-                titulo={n === max ? "All-in" : n.toLocaleString()}
-                compacto
-                secundario
-                style={{ flex: 1 }}
-                disabled={ocupado}
-                onPress={() => cambiar(String(n))}
-              />
-            ))}
-          </View>
+          {editor === "igualar" ? (
+            <Texto suave>
+              {t("Monto exacto para igualar: {n}", { n: totalIgualar })}
+            </Texto>
+          ) : (
+            <View style={{ flexDirection: "row", gap: 8 }}>
+              {[
+                ...new Set([Math.min(min, max), Math.min(min * 2, max), max]),
+              ].map((n) => (
+                <Boton
+                  key={n}
+                  titulo={n === max ? "All-in" : n.toLocaleString()}
+                  compacto
+                  secundario
+                  style={{ flex: 1 }}
+                  disabled={ocupado}
+                  onPress={() => cambiar(String(n))}
+                />
+              ))}
+            </View>
+          )}
           <Boton
             titulo={
-              Number(monto) === max
-                ? t("Confirmar all-in")
-                : t("Subir a {n}", { n: Number(monto) || 0 })
+              editor === "igualar"
+                ? t("Confirmar igualar a {n}", { n: Number(monto) || 0 })
+                : Number(monto) === max
+                  ? t("Confirmar all-in")
+                  : t("Subir a {n}", { n: Number(monto) || 0 })
             }
-            disabled={ocupado || !valido}
-            onPress={() => actuar(Number(monto) === max ? "allin" : "subir")}
+            disabled={
+              ocupado || (editor === "igualar" ? !igualadaValida : !subidaValida)
+            }
+            onPress={() => actuar(editor)}
           />
         </>
       )}
@@ -97,9 +114,13 @@ export function PanelApuesta({
           compacto
           style={{ flex: 1.25 }}
           disabled={ocupado}
-          onPress={() => actuar(faltan ? "igualar" : "pasar")}
+          onPress={() => {
+            if (!faltan) return actuar("pasar");
+            cambiar(String(totalIgualar));
+            setEditor("igualar");
+          }}
         />
-        {!subiendo && (
+        {!editor && (
           <Boton
             titulo={t(actual === 0 ? "Apostar" : "Subir")}
             compacto
@@ -108,7 +129,7 @@ export function PanelApuesta({
             disabled={ocupado || !puedeSubir || max <= actual}
             onPress={() => {
               cambiar(String(Math.min(min, max)));
-              setSubiendo(true);
+              setEditor("subir");
             }}
           />
         )}
