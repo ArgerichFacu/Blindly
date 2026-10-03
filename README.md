@@ -99,11 +99,11 @@ La recuperación por clave ya funciona sin un proveedor externo. La interfaz tam
 
 **La recuperación por correo todavía está deshabilitada por defecto**, pero ya no bloquea la identidad recuperable porque la clave privada cubre ese caso. Falta configurar un proveedor SMTP, aplicar las plantillas y verificar el envío. Solo después debe habilitarse `EXPO_PUBLIC_EMAIL_AUTH_READY=true`.
 
-Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md). La [política de privacidad](PRIVACY.md), los [términos de uso](TERMS.md) y las [instrucciones de eliminación](ACCOUNT_DELETION.md) también están disponibles públicamente.
+Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md). La [política de privacidad](PRIVACY.md), los [términos de uso](TERMS.md) y las [instrucciones de eliminación](ACCOUNT_DELETION.md) están versionados en el repositorio. Sus páginas web están preparadas en `docs/` y quedarán públicas cuando se active GitHub Pages desde `main` y `/docs`.
 
 ## Supabase
 
-Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `13`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos.
+Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `15`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos. En el proyecto conectado, la fuente de verdad para cambios ya aplicados es `supabase/migrations/`.
 
 | Scripts | Área |
 | --- | --- |
@@ -115,6 +115,7 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `11_seguridad_rendimiento.sql` | Permisos mínimos, política consolidada e índices de acceso |
 | `12_helper_privado.sql` | Helper de RLS fuera de la API pública |
 | `13_stack_solo_dealer.sql` | Ajuste de stacks físicos autorizado exclusivamente al dealer |
+| `14_salas_privadas.sql` | Lectura de salas limitada al host y a sus participantes |
 | `15_monto_igualar.sql` | Confirmación y validación del monto exacto al igualar |
 
 La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas.
@@ -132,6 +133,11 @@ RevenueCat Test Store está activo solamente en `development`, donde la build es
 `app.json` configura el nombre, los identificadores, permisos e imágenes. El splash nativo usa `assets/images/blindly-logo.png` sobre fondo verde fijo. El menú y las pantallas React usan el logo transparente para adaptarse al tema.
 
 `eas.json` incluye perfiles `development`, `preview` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus usa Test Store solo en development; preview y production permanecen desactivados hasta disponer de productos reales. Android se publicará en Google Play; los iPhone de amigos pueden recibir una IPA privada o una invitación cerrada de TestFlight sin publicar Blindly en App Store. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
+
+Ya existen dos artefactos Android firmados por EAS para la versión 1.0.0:
+
+- [APK preview instalable](https://expo.dev/artifacts/eas/zmUry6WZBGkGU9Q5EXXQBGcJE5i3MVJQWSQs648Bsi4.apk), SHA-256 `DA13EF411EF9415464CF9174B8080DDD5486EC06F0940151F75D289C3EF4712C`.
+- [AAB de producción para Play Store](https://expo.dev/artifacts/eas/6zDmpoMV51ZxbihY1LZgvUzQ4jknBlFq2qIayZXandI.aab), `versionCode 2`, SHA-256 `733CB48831854DBFF9BE14ECEF2DF642D16438C7816B78C850A2E09892120AE2`.
 
 La ficha y las declaraciones iniciales para las tiendas están en [docs/store-listing.md](docs/store-listing.md).
 
@@ -176,7 +182,7 @@ Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migr
 ## Pendientes antes de publicar
 
 - Configurar SMTP, aplicar las plantillas y probar la vinculación y recuperación de una identidad con puntos.
-- Generar builds EAS nativas e instalarlas en dispositivos físicos.
+- Instalar el APK EAS ya generado en dispositivos físicos y completar la matriz de aceptación.
 - Validar el splash en arranque en frío, la pausa de música al pasar a segundo plano y la reconexión después de bloquear el teléfono o perder la red.
 - Completar una partida con varios celulares y verificar apuestas, reparto de pozos y cierre del torneo.
 - Probar compra, restauración y eliminación con RevenueCat Test Store en una build `development`; después crear los productos comerciales en las tiendas.

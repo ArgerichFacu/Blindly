@@ -28,7 +28,7 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] APK Android preview regenerado con firma remota y Plus desactivado ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/5c01f942-48fa-403f-a16a-3fac1d035e58)); falta instalarlo en hardware real.
 - [x] AAB de producción para Google Play generado con `versionCode 2` y firma remota ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/b1aca8b7-3598-4f57-8652-db7861e418e7)).
 - [x] RevenueCat Test Store configurado con entitlement `blindly_plus`, tres productos, oferta predeterminada y paywall publicado en español, inglés y portugués.
-- [x] Enlaces del paywall conectados a la política de privacidad y los términos públicos de Blindly.
+- [x] Enlaces del paywall configurados con las URLs previstas para privacidad y términos; serán navegables cuando se active GitHub Pages.
 - [x] Ícono y gráfico de funciones de Google Play generados y validados en sus dimensiones y formatos requeridos.
 - [x] Permiso de Google Play Billing y `launchMode=singleTop` garantizados por config plugin y prueba de manifiesto.
 - [x] Proyecto Supabase aislado en la organización Blindly.
@@ -36,6 +36,7 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 
 ## Preparado y pendiente de un servicio externo
 
+- [ ] Activar GitHub Pages desde `main` y `/docs`, y comprobar que privacidad, términos y eliminación de cuenta respondan públicamente. La configuración está lista y solo falta autorizar la publicación.
 - [ ] Crear una cuenta de distribución completa en Google Play cuando esté disponible la tarifa única de USD 25. No se eligió la distribución limitada gratuita porque admite como máximo 20 dispositivos y Google no permite convertir ese plan en distribución completa.
 - [ ] Configurar un proveedor SMTP y un dominio remitente.
 - [ ] Aplicar las plantillas de correo y activar `EXPO_PUBLIC_EMAIL_AUTH_READY`.
@@ -50,6 +51,12 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Guardar `REVENUECAT_SECRET_KEY` en la Edge Function y validar la eliminación autenticada del perfil de cliente.
 - [ ] Revocar la clave privada actual de RevenueCat, generar un reemplazo y actualizar el secreto de Supabase después de recibir autorización explícita.
 - [ ] Activar `EXPO_PUBLIC_PLUS_READY` en `production` después de validar compra y restauración con productos reales.
+
+## Artefactos Android 1.0.0
+
+- APK de prueba: [descarga directa](https://expo.dev/artifacts/eas/zmUry6WZBGkGU9Q5EXXQBGcJE5i3MVJQWSQs648Bsi4.apk), SHA-256 `DA13EF411EF9415464CF9174B8080DDD5486EC06F0940151F75D289C3EF4712C`.
+- AAB para Google Play: [descarga directa](https://expo.dev/artifacts/eas/6zDmpoMV51ZxbihY1LZgvUzQ4jknBlFq2qIayZXandI.aab), `versionCode 2`, SHA-256 `733CB48831854DBFF9BE14ECEF2DF642D16438C7816B78C850A2E09892120AE2`.
+- Los dos artefactos se generaron con Blindly Plus desactivado, por lo que no contienen una clave Test Store utilizable en una build release.
 
 ## Prueba física de aceptación
 
