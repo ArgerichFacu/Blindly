@@ -38,3 +38,15 @@ Después de cualquier migración o cambio en Auth:
 5. Probar con dos usuarios reales que una identidad no pueda leer ni modificar una sala ajena.
 
 Referencias: [seguridad de la API de datos](https://supabase.com/docs/guides/api/securing-your-api), [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security) y [aviso sobre identidades anónimas](https://supabase.com/docs/guides/observability/advisors?queryGroups=lint&lint=0012_auth_allow_anonymous_sign_ins).
+
+## Dependencias JavaScript
+
+La revisión del 3 de octubre de 2026 produjo cero vulnerabilidades críticas. `npm audit --omit=dev` informó 21 altas y 11 moderadas, pero los avisos altos se concentran en Expo CLI, Metro, prebuild y herramientas transitivas de React Native. No forman rutas de entrada del juego dentro del APK; `npm audit` también replica esos avisos sobre paquetes directos que dependen del mismo árbol.
+
+No existe una actualización automática compatible: `npm audit fix --force` propone Expo 44, React Native 0.72 y Expo Router 58, lo que rompería la matriz obligatoria de Expo SDK 57. Los paquetes `braces`, `node-forge` y `http-cache-semantics` todavía no tenían una versión corregida publicada al momento de la revisión.
+
+`expo-router` 57 incluye `query-string` 7 y `decode-uri-component` 0.2.2. Su aviso moderado permite provocar consumo excesivo de CPU con una URL malformada; no informa lectura, modificación ni ejecución de código. La versión corregida de `decode-uri-component` es ESM y no puede forzarse dentro de `query-string` 7, que la carga con CommonJS. Se conserva la combinación soportada por Expo 57 y se debe actualizar cuando Expo publique una corrección compatible o al migrar el SDK.
+
+CI ejecuta `npm audit --audit-level=critical`, además de Expo Doctor, compatibilidad de paquetes, tipos, lint, pruebas y exportación de bundles. No se debe usar `npm audit fix --force`; cualquier actualización necesita pasar la matriz completa y una nueva build nativa.
+
+Referencias: [aviso de `decode-uri-component`](https://github.com/advisories/GHSA-vcc3-ghjq-m6fr), [aviso de `braces`](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) y [aviso de `node-forge`](https://github.com/advisories/GHSA-86w9-cpqp-85rv).
