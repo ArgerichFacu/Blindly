@@ -38,7 +38,7 @@ El código de compra está completo y mantiene los cobros desactivados hasta que
 
 ## Estado de pruebas internas
 
-El proyecto `Blindly` ya existe en RevenueCat. Su Test Store tiene el entitlement `blindly_plus`, una oferta `default` con paquetes mensual, anual y vitalicio, y un paywall `Blindly Plus` vinculado a esa oferta. Solo el entorno EAS `development` usa la clave pública de Test Store con `EXPO_PUBLIC_PLUS_READY=true`. `preview` y `production` mantienen `EXPO_PUBLIC_PLUS_READY=false` hasta disponer de claves y productos reales de plataforma.
+El proyecto `Blindly` ya existe en RevenueCat. Su Test Store tiene el entitlement `blindly_plus`, una oferta `default` con paquetes mensual, anual y vitalicio, y un paywall `Blindly Plus` vinculado a esa oferta. Solo el entorno EAS `development` usa la clave pública de Test Store con `EXPO_PUBLIC_PLUS_READY=true`. `preview` y `production` mantienen `EXPO_PUBLIC_PLUS_READY=false` y no contienen claves de RevenueCat hasta disponer de productos reales de plataforma.
 
 El Test Store no procesa dinero real. Sirve para validar el paywall, la compra simulada, la restauración, el cambio de dispositivo y el bloqueo de funciones premium antes de crear productos en Google Play Console. RevenueCat solo admite su clave `test_` en builds depurables; una build release muestra un error y se cierra deliberadamente. Por eso estas pruebas se hacen con `development`, mientras las copias privadas release de Android o iPhone mantienen Plus desactivado hasta usar una clave real de plataforma.
 

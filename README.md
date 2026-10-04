@@ -118,7 +118,7 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `14_salas_privadas.sql` | Lectura de salas limitada al host y a sus participantes |
 | `15_monto_igualar.sql` | Confirmación y validación del monto exacto al igualar |
 
-La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas.
+La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas. La [revisión de seguridad remota](docs/security-review.md) documenta los permisos efectivos y los avisos intencionales del asesor de Supabase.
 
 Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren configuración en el servicio de correo. No incluyen credenciales.
 
@@ -126,7 +126,7 @@ Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren con
 
 La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Plus habilita métricas avanzadas, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis.
 
-RevenueCat Test Store está activo solamente en `development`, donde la build es depurable y no procesa cobros reales. Las APK `preview` y las builds `production` mantienen Plus desactivado hasta configurar productos comerciales: RevenueCat cierra intencionalmente una build release que use una clave Test Store. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
+RevenueCat Test Store está activo solamente en `development`, donde la build es depurable y no procesa cobros reales. Los entornos `preview` y `production` no contienen claves de RevenueCat y mantienen Plus desactivado hasta configurar productos comerciales: RevenueCat cierra intencionalmente una build release que use una clave Test Store. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
 
 ## Android e iOS
 
