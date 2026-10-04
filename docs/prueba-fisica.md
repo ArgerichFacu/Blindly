@@ -55,11 +55,12 @@ Podés indicar otra herramienta o archivo con `-AdbPath` y `-ApkPath`. `-Validat
 Esta sección requiere la [build `development` depurable](https://expo.dev/artifacts/eas/cO1utrQC2gAeLE63VkH1TfjxUIe-O-5DDPS4nsYguUM.apk), SHA-256 `9C3CD74DBC14724A173FBF14D4944589B1E6B814A33758D103AC0737CC6EAA8E`. No uses una APK `preview`: RevenueCat bloquea las claves Test Store en cualquier build release. El APK preview mantiene Plus desactivado y sirve para validar todo el juego sin compras.
 
 1. Abrí **Blindly Plus** y mostrá el paywall publicado.
-2. Realizá una compra simulada mensual o anual.
-3. Verificá métricas avanzadas, temas rojo/negro y estructuras personalizadas.
-4. Reinstalá la app o usá otro dispositivo, recuperá la misma identidad y ejecutá **Restaurar compras**.
-5. Verificá que otra identidad sin entitlement no herede Plus.
-6. Administrá o cancelá la compra simulada y comprobá que la app actualice el acceso.
+2. Confirmá que el paywall muestre mensual a USD 0,99, anual a USD 9,99 como recomendado y Founder Edition vitalicia a USD 24,99 como precio especial de lanzamiento.
+3. Realizá una compra simulada de cada plan en pruebas separadas y verificá que los tres concedan el mismo entitlement `blindly_plus`.
+4. Verificá métricas avanzadas, temas rojo/negro y estructuras personalizadas.
+5. Reinstalá la app o usá otro dispositivo, recuperá la misma identidad y ejecutá **Restaurar compras**.
+6. Verificá que otra identidad sin entitlement no herede Plus.
+7. Administrá o cancelá la compra simulada y comprobá que la app actualice el acceso.
 
 ## Criterio de aceptación
 

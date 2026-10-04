@@ -126,6 +126,8 @@ Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren con
 
 La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Plus habilita métricas avanzadas, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis.
 
+Los precios de lanzamiento previstos son USD 0,99 mensual, USD 9,99 anual —el plan recomendado— y USD 24,99 por la Founder Edition vitalicia. El precio regular futuro del acceso vitalicio será USD 39,99.
+
 RevenueCat Test Store está activo solamente en `development`, donde la build es depurable y no procesa cobros reales. Los entornos `preview` y `production` no contienen claves de RevenueCat y mantienen Plus desactivado hasta configurar productos comerciales: RevenueCat cierra intencionalmente una build release que use una clave Test Store. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
 
 ## Android e iOS

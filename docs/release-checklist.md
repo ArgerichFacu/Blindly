@@ -32,7 +32,7 @@ La matriz consolidada de evidencia y dependencias externas está en [`final-read
 - [x] AAB de producción final generado desde el mismo commit, con `versionCode 5` y firma remota ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/cef204be-b7bc-4da5-b81d-9da2d4317d61)).
 - [x] Build nativa iOS de simulador generada por Xcode y EAS desde el commit `7654263` ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/53230fdc-cf5c-4463-b12f-a3e3f7e212c6)); el paquete `.app` fue validado localmente.
 - [x] APK `development` generado para probar compras simuladas de RevenueCat Test Store ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/2d4f84b6-4ea7-41d0-9b2e-aee09d2e6e4b)).
-- [x] RevenueCat Test Store configurado con entitlement `blindly_plus`, tres productos, oferta predeterminada y paywall publicado en español, inglés y portugués.
+- [x] RevenueCat Test Store configurado con entitlement `blindly_plus` y la oferta predeterminada: mensual USD 0,99, anual USD 9,99 recomendado y Founder Edition vitalicia USD 24,99 como precio especial de lanzamiento.
 - [x] Enlaces del paywall configurados con las URLs previstas para privacidad y términos; serán navegables cuando se active GitHub Pages.
 - [x] Ícono y gráfico de funciones de Google Play generados y validados en sus dimensiones y formatos requeridos.
 - [x] Permiso de Google Play Billing y `launchMode=singleTop` garantizados por config plugin y prueba de manifiesto.
@@ -56,7 +56,7 @@ La matriz consolidada de evidencia y dependencias externas está en [`final-read
 - [ ] Cargar el AAB en prueba interna, revisar el informe previo al lanzamiento y después ejecutar [`play-closed-test.md`](play-closed-test.md) con al menos 12 testers inscritos de forma continua durante 14 días, requisito de las cuentas personales creadas después del 13 de noviembre de 2023.
 - [ ] Solicitar acceso a producción en Play Console cuando la prueba cerrada cumpla el plazo y conservar un registro de los dispositivos, recorridos probados, comentarios y correcciones.
 - [ ] Contratar o vincular una membresía Apple Developer, crear las credenciales de distribución en EAS y registrar los UDID de los iPhone; el intento `preview` no interactivo confirmó que todavía no existe un certificado ni perfil *ad hoc*. Después, generar la IPA privada o preparar el grupo cerrado de TestFlight.
-- [ ] Crear los productos comerciales de Blindly Plus en Google Play Console y vincularlos con RevenueCat.
+- [ ] Crear los productos comerciales de Blindly Plus en Google Play Console con los precios de lanzamiento documentados y vincularlos con RevenueCat.
 - [ ] Si Plus se prueba con compras reales en iPhone, crear también los productos equivalentes en App Store Connect; una IPA release privada mantiene Plus desactivado y Test Store se usa solo en `development`.
 - [ ] Validar compra y restauración con RevenueCat Test Store en una build `development` depurable sobre un dispositivo físico.
 - [x] Guardar `REVENUECAT_SECRET_KEY` en la Edge Function y validar la eliminación autenticada del perfil de cliente.

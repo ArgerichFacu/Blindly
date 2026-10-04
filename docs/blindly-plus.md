@@ -4,6 +4,16 @@ Blindly seguirá siendo utilizable sin pagar. La creación y unión a salas, los
 
 El paywall `Blindly Plus` está publicado en RevenueCat con textos en español, inglés y portugués. Sus enlaces de privacidad y términos apuntan a los documentos públicos de este repositorio. El perfil `development` usa Test Store; las APK `preview` son builds release y mantienen Plus desactivado. Todavía falta validar compra y restauración con una build de desarrollo en hardware real antes de crear los productos comerciales de Google Play.
 
+## Precios de lanzamiento
+
+| Plan | Precio | Presentación |
+| --- | ---: | --- |
+| Mensual | USD 0,99 | Para probar Plus o jugar ocasionalmente. |
+| Anual | USD 9,99 | Plan recomendado y destacado visualmente. |
+| Blindly Plus — Founder Edition | USD 24,99 | Acceso vitalicio con precio especial de lanzamiento. |
+
+El precio regular previsto para el acceso vitalicio es USD 39,99 en una etapa futura. Mientras Founder Edition esté disponible, el paywall muestra USD 24,99 y no presenta USD 39,99 como una compra activa.
+
 ## Alcance propuesto
 
 Plus incorpora métricas avanzadas, temas premium y la edición de niveles de ciegas y descansos. Mientras `EXPO_PUBLIC_PLUS_READY=false`, estas funciones permanecen abiertas para facilitar el desarrollo y las pruebas; al activar productos reales, RevenueCat controla su acceso. Ninguna de estas funciones impide que un jugador gratuito participe de una mesa, use los modos estándar o administre el pozo.
@@ -27,7 +37,7 @@ La Edge Function `eliminar-cuenta` también puede borrar el perfil de cliente de
 ## Activación
 
 1. Crear la aplicación y el entitlement `blindly_plus` en RevenueCat.
-2. Crear en Google Play Console la suscripción `blindly_plus` con los planes base `monthly` y `annual`, y el producto único no consumible `blindly_plus_lifetime`. Los identificadores no pueden cambiarse ni reutilizarse después de crearlos.
+2. Crear en Google Play Console la suscripción `blindly_plus` con los planes base `monthly` y `annual`, y el producto único no consumible `blindly_plus_founder_lifetime`. Los identificadores no pueden cambiarse ni reutilizarse después de crearlos.
 3. Cargar las claves públicas de plataforma en los entornos EAS y `REVENUECAT_SECRET_KEY` en Supabase.
 4. Importar los productos en RevenueCat, asociarlos al entitlement `blindly_plus` y a los paquetes mensual, anual y vitalicio de la oferta `default`.
 5. Generar una development build; Expo Go no procesa compras reales.
@@ -38,7 +48,9 @@ El código de compra está completo y mantiene los cobros desactivados hasta que
 
 ## Estado de pruebas internas
 
-El proyecto `Blindly` ya existe en RevenueCat. Su Test Store tiene el entitlement `blindly_plus`, una oferta `default` con paquetes mensual, anual y vitalicio, y un paywall `Blindly Plus` vinculado a esa oferta. Solo el entorno EAS `development` usa la clave pública de Test Store con `EXPO_PUBLIC_PLUS_READY=true`. `preview` y `production` mantienen `EXPO_PUBLIC_PLUS_READY=false` y no contienen claves de RevenueCat hasta disponer de productos reales de plataforma.
+El proyecto `Blindly` ya existe en RevenueCat. Su Test Store tiene el entitlement `blindly_plus` y la oferta `default` vinculada al paywall `Blindly Plus`. Los paquetes activos usan `blindly_plus_monthly_launch` por USD 0,99, `blindly_plus_annual_launch` por USD 9,99 y `blindly_plus_founder_lifetime` por USD 24,99. El anual aparece como recomendado y Founder Edition se presenta como precio especial de lanzamiento. Solo el entorno EAS `development` usa la clave pública de Test Store con `EXPO_PUBLIC_PLUS_READY=true`. `preview` y `production` mantienen `EXPO_PUBLIC_PLUS_READY=false` y no contienen claves de RevenueCat hasta disponer de productos reales de plataforma.
+
+Los productos de Test Store anteriores (`monthly`, `yearly` y `lifetime`) permanecen sin ofrecer para conservar el historial de pruebas. RevenueCat no permite modificar el precio ni la duración de un producto ya creado; por eso los precios finales usan identificadores nuevos.
 
 El Test Store no procesa dinero real. Sirve para validar el paywall, la compra simulada, la restauración, el cambio de dispositivo y el bloqueo de funciones premium antes de crear productos en Google Play Console. RevenueCat solo admite su clave `test_` en builds depurables; una build release muestra un error y se cierra deliberadamente. Por eso estas pruebas se hacen con `development`, mientras las copias privadas release de Android o iPhone mantienen Plus desactivado hasta usar una clave real de plataforma.
 
