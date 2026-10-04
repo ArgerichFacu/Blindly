@@ -136,8 +136,8 @@ RevenueCat Test Store está activo solamente en `development`, donde la build es
 
 Ya existen dos artefactos Android firmados por EAS para la versión 1.0.0:
 
-- [APK preview instalable](https://expo.dev/artifacts/eas/PssT7o1DRFg6YPlxDOSiXl0Y5gMWDPbQ6xT4PVYJpzg.apk), SHA-256 `9D25B27DC466C0F957AEE16A92ED2A43F85740C9F0DC3CC0533509C620BC914A`.
-- [AAB de producción para Play Store](https://expo.dev/artifacts/eas/eJagEArucSUA58tGsvO2o4wxQvtm4fhrR5Aoiu2jc08.aab), `versionCode 3`, SHA-256 `063E62862A4FCF8CC41963CAEF59591465C0936B3D1C5FA47DAFF872E242495A`.
+- [APK preview instalable](https://expo.dev/artifacts/eas/aLs3Sth11h66H3Ddz78F5OyXDiDFnTBuDdb4-zb1xL0.apk), `versionCode 3`, SHA-256 `45B2E3AAAE4D27338FF831ABFE009D54D00AE15861DF6DEA942C620A412FFDC9`.
+- [AAB de producción para Play Store](https://expo.dev/artifacts/eas/s5nAxvg6Yd-Qciiuc9ZKMRmE-oITNIqVgP-Hlcnl41U.aab), `versionCode 4`, SHA-256 `F0B90F6B995BB7FBCB62A97C2991FC1EE19FD4776939BB263FB96C2E639874A5`.
 
 La ficha y las declaraciones iniciales para las tiendas están en [docs/store-listing.md](docs/store-listing.md).
 

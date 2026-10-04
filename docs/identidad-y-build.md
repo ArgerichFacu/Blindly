@@ -34,10 +34,11 @@ Una vez enlazado y con variables configuradas:
 ```powershell
 npx eas-cli@latest build --platform android --profile development
 npx eas-cli@latest build --platform android --profile preview
+npx eas-cli@latest build --platform ios --profile ios-simulator
 npx eas-cli@latest build --platform ios --profile preview
 ```
 
-iOS físico necesita una cuenta Apple Developer. Para una descarga privada entre amigos, el perfil `preview` genera una IPA *ad hoc*: EAS solicita registrar el UDID de cada iPhone y firma la aplicación solo para esos dispositivos. TestFlight es la alternativa recomendada cuando se quiere invitar por correo o enlace sin registrar cada UDID; requiere crear Blindly en App Store Connect, pero no obliga a publicar la aplicación en App Store.
+El perfil `ios-simulator` permite validar la compilación iOS sin una cuenta de Apple, pero su archivo solo se instala en el simulador de macOS. iOS físico necesita una cuenta Apple Developer. Para una descarga privada entre amigos, el perfil `preview` genera una IPA *ad hoc*: EAS solicita registrar el UDID de cada iPhone y firma la aplicación solo para esos dispositivos. TestFlight es la alternativa recomendada cuando se quiere invitar por correo o enlace sin registrar cada UDID; requiere crear Blindly en App Store Connect, pero no obliga a publicar la aplicación en App Store.
 
 No se puede instalar un APK en iPhone. La distribución prevista queda así:
 
@@ -47,7 +48,7 @@ No se puede instalar un APK en iPhone. La distribución prevista queda así:
 
 La publicación comercial inicial solo requiere productos de Blindly Plus en Google Play Console. App Store Connect será necesario para distribuir mediante TestFlight y para probar compras reales en iPhone. Una IPA *ad hoc* no necesita una publicación pública en App Store, pero debe mantener Plus desactivado hasta disponer de una clave real de plataforma porque Test Store no funciona en builds release.
 
-Los previews anteriores que incluían una clave Test Store quedaron obsoletos: RevenueCat cierra deliberadamente las builds release que usan esa clave. El [APK preview final aceptado por EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/a792228d-399d-417f-a012-ae4a6df773b0) mantiene Plus desactivado y sirve para probar el juego. El [AAB de producción final](https://expo.dev/accounts/facuargerich/projects/blindly/builds/775595f2-e10f-46dd-b1c0-3064821c9b19) usa `versionCode 3` y está preparado para la pista interna de Google Play. Para compras simuladas ya existe una [build `development` depurable](https://expo.dev/accounts/facuargerich/projects/blindly/builds/2d4f84b6-4ea7-41d0-9b2e-aee09d2e6e4b) con RevenueCat Test Store. El historial completo está en [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly/builds).
+Los previews anteriores que incluían una clave Test Store quedaron obsoletos: RevenueCat cierra deliberadamente las builds release que usan esa clave. El [APK preview final aceptado por EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/50c1a63c-fc71-43f5-b17d-abb6e1bf02a4) mantiene Plus desactivado y sirve para probar el juego. El [AAB de producción final](https://expo.dev/accounts/facuargerich/projects/blindly/builds/afbc3463-d90c-432e-a660-23ac614458aa) usa `versionCode 4` y está preparado para la pista interna de Google Play. Ambos fueron generados desde el commit `efb0192`. Para compras simuladas ya existe una [build `development` depurable](https://expo.dev/accounts/facuargerich/projects/blindly/builds/2d4f84b6-4ea7-41d0-9b2e-aee09d2e6e4b) con RevenueCat Test Store. El historial completo está en [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly/builds).
 
 ## Configuración y verificación física
 

@@ -1,6 +1,6 @@
 # Prueba física de aceptación
 
-Usá el [APK preview final de Blindly 1.0.0](https://expo.dev/artifacts/eas/PssT7o1DRFg6YPlxDOSiXl0Y5gMWDPbQ6xT4PVYJpzg.apk). Su SHA-256 es `9D25B27DC466C0F957AEE16A92ED2A43F85740C9F0DC3CC0533509C620BC914A`; verificá ese valor si descargaste más de una build. Este APK mantiene Plus desactivado y permite probar el juego completo sin cobros. Para una prueba completa hacen falta al menos tres celulares Android conectados a Internet.
+Usá el [APK preview final de Blindly 1.0.0](https://expo.dev/artifacts/eas/aLs3Sth11h66H3Ddz78F5OyXDiDFnTBuDdb4-zb1xL0.apk). Su SHA-256 es `45B2E3AAAE4D27338FF831ABFE009D54D00AE15861DF6DEA942C620A412FFDC9`; verificá ese valor si descargaste más de una build. Este APK mantiene Plus desactivado y permite probar el juego completo sin cobros. Para una prueba completa hacen falta al menos tres celulares Android conectados a Internet.
 
 ## 1. Instalación y arranque
 
