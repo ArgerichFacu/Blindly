@@ -91,8 +91,10 @@ Antes de enviar a revision:
 1. Activar las paginas legales y verificar sus URLs publicas.
 2. Definir el correo publico de soporte y privacidad.
 3. Obtener al menos dos capturas del APK final en un Android real.
-4. Cargar primero el AAB en una pista interna y completar los formularios.
-5. Mantener Blindly Plus desactivado hasta crear los productos comerciales.
+4. Cargar primero el AAB en una pista interna y revisar el informe previo al lanzamiento.
+5. Ejecutar la prueba cerrada exigida: 12 testers inscritos durante 14 dias continuos.
+6. Solicitar acceso a produccion y completar los formularios de Play Console.
+7. Mantener Blindly Plus desactivado hasta crear los productos comerciales.
 
 Los textos localizados y las respuestas preparadas estan en metadatos/.
 Los hashes y tamaños de todos los archivos estan en SHA256SUMS.txt.

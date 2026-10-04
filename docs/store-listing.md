@@ -74,7 +74,7 @@ Estas respuestas deben revisarse en Play Console contra el AAB exacto. La declar
 - Texto alternativo sugerido para el gráfico: **Mesa verde de poker con cuatro celulares sincronizados alrededor de las cartas y las fichas.**
 - Capturas: todavía deben obtenerse del APK aceptado. Google Play exige al menos dos; usar PNG de 24 bits o JPEG, entre 320 y 3840 px, sin mostrar datos reales ni funciones inexistentes.
 
-El manifiesto del AAB se valida con bundletool. Blindly conserva cámara, red, vibración, pantalla activa, control de audio y Billing porque corresponden a funciones reales; bloquea `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE` y `SYSTEM_ALERT_WINDOW`, que llegaban desde dependencias nativas y no se utilizan.
+El manifiesto del AAB se valida con bundletool. Blindly conserva cámara, red, vibración, pantalla activa, control de audio y Billing porque corresponden a funciones reales; bloquea `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE` y `SYSTEM_ALERT_WINDOW`, que llegaban desde dependencias nativas y no se utilizan. El bundle final declara `targetSdkVersion 36`, por lo que cumple la exigencia de Android 16/API 36 aplicable a aplicaciones nuevas y actualizaciones desde el 31 de agosto de 2026.
 
 En Windows, `scripts/create-play-console-package.ps1` verifica el hash del AAB aprobado y genera `release/Blindly-1.0.0-play-console-package.zip` con el bundle, los recursos gráficos, los textos localizados, las páginas legales y un manifiesto SHA-256. El ZIP queda fuera de Git porque contiene el binario firmado. Para regenerarlo:
 
@@ -89,9 +89,10 @@ powershell -ExecutionPolicy Bypass -File .\scripts\create-play-console-package.p
 3. Crear la aplicación `com.blindly.app` y completar acceso, anuncios, clasificación de contenido, público objetivo y seguridad de datos.
    En el cuestionario IARC, declarar de forma exacta la temática de poker y el uso de fichas virtuales; no seleccionar público infantil. Blindly no admite dinero, premios de valor real, anuncios de apuestas ni enlaces a casinos.
 4. Cargar el ícono, el gráfico de funciones, al menos dos capturas reales y los textos localizados.
-5. Cargar el AAB de producción en una pista interna antes de avanzar a pruebas cerradas o producción.
-6. Ingresar la URL pública de eliminación de cuenta y comprobar que el formulario reconoce que Blindly crea cuentas.
-7. Crear y vincular los productos de Blindly Plus descritos en [`blindly-plus.md`](blindly-plus.md).
+5. Cargar el AAB de producción en una pista interna y resolver cualquier informe previo al lanzamiento.
+6. Crear una prueba cerrada. Si la cuenta personal fue creada después del 13 de noviembre de 2023, mantener al menos 12 testers inscritos de forma continua durante 14 días y después solicitar acceso a producción desde el panel de Play Console.
+7. Ingresar la URL pública de eliminación de cuenta y comprobar que el formulario reconoce que Blindly crea cuentas.
+8. Crear y vincular los productos de Blindly Plus descritos en [`blindly-plus.md`](blindly-plus.md).
 
 Antes de enviar, revisar estas respuestas contra la build exacta y completar los formularios de Google Play.
 
@@ -101,4 +102,6 @@ Antes de enviar, revisar estas respuestas contra la build exacta y completar los
 - [Distribución completa o limitada de Android](https://support.google.com/android-developer-console/answer/16640817)
 - [Formulario de seguridad de datos](https://support.google.com/googleplay/android-developer/answer/10787469)
 - [Eliminación de cuentas](https://support.google.com/googleplay/android-developer/answer/13327111)
+- [Pruebas exigidas para cuentas personales nuevas](https://support.google.com/googleplay/android-developer/answer/14151465)
+- [Nivel de API objetivo exigido por Google Play](https://support.google.com/googleplay/android-developer/answer/11926878)
 - [Declaración de datos de RevenueCat](https://www.revenuecat.com/docs/platform-resources/google-platform-resources/google-plays-data-safety)
