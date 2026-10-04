@@ -74,6 +74,12 @@ Estas respuestas deben revisarse en Play Console contra el AAB exacto. La declar
 - Texto alternativo sugerido para el gráfico: **Mesa verde de poker con cuatro celulares sincronizados alrededor de las cartas y las fichas.**
 - Capturas: todavía deben obtenerse del APK aceptado. Google Play exige al menos dos; usar PNG de 24 bits o JPEG, entre 320 y 3840 px, sin mostrar datos reales ni funciones inexistentes.
 
+En Windows, `scripts/create-play-console-package.ps1` verifica el hash del AAB aprobado y genera `release/Blindly-1.0.0-play-console-package.zip` con el bundle, los recursos gráficos, los textos localizados, las páginas legales y un manifiesto SHA-256. El ZIP queda fuera de Git porque contiene el binario firmado. Para regenerarlo:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\create-play-console-package.ps1
+```
+
 ## Pendientes de Play Console
 
 1. Crear una cuenta personal de distribución completa cuando se pueda pagar la tarifa única de USD 25. Google también ofrece distribución limitada gratuita para un máximo de 20 dispositivos, pero ese plan no puede convertirse después en distribución completa y no sirve para el lanzamiento público previsto. Mientras tanto, usar el APK interno de EAS para las pruebas privadas.
