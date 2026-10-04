@@ -189,7 +189,7 @@ Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migr
 - Completar una partida con varios celulares y verificar apuestas, reparto de pozos y cierre del torneo.
 - Probar compra, restauración y eliminación con RevenueCat Test Store en una build `development`; después crear los productos comerciales en las tiendas.
 
-La configuración nativa y las pruebas automatizadas están preparadas; estas verificaciones físicas siguen pendientes.
+La configuración nativa y las pruebas automatizadas están preparadas; estas verificaciones físicas siguen pendientes. El [estado final de preparación](docs/final-readiness.md) reúne la evidencia comprobada, los artefactos aprobados y el orden exacto de las acciones externas restantes.
 
 ## Créditos
 

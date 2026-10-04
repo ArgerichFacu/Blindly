@@ -2,6 +2,8 @@
 
 Estado auditado el 4 de octubre de 2026. Esta lista separa lo validado por código de las comprobaciones que requieren cuentas comerciales o dispositivos físicos.
 
+La matriz consolidada de evidencia y dependencias externas está en [`final-readiness.md`](final-readiness.md).
+
 ## Validado automáticamente
 
 - [x] Tipos TypeScript.
