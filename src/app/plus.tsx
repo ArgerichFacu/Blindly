@@ -19,7 +19,7 @@ export default function Plus() {
   return (
     <Pantalla
       titulo={t("Blindly Plus")}
-      subtitulo={t("Una experiencia más completa para quienes organizan y juegan seguido.")}
+      subtitulo={t("Convertí tu mesa en una liga.")}
     >
       <Tarjeta
         style={{

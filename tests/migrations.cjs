@@ -24,6 +24,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261002194847_stack_solo_dealer.sql",
     "20261002200358_salas_privadas.sql",
     "20261003005104_monto_igualar.sql",
+    "20261004221957_ligas_temporadas_ranking.sql",
   ]);
 
   const baseSources = fs
@@ -57,6 +58,10 @@ const read = (file) => fs.readFileSync(file, "utf8");
     normalize(read(path.join(migrationDir, migrationFiles[6]))),
     normalize(read(path.join(sqlDir, "15_monto_igualar.sql"))),
   );
+  assert.equal(
+    normalize(read(path.join(migrationDir, migrationFiles[7]))),
+    normalize(read(path.join(sqlDir, "16_ligas_temporadas_ranking.sql"))),
+  );
 
   await db.exec(
     "create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key); create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;",
@@ -72,7 +77,13 @@ const read = (file) => fs.readFileSync(file, "utf8");
         to_regclass('public.salas') is not null as salas,
         to_regclass('public.jugadores') is not null as jugadores,
         to_regclass('public.puntuacion_partidas') is not null as puntuacion,
+        to_regclass('public.ligas') is not null as ligas,
+        to_regclass('public.liga_temporadas') is not null as temporadas,
+        to_regclass('public.liga_miembros') is not null as miembros,
+        to_regclass('public.liga_partidas') is not null as partidas_liga,
+        to_regclass('public.accesos_plus') is not null as accesos_plus,
         to_regprocedure('public.accion_mesa(uuid,text,jsonb,text)') is not null as accion,
+        to_regprocedure('public.accion_mesa_sin_ligas(uuid,text,jsonb,text)') is not null as accion_sin_ligas,
         to_regprocedure('public.accion_mesa_con_puntuacion(uuid,text,jsonb,text)') is not null as accion_base,
         to_regprocedure('public.accion_mesa_con_stack_dealer(uuid,text,jsonb,text)') is not null as accion_stack,
         to_regprocedure('private.soy_jugador_de(uuid)') is not null as helper_privado,
@@ -84,7 +95,13 @@ const read = (file) => fs.readFileSync(file, "utf8");
     salas: true,
     jugadores: true,
     puntuacion: true,
+    ligas: true,
+    temporadas: true,
+    miembros: true,
+    partidas_liga: true,
+    accesos_plus: true,
     accion: true,
+    accion_sin_ligas: true,
     accion_base: true,
     accion_stack: true,
     helper_privado: true,
@@ -94,10 +111,19 @@ const read = (file) => fs.readFileSync(file, "utf8");
 
   const functionDefinition = (
     await db.query(
-      "select pg_get_functiondef('public.accion_mesa(uuid,text,jsonb,text)'::regprocedure) as definition",
+      "select pg_get_functiondef('public.accion_mesa_sin_ligas(uuid,text,jsonb,text)'::regprocedure) as definition",
     )
   ).rows[0].definition;
   assert.match(functionDefinition, /MONTO_IGUALAR_INVALIDO/);
+  const leagueDefinition = (
+    await db.query(
+      "select pg_get_functiondef('public.accion_mesa(uuid,text,jsonb,text)'::regprocedure) as definition",
+    )
+  ).rows[0].definition;
+  assert.match(leagueDefinition, /liga_miembros/);
+  assert.match(leagueDefinition, /temporada_id/);
+  assert.match(leagueDefinition, /private\.exigir_plus\(auth\.uid\(\)\)/);
+  assert.match(leagueDefinition, /TEMPORADA_NO_FINALIZABLE/);
   const stackDefinition = (
     await db.query(
       "select pg_get_functiondef('public.accion_mesa_con_stack_dealer(uuid,text,jsonb,text)'::regprocedure) as definition",

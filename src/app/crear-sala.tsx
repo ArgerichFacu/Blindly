@@ -1,6 +1,6 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useRef, useState } from "react";
-import { Pantalla, Boton, Texto, Campo } from "../components/Controles";
+import { Pantalla, Boton, Texto, Campo, Tarjeta, Etiqueta } from "../components/Controles";
 import { usePreferencias } from "../lib/Preferencias";
 import { crearSala, type Sala } from "../lib/salas";
 import { unirseASala } from "../lib/jugadores";
@@ -8,6 +8,11 @@ import { NIVELES_REGULAR } from "../lib/niveles";
 export default function CrearSala() {
   const router = useRouter(),
     { t, mensajeError } = usePreferencias();
+  const { temporada, liga, temporadaNombre } = useLocalSearchParams<{
+    temporada?: string;
+    liga?: string;
+    temporadaNombre?: string;
+  }>();
   const [nombre, setNombre] = useState(""),
     [ocupado, setOcupado] = useState(false),
     [error, setError] = useState("");
@@ -23,7 +28,9 @@ export default function CrearSala() {
     setOcupado(true);
     setError("");
     try {
-      const sala = creada.current ?? (await crearSala(NIVELES_REGULAR));
+      const sala =
+        creada.current ??
+        (await crearSala(NIVELES_REGULAR, temporada?.trim() || null));
       creada.current = sala;
       await unirseASala(sala.codigo, nombre);
       router.replace({ pathname: "/sala", params: { codigo: sala.codigo } });
@@ -44,6 +51,18 @@ export default function CrearSala() {
           "Primero, ¿cómo te llamás? Después podrás invitar a tu mesa y elegir cómo jugar.",
         )}
       </Texto>
+      {!!temporada && (
+        <Tarjeta>
+          <Etiqueta>{t("PARTIDA DE LIGA")}</Etiqueta>
+          <Texto style={{ fontWeight: "700", fontSize: 17 }}>
+            {liga ?? t("Liga")}
+          </Texto>
+          <Texto suave>{temporadaNombre ?? t("Temporada activa")}</Texto>
+          <Texto suave>
+            {t("Al finalizar, los puntos se sumarán automáticamente al ranking de esta temporada.")}
+          </Texto>
+        </Tarjeta>
+      )}
       <Campo
         etiqueta={t("Tu nombre")}
         value={nombre}

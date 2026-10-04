@@ -297,6 +297,179 @@ Object.assign(textos, {
   ],
 });
 
+Object.assign(textos, {
+  "Mis ligas": ["My leagues", "Minhas ligas"],
+  "Tus temporadas de poker entre amigos.": [
+    "Your poker seasons with friends.",
+    "Suas temporadas de poker entre amigos.",
+  ],
+  "BLINDLY LEAGUES": ["BLINDLY LEAGUES", "LIGAS BLINDLY"],
+  "Convertí tus partidas en una temporada.": [
+    "Turn your games into a season.",
+    "Transforme suas partidas em uma temporada.",
+  ],
+  "Ranking, puntos y resultados compartidos para tu grupo. Los invitados juegan gratis.": [
+    "Shared standings, points and results for your group. Guests play for free.",
+    "Classificação, pontos e resultados compartilhados para seu grupo. Convidados jogam grátis.",
+  ],
+  "+ Crear liga": ["+ Create league", "+ Criar liga"],
+  "Crear mi liga con Plus": ["Create my league with Plus", "Criar minha liga com Plus"],
+  "Todavía no participás en ninguna liga.": [
+    "You are not in a league yet.",
+    "Você ainda não participa de nenhuma liga.",
+  ],
+  "Sin temporada": ["No season", "Sem temporada"],
+  "{n} miembros": ["{n} members", "{n} membros"],
+  "Última partida: {fecha}": ["Last game: {fecha}", "Última partida: {fecha}"],
+  "Sin partidas finalizadas": ["No completed games", "Sem partidas finalizadas"],
+  "Una liga existente permanece visible si el owner deja Plus. La administración queda en pausa hasta restaurarlo.": [
+    "An existing league stays visible if its owner leaves Plus. Management pauses until Plus is restored.",
+    "Uma liga existente continua visível se o owner deixar o Plus. A administração fica pausada até a restauração.",
+  ],
+  "Crear liga": ["Create league", "Criar liga"],
+  "Esta función requiere Blindly Plus.": [
+    "This feature requires Blindly Plus.",
+    "Este recurso exige Blindly Plus.",
+  ],
+  "Solo el owner necesita Plus. Todos sus invitados pueden participar gratis.": [
+    "Only the owner needs Plus. Every guest can participate for free.",
+    "Somente o owner precisa do Plus. Todos os convidados podem participar grátis.",
+  ],
+  "Dale una identidad a tu grupo y empezá su primera temporada.": [
+    "Give your group an identity and start its first season.",
+    "Dê uma identidade ao seu grupo e comece a primeira temporada.",
+  ],
+  "Nombre de la liga": ["League name", "Nome da liga"],
+  "Los Pibes Poker League": ["Friday Poker League", "Liga do Poker de Sexta"],
+  "Nombre de la temporada": ["Season name", "Nome da temporada"],
+  "Temporada 2026": ["2026 Season", "Temporada 2026"],
+  "Tu nombre en la liga": ["Your league name", "Seu nome na liga"],
+  "Nombre de jugador": ["Player name", "Nome do jogador"],
+  "Los demás miembros se incorporan automáticamente al jugar su primera partida asociada.": [
+    "Other members join automatically when they play their first associated game.",
+    "Os outros membros entram automaticamente ao jogar a primeira partida associada.",
+  ],
+  Liga: ["League", "Liga"],
+  Ranking: ["Standings", "Classificação"],
+  "El ranking aparecerá al finalizar la primera partida de esta temporada.": [
+    "The standings will appear after the first game of this season is completed.",
+    "A classificação aparecerá após a primeira partida desta temporada ser concluída.",
+  ],
+  Jugador: ["Player", "Jogador"],
+  PJ: ["GP", "PJ"],
+  V: ["W", "V"],
+  Podios: ["Podiums", "Pódios"],
+  Pts: ["Pts", "Pts"],
+  Partidas: ["Games", "Partidas"],
+  "Todavía no hay partidas finalizadas en esta temporada.": [
+    "There are no completed games in this season yet.",
+    "Ainda não há partidas finalizadas nesta temporada.",
+  ],
+  "Ganó {nombre}": ["{nombre} won", "{nombre} venceu"],
+  Miembros: ["Members", "Membros"],
+  Owner: ["Owner", "Owner"],
+  Quitar: ["Remove", "Remover"],
+  "Quitar miembro": ["Remove member", "Remover membro"],
+  "Dejará de ver la liga, pero sus resultados históricos se conservan.": [
+    "They will no longer see the league, but their historical results will be preserved.",
+    "A pessoa deixará de ver a liga, mas seus resultados históricos serão preservados.",
+  ],
+  "Liga en modo lectura": ["Read-only league", "Liga em modo de leitura"],
+  "Tus datos siguen guardados. Restaurá Plus para crear temporadas o partidas asociadas y administrar miembros.": [
+    "Your data remains saved. Restore Plus to create seasons or associated games and manage members.",
+    "Seus dados continuam salvos. Restaure o Plus para criar temporadas ou partidas associadas e gerenciar membros.",
+  ],
+  "Restaurar Blindly Plus": ["Restore Blindly Plus", "Restaurar Blindly Plus"],
+  "Administrar liga": ["Manage league", "Gerenciar liga"],
+  "Editar nombre": ["Edit name", "Editar nome"],
+  "Crear partida para esta temporada": [
+    "Create game for this season",
+    "Criar partida para esta temporada",
+  ],
+  "Finalizar temporada": ["End season", "Finalizar temporada"],
+  "El ranking quedará guardado y luego podrás crear una temporada nueva.": [
+    "The standings will be preserved and you can then create a new season.",
+    "A classificação será preservada e depois você poderá criar uma nova temporada.",
+  ],
+  Finalizar: ["End", "Finalizar"],
+  "Nombre de la nueva temporada": ["New season name", "Nome da nova temporada"],
+  "Temporada 2027": ["2027 Season", "Temporada 2027"],
+  "Crear temporada": ["Create season", "Criar temporada"],
+  "Reactivar liga": ["Reactivate league", "Reativar liga"],
+  "Archivar liga": ["Archive league", "Arquivar liga"],
+  "PARTIDA DE LIGA": ["LEAGUE GAME", "PARTIDA DE LIGA"],
+  "Temporada activa": ["Active season", "Temporada ativa"],
+  "Al finalizar, los puntos se sumarán automáticamente al ranking de esta temporada.": [
+    "When the game ends, points will be added automatically to this season's standings.",
+    "Ao finalizar, os pontos serão somados automaticamente à classificação desta temporada.",
+  ],
+  "Temporadas, ranking y partidas de tu grupo.": [
+    "Your group's seasons, standings and games.",
+    "Temporadas, classificação e partidas do seu grupo.",
+  ],
+  "Ligas privadas": ["Private leagues", "Ligas privadas"],
+  "Creá temporadas, reuní a tu grupo y seguí un ranking compartido.": [
+    "Create seasons, bring your group together and follow shared standings.",
+    "Crie temporadas, reúna seu grupo e acompanhe uma classificação compartilhada.",
+  ],
+  "Convertí tu mesa en una liga.": [
+    "Turn your table into a league.",
+    "Transforme sua mesa em uma liga.",
+  ],
+  "Blindly Plus es necesario para administrar ligas.": [
+    "Blindly Plus is required to manage leagues.",
+    "Blindly Plus é necessário para gerenciar ligas.",
+  ],
+  "No se pudo verificar Blindly Plus. Probá de nuevo.": [
+    "Blindly Plus could not be verified. Try again.",
+    "Não foi possível verificar o Blindly Plus. Tente novamente.",
+  ],
+  "La verificación de Plus todavía no está configurada en el servidor.": [
+    "Plus verification is not configured on the server yet.",
+    "A verificação do Plus ainda não está configurada no servidor.",
+  ],
+  "Solo el owner puede administrar esta liga.": [
+    "Only the owner can manage this league.",
+    "Somente o owner pode gerenciar esta liga.",
+  ],
+  "Finalizá la temporada activa antes de crear otra.": [
+    "End the active season before creating another one.",
+    "Finalize a temporada ativa antes de criar outra.",
+  ],
+  "No se puede finalizar mientras haya una partida activa.": [
+    "The season cannot end while a game is active.",
+    "Não é possível finalizar enquanto houver uma partida ativa.",
+  ],
+  "La liga no está disponible para esta cuenta.": [
+    "This league is not available to this account.",
+    "Esta liga não está disponível para esta conta.",
+  ],
+  "La temporada no está activa o no existe.": [
+    "The season is not active or does not exist.",
+    "A temporada não está ativa ou não existe.",
+  ],
+  "La liga está archivada.": ["The league is archived.", "A liga está arquivada."],
+  "El owner no puede quitarse de su propia liga.": [
+    "The owner cannot be removed from their own league.",
+    "O owner não pode ser removido da própria liga.",
+  ],
+});
+
+Object.assign(errores, {
+  PLUS_REQUERIDO: "Blindly Plus es necesario para administrar ligas.",
+  PLUS_NO_VERIFICADO: "No se pudo verificar Blindly Plus. Probá de nuevo.",
+  PLUS_SERVIDOR_NO_CONFIGURADO:
+    "La verificación de Plus todavía no está configurada en el servidor.",
+  SOLO_OWNER: "Solo el owner puede administrar esta liga.",
+  TEMPORADA_ACTIVA: "Finalizá la temporada activa antes de crear otra.",
+  TEMPORADA_NO_FINALIZABLE:
+    "No se puede finalizar mientras haya una partida activa.",
+  LIGA_NO_DISPONIBLE: "La liga no está disponible para esta cuenta.",
+  TEMPORADA_NO_EXISTE: "La temporada no está activa o no existe.",
+  LIGA_ARCHIVADA: "La liga está archivada.",
+  OWNER_REQUERIDO: "El owner no puede quitarse de su propia liga.",
+});
+
 export function traducir(
   idioma: Idioma,
   clave: string,

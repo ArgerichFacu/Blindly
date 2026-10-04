@@ -2,6 +2,7 @@ import type { Nivel } from "./niveles";
 import type { Configuracion } from "./mesa";
 import { asegurarSesion } from "./sesion";
 import { supabase } from "./supabase";
+import { sincronizarPlusServidor } from "./plusServidor";
 export type Sala = {
   id: string;
   codigo: string;
@@ -27,24 +28,23 @@ export type Sala = {
   mano: number;
   pozo: number;
   revision: number;
+  temporada_id: string | null;
 };
-export async function crearSala(niveles: Nivel[]): Promise<Sala> {
-  const usuario = await asegurarSesion();
-  const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  for (let intento = 0; intento < 5; intento++) {
-    const codigo = Array.from(
-      { length: 5 },
-      () => letras[Math.floor(Math.random() * letras.length)],
-    ).join("");
-    const { data, error } = await supabase
-      .from("salas")
-      .insert({ codigo, host_id: usuario.id, niveles })
-      .select()
-      .single();
-    if (!error) return data as Sala;
-    if (error.code !== "23505") throw error;
+export async function crearSala(
+  niveles: Nivel[],
+  temporadaId: string | null = null,
+): Promise<Sala> {
+  await asegurarSesion();
+  if (temporadaId) {
+    const estado = await sincronizarPlusServidor();
+    if (!estado.activo) throw new Error("PLUS_REQUERIDO");
   }
-  throw new Error("No se pudo crear la sala.");
+  const { data, error } = await supabase.rpc("crear_sala", {
+    p_niveles: niveles,
+    p_temporada: temporadaId,
+  });
+  if (error) throw error;
+  return data as Sala;
 }
 export async function obtenerSalaPorCodigo(codigo: string): Promise<Sala> {
   const { data, error } = await supabase

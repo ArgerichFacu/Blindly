@@ -19,6 +19,7 @@ import {
   prepararCompras,
   tieneEntitlementPlus,
 } from "./plus";
+import { sincronizarPlusServidor } from "./plusServidor";
 
 type EstadoPlus = {
   disponible: boolean;
@@ -58,7 +59,9 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     setError(null);
     try {
       const id = usuarioId ?? (await asegurarSesion()).id;
-      setInfo(await prepararCompras(id));
+      const nuevaInfo = await prepararCompras(id);
+      setInfo(nuevaInfo);
+      await sincronizarPlusServidor();
     } catch (e) {
       setError(e);
     } finally {
@@ -71,7 +74,12 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     let listener: CustomerInfoUpdateListener | null = null;
     if (!PLUS_DISPONIBLE) return;
     listener = (nueva) => {
-      if (vivo) setInfo(nueva);
+      if (vivo) {
+        setInfo(nueva);
+        void sincronizarPlusServidor().catch((e) => {
+          if (vivo) setError(e);
+        });
+      }
     };
     Purchases.addCustomerInfoUpdateListener(listener);
     const inicio = setTimeout(() => {
@@ -102,6 +110,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     try {
       await operacion();
       setInfo(await Purchases.getCustomerInfo());
+      await sincronizarPlusServidor();
     } catch (e) {
       setError(e);
       throw e;

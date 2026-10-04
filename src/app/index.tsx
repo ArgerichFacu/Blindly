@@ -48,6 +48,12 @@ export default function Menu() {
         onPress={() => router.push("/unirse")}
       />
       <Acceso
+        titulo={t("Mis ligas")}
+        detalle={t("Temporadas, ranking y partidas de tu grupo.")}
+        simbolo="🏆"
+        onPress={() => router.push("/ligas")}
+      />
+      <Acceso
         titulo={t("Mi puntuación")}
         detalle={t("Tus puntos, tu progreso y tu rango.")}
         simbolo="♜"

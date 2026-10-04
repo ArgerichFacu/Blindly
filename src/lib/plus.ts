@@ -58,6 +58,11 @@ export async function tienePlusActivo() {
 
 export const BENEFICIOS_PLUS = [
   {
+    simbolo: "♛",
+    titulo: "Ligas privadas",
+    detalle: "Creá temporadas, reuní a tu grupo y seguí un ranking compartido.",
+  },
+  {
     simbolo: "◈",
     titulo: "Estadísticas avanzadas",
     detalle: "Analizá resultados, evolución y rendimiento de tus partidas.",

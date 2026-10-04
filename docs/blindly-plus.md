@@ -2,7 +2,7 @@
 
 Blindly seguirá siendo utilizable sin pagar. La creación y unión a salas, los turnos, las fichas físicas y virtuales y el reparto del pozo forman parte del producto principal.
 
-El paywall `Blindly Plus` está publicado en RevenueCat con textos en español, inglés y portugués. Sus enlaces de privacidad y términos apuntan a los documentos públicos de este repositorio. El perfil `development` usa Test Store; las APK `preview` son builds release y mantienen Plus desactivado. Todavía falta validar compra y restauración con una build de desarrollo en hardware real antes de crear los productos comerciales de Google Play.
+El paywall `Blindly Plus` tiene un nuevo diseño guardado como borrador en RevenueCat con textos en español, inglés y portugués. Debe publicarse únicamente tras la confirmación final del propietario. El perfil `development` usa Test Store; las APK `preview` son builds release y mantienen Plus desactivado. Todavía falta validar compra y restauración con una build de desarrollo en hardware real antes de crear los productos comerciales de Google Play.
 
 ## Precios de lanzamiento
 
@@ -14,9 +14,11 @@ El paywall `Blindly Plus` está publicado en RevenueCat con textos en español, 
 
 El precio regular previsto para el acceso vitalicio es USD 39,99 en una etapa futura. Mientras Founder Edition esté disponible, el paywall muestra USD 24,99 y no presenta USD 39,99 como una compra activa.
 
-## Alcance propuesto
+## Alcance implementado
 
-Plus incorpora métricas avanzadas, temas premium y la edición de niveles de ciegas y descansos. Mientras `EXPO_PUBLIC_PLUS_READY=false`, estas funciones permanecen abiertas para facilitar el desarrollo y las pruebas; al activar productos reales, RevenueCat controla su acceso. Ninguna de estas funciones impide que un jugador gratuito participe de una mesa, use los modos estándar o administre el pozo.
+Plus incorpora ligas privadas, temporadas y ranking compartido, además de métricas avanzadas, temas premium y la edición de niveles de ciegas y descansos. La creación y administración de ligas requiere Plus en el owner; los miembros invitados participan gratis. Ninguna de estas funciones impide que un jugador gratuito participe de una mesa, use los modos estándar o administre el pozo.
+
+Las ligas se protegen también en servidor. `sincronizar-plus` valida el entitlement en RevenueCat y actualiza `accesos_plus`; las RPC administrativas sólo aceptan verificaciones vigentes. La cancelación conserva ligas y resultados en modo lectura. Consultá [ligas, temporadas y ranking](ligas.md).
 
 ## Arquitectura de compras implementada
 
@@ -32,7 +34,7 @@ EXPO_PUBLIC_REVENUECAT_ANDROID_KEY=
 
 Las claves públicas de plataforma pueden formar parte de la app. Nunca deben incluirse secretos de App Store Connect, Google Play, Stripe, RevenueCat ni `service_role`.
 
-La Edge Function `eliminar-cuenta` también puede borrar el perfil de cliente de RevenueCat. Para activarlo, guardá la clave secreta de API v1 en Supabase como `REVENUECAT_SECRET_KEY`; nunca uses ese secreto como variable `EXPO_PUBLIC`. La eliminación del perfil no cancela la suscripción de la tienda, por lo que la interfaz dirige al usuario a administrarla antes.
+Las Edge Functions `eliminar-cuenta` y `sincronizar-plus` usan la clave secreta de API v1 guardada en Supabase como `REVENUECAT_SECRET_KEY`; nunca uses ese secreto como variable `EXPO_PUBLIC`. La primera borra el perfil al eliminar la cuenta y la segunda verifica el entitlement antes de administrar una liga. La eliminación del perfil no cancela la suscripción de la tienda, por lo que la interfaz dirige al usuario a administrarla antes.
 
 ## Activación
 

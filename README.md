@@ -18,6 +18,7 @@ Aplicación desarrollada con Expo, React Native, TypeScript y Supabase. La rama 
 - Consultar las combinaciones de poker con ejemplos de cartas y criterios de desempate.
 - Elegir tema verde, rojo o negro e idioma español, inglés o portugués.
 - Activar música de ambiente y consultar tu puntuación e historial personal.
+- Crear ligas Plus con temporadas, miembros invitados Free, historial de torneos y ranking compartido.
 
 Blindly acompaña la mesa: las cartas se reparten físicamente y el dealer determina los ganadores. La app no evalúa automáticamente las manos.
 
@@ -103,7 +104,7 @@ Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md). La 
 
 ## Supabase
 
-Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `15`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos. En el proyecto conectado, la fuente de verdad para cambios ya aplicados es `supabase/migrations/`.
+Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `16`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos. En el proyecto conectado, la fuente de verdad para cambios ya aplicados es `supabase/migrations/`.
 
 | Scripts | Área |
 | --- | --- |
@@ -117,6 +118,7 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `13_stack_solo_dealer.sql` | Ajuste de stacks físicos autorizado exclusivamente al dealer |
 | `14_salas_privadas.sql` | Lectura de salas limitada al host y a sus participantes |
 | `15_monto_igualar.sql` | Confirmación y validación del monto exacto al igualar |
+| `16_ligas_temporadas_ranking.sql` | Ligas Plus, temporadas, asociación segura de resultados, ranking y verificación server-side del entitlement |
 
 La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas. La [revisión de seguridad remota](docs/security-review.md) documenta los permisos efectivos y los avisos intencionales del asesor de Supabase.
 
@@ -124,7 +126,9 @@ Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren con
 
 ## Blindly Plus
 
-La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Plus habilita métricas avanzadas, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis.
+La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Plus permite que un host cree ligas privadas, temporadas y partidas asociadas con ranking; los invitados Free participan normalmente. También habilita métricas avanzadas, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis.
+
+La administración de ligas no confía en el estado del teléfono. La Edge Function `sincronizar-plus` consulta RevenueCat con un secreto de servidor y las RPC de Supabase exigen una verificación vigente. Si el owner cancela, la liga queda en modo lectura y conserva todos sus datos. Arquitectura y pruebas: [ligas, temporadas y ranking](docs/ligas.md).
 
 Los precios de lanzamiento previstos son USD 0,99 mensual, USD 9,99 anual —el plan recomendado— y USD 24,99 por la Founder Edition vitalicia. El precio regular futuro del acceso vitalicio será USD 39,99.
 
@@ -181,7 +185,7 @@ eas.json           Perfiles de compilación
 | `npm run build:bundles` | Verificar los paquetes JavaScript de web, Android e iOS |
 | `npm test` | Ejecutar las pruebas automatizadas |
 
-Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migraciones. Cubren turnos, permisos, conservación de fichas, pozos, puntuación, privacidad y operaciones repetidas. Las pruebas de sesión usan dobles de Supabase: no envían correos ni sustituyen una prueba de autenticación real.
+Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migraciones. Cubren turnos, permisos, conservación de fichas, pozos, puntuación, ligas, temporadas, invitados Free, cancelación/restauración de Plus, RLS, privacidad y operaciones repetidas. Las pruebas de sesión usan dobles de Supabase: no envían correos ni sustituyen una prueba de autenticación real.
 
 ## Pendientes antes de publicar
 
