@@ -23,10 +23,11 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] CI verifica compatibilidad exacta con Expo 57, Expo Doctor, TypeScript y ESLint; además bloquea vulnerabilidades críticas de dependencias.
 - [x] SDK de Blindly Plus, paywall, restauración y administración de suscripción integrados y desactivados por variable pública.
 - [x] Borrado opcional del perfil de RevenueCat desde la eliminación autenticada de cuenta.
-- [x] Perfiles EAS de development, preview y production preparados.
+- [x] Perfiles EAS de development, preview, ios-simulator y production preparados.
 - [x] Proyecto `@facuargerich/blindly` vinculado y variables públicas creadas en los tres entornos EAS.
 - [x] APK Android preview final regenerado con firma remota y Plus desactivado desde el commit `efb0192` ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/50c1a63c-fc71-43f5-b17d-abb6e1bf02a4)); falta instalarlo en hardware real.
 - [x] AAB de producción final generado desde el mismo commit, con `versionCode 4` y firma remota ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/afbc3463-d90c-432e-a660-23ac614458aa)).
+- [x] Build nativa iOS de simulador generada por Xcode y EAS desde el commit `7654263` ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/53230fdc-cf5c-4463-b12f-a3e3f7e212c6)); el paquete `.app` fue validado localmente.
 - [x] APK `development` generado para probar compras simuladas de RevenueCat Test Store ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/2d4f84b6-4ea7-41d0-9b2e-aee09d2e6e4b)).
 - [x] RevenueCat Test Store configurado con entitlement `blindly_plus`, tres productos, oferta predeterminada y paywall publicado en español, inglés y portugués.
 - [x] Enlaces del paywall configurados con las URLs previstas para privacidad y términos; serán navegables cuando se active GitHub Pages.
@@ -45,7 +46,7 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - [ ] Capturar al menos dos pantallas reales del APK aceptado para la ficha de Google Play.
 - [ ] Definir un correo público de soporte y privacidad.
 - [ ] Crear `com.blindly.app` en Play Console y completar acceso, clasificación, público objetivo y seguridad de datos.
-- [ ] Generar la IPA privada cuando haya credenciales de Apple Developer y estén registrados los iPhone de prueba, o preparar el grupo cerrado de TestFlight.
+- [ ] Contratar o vincular una membresía Apple Developer, crear las credenciales de distribución en EAS y registrar los UDID de los iPhone; el intento `preview` no interactivo confirmó que todavía no existe un certificado ni perfil *ad hoc*. Después, generar la IPA privada o preparar el grupo cerrado de TestFlight.
 - [ ] Crear los productos comerciales de Blindly Plus en Google Play Console y vincularlos con RevenueCat.
 - [ ] Si Plus se prueba con compras reales en iPhone, crear también los productos equivalentes en App Store Connect; una IPA release privada mantiene Plus desactivado y Test Store se usa solo en `development`.
 - [ ] Validar compra y restauración con RevenueCat Test Store en una build `development` depurable sobre un dispositivo físico.
@@ -59,6 +60,11 @@ Estado auditado el 2 de octubre de 2026. Esta lista separa lo validado por códi
 - AAB para Google Play: [descarga directa](https://expo.dev/artifacts/eas/s5nAxvg6Yd-Qciiuc9ZKMRmE-oITNIqVgP-Hlcnl41U.aab), `versionCode 4`, SHA-256 `F0B90F6B995BB7FBCB62A97C2991FC1EE19FD4776939BB263FB96C2E639874A5`.
 - APK de desarrollo para Test Store: [descarga directa](https://expo.dev/artifacts/eas/cO1utrQC2gAeLE63VkH1TfjxUIe-O-5DDPS4nsYguUM.apk), SHA-256 `9C3CD74DBC14724A173FBF14D4944589B1E6B814A33758D103AC0737CC6EAA8E`.
 - El APK preview y el AAB se generaron con Blindly Plus desactivado, por lo que no contienen una clave Test Store utilizable en una build release. La APK de desarrollo sí usa Test Store y no debe distribuirse como versión final.
+
+## Artefacto iOS 1.0.0
+
+- Simulador de macOS: [descarga directa](https://expo.dev/artifacts/eas/98EZjNOLQrVTD12iljHmRZZqBO1KGpDOkZKIEFKBqOg.tar.gz), build 1, SHA-256 `5673FD59EE3BA234BB5D7B82DF3FACDC01449E79E39E90816FE3E91B94ACEC87`.
+- El archivo contiene `Blindly.app` y valida la compilación nativa iOS. No puede instalarse en un iPhone físico; la IPA requiere la firma externa indicada arriba.
 
 ## Prueba física de aceptación
 

@@ -132,12 +132,14 @@ RevenueCat Test Store está activo solamente en `development`, donde la build es
 
 `app.json` configura el nombre, los identificadores, permisos e imágenes. El splash nativo usa `assets/images/blindly-logo.png` sobre fondo verde fijo. El menú y las pantallas React usan el logo transparente para adaptarse al tema.
 
-`eas.json` incluye perfiles `development`, `preview` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus usa Test Store solo en development; preview y production permanecen desactivados hasta disponer de productos reales. Android se publicará en Google Play; los iPhone de amigos pueden recibir una IPA privada o una invitación cerrada de TestFlight sin publicar Blindly en App Store. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
+`eas.json` incluye perfiles `development`, `preview`, `ios-simulator` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus usa Test Store solo en development; preview y production permanecen desactivados hasta disponer de productos reales. Android se publicará en Google Play; los iPhone de amigos pueden recibir una IPA privada o una invitación cerrada de TestFlight sin publicar Blindly en App Store. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
 
 Ya existen dos artefactos Android firmados por EAS para la versión 1.0.0:
 
 - [APK preview instalable](https://expo.dev/artifacts/eas/aLs3Sth11h66H3Ddz78F5OyXDiDFnTBuDdb4-zb1xL0.apk), `versionCode 3`, SHA-256 `45B2E3AAAE4D27338FF831ABFE009D54D00AE15861DF6DEA942C620A412FFDC9`.
 - [AAB de producción para Play Store](https://expo.dev/artifacts/eas/s5nAxvg6Yd-Qciiuc9ZKMRmE-oITNIqVgP-Hlcnl41U.aab), `versionCode 4`, SHA-256 `F0B90F6B995BB7FBCB62A97C2991FC1EE19FD4776939BB263FB96C2E639874A5`.
+
+La compilación nativa iOS también fue validada con el [paquete para simulador](https://expo.dev/artifacts/eas/98EZjNOLQrVTD12iljHmRZZqBO1KGpDOkZKIEFKBqOg.tar.gz), build 1, SHA-256 `5673FD59EE3BA234BB5D7B82DF3FACDC01449E79E39E90816FE3E91B94ACEC87`. Este paquete se instala en el simulador de macOS; una IPA para iPhone requiere firma de Apple Developer.
 
 La ficha y las declaraciones iniciales para las tiendas están en [docs/store-listing.md](docs/store-listing.md).
 
