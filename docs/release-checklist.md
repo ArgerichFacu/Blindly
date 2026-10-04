@@ -1,6 +1,6 @@
 # Lista de lanzamiento de Blindly
 
-Estado auditado el 3 de octubre de 2026. Esta lista separa lo validado por código de las comprobaciones que requieren cuentas comerciales o dispositivos físicos.
+Estado auditado el 4 de octubre de 2026. Esta lista separa lo validado por código de las comprobaciones que requieren cuentas comerciales o dispositivos físicos.
 
 ## Validado automáticamente
 
@@ -26,15 +26,15 @@ Estado auditado el 3 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Borrado opcional del perfil de RevenueCat desde la eliminación autenticada de cuenta.
 - [x] Perfiles EAS de development, preview, ios-simulator y production preparados.
 - [x] Proyecto `@facuargerich/blindly` vinculado y variables públicas creadas en los tres entornos EAS.
-- [x] APK Android preview final regenerado con firma remota y Plus desactivado desde el commit `efb0192` ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/50c1a63c-fc71-43f5-b17d-abb6e1bf02a4)); falta instalarlo en hardware real.
-- [x] AAB de producción final generado desde el mismo commit, con `versionCode 4` y firma remota ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/afbc3463-d90c-432e-a660-23ac614458aa)).
+- [x] APK Android preview final regenerado con firma remota, Plus desactivado y permisos mínimos desde el commit `07aff0d` ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/adce6a93-dbe1-4ef9-a5db-c86eb084cb3b)); falta instalarlo en hardware real.
+- [x] AAB de producción final generado desde el mismo commit, con `versionCode 5` y firma remota ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/cef204be-b7bc-4da5-b81d-9da2d4317d61)).
 - [x] Build nativa iOS de simulador generada por Xcode y EAS desde el commit `7654263` ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/53230fdc-cf5c-4463-b12f-a3e3f7e212c6)); el paquete `.app` fue validado localmente.
 - [x] APK `development` generado para probar compras simuladas de RevenueCat Test Store ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/2d4f84b6-4ea7-41d0-9b2e-aee09d2e6e4b)).
 - [x] RevenueCat Test Store configurado con entitlement `blindly_plus`, tres productos, oferta predeterminada y paywall publicado en español, inglés y portugués.
 - [x] Enlaces del paywall configurados con las URLs previstas para privacidad y términos; serán navegables cuando se active GitHub Pages.
 - [x] Ícono y gráfico de funciones de Google Play generados y validados en sus dimensiones y formatos requeridos.
 - [x] Permiso de Google Play Billing y `launchMode=singleTop` garantizados por config plugin y prueba de manifiesto.
-- [x] Manifiesto del AAB inspeccionado con bundletool; los permisos heredados de almacenamiento y superposición se bloquearon porque Blindly no los usa.
+- [x] AAB validado con bundletool 1.18.3 y manifiesto compilado inspeccionado: SDK 36, build no depurable, Billing presente y permisos heredados de almacenamiento y superposición ausentes.
 - [x] Proyecto Supabase aislado en la organización Blindly.
 - [x] Proyecto Supabase saludable, siete migraciones presentes, Edge Functions con JWT y asesores revisados; las advertencias intencionales y sus límites están documentados en `docs/security-review.md`.
 - [x] GitHub conectado a Supabase sobre la rama main.
@@ -60,8 +60,8 @@ Estado auditado el 3 de octubre de 2026. Esta lista separa lo validado por códi
 
 ## Artefactos Android 1.0.0
 
-- APK de prueba: [descarga directa](https://expo.dev/artifacts/eas/aLs3Sth11h66H3Ddz78F5OyXDiDFnTBuDdb4-zb1xL0.apk), `versionCode 3`, SHA-256 `45B2E3AAAE4D27338FF831ABFE009D54D00AE15861DF6DEA942C620A412FFDC9`.
-- AAB para Google Play: [descarga directa](https://expo.dev/artifacts/eas/s5nAxvg6Yd-Qciiuc9ZKMRmE-oITNIqVgP-Hlcnl41U.aab), `versionCode 4`, SHA-256 `F0B90F6B995BB7FBCB62A97C2991FC1EE19FD4776939BB263FB96C2E639874A5`.
+- APK de prueba: [descarga directa](https://expo.dev/artifacts/eas/gMvdiijTDFWPn-ieGNCcx6L72TUeZMKDvx7cOffhK-c.apk), `versionCode 4`, SHA-256 `65216DAD2837E7E2882D5B94B68815495BDCCB86085FCB1A7AD664B87227F85E`.
+- AAB para Google Play: [descarga directa](https://expo.dev/artifacts/eas/mOaH1SBjZr8oFJZ2v6l11InH-A_rpgTT5f0uRpQfffs.aab), `versionCode 5`, SHA-256 `89F753CCFF4A47AC9B2501B220EE4649152FFBD2BC1944522FF7D0ACD581124C`.
 - APK de desarrollo para Test Store: [descarga directa](https://expo.dev/artifacts/eas/cO1utrQC2gAeLE63VkH1TfjxUIe-O-5DDPS4nsYguUM.apk), SHA-256 `9C3CD74DBC14724A173FBF14D4944589B1E6B814A33758D103AC0737CC6EAA8E`.
 - El APK preview y el AAB se generaron con Blindly Plus desactivado, por lo que no contienen una clave Test Store utilizable en una build release. La APK de desarrollo sí usa Test Store y no debe distribuirse como versión final.
 

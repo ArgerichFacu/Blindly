@@ -2,7 +2,7 @@
 param(
   [string]$ApkPath,
   [string]$AdbPath,
-  [string]$ExpectedSha256 = '45B2E3AAAE4D27338FF831ABFE009D54D00AE15861DF6DEA942C620A412FFDC9',
+  [string]$ExpectedSha256 = '65216DAD2837E7E2882D5B94B68815495BDCCB86085FCB1A7AD664B87227F85E',
   [switch]$SkipInstall,
   [switch]$ValidateOnly
 )

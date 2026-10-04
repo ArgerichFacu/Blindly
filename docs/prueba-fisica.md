@@ -1,6 +1,6 @@
 # Prueba física de aceptación
 
-Usá el [APK preview final de Blindly 1.0.0](https://expo.dev/artifacts/eas/aLs3Sth11h66H3Ddz78F5OyXDiDFnTBuDdb4-zb1xL0.apk). Su SHA-256 es `45B2E3AAAE4D27338FF831ABFE009D54D00AE15861DF6DEA942C620A412FFDC9`; verificá ese valor si descargaste más de una build. Este APK mantiene Plus desactivado y permite probar el juego completo sin cobros. Para una prueba completa hacen falta al menos tres celulares Android conectados a Internet.
+Usá el [APK preview final de Blindly 1.0.0](https://expo.dev/artifacts/eas/gMvdiijTDFWPn-ieGNCcx6L72TUeZMKDvx7cOffhK-c.apk). Su SHA-256 es `65216DAD2837E7E2882D5B94B68815495BDCCB86085FCB1A7AD664B87227F85E`; verificá ese valor si descargaste más de una build. Este APK mantiene Plus desactivado y permite probar el juego completo sin cobros. Para una prueba completa hacen falta al menos tres celulares Android conectados a Internet.
 
 En Windows, `scripts/android-device-test.ps1` valida que el APK sea exactamente la build aprobada, detecta un teléfono autorizado, instala y abre Blindly, y guarda una captura junto con los datos del dispositivo en `release/device-tests/`. Conectá un solo teléfono, activá **Opciones de desarrollador > Depuración USB**, aceptá la huella RSA y ejecutá:
 
