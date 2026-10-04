@@ -74,6 +74,8 @@ Estas respuestas deben revisarse en Play Console contra el AAB exacto. La declar
 - Texto alternativo sugerido para el gráfico: **Mesa verde de poker con cuatro celulares sincronizados alrededor de las cartas y las fichas.**
 - Capturas: todavía deben obtenerse del APK aceptado. Google Play exige al menos dos; usar PNG de 24 bits o JPEG, entre 320 y 3840 px, sin mostrar datos reales ni funciones inexistentes.
 
+El manifiesto del AAB se valida con bundletool. Blindly conserva cámara, red, vibración, pantalla activa, control de audio y Billing porque corresponden a funciones reales; bloquea `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE` y `SYSTEM_ALERT_WINDOW`, que llegaban desde dependencias nativas y no se utilizan.
+
 En Windows, `scripts/create-play-console-package.ps1` verifica el hash del AAB aprobado y genera `release/Blindly-1.0.0-play-console-package.zip` con el bundle, los recursos gráficos, los textos localizados, las páginas legales y un manifiesto SHA-256. El ZIP queda fuera de Git porque contiene el binario firmado. Para regenerarlo:
 
 ```powershell

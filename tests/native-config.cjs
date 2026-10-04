@@ -21,11 +21,28 @@ const permissions = (manifest["uses-permission"] ?? []).map(
 const mainActivity = manifest.application?.[0]?.activity?.find((activity) =>
   activity.$?.["android:name"]?.endsWith("MainActivity"),
 );
+const blockedPermissions = [
+  "android.permission.READ_EXTERNAL_STORAGE",
+  "android.permission.WRITE_EXTERNAL_STORAGE",
+  "android.permission.SYSTEM_ALERT_WINDOW",
+];
 
 assert.ok(
   permissions.includes("com.android.vending.BILLING"),
   "El manifiesto Android debe declarar el permiso de Google Play Billing",
 );
+for (const blockedPermission of blockedPermissions) {
+  const declarations = (manifest["uses-permission"] ?? []).filter(
+    (permission) => permission.$?.["android:name"] === blockedPermission,
+  );
+  assert.ok(
+    declarations.length > 0 &&
+      declarations.every(
+        (permission) => permission.$?.["tools:node"] === "remove",
+      ),
+    `El manifiesto Android debe bloquear ${blockedPermission}`,
+  );
+}
 assert.equal(
   mainActivity?.$?.["android:launchMode"],
   "singleTop",

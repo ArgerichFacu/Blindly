@@ -34,6 +34,7 @@ Estado auditado el 3 de octubre de 2026. Esta lista separa lo validado por códi
 - [x] Enlaces del paywall configurados con las URLs previstas para privacidad y términos; serán navegables cuando se active GitHub Pages.
 - [x] Ícono y gráfico de funciones de Google Play generados y validados en sus dimensiones y formatos requeridos.
 - [x] Permiso de Google Play Billing y `launchMode=singleTop` garantizados por config plugin y prueba de manifiesto.
+- [x] Manifiesto del AAB inspeccionado con bundletool; los permisos heredados de almacenamiento y superposición se bloquearon porque Blindly no los usa.
 - [x] Proyecto Supabase aislado en la organización Blindly.
 - [x] Proyecto Supabase saludable, siete migraciones presentes, Edge Functions con JWT y asesores revisados; las advertencias intencionales y sus límites están documentados en `docs/security-review.md`.
 - [x] GitHub conectado a Supabase sobre la rama main.
