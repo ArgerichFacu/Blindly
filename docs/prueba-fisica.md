@@ -2,6 +2,14 @@
 
 Usá el [APK preview final de Blindly 1.0.0](https://expo.dev/artifacts/eas/aLs3Sth11h66H3Ddz78F5OyXDiDFnTBuDdb4-zb1xL0.apk). Su SHA-256 es `45B2E3AAAE4D27338FF831ABFE009D54D00AE15861DF6DEA942C620A412FFDC9`; verificá ese valor si descargaste más de una build. Este APK mantiene Plus desactivado y permite probar el juego completo sin cobros. Para una prueba completa hacen falta al menos tres celulares Android conectados a Internet.
 
+En Windows, `scripts/android-device-test.ps1` valida que el APK sea exactamente la build aprobada, detecta un teléfono autorizado, instala y abre Blindly, y guarda una captura junto con los datos del dispositivo en `release/device-tests/`. Conectá un solo teléfono, activá **Opciones de desarrollador > Depuración USB**, aceptá la huella RSA y ejecutá:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\android-device-test.ps1
+```
+
+Podés indicar otra herramienta o archivo con `-AdbPath` y `-ApkPath`. `-ValidateOnly` comprueba el hash y ADB sin acceder a ningún dispositivo; `-SkipInstall` vuelve a abrir una instalación existente.
+
 ## 1. Instalación y arranque
 
 1. Instalá el mismo APK en todos los celulares.
