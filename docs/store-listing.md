@@ -90,7 +90,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\create-play-console-package.p
    En el cuestionario IARC, declarar de forma exacta la temática de poker y el uso de fichas virtuales; no seleccionar público infantil. Blindly no admite dinero, premios de valor real, anuncios de apuestas ni enlaces a casinos.
 4. Cargar el ícono, el gráfico de funciones, al menos dos capturas reales y los textos localizados.
 5. Cargar el AAB de producción en una pista interna y resolver cualquier informe previo al lanzamiento.
-6. Crear una prueba cerrada. Si la cuenta personal fue creada después del 13 de noviembre de 2023, mantener al menos 12 testers inscritos de forma continua durante 14 días y después solicitar acceso a producción desde el panel de Play Console.
+6. Crear una prueba cerrada. Si la cuenta personal fue creada después del 13 de noviembre de 2023, seguir el [`plan de prueba cerrada`](play-closed-test.md), mantener al menos 12 testers inscritos de forma continua durante 14 días y después solicitar acceso a producción desde el panel de Play Console.
 7. Ingresar la URL pública de eliminación de cuenta y comprobar que el formulario reconoce que Blindly crea cuentas.
 8. Crear y vincular los productos de Blindly Plus descritos en [`blindly-plus.md`](blindly-plus.md).
 

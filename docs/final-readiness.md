@@ -35,7 +35,7 @@ Los binarios Android se generaron desde `07aff0db39e14643060e102ec9cfb07a116450f
 3. Guardar al menos dos capturas aprobadas y definir el correo público de soporte.
 4. Crear la cuenta completa de Play Console, crear `com.blindly.app` y cargar el AAB primero en prueba interna.
 5. Completar los formularios de contenido, acceso, público, seguridad de datos y eliminación de cuenta.
-6. Mantener al menos 12 testers inscritos continuamente en una prueba cerrada durante 14 días y solicitar acceso a producción.
+6. Ejecutar [`play-closed-test.md`](play-closed-test.md), mantener al menos 12 testers inscritos continuamente durante 14 días y solicitar acceso a producción.
 7. Crear los productos comerciales de Plus, configurar RevenueCat producción, reconstruir y validar compra/restauración antes de activar Plus.
 8. Para iPhone físico, contratar Apple Developer y elegir entre IPA *ad hoc* con UDID o TestFlight cerrado.
 

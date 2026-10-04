@@ -53,7 +53,7 @@ La matriz consolidada de evidencia y dependencias externas está en [`final-read
 - [ ] Capturar al menos dos pantallas reales del APK aceptado para la ficha de Google Play.
 - [ ] Definir un correo público de soporte y privacidad.
 - [ ] Crear `com.blindly.app` en Play Console y completar acceso, clasificación, público objetivo y seguridad de datos.
-- [ ] Cargar el AAB en prueba interna, revisar el informe previo al lanzamiento y después ejecutar una prueba cerrada con al menos 12 testers inscritos de forma continua durante 14 días, requisito de las cuentas personales creadas después del 13 de noviembre de 2023.
+- [ ] Cargar el AAB en prueba interna, revisar el informe previo al lanzamiento y después ejecutar [`play-closed-test.md`](play-closed-test.md) con al menos 12 testers inscritos de forma continua durante 14 días, requisito de las cuentas personales creadas después del 13 de noviembre de 2023.
 - [ ] Solicitar acceso a producción en Play Console cuando la prueba cerrada cumpla el plazo y conservar un registro de los dispositivos, recorridos probados, comentarios y correcciones.
 - [ ] Contratar o vincular una membresía Apple Developer, crear las credenciales de distribución en EAS y registrar los UDID de los iPhone; el intento `preview` no interactivo confirmó que todavía no existe un certificado ni perfil *ad hoc*. Después, generar la IPA privada o preparar el grupo cerrado de TestFlight.
 - [ ] Crear los productos comerciales de Blindly Plus en Google Play Console y vincularlos con RevenueCat.

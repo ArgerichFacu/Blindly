@@ -33,6 +33,7 @@ $files = @(
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\store-listing.md'); Destination = 'metadatos/store-listing.md' },
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\release-checklist.md'); Destination = 'metadatos/release-checklist.md' },
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\final-readiness.md'); Destination = 'metadatos/final-readiness.md' },
+  [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\play-closed-test.md'); Destination = 'metadatos/play-closed-test.md' },
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\security-review.md'); Destination = 'metadatos/security-review.md' },
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\privacy.html'); Destination = 'legal/privacy.html' },
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\account-deletion.html'); Destination = 'legal/account-deletion.html' },
