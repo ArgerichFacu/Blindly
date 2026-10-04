@@ -50,7 +50,9 @@ Deno.serve(async (request: Request) => {
   );
 
   let entitlement: EntitlementRevenueCat | null = null;
-  if (respuesta.status === 200) {
+  // RevenueCat devuelve 201 la primera vez que materializa un subscriber.
+  // El cuerpo tiene el mismo formato que la respuesta 200 posterior.
+  if (respuesta.status === 200 || respuesta.status === 201) {
     const cuerpo = await respuesta.json();
     entitlement =
       (cuerpo?.subscriber?.entitlements?.blindly_plus as

@@ -20,6 +20,7 @@ assert.match(
 assert.match(serverSource, /REVENUECAT_SECRET_KEY/);
 assert.match(serverSource, /authClient\.auth\.getUser\(token\)/);
 assert.match(serverSource, /entitlements\?\.blindly_plus/);
+assert.match(serverSource, /respuesta\.status === 200 \|\| respuesta\.status === 201/);
 assert.match(serverSource, /\.from\("accesos_plus"\)\.upsert/);
 assert.doesNotMatch(serverSource, /EXPO_PUBLIC_/);
 
