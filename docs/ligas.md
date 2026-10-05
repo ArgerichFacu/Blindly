@@ -90,4 +90,4 @@ Ejecutá `npm test`, `npm run typecheck` y `npm run build:bundles` después de c
 
 ## Alcance de este sprint
 
-Las fases cerradas en esta entrega son auditoría, modelo de datos, migración y RLS, ligas, temporadas, integración con el resultado autoritativo del torneo y ranking. Mesa habitual, Head-to-Head, Recap, tarjetas para compartir y ampliaciones del historial Free/Plus quedan fuera de esta migración y no deben confundirse con funcionalidad incompleta de Ligas.
+Esta migración cierra auditoría, modelo de datos, RLS, ligas, temporadas, integración con el resultado autoritativo y ranking. Mesa habitual, Head-to-Head, Recap, tarjetas para compartir e historial Free/Plus se implementan de forma incremental en `17_plus_mesas_estadisticas_recap.sql`; consultá [experiencia Plus](experiencia-plus.md).

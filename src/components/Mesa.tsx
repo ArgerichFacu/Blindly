@@ -1,6 +1,6 @@
 import { PantallaCarga } from "./PantallaCarga";
 import { useRangosMesa } from "../lib/puntuacion";
-import { useRouter, useFocusEffect } from "expo-router";
+import { useRouter, useFocusEffect, type Href } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Modal, ScrollView, View, StyleSheet } from "react-native";
 import QRCode from "react-native-qrcode-svg";
@@ -484,10 +484,17 @@ export function Mesa({ codigo }: { codigo: string }) {
         </>
       )}
       {finalizada && (
-        <Boton
-          titulo={t("Ver mis puntos")}
-          onPress={() => router.push("/puntuacion")}
-        />
+        <>
+          <Boton
+            titulo={t("Ver resumen de la partida")}
+            onPress={() => router.push(`/recap?sala=${encodeURIComponent(sala.id)}` as Href)}
+          />
+          <Boton
+            titulo={t("Ver mis puntos")}
+            secundario
+            onPress={() => router.push("/puntuacion")}
+          />
+        </>
       )}
       <Seccion
         titulo={t("Jugadores") + " · " + jugadores.length + "/10"}

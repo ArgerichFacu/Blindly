@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useRouter, useFocusEffect } from "expo-router";
+import { useRouter, useFocusEffect, type Href } from "expo-router";
 import { View } from "react-native";
 import {
   Pantalla,
@@ -12,12 +12,10 @@ import {
 import { miPuntuacion, PUNTOS_F1, type Puntuacion } from "../lib/puntuacion";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
-import { usePlus } from "../lib/PlusContext";
 export default function MiPuntuacion() {
   const router = useRouter();
   const { t, mensajeError, preferencias } = usePreferencias(),
-    { tema } = useTema(),
-    plus = usePlus();
+    { tema } = useTema();
   const [datos, setDatos] = useState<Puntuacion | null>(null),
     [error, setError] = useState<unknown>(null),
     [revision, setRevision] = useState(0),
@@ -42,17 +40,16 @@ export default function MiPuntuacion() {
   );
   const numero = (n: number) =>
     n.toLocaleString(preferencias.idioma, { maximumFractionDigits: 3 });
-  const metricas = datos
+  const metricas = datos?.estadisticas
     ? [
-        ["Puntos por partida", datos.partidas ? datos.puntos / datos.partidas : 0],
-        ["Victorias en las últimas 30", datos.historial.filter((h) => h.puesto === 1).length],
-        ["Podios en las últimas 30", datos.historial.filter((h) => h.puesto <= 3).length],
-        [
-          "Mejor puesto en las últimas 30",
-          datos.historial.length
-            ? Math.min(...datos.historial.map((h) => h.puesto))
-            : null,
-        ],
+        ["Partidas jugadas", datos.estadisticas.partidas],
+        ["Victorias", datos.estadisticas.victorias],
+        ["Podios", datos.estadisticas.podios],
+        ["Win rate", `${numero(datos.estadisticas.win_rate)}%`],
+        ["Posición promedio", datos.estadisticas.posicion_media],
+        ["Mejor posición", datos.estadisticas.mejor_posicion],
+        ["Peor posición", datos.estadisticas.peor_posicion],
+        ["Mejor racha de victorias", datos.estadisticas.mejor_racha_victorias],
       ] as const
     : [];
   return (
@@ -102,7 +99,7 @@ export default function MiPuntuacion() {
               )}
             </Texto>
           </Tarjeta>
-          {(!plus.disponible || plus.activo) && (
+          {!!datos.estadisticas && (
             <Seccion titulo={t("Métricas Plus")} inicial>
               <Tarjeta>
                 {metricas.map(([etiqueta, valor]) => (
@@ -116,14 +113,26 @@ export default function MiPuntuacion() {
                   >
                     <Texto suave>{t(etiqueta)}</Texto>
                     <Texto style={{ color: tema.acento, fontWeight: "700" }}>
-                      {valor === null ? "—" : numero(valor)}
+                      {valor === null ? "—" : typeof valor === "number" ? numero(valor) : valor}
                     </Texto>
                   </View>
                 ))}
               </Tarjeta>
+              {datos.estadisticas.por_mes.length > 0 && (
+                <Tarjeta>
+                  <Texto style={{ fontWeight: "700" }}>{t("Rendimiento por mes")}</Texto>
+                  {datos.estadisticas.por_mes.slice(-6).map((mes) => (
+                    <View key={mes.mes} style={{ flexDirection: "row", justifyContent: "space-between", gap: 8 }}>
+                      <Texto suave>{mes.mes}</Texto>
+                      <Texto>{t("{n} partidas · {p} pts", { n: mes.partidas, p: numero(mes.puntos) })}</Texto>
+                    </View>
+                  ))}
+                </Tarjeta>
+              )}
+              <Boton titulo={t("Comparar con amigos")} secundario onPress={() => router.push("/head-to-head" as Href)} />
             </Seccion>
           )}
-          {plus.disponible && !plus.activo && (
+          {!datos.estadisticas && (
             <Tarjeta>
               <Texto style={{ fontWeight: "700" }}>{t("Métricas Plus")}</Texto>
               <Texto suave>
@@ -136,6 +145,11 @@ export default function MiPuntuacion() {
             </Tarjeta>
           )}
           <Seccion titulo={t("Mis últimas partidas")} inicial>
+            <Texto suave>
+              {t(datos.historial_completo
+                ? "Blindly Plus muestra tu historial completo."
+                : "Blindly Free muestra tus últimas 10 partidas. Tu historial anterior sigue guardado.")}
+            </Texto>
             {datos.historial.length === 0 ? (
               <Texto suave>
                 {t(

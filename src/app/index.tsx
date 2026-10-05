@@ -1,5 +1,5 @@
 import { LogoBlindly } from "../components/LogoBlindly";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 import { View } from "react-native";
 import {
   Pantalla,
@@ -52,6 +52,12 @@ export default function Menu() {
         detalle={t("Temporadas, ranking y partidas de tu grupo.")}
         simbolo="🏆"
         onPress={() => router.push("/ligas")}
+      />
+      <Acceso
+        titulo={t("Mis mesas")}
+        detalle={t("Plantillas listas para tu grupo habitual.")}
+        simbolo="♣"
+        onPress={() => router.push("/mesas" as Href)}
       />
       <Acceso
         titulo={t("Mi puntuación")}

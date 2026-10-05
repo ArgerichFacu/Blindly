@@ -70,7 +70,8 @@
         }
       ],
       "expo-asset",
-      "./plugins/with-revenuecat-android"
+      "./plugins/with-revenuecat-android",
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true,

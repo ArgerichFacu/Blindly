@@ -6,7 +6,7 @@ El asesor de seguridad informa cero errores. Sus 22 advertencias se revisaron in
 
 ## Tablas internas sin escritura cliente
 
-`operaciones_mesa`, `puntuacion_partidas` y `accesos_plus` tienen RLS activo y no permiten escrituras directas de `anon` ni `authenticated`. `accesos_plus` tampoco permite lectura cliente: solo la Edge Function autenticada puede actualizar el entitlement mediante `service_role`.
+`operaciones_mesa`, `puntuacion_partidas`, `accesos_plus` y `mesas_habituales` tienen RLS activo y no permiten escrituras directas de `anon` ni `authenticated`. `accesos_plus` tampoco permite lectura cliente: solo la Edge Function autenticada puede actualizar el entitlement mediante `service_role`. Las plantillas conceden lectura únicamente al owner y sus mutaciones pasan por RPC con verificación de Plus.
 
 Las tablas `ligas`, `liga_temporadas`, `liga_miembros` y `liga_partidas` conceden únicamente lectura a `authenticated`, limitada por políticas que verifican que `auth.uid()` sea owner o miembro activo. Todas las escrituras pasan por RPC acotadas. Agregar políticas permisivas para silenciar avisos ampliaría innecesariamente la superficie de acceso.
 
@@ -16,6 +16,7 @@ Las quince RPC ejecutables por `authenticated` son:
 
 - Mesa y puntuación: `accion_mesa`, `unirse_mesa`, `mi_puntuacion` y `rangos_mesa`.
 - Ligas y suscripción: `mi_estado_plus`, `crear_liga`, `actualizar_liga`, `crear_temporada`, `finalizar_temporada`, `quitar_miembro`, `mis_ligas`, `mis_temporadas_propias`, `ranking_liga`, `detalle_liga` y `crear_sala(jsonb, uuid)`.
+- Experiencia Plus: `mis_mesas_habituales`, `guardar_mesa_habitual`, `eliminar_mesa_habitual`, `crear_sala_desde_mesa`, `mi_head_to_head` y `recap_partida`.
 
 Todas usan `search_path=''`, exigen sesión y aplican comprobaciones de ownership, pertenencia, estado o entitlement según la operación. Las funciones internas de mesa y los helpers de Plus no son ejecutables por roles cliente. `anon` no puede ejecutar las fachadas.
 
@@ -45,7 +46,7 @@ Referencias: [seguridad de la API de datos](https://supabase.com/docs/guides/api
 
 ## Dependencias JavaScript
 
-La revisión del 5 de octubre de 2026 produjo cero vulnerabilidades críticas. `npm audit --audit-level=critical` informó 22 altas y 12 moderadas en dependencias transitivas de Expo CLI, Metro, prebuild y React Native, pero ninguna crítica y ninguna corrección compatible automática.
+La revisión del 5 de octubre de 2026 produjo cero vulnerabilidades críticas. `npm audit --audit-level=critical` informó 23 altas y 13 moderadas en dependencias transitivas de Expo CLI, Metro, prebuild y React Native, pero ninguna crítica y ninguna corrección compatible automática.
 
 `npm audit fix --force` propone versiones incompatibles, incluida una regresión a Expo 44, por lo que no debe ejecutarse. La matriz obligatoria permanece en Expo SDK 57 y se valida con Expo Doctor, compatibilidad de paquetes, TypeScript, ESLint, pruebas y exportación de bundles en CI.
 

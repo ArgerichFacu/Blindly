@@ -5,13 +5,16 @@ import { usePreferencias } from "../lib/Preferencias";
 import { crearSala, type Sala } from "../lib/salas";
 import { unirseASala } from "../lib/jugadores";
 import { NIVELES_REGULAR } from "../lib/niveles";
+import { crearSalaDesdeMesa } from "../lib/mesasHabituales";
 export default function CrearSala() {
   const router = useRouter(),
     { t, mensajeError } = usePreferencias();
-  const { temporada, liga, temporadaNombre } = useLocalSearchParams<{
+  const { temporada, liga, temporadaNombre, mesa, mesaNombre } = useLocalSearchParams<{
     temporada?: string;
     liga?: string;
     temporadaNombre?: string;
+    mesa?: string;
+    mesaNombre?: string;
   }>();
   const [nombre, setNombre] = useState(""),
     [ocupado, setOcupado] = useState(false),
@@ -30,7 +33,9 @@ export default function CrearSala() {
     try {
       const sala =
         creada.current ??
-        (await crearSala(NIVELES_REGULAR, temporada?.trim() || null));
+        (mesa
+          ? await crearSalaDesdeMesa(mesa)
+          : await crearSala(NIVELES_REGULAR, temporada?.trim() || null));
       creada.current = sala;
       await unirseASala(sala.codigo, nombre);
       router.replace({ pathname: "/sala", params: { codigo: sala.codigo } });
@@ -61,6 +66,13 @@ export default function CrearSala() {
           <Texto suave>
             {t("Al finalizar, los puntos se sumarán automáticamente al ranking de esta temporada.")}
           </Texto>
+        </Tarjeta>
+      )}
+      {!!mesa && (
+        <Tarjeta>
+          <Etiqueta>{t("MESA HABITUAL")}</Etiqueta>
+          <Texto style={{ fontWeight: "700", fontSize: 17 }}>{mesaNombre ?? t("Mesa habitual")}</Texto>
+          <Texto suave>{t("La sala se creará con la configuración guardada. Podrás ajustarla antes de iniciar.")}</Texto>
         </Tarjeta>
       )}
       <Campo

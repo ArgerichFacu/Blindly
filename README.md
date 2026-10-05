@@ -19,6 +19,9 @@ Aplicación desarrollada con Expo, React Native, TypeScript y Supabase. La rama 
 - Elegir tema verde, rojo o negro e idioma español, inglés o portugués.
 - Activar música de ambiente y consultar tu puntuación e historial personal.
 - Crear ligas Plus con temporadas, miembros invitados Free, historial de torneos y ranking compartido.
+- Guardar mesas habituales Plus con jugadores de referencia, fichas, ciegas, duración, tema y liga opcional.
+- Consultar estadísticas avanzadas, historial completo y comparaciones privadas entre amigos con Plus.
+- Ver un recap al terminar cada torneo y, con Plus, compartir una tarjeta vertical del resultado.
 
 Blindly acompaña la mesa: las cartas se reparten físicamente y el dealer determina los ganadores. La app no evalúa automáticamente las manos.
 
@@ -44,7 +47,7 @@ Al finalizar un torneo se asignan puntos una sola vez. Se parte de la escala `25
 
 Las eliminaciones simultáneas se ordenan por el stack previo; si persiste el empate, comparten posición y promedian los puntos de los puestos ocupados. El historial se conserva aunque se elimine la sala.
 
-Cada jugador consulta sus propios puntos e historial. Los demás participantes solo ven su posición en el ranking al compartir una sala. El acceso se controla mediante políticas y funciones de la base de datos.
+Cada jugador consulta sus propios puntos e historial. Free recibe sus 10 resultados más recientes; el historial anterior permanece guardado y aparece completo al activar Plus. Las comparaciones entre amigos solo agregan resultados de partidas compartidas y nunca revelan el historial ajeno. Los demás participantes solo ven la posición global al compartir una sala. El acceso se controla mediante políticas y funciones de la base de datos.
 
 ## Empezar en otra PC
 
@@ -104,7 +107,7 @@ Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md). La 
 
 ## Supabase
 
-Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `16`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos. En el proyecto conectado, la fuente de verdad para cambios ya aplicados es `supabase/migrations/`.
+Los scripts numerados de `supabase/` contienen la evolución del esquema y sus funciones. Para un proyecto nuevo, revisalos y aplicalos en orden del `01` al `17`, configurando autenticación anónima y Realtime según el esquema. No son un comando de reinicio ni deben ejecutarse de nuevo indiscriminadamente sobre una base con datos. En el proyecto conectado, la fuente de verdad para cambios ya aplicados es `supabase/migrations/`.
 
 | Scripts | Área |
 | --- | --- |
@@ -119,6 +122,7 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `14_salas_privadas.sql` | Lectura de salas limitada al host y a sus participantes |
 | `15_monto_igualar.sql` | Confirmación y validación del monto exacto al igualar |
 | `16_ligas_temporadas_ranking.sql` | Ligas Plus, temporadas, asociación segura de resultados, ranking y verificación server-side del entitlement |
+| `17_plus_mesas_estadisticas_recap.sql` | Mesas habituales, historial Free/Plus, estadísticas privadas, head-to-head y recap autoritativo |
 
 La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas. La [revisión de seguridad remota](docs/security-review.md) documenta los permisos efectivos y los avisos intencionales del asesor de Supabase.
 
@@ -126,7 +130,7 @@ Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren con
 
 ## Blindly Plus
 
-La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Plus permite que un host cree ligas privadas, temporadas y partidas asociadas con ranking; los invitados Free participan normalmente. También habilita métricas avanzadas, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis.
+La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Plus permite que un host cree ligas privadas, temporadas y partidas asociadas con ranking; los invitados Free participan normalmente. También habilita mesas habituales, historial completo, métricas avanzadas, head-to-head privado, tarjetas de recap, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis.
 
 La administración de ligas no confía en el estado del teléfono. La Edge Function `sincronizar-plus` consulta RevenueCat con un secreto de servidor y las RPC de Supabase exigen una verificación vigente. Si el owner cancela, la liga queda en modo lectura y conserva todos sus datos. Arquitectura y pruebas: [ligas, temporadas y ranking](docs/ligas.md).
 
@@ -187,7 +191,7 @@ eas.json           Perfiles de compilación
 | `npm run build:bundles` | Verificar los paquetes JavaScript de web, Android e iOS |
 | `npm test` | Ejecutar las pruebas automatizadas |
 
-Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migraciones. Cubren turnos, permisos, conservación de fichas, pozos, puntuación, ligas, temporadas, invitados Free, cancelación/restauración de Plus, RLS, privacidad y operaciones repetidas. Las pruebas de sesión usan dobles de Supabase: no envían correos ni sustituyen una prueba de autenticación real.
+Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migraciones. Cubren turnos, permisos, conservación de fichas, pozos, puntuación, ligas, temporadas, mesas habituales, invitados Free, cancelación/restauración de Plus, historial Free/Plus, estadísticas, head-to-head, recap, RLS, privacidad y operaciones repetidas. Las pruebas de sesión usan dobles de Supabase: no envían correos ni sustituyen una prueba de autenticación real.
 
 ## Pendientes antes de publicar
 

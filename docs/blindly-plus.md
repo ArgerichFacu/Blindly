@@ -16,9 +16,9 @@ El precio regular previsto para el acceso vitalicio es USD 39,99 en una etapa fu
 
 ## Alcance implementado
 
-Plus incorpora ligas privadas, temporadas y ranking compartido, además de métricas avanzadas, temas premium y la edición de niveles de ciegas y descansos. La creación y administración de ligas requiere Plus en el owner; los miembros invitados participan gratis. Ninguna de estas funciones impide que un jugador gratuito participe de una mesa, use los modos estándar o administre el pozo.
+Plus incorpora ligas privadas, temporadas, ranking compartido, mesas habituales, historial completo, métricas avanzadas, head-to-head privado, tarjetas de recap, temas premium y la edición de niveles de ciegas y descansos. La creación y administración de ligas o plantillas requiere Plus en el owner; los miembros invitados participan gratis. Ninguna de estas funciones impide que un jugador gratuito participe de una mesa, use los modos estándar o administre el pozo.
 
-Las ligas se protegen también en servidor. `sincronizar-plus` valida el entitlement en RevenueCat y actualiza `accesos_plus`; las RPC administrativas sólo aceptan verificaciones vigentes. La cancelación conserva ligas y resultados en modo lectura. Consultá [ligas, temporadas y ranking](ligas.md).
+Las funciones premium se protegen también en servidor. `sincronizar-plus` valida el entitlement en RevenueCat y actualiza `accesos_plus`; las RPC administrativas sólo aceptan verificaciones vigentes. La cancelación conserva ligas, plantillas y resultados en modo lectura. Consultá [ligas, temporadas y ranking](ligas.md) y [experiencia Plus](experiencia-plus.md).
 
 ## Arquitectura de compras implementada
 

@@ -141,6 +141,27 @@ export default function Configurar() {
             {t("Jugadores")}: {jugadores.length} · {t("Código de sala")}:{" "}
             {codigo}
           </Texto>
+          {!!sala.configuracion.jugadores_habituales?.length && (
+            <Tarjeta>
+              <Texto style={{ fontWeight: "700" }}>{t("Jugadores habituales esperados")}</Texto>
+              <Texto suave>{t("Es una referencia: cada jugador debe entrar con el código o QR.")}</Texto>
+              {sala.configuracion.jugadores_habituales.map((nombre) => (
+                <View key={nombre} style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                  <Texto style={{ flex: 1 }}>{nombre}</Texto>
+                  <Boton
+                    titulo={t("Quitar")}
+                    compacto
+                    secundario
+                    disabled={accion.ocupado}
+                    onPress={() => accion.ejecutar("configurar", {
+                      seccion: "jugadores_habituales",
+                      valor: sala.configuracion.jugadores_habituales?.filter((j) => j !== nombre) ?? [],
+                    })}
+                  />
+                </View>
+              ))}
+            </Tarjeta>
+          )}
           {!!accion.error && <Texto>{accion.error}</Texto>}
           {accion.incierto && (
             <Boton titulo={t("Reintentar")} onPress={accion.reintentar} />

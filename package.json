@@ -20,6 +20,7 @@
     "expo-keep-awake": "~57.0.2",
     "expo-linking": "~57.0.11",
     "expo-router": "~57.0.24",
+    "expo-sharing": "~57.0.22",
     "expo-splash-screen": "~57.0.9",
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.3",
@@ -37,6 +38,7 @@
     "react-native-screens": "~4.26.0",
     "react-native-svg": "15.15.4",
     "react-native-url-polyfill": "^4.0.0",
+    "react-native-view-shot": "5.1.0",
     "react-native-web": "^0.21.2",
     "react-native-worklets": "0.10.1"
   },
@@ -49,7 +51,7 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
-    "test": "node tests/mesa-logica.cjs && node tests/mesa-sql.cjs && node tests/turnos-sql.cjs && node tests/puntuacion-sql.cjs && node tests/ligas-sql.cjs && node tests/seguridad-sql.cjs && node tests/migrations.cjs && node tests/sesion.cjs && node tests/native-config.cjs && node tests/revenuecat-config.cjs && node tests/store-assets.cjs && node tests/legal-pages.cjs && node tests/traducciones.cjs",
+    "test": "node tests/mesa-logica.cjs && node tests/mesa-sql.cjs && node tests/turnos-sql.cjs && node tests/puntuacion-sql.cjs && node tests/ligas-sql.cjs && node tests/plus-experiencia-sql.cjs && node tests/seguridad-sql.cjs && node tests/migrations.cjs && node tests/sesion.cjs && node tests/native-config.cjs && node tests/revenuecat-config.cjs && node tests/store-assets.cjs && node tests/legal-pages.cjs && node tests/traducciones.cjs",
     "typecheck": "tsc --noEmit",
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",

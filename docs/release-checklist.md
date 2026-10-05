@@ -41,6 +41,10 @@ La matriz consolidada de evidencia y dependencias externas está en [`final-read
 - [x] Proyecto Supabase aislado en la organización Blindly.
 - [x] Proyecto Supabase saludable, ocho migraciones presentes, Edge Functions con JWT y asesores revisados; las advertencias intencionales y sus límites están documentados en `docs/security-review.md`.
 - [x] `sincronizar-plus` validada de extremo a extremo con una identidad temporal, RevenueCat, `mi_estado_plus` y eliminación posterior de la cuenta.
+- [x] Mesas habituales Plus implementadas como plantillas de salas normales, con conservación y modo lectura al cancelar.
+- [x] Historial Free limitado a 10 desde backend e historial completo Plus sin borrar datos anteriores.
+- [x] Estadísticas avanzadas y head-to-head derivados de resultados autoritativos y protegidos en servidor.
+- [x] Recap privado por participante y tarjeta vertical 1080×1920 lista para el share sheet nativo.
 - [x] GitHub conectado a Supabase sobre la rama main.
 - [x] Test Store aislado en EAS `development`; las claves de RevenueCat fueron retiradas de `preview` y nunca estuvieron en `production`.
 

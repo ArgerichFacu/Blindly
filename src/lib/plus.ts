@@ -68,6 +68,16 @@ export const BENEFICIOS_PLUS = [
     detalle: "Analizá resultados, evolución y rendimiento de tus partidas.",
   },
   {
+    simbolo: "♾",
+    titulo: "Historial completo",
+    detalle: "Revisá todas tus partidas y compará resultados entre amigos.",
+  },
+  {
+    simbolo: "♣",
+    titulo: "Mesas habituales",
+    detalle: "Guardá la configuración de tu grupo y creá la próxima partida en segundos.",
+  },
+  {
     simbolo: "◆",
     titulo: "Temas y ambientaciones premium",
     detalle: "Personalizá la mesa, los sonidos y la experiencia del torneo.",
@@ -76,5 +86,10 @@ export const BENEFICIOS_PLUS = [
     simbolo: "♜",
     titulo: "Estructura personalizada",
     detalle: "Creá tus propios niveles de ciegas y descansos para la mesa.",
+  },
+  {
+    simbolo: "↗",
+    titulo: "Recaps para compartir",
+    detalle: "Convertí el resultado final en una tarjeta lista para tus redes.",
   },
 ] as const;

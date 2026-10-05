@@ -9,7 +9,15 @@ export type Modo = {
   id: "turbo" | "regular" | "deep" | "personalizado";
   niveles: Nivel[];
 };
-export type Configuracion = { fichas?: Fichas; modo?: Modo; musica?: boolean };
+export type Configuracion = {
+  fichas?: Fichas;
+  modo?: Modo;
+  musica?: boolean;
+  mesa_habitual_id?: string;
+  mesa_habitual_nombre?: string;
+  jugadores_habituales?: string[];
+  tema_id?: string;
+};
 
 export function entero(
   texto: string,

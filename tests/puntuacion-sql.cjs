@@ -175,7 +175,10 @@ async function falla(fn, texto) {
     puntos: 0,
     partidas: 0,
     rango: null,
+    plus_activo: false,
+    historial_completo: false,
     historial: [],
+    estadisticas: null,
   });
   await db.exec("reset role; set role anon");
   await falla(() => consulta("select mi_puntuacion()"), "permission denied");
