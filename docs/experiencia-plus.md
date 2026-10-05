@@ -2,6 +2,8 @@
 
 La migración `20261005170548_plus_mesas_estadisticas_recap.sql` completa las fases 8 a 13 del plan freemium. Reutiliza `salas`, `puntuacion_partidas`, `liga_temporadas` y la verificación server-side del entitlement `blindly_plus`.
 
+Está aplicada y registrada en el proyecto remoto `ddvbbkwhisuezloorhfg`. La auditoría del 5 de octubre de 2026 verificó tabla, RLS, política de owner, privilegios, RPC públicas, helpers privados y el límite Free; una prueba real con una identidad temporal confirmó los bloqueos Plus y la privacidad del recap.
+
 ## Mesas habituales
 
 `mesas_habituales` guarda una plantilla privada del owner: nombre, jugadores de referencia, configuración completa de fichas y niveles, tema y temporada opcional. Una plantilla no crea jugadores falsos ni una segunda clase de partida. `crear_sala_desde_mesa` copia sus ajustes a una sala normal; cada persona entra después con el código o QR y el host puede quitar nombres ausentes de la lista de referencia antes de iniciar.

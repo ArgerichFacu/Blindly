@@ -1,8 +1,8 @@
 # Revisión de seguridad de Supabase
 
-Revisión remota realizada el 5 de octubre de 2026 sobre el proyecto `ddvbbkwhisuezloorhfg`. La base contiene las ocho migraciones versionadas de Blindly y las Edge Functions `crear-recuperacion`, `eliminar-cuenta` y `sincronizar-plus`.
+Revisión remota realizada el 5 de octubre de 2026 sobre el proyecto `ddvbbkwhisuezloorhfg`. La base contiene las nueve migraciones versionadas de Blindly y las Edge Functions `crear-recuperacion`, `eliminar-cuenta` y `sincronizar-plus`.
 
-El asesor de seguridad informa cero errores. Sus 22 advertencias se revisaron individualmente: quince corresponden a fachadas `SECURITY DEFINER` que la aplicación necesita invocar, seis al uso deliberado de identidades anónimas con rol `authenticated` y una a la protección de contraseñas filtradas. El asesor de rendimiento informa cero errores, cero advertencias y cuatro sugerencias informativas.
+El asesor de seguridad informa cero errores. Sus advertencias se revisaron individualmente: corresponden principalmente a fachadas `SECURITY DEFINER` que la aplicación necesita invocar, al uso deliberado de identidades anónimas con rol `authenticated` y a la protección de contraseñas filtradas. La política nueva de `mesas_habituales` también aparece como acceso anónimo porque los invitados de Blindly usan el rol `authenticated`; restringe cada fila con `owner_id = auth.uid()`. El asesor de rendimiento mantiene como observación la inicialización de `auth.uid()` en esa política, sin alterar su aislamiento.
 
 ## Tablas internas sin escritura cliente
 
@@ -21,6 +21,8 @@ Las quince RPC ejecutables por `authenticated` son:
 Todas usan `search_path=''`, exigen sesión y aplican comprobaciones de ownership, pertenencia, estado o entitlement según la operación. Las funciones internas de mesa y los helpers de Plus no son ejecutables por roles cliente. `anon` no puede ejecutar las fachadas.
 
 La auditoría remota comprobó catorce invariantes: tablas y migración presentes, RLS activo, caché Plus privada, ausencia de escrituras directas, acceso de `service_role`, bloqueo de `anon`, ejecución autenticada de la fachada, bloqueo del wrapper interno, Plus obligatorio al iniciar una sala de liga, temporada activa, bloqueo de cierre con salas pendientes, ranking derivado de `puntuacion_partidas` y cuatro políticas de lectura. Todos devolvieron `true`.
+
+La migración 17 agregó una segunda auditoría de 20 condiciones. Confirmó `mesas_habituales`, RLS y lectura exclusiva del owner; negó `INSERT`, `UPDATE` y `DELETE` directos a `authenticated`; bloqueó el helper privado y la acción original; comprobó las ocho RPC públicas, el límite Free de 10 partidas y el registro de la migración. Una identidad anónima temporal leyó sus mesas y puntuación, recibió `PLUS_REQUERIDO` al intentar guardar una plantilla o abrir head-to-head, no pudo leer un recap ajeno y se eliminó al terminar.
 
 ## Identidades anónimas
 

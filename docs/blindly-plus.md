@@ -2,7 +2,7 @@
 
 Blindly seguirá siendo utilizable sin pagar. La creación y unión a salas, los turnos, las fichas físicas y virtuales y el reparto del pozo forman parte del producto principal.
 
-El paywall `Blindly Plus` tiene un nuevo diseño guardado como borrador en RevenueCat con textos en español, inglés y portugués. Debe publicarse únicamente tras la confirmación final del propietario. El perfil `development` usa Test Store; las APK `preview` son builds release y mantienen Plus desactivado. Todavía falta validar compra y restauración con una build de desarrollo en hardware real antes de crear los productos comerciales de Google Play.
+El paywall `Blindly Plus` tiene un nuevo diseño guardado como borrador en RevenueCat: fondo verde oscuro, tarjetas verdes, acento dorado, ocho beneficios, anual destacado y textos revisados en español, inglés y portugués. El validador del editor no informa problemas. Debe publicarse únicamente tras la confirmación final del propietario. El perfil `development` usa Test Store; las APK `preview` son builds release y mantienen Plus desactivado. Todavía falta validar compra y restauración con una build de desarrollo en hardware real antes de crear los productos comerciales de Google Play.
 
 ## Precios de lanzamiento
 

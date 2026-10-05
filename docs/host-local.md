@@ -36,6 +36,6 @@ npx expo start --web --lan --port 8090
 
 Abrí http://localhost:8090 en la PC. Para otros equipos de la misma red, usá http://IP-DE-LA-PC:8090 (obtené la dirección IPv4 con ipconfig). Permití Node.js en el firewall para redes privadas si Windows lo solicita. No abras puertos del router para esta prueba local.
 
-Esta PC sirve la app; la base de datos, sesiones y sincronización siguen en Supabase, por lo que se necesita Internet. Todas las migraciones versionadas de `supabase/migrations/`, incluida `20261003005104_monto_igualar.sql`, ya se aplicaron al proyecto `ddvbbkwhisuezloorhfg`: no es necesario volver a ejecutarlas por cambiar de PC. Si creás otro proyecto Supabase, requiere su propia configuración y migraciones.
+Esta PC sirve la app; la base de datos, sesiones y sincronización siguen en Supabase, por lo que se necesita Internet. Las nueve migraciones versionadas de `supabase/migrations/`, incluida `20261005170548_plus_mesas_estadisticas_recap.sql`, ya se aplicaron al proyecto `ddvbbkwhisuezloorhfg`: no es necesario volver a ejecutarlas por cambiar de PC. Si creás otro proyecto Supabase, requiere su propia configuración y migraciones.
 
 El escáner QR web puede requerir HTTPS fuera de localhost; para probar por HTTP desde otro celular, ingresá el código de sala manualmente. Para prueba nativa, consultá docs/identidad-y-build.md. El splash nativo requiere una build real.

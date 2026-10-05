@@ -124,6 +124,8 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `16_ligas_temporadas_ranking.sql` | Ligas Plus, temporadas, asociación segura de resultados, ranking y verificación server-side del entitlement |
 | `17_plus_mesas_estadisticas_recap.sql` | Mesas habituales, historial Free/Plus, estadísticas privadas, head-to-head y recap autoritativo |
 
+Las nueve migraciones están aplicadas y registradas en el proyecto remoto `ddvbbkwhisuezloorhfg`. La migración 17 se auditó además con una identidad Free temporal para comprobar lectura propia, límites Plus, privacidad del recap y eliminación posterior de la cuenta de prueba.
+
 La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas. La [revisión de seguridad remota](docs/security-review.md) documenta los permisos efectivos y los avisos intencionales del asesor de Supabase.
 
 Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren configuración en el servicio de correo. No incluyen credenciales.
@@ -151,7 +153,7 @@ Ya existen dos artefactos Android firmados por EAS para la versión 1.0.0:
 
 Estos binarios son una base nativa anterior a Ligas. Sirven para las pruebas ya documentadas, pero no incluyen la entrega de Ligas, Temporadas y Ranking y no deben cargarse como versión final en Play Store. La próxima compilación nativa deberá generarse desde el commit final del producto y usar un `versionCode` nuevo.
 
-La compilación nativa iOS también fue validada con el [paquete para simulador](https://expo.dev/artifacts/eas/98EZjNOLQrVTD12iljHmRZZqBO1KGpDOkZKIEFKBqOg.tar.gz), build 1, SHA-256 `5673FD59EE3BA234BB5D7B82DF3FACDC01449E79E39E90816FE3E91B94ACEC87`. Este paquete se instala en el simulador de macOS; una IPA para iPhone requiere firma de Apple Developer.
+La entrega actual también compiló en iOS desde el commit `a147e78`: [paquete para simulador](https://expo.dev/artifacts/eas/g2xejQ1cr9udaplB7q_qkhkjpC45ugSIL-xQHg_4bk8.tar.gz), build 1, SHA-256 `03022B72932A77409975C43EF9E7C8C82DA6F259C3A6E4D0E19BFFE089B24A31`. El archivo contiene `Blindly.app`; se verificaron `com.blindly.app`, versión 1.0.0, cifrado exento y los esquemas de enlace. Se instala en el simulador de macOS; una IPA para iPhone requiere firma de Apple Developer.
 
 La ficha y las declaraciones iniciales para las tiendas están en [docs/store-listing.md](docs/store-listing.md).
 
