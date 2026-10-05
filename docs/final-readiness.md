@@ -1,6 +1,6 @@
 # Estado final de preparación de Blindly 1.0.0
 
-Auditoría actualizada el 4 de octubre de 2026. Este documento separa la evidencia técnica comprobada de las acciones que requieren una cuenta externa, dinero, dispositivos físicos o autorización del propietario.
+Auditoría actualizada el 5 de octubre de 2026. Este documento separa la evidencia técnica comprobada de las acciones que requieren una cuenta externa, dinero, dispositivos físicos o autorización del propietario.
 
 ## Resultado por área
 
@@ -8,14 +8,14 @@ Auditoría actualizada el 4 de octubre de 2026. Este documento separa la evidenc
 | --- | --- | --- | --- |
 | Juego y mesa | Implementado | Las pruebas cubren dealer fijo, BTN/SB/BB rotativos, turnos propios, pasar, igualar, subir, retirarse, all-in, pozos principales y secundarios, reparto exclusivo del dealer, stacks protegidos, puntuación e idempotencia. | Completar una partida de aceptación en al menos tres Android reales. |
 | Identidad | Implementada | Invitado persistente, clave privada recuperable, rotación de clave, protección de UUID/puntos/historial/compras y eliminación autenticada de cuenta. | Configurar SMTP y probar el flujo opcional de correo en dos dispositivos. |
-| Supabase | Operativo | Proyecto `ddvbbkwhisuezloorhfg` en estado `ACTIVE_HEALTHY`, Postgres 17.6, siete migraciones remotas y Edge Functions `crear-recuperacion` y `eliminar-cuenta` activas con `verify_jwt=true`. | Ninguno para el flujo por clave. SMTP solo afecta la recuperación opcional por correo. |
-| Seguridad de base | Revisada | Sin avisos de rendimiento. Los avisos de RLS, acceso anónimo y cuatro RPC `SECURITY DEFINER` son intencionales y están limitados por autenticación, pertenencia a sala, UUID y permisos documentados en `security-review.md`. | Rotar la clave privada de RevenueCat que apareció anteriormente en un registro, después de autorización explícita. |
-| Android | Compilado | APK preview `versionCode 4` y AAB production `versionCode 5` terminados en EAS. El AAB fue validado con bundletool 1.18.3: paquete `com.blindly.app`, API 36, no depurable, Billing presente y permisos innecesarios ausentes. | Instalar y ejecutar la matriz de prueba física; obtener capturas reales. |
+| Supabase | Operativo | Proyecto `ddvbbkwhisuezloorhfg` con ocho migraciones remotas y Edge Functions `crear-recuperacion`, `eliminar-cuenta` y `sincronizar-plus`. La prueba real de Auth, RevenueCat, caché servidor, RPC y limpieza temporal terminó correctamente. | SMTP solo afecta la recuperación opcional por correo. |
+| Seguridad de base | Revisada | Los 14 controles remotos de tablas, RLS, privilegios, wrappers, temporadas y ranking devolvieron `true`. El asesor muestra cero errores; rendimiento muestra cero errores y cero advertencias. Los avisos intencionales están documentados en `security-review.md`. | Rotar la clave privada de RevenueCat que apareció anteriormente en un registro, después de autorización explícita. |
+| Android | Bundle JavaScript validado | Expo exportó correctamente web, Android e iOS con Ligas. Los APK/AAB firmados existentes son una base anterior a esta entrega. | Generar una nueva build nativa desde el commit final, incrementar `versionCode` y completar la matriz física antes de Play Store. |
 | iOS | Compilación validada | Build de simulador iOS 1.0.0 terminada en EAS y paquete `.app` descargado. | Membresía Apple Developer, certificados, perfiles y dispositivos registrados para producir una IPA o usar TestFlight. |
-| Blindly Plus | Integrado y aislado | SDK, entitlement, paywall, restauración, administración y borrado de perfil integrados. La oferta Test Store usa mensual USD 0,99, anual USD 9,99 recomendado y Founder Edition vitalicia USD 24,99; el futuro precio regular vitalicio queda reservado en USD 39,99. Test Store existe solo en `development`; `preview` y `production` mantienen Plus desactivado y no contienen una clave Test Store. | Publicar el nuevo borrador del paywall tras la confirmación del propietario, probar compra/restauración en Android real, crear productos de Google Play, configurar la clave de producción y reconstruir. |
+| Blindly Plus | Integrado y protegido | SDK, entitlement, paywall, restauración, administración, borrado de perfil, Ligas, Temporadas y Ranking integrados. `sincronizar-plus` valida RevenueCat desde Supabase y las RPC no confían en el teléfono. Test Store existe solo en `development`; `preview` y `production` mantienen Plus desactivado. | Publicar el nuevo borrador del paywall tras la confirmación del propietario, probar compra/restauración en Android real, crear productos de Google Play, configurar las claves públicas de producción y reconstruir. |
 | Documentación y legales | Preparados | README, política de privacidad, términos, eliminación de cuenta, textos de tienda, gráficos, guía física, revisión de seguridad y paquete de Play Console versionados. | Autorizar y activar GitHub Pages; definir correo público de soporte y privacidad. |
 | Google Play | Paquete preparado | AAB firmado, ficha localizada, icono, gráfico, documentos legales y hashes incluidos en el ZIP. `targetSdkVersion 36` cumple el requisito vigente. | Pagar/crear la cuenta, cargar el bundle, completar formularios, ejecutar prueba cerrada con 12 testers durante 14 días y solicitar producción. |
-| GitHub y CI | Sincronizado | El commit `6f88de7` pasó el workflow [`Verificar Blindly`](https://github.com/ArgerichFacu/Blindly/actions/runs/37219412086), que incluye Expo Doctor, dependencias, TypeScript, ESLint, pruebas y bundles web/Android/iOS. El remoto conserva únicamente `main`. | Ninguno para el código actual. |
+| GitHub y CI | Sincronizado | El commit `13052cf` pasó el workflow [`Verificar Blindly`](https://github.com/ArgerichFacu/Blindly/actions/runs/37243348765), que incluye Expo Doctor, dependencias, TypeScript, ESLint, pruebas y bundles web/Android/iOS. El remoto conserva únicamente `main`. | Ninguno para el código actual. |
 
 ## Artefactos aprobados
 
@@ -26,7 +26,7 @@ Auditoría actualizada el 4 de octubre de 2026. Este documento separa la evidenc
 | Paquete Play Console | Local y OneDrive | 1.0.0 | Verificado al generar; el hash vigente se registra en `release/LEEME.txt`. |
 | Simulador iOS | [`53230fdc-cf5c-4463-b12f-a3e3f7e212c6`](https://expo.dev/accounts/facuargerich/projects/blindly/builds/53230fdc-cf5c-4463-b12f-a3e3f7e212c6) | 1.0.0 (`build 1`) | `5673FD59EE3BA234BB5D7B82DF3FACDC01449E79E39E90816FE3E91B94ACEC87` |
 
-Los binarios Android se generaron desde `07aff0db39e14643060e102ec9cfb07a116450f8`. Los commits posteriores solo actualizan documentación y scripts de entrega, sin cambiar el código incluido en esos binarios.
+Los binarios Android se generaron desde `07aff0db39e14643060e102ec9cfb07a116450f8` y no contienen Ligas, Temporadas ni Ranking. Se conservan como artefactos de referencia; la siguiente versión publicable debe reconstruirse después de cerrar las fases restantes autorizadas por el propietario.
 
 ## Orden restante de publicación
 

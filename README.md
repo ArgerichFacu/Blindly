@@ -145,6 +145,8 @@ Ya existen dos artefactos Android firmados por EAS para la versión 1.0.0:
 - [APK preview instalable](https://expo.dev/artifacts/eas/gMvdiijTDFWPn-ieGNCcx6L72TUeZMKDvx7cOffhK-c.apk), `versionCode 4`, SHA-256 `65216DAD2837E7E2882D5B94B68815495BDCCB86085FCB1A7AD664B87227F85E`.
 - [AAB de producción para Play Store](https://expo.dev/artifacts/eas/mOaH1SBjZr8oFJZ2v6l11InH-A_rpgTT5f0uRpQfffs.aab), `versionCode 5`, SHA-256 `89F753CCFF4A47AC9B2501B220EE4649152FFBD2BC1944522FF7D0ACD581124C`.
 
+Estos binarios son una base nativa anterior a Ligas. Sirven para las pruebas ya documentadas, pero no incluyen la entrega de Ligas, Temporadas y Ranking y no deben cargarse como versión final en Play Store. La próxima compilación nativa deberá generarse desde el commit final del producto y usar un `versionCode` nuevo.
+
 La compilación nativa iOS también fue validada con el [paquete para simulador](https://expo.dev/artifacts/eas/98EZjNOLQrVTD12iljHmRZZqBO1KGpDOkZKIEFKBqOg.tar.gz), build 1, SHA-256 `5673FD59EE3BA234BB5D7B82DF3FACDC01449E79E39E90816FE3E91B94ACEC87`. Este paquete se instala en el simulador de macOS; una IPA para iPhone requiere firma de Apple Developer.
 
 La ficha y las declaraciones iniciales para las tiendas están en [docs/store-listing.md](docs/store-listing.md).

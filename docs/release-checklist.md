@@ -39,7 +39,8 @@ La matriz consolidada de evidencia y dependencias externas está en [`final-read
 - [x] AAB validado con bundletool 1.18.3 y manifiesto compilado inspeccionado: SDK 36, build no depurable, Billing presente y permisos heredados de almacenamiento y superposición ausentes.
 - [x] `targetSdkVersion 36` verificado en el AAB, compatible con el requisito de Android 16/API 36 vigente para nuevas entregas de Google Play desde el 31 de agosto de 2026.
 - [x] Proyecto Supabase aislado en la organización Blindly.
-- [x] Proyecto Supabase saludable, siete migraciones presentes, Edge Functions con JWT y asesores revisados; las advertencias intencionales y sus límites están documentados en `docs/security-review.md`.
+- [x] Proyecto Supabase saludable, ocho migraciones presentes, Edge Functions con JWT y asesores revisados; las advertencias intencionales y sus límites están documentados en `docs/security-review.md`.
+- [x] `sincronizar-plus` validada de extremo a extremo con una identidad temporal, RevenueCat, `mi_estado_plus` y eliminación posterior de la cuenta.
 - [x] GitHub conectado a Supabase sobre la rama main.
 - [x] Test Store aislado en EAS `development`; las claves de RevenueCat fueron retiradas de `preview` y nunca estuvieron en `production`.
 
@@ -64,6 +65,8 @@ La matriz consolidada de evidencia y dependencias externas está en [`final-read
 - [ ] Activar `EXPO_PUBLIC_PLUS_READY` en `production` después de validar compra y restauración con productos reales.
 
 ## Artefactos Android 1.0.0
+
+Estos artefactos se generaron antes de Ligas, Temporadas y Ranking. Se conservan como referencia técnica y no deben cargarse como la versión final actual; la siguiente build necesita un `versionCode` nuevo.
 
 - APK de prueba: [descarga directa](https://expo.dev/artifacts/eas/gMvdiijTDFWPn-ieGNCcx6L72TUeZMKDvx7cOffhK-c.apk), `versionCode 4`, SHA-256 `65216DAD2837E7E2882D5B94B68815495BDCCB86085FCB1A7AD664B87227F85E`.
 - AAB para Google Play: [descarga directa](https://expo.dev/artifacts/eas/mOaH1SBjZr8oFJZ2v6l11InH-A_rpgTT5f0uRpQfffs.aab), `versionCode 5`, SHA-256 `89F753CCFF4A47AC9B2501B220EE4649152FFBD2BC1944522FF7D0ACD581124C`.

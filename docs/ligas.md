@@ -52,6 +52,8 @@ Al restaurar Plus, la siguiente sincronización reactiva la administración con 
 
 La migración incremental es `20261004221957_ligas_temporadas_ranking.sql`. No modifica las migraciones históricas. El archivo numerado `16_ligas_temporadas_ranking.sql` es una copia verificable para reconstruir un proyecto nuevo; las pruebas exigen que ambos archivos permanezcan idénticos.
 
+La migración está aplicada y registrada en el proyecto de producción `ddvbbkwhisuezloorhfg`. Una auditoría remota del 5 de octubre de 2026 verificó las cinco tablas, las cuatro columnas incorporadas, RLS, políticas, privilegios y las RPC. Los catorce controles devolvieron `true`.
+
 ## Despliegue
 
 La función requiere el secreto que ya usa la eliminación de cuenta:
@@ -81,6 +83,8 @@ No guardes la clave de RevenueCat en `.env`, EAS, Git ni una variable `EXPO_PUBL
 - bloqueo del cierre de temporada mientras exista una sala pendiente o activa;
 - finalización y creación de temporadas;
 - retiro de miembros sin borrar resultados históricos.
+
+La verificación remota crea una identidad anónima temporal, invoca `sincronizar-plus`, compara su respuesta con `mi_estado_plus` y elimina la cuenta al finalizar. También cubre la respuesta HTTP `201` que RevenueCat usa al materializar un suscriptor por primera vez.
 
 Ejecutá `npm test`, `npm run typecheck` y `npm run build:bundles` después de cualquier cambio en esta funcionalidad.
 
