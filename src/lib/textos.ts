@@ -1,6 +1,16 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Título personalizado": ["Custom title", "Título personalizado"],
+  "De 2 a 24 caracteres. Sólo en este club; no se traduce.": ["2 to 24 characters. Only in this club; it is not translated.", "De 2 a 24 caracteres. Só neste clube; não é traduzido."],
+  "Guardar título": ["Save title", "Salvar título"],
+  "Quitar título": ["Remove title", "Remover título"],
+  "Editar título": ["Edit title", "Editar título"],
+  "Asignar título": ["Assign title", "Atribuir título"],
+  "Los títulos personalizados requieren Plus vigente del owner. Los guardados siguen visibles.": ["Custom titles require the owner's active Plus. Saved titles remain visible.", "Títulos personalizados exigem Plus ativo do owner. Os títulos salvos continuam visíveis."],
+  "El owner necesita Plus verificado para editar títulos del club.": ["The owner needs verified Plus to edit club titles.", "O owner precisa de Plus verificado para editar títulos do clube."],
+  "El título debe tener entre 2 y 24 caracteres, sin enlaces ni etiquetas.": ["Titles must have 2 to 24 characters, without links or markup.", "O título deve ter de 2 a 24 caracteres, sem links ou marcações."],
+  "Blindly Plus es necesario para esta función premium.": ["Blindly Plus is required for this premium feature.", "Blindly Plus é necessário para esta função premium."],
   "MVP": ["MVP", "MVP"],
   "TIBURÓN": ["SHARK", "TUBARÃO"],
   "REY DEL PODIO": ["PODIUM KING", "REI DO PÓDIO"],
@@ -977,7 +987,9 @@ Object.assign(textos, {
 });
 
 Object.assign(errores, {
-  PLUS_REQUERIDO: "Blindly Plus es necesario para administrar ligas.",
+  PLUS_REQUERIDO: "Blindly Plus es necesario para esta función premium.",
+  PLUS_CLUB_REQUERIDO: "El owner necesita Plus verificado para editar títulos del club.",
+  TITULO_INVALIDO: "El título debe tener entre 2 y 24 caracteres, sin enlaces ni etiquetas.",
   PLUS_NO_VERIFICADO: "No se pudo verificar Blindly Plus. Probá de nuevo.",
   PLUS_SERVIDOR_NO_CONFIGURADO:
     "La verificación de Plus todavía no está configurada en el servidor.",

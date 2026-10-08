@@ -27,6 +27,8 @@ import { ClasificacionTemporada } from "../components/ClasificacionTemporada";
 import { useLigaEnVivo } from "../lib/useLigaEnVivo";
 import { TitulosJugador } from "../components/TitulosJugador";
 import { clasificacion } from "../lib/clasificacion";
+import { permisosClub } from "../lib/permisosClub";
+import { TituloPersonalizado } from "../components/TituloPersonalizado";
 
 export default function Liga() {
   const { id, temporada: temporadaParam } = useLocalSearchParams<{
@@ -74,6 +76,7 @@ export default function Liga() {
   const actualizarRanking = useCallback(() => setRevision(v => v + 1), []);
   const enVivo = useLigaEnVivo(id, temporadaObservada, actualizarRanking);
   const mvpId = datos ? clasificacion(datos.ranking, datos.temporada?.estado).mvp?.user_id : undefined;
+  const permisos = permisosClub(datos);
 
   async function ejecutar(accion: () => Promise<void>) {
     if (ocupado) return;
@@ -270,6 +273,7 @@ export default function Liga() {
             <InvitacionClub key={datos.liga.id} ligaId={datos.liga.id} />
           )}
           <Seccion titulo={t("Miembros")}>
+            {datos.liga.puede_administrar && !permisos.editarTitulos && <Texto suave>{t("Los títulos personalizados requieren Plus vigente del owner. Los guardados siguen visibles.")}</Texto>}
             {datos.miembros.map((miembro) => (
               <View
                 key={miembro.user_id}
@@ -342,6 +346,7 @@ export default function Liga() {
                       }
                     />
                   )}
+                <TituloPersonalizado ligaId={datos.liga.id} usuarioId={miembro.user_id} titulo={miembro.titulo_personalizado} permitido={permisos.editarTitulos} alGuardar={actualizarRanking} />
               </View>
             ))}
           </Seccion>

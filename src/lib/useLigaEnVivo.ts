@@ -14,6 +14,7 @@ export function useLigaEnVivo(liga: string | undefined, temporada: string | null
     const canal = supabase.channel(nombreCanalUnico(`club-${liga}`))
       .on("postgres_changes", { event: "*", schema: "public", table: "liga_partidas", filter: `temporada_id=eq.${temporada}` }, refrescar)
       .on("postgres_changes", { event: "*", schema: "public", table: "liga_temporadas", filter: `liga_id=eq.${liga}` }, refrescar)
+      .on("postgres_changes", { event: "*", schema: "public", table: "liga_miembros", filter: `liga_id=eq.${liga}` }, refrescar)
       .subscribe(estado => {
         if (!vivo) return;
         setEnVivo(estado === "SUBSCRIBED");

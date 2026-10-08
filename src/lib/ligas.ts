@@ -27,6 +27,7 @@ export type TemporadaLiga = {
 };
 
 export type FilaRanking = {
+  titulo_personalizado?: string | null;
   posicion: number;
   user_id: string;
   nombre: string;
@@ -47,6 +48,7 @@ export type PartidaLiga = {
 };
 
 export type MiembroLiga = {
+  titulo_personalizado?: string | null;
   user_id: string;
   nombre: string;
   activo: boolean;
@@ -63,6 +65,7 @@ export type DetalleLiga = {
     puede_administrar: boolean;
     descripcion: string;
     rol: "owner" | "admin" | "member";
+    permisos?: { plus: boolean; editar_titulos: boolean };
   };
   temporada: TemporadaLiga | null;
   temporadas: TemporadaLiga[];
@@ -97,6 +100,10 @@ export async function actualizarClub(ligaId: string, descripcion: string) {
     p_liga: ligaId,
     p_descripcion: descripcion,
   });
+}
+export async function asignarTituloLiga(ligaId: string, usuarioId: string, titulo: string | null) {
+  await prepararAdministracion();
+  await rpc<null>("asignar_titulo_liga", { p_liga: ligaId, p_usuario: usuarioId, p_titulo: titulo });
 }
 export async function cambiarRolLiga(
   ligaId: string,
