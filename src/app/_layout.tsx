@@ -7,6 +7,7 @@ import { TemaProvider } from "../lib/TemaContext";
 import { PreferenciasProvider } from "../lib/Preferencias";
 import { PantallaCarga } from "../components/PantallaCarga";
 import { PlusProvider } from "../lib/PlusContext";
+export const unstable_settings = { anchor: "index" };
 if (Platform.OS !== "web")
   void SplashScreen.preventAutoHideAsync().catch(() => {});
 export default function RootLayout() {

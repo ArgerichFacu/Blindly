@@ -21,6 +21,7 @@ import { usePreferencias } from "../lib/Preferencias";
 import { validarNiveles } from "../lib/mesa";
 import { usePlus } from "../lib/PlusContext";
 import { Boton, Pantalla, Texto } from "../components/Controles";
+import { useVolver } from "../lib/useVolver";
 
 type Fila = {
   id: number;
@@ -89,6 +90,7 @@ function Campo({
 export default function Editor() {
   const { t } = usePreferencias();
   const router = useRouter();
+  const volver = useVolver();
   const { tema } = useTema();
   const plus = usePlus();
   const [filas, setFilas] = useState<Fila[]>([]);
@@ -157,7 +159,7 @@ export default function Editor() {
     try {
       await guardarPersonalizado(resultado);
       await guardarPresetId("personalizado");
-      router.back();
+      volver();
     } catch {
       Alert.alert(t("No se pudo completar. Probá de nuevo."));
     }
@@ -165,7 +167,7 @@ export default function Editor() {
 
   if (plus.disponible && !plus.activo)
     return (
-      <Pantalla titulo={t("Estructura personalizada")}>
+      <Pantalla titulo={t("Estructura personalizada")} onVolver={volver}>
         <Texto>
           {t("Crear niveles y descansos personalizados es una función de Blindly Plus.")}
         </Texto>
@@ -176,7 +178,7 @@ export default function Editor() {
   return (
     <SafeAreaView style={[styles.contenedor, { backgroundColor: tema.fondo }]}>
       <View style={styles.encabezado}>
-        <Pressable onPress={() => router.back()}>
+        <Pressable accessibilityRole="button" accessibilityLabel={t("Cancelar")} onPress={volver}>
           <Text style={[styles.cancelar, { color: tema.textoSuave }]}>
             {t("Cancelar")}
           </Text>

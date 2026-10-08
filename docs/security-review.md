@@ -52,6 +52,8 @@ La revisión del 7 de octubre de 2026 detectó el nuevo aviso crítico de `shell
 
 La matriz incluida en Expo 57.0.26 coincide con los paquetes bloqueados de la release. `expo install --check` y Expo Doctor con `EXPO_OFFLINE=1` verificaron esa matriz (21/21). El informe online recomienda seis parches posteriores: Expo 57.0.27, @expo/ui 57.0.22, expo-asset 57.0.19, expo-constants 57.0.21, expo-linking 57.0.12 y expo-router 57.0.25. CI conserva ese informe online como informativo y exige la matriz fija, auditoría crítica, tipos, lint, pruebas y bundles. Las recomendaciones nuevas deben revisarse al iniciar el siguiente bloque y requieren nuevos binarios si se aplican; este cierre conserva la relación entre los builds y su commit original.
 
+Después del cierre `f953239` se aplicaron los parches recomendados para la siguiente versión. La verificación online pasó 21/21 y CI volvió a exigir tanto `expo install --check` como Expo Doctor online. La auditoría completa posterior informa cero críticas, 22 altas y 13 moderadas. Los binarios de base conservan el commit `a147e78`; estos parches y la nueva navegación necesitan una nueva build.
+
 `npm audit fix --force` propone versiones incompatibles, incluida una regresión a Expo 44, por lo que no debe ejecutarse. La matriz obligatoria permanece en Expo SDK 57 y se valida con Expo Doctor, compatibilidad de paquetes, TypeScript, ESLint, pruebas y exportación de bundles en CI.
 
 Referencias: [aviso de `shell-quote`](https://github.com/advisories/GHSA-pqg4-j6r4-53mv), [aviso de `decode-uri-component`](https://github.com/advisories/GHSA-vcc3-ghjq-m6fr), [aviso de `braces`](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) y [aviso de `node-forge`](https://github.com/advisories/GHSA-86w9-cpqp-85rv).

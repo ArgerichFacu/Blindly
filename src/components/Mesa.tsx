@@ -23,6 +23,7 @@ import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 import { estadoActual, numeroDeNivel } from "../lib/niveles";
 import { ahoraServidor } from "../lib/tiempoServidor";
+import { useSalidaMesa } from "../lib/useSalidaMesa";
 import {
   entero,
   calcularPozos,
@@ -59,6 +60,9 @@ export function Mesa({ codigo }: { codigo: string }) {
     jugadores.length,
   );
   const corriendo = sala?.estado === "jugando";
+  const volver = useSalidaMesa(
+    (!sala && !mesa.error) || corriendo || sala?.estado === "pausada",
+  );
   useFocusEffect(
     useCallback(() => {
       setEnfocada(true);
@@ -86,7 +90,7 @@ export function Mesa({ codigo }: { codigo: string }) {
   if ((!sala || !estado) && !mesa.error) return <PantallaCarga />;
   if (!sala || !estado)
     return (
-      <Pantalla titulo="Blindly">
+      <Pantalla titulo="Blindly" onVolver={volver}>
         <Texto>{mesa.error ? mensajeError(mesa.error) : t("Cargando…")}</Texto>
         {!!mesa.error && (
           <Boton titulo={t("Reintentar")} onPress={mesa.reconectar} />
@@ -203,6 +207,7 @@ export function Mesa({ codigo }: { codigo: string }) {
   );
   return (
     <Pantalla
+      onVolver={volver}
       titulo={t(
         esperando
           ? "Sala de espera"

@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useVolver } from "../lib/useVolver";
 import { useState, type ReactNode } from "react";
 import {
   ScrollView,
@@ -317,18 +317,20 @@ export function Pantalla({
   titulo,
   children,
   volver = true,
+  onVolver,
   subtitulo,
   pie,
 }: {
   titulo: string;
   children: ReactNode;
   volver?: boolean;
+  onVolver?: () => void;
   subtitulo?: string;
   pie?: ReactNode;
 }) {
   const { tema } = useTema(),
-    router = useRouter(),
     { t } = usePreferencias();
+  const regresar = useVolver(volver && !onVolver);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: tema.fondo }}>
       <KeyboardAvoidingView
@@ -344,9 +346,7 @@ export function Pantalla({
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={t("Volver")}
-                onPress={() =>
-                  router.canGoBack() ? router.back() : router.replace("/")
-                }
+                onPress={onVolver ?? regresar}
                 style={[estilos.volver, { borderColor: tema.borde }]}
               >
                 <Texto style={{ fontSize: 22 }}>‹</Texto>

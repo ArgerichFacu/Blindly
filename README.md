@@ -197,6 +197,8 @@ Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migr
 
 ## Pendientes antes de publicar
 
+La release base fue cerrada en `f953239`. `main` ya desarrolla la siguiente versión: navegación Atrás y parches compatibles de Expo 57. Los binarios enlazados arriba conservan el código de `a147e78`. El avance y la aceptación pendiente están en [evolución incremental](docs/evolucion.md).
+
 - Configurar SMTP, aplicar las plantillas y probar la vinculación y recuperación de una identidad con puntos.
 - Instalar el APK EAS ya generado en dispositivos físicos y completar la matriz de aceptación.
 - Validar el splash en arranque en frío, la pausa de música al pasar a segundo plano y la reconexión después de bloquear el teléfono o perder la red.

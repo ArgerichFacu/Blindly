@@ -9,6 +9,13 @@ export const textos: Record<string, [string, string]> = {
   Unirme: ["Join", "Entrar"],
   Opciones: ["Settings", "Opções"],
   Volver: ["Back", "Voltar"],
+  "¿Salir de la mesa?": ["Leave the table?", "Sair da mesa?"],
+  "Seguir en la mesa": ["Stay at the table", "Continuar na mesa"],
+  "Salir de la mesa": ["Leave the table", "Sair da mesa"],
+  "La partida sigue en curso. Salir de esta pantalla no te retira de la mano ni pausa la mesa. Podés volver con el código de sala.": [
+    "The game is still running. Leaving this screen does not fold your hand or pause the table. You can return with the room code.",
+    "A partida continua. Sair desta tela não desiste da mão nem pausa a mesa. Você pode voltar com o código da sala.",
+  ],
   Continuar: ["Continue", "Continuar"],
   Guardar: ["Save", "Salvar"],
   Cancelar: ["Cancel", "Cancelar"],
