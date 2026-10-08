@@ -23,6 +23,8 @@ import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 import { InvitacionClub } from "../components/InvitacionClub";
 import { ProtegerCuenta } from "../components/ProtegerCuenta";
+import { ClasificacionTemporada } from "../components/ClasificacionTemporada";
+import { useLigaEnVivo } from "../lib/useLigaEnVivo";
 
 export default function Liga() {
   const { id, temporada: temporadaParam } = useLocalSearchParams<{
@@ -43,6 +45,7 @@ export default function Liga() {
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [nuevaTemporada, setNuevaTemporada] = useState("");
+  const [observada,setObservada] = useState<{liga:string;temporada:string}|null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -55,6 +58,7 @@ export default function Liga() {
         .then((resultado) => {
           if (!vivo) return;
           setDatos(resultado);
+          setObservada(resultado.temporada ? {liga:resultado.liga.id,temporada:resultado.temporada.id} : null);
           setNombre(resultado.liga.nombre);
           setDescripcion(resultado.liga.descripcion ?? "");
         })
@@ -64,6 +68,9 @@ export default function Liga() {
       };
     }, [id, temporadaId, revision]),
   );
+  const temporadaObservada=observada?.liga===id ? observada.temporada : null;
+  const actualizarRanking = useCallback(() => setRevision(v => v + 1), []);
+  const enVivo = useLigaEnVivo(id, temporadaObservada, actualizarRanking);
 
   async function ejecutar(accion: () => Promise<void>) {
     if (ocupado) return;
@@ -136,6 +143,9 @@ export default function Liga() {
           </View>
 
           <Seccion titulo={t("Ranking")} inicial>
+            <Texto suave>{t(enVivo?"Ranking en vivo":"Podés actualizar el ranking manualmente.")}</Texto>
+            <Boton titulo={t("Actualizar ranking")} compacto secundario disabled={ocupado} onPress={()=>setRevision(v=>v+1)} />
+            <ClasificacionTemporada ranking={datos.ranking} temporada={datos.temporada} movimientos={datos.movimientos} />
             {datos.ranking.length === 0 ? (
               <Texto suave>
                 {t(

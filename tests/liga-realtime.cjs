@@ -1,0 +1,21 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),ts=require('typescript');
+let efecto,app,estado,eliminados=0,listenerRetirado=0,revisiones=0,conectado=false;
+const filtros=[],callbacks=[],canal={on:(_,f,cb)=>{filtros.push(f);callbacks.push(cb);return canal;},subscribe:cb=>{estado=cb;return canal;}};
+const exportsModulo={};
+vm.runInNewContext(ts.transpileModule(fs.readFileSync('src/lib/useLigaEnVivo.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText,{exports:exportsModulo,require:name=>{
+  if(name==='react')return {useCallback:f=>f,useState:()=>[conectado,v=>{conectado=v;}]};
+  if(name==='react-native')return {AppState:{addEventListener:(_,cb)=>{app=cb;return {remove:()=>listenerRetirado++};}}};
+  if(name==='expo-router')return {useFocusEffect:f=>{efecto=f;}};
+  if(name==='./salas')return {nombreCanalUnico:s=>s};
+  if(name==='./supabase')return {supabase:{channel:()=>canal,removeChannel:async c=>{assert.equal(c,canal);eliminados++;}}};
+  throw Error(name);
+}});
+exportsModulo.useLigaEnVivo('club','season',()=>revisiones++);
+const limpiar=efecto();assert.equal(filtros[0].filter,'temporada_id=eq.season');assert.equal(filtros[1].filter,'liga_id=eq.club');
+estado('SUBSCRIBED');assert.equal(conectado,true);assert.equal(revisiones,1);
+callbacks[0]();callbacks[1]();assert.equal(revisiones,3);
+app('background');assert.equal(revisiones,3);app('active');assert.equal(revisiones,4);
+estado('CHANNEL_ERROR');assert.equal(conectado,false);estado('SUBSCRIBED');assert.equal(revisiones,5);
+limpiar();callbacks[0]();estado('SUBSCRIBED');app('active');assert.equal(revisiones,5);assert.equal(eliminados,1);assert.equal(listenerRetirado,1);
+exportsModulo.useLigaEnVivo('club',null,()=>revisiones++);assert.equal(efecto(),undefined);assert.equal(filtros.length,2);
+console.log('Ranking Realtime: filtros, reconexión, regreso a primer plano y limpieza OK');

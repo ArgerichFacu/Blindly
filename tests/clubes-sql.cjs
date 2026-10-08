@@ -380,6 +380,45 @@ async function falla(sql, args, codigo) {
       )[0].p,
       false,
     );
+  // Dos torneos completos: la comparación quita TODOS los resultados del último.
+  await db.exec("reset role");
+  async function torneo(numero, participantes, fecha) {
+    await q("insert into liga_partidas(sala_id,temporada_id,codigo_sala,finalizada_en) values($1,$2,$3,$4)", [uid(numero),second,`T${numero}X`,fecha]);
+    for (const [n,puesto,puntos] of participantes)
+      await q("insert into puntuacion_partidas(sala_id,user_id,jugador_id,jugadores,stack_inicio,puesto,puntos,finalizada_en,temporada_id) values($1,$2,$3,$4,1000,$5,$6,$7,$8)", [uid(numero),uid(n),uid(numero+n+20),participantes.length,puesto,puntos,fecha,second]);
+  }
+  await torneo(900,[[1,1,2],[2,2,1]],"2026-10-01T12:00:00Z");
+  await como(1);
+  assert.deepEqual((await q("select detalle_liga($1,$2) v",[club,second]))[0].v.movimientos,{},"Primera partida: sin cambios inventados");
+  await db.exec("reset role");
+  await torneo(901,[[2,1,4],[5,2,2],[1,3,1]],"2026-10-02T12:00:00Z");
+  await como(1);
+  const clasificacion=(await q("select detalle_liga($1,$2) v",[club,second]))[0].v;
+  assert.deepEqual(clasificacion.ranking.map(f=>[f.user_id,Number(f.posicion),Number(f.puntos)]),[[uid(2),1,5],[uid(1),2,3],[uid(5),3,2]]);
+  assert.deepEqual(clasificacion.movimientos,{[uid(1)]:-1,[uid(2)]:1});
+  assert.equal(clasificacion.movimientos[uid(5)],undefined,"Nuevo participante: no se inventa posición previa");
+  await db.exec("reset role");
+  await q("insert into liga_temporadas(id,liga_id,nombre,estado) values($1,$2,'Empate','finalizada')",[uid(903),club]);
+  await q("update liga_miembros set nombre='Facu' where liga_id=$1 and user_id in ($2,$3)",[club,uid(1),uid(2)]);
+  for(const n of [1,2]) await q("insert into puntuacion_partidas(sala_id,user_id,jugador_id,jugadores,stack_inicio,puesto,puntos,finalizada_en,temporada_id) values($1,$2,$3,2,1000,1,1.5,now(),$4)",[uid(902),uid(n),uid(920+n),uid(903)]);
+  await como(1);
+  const empate=(await q("select detalle_liga($1,$2) v",[club,uid(903)]))[0].v;
+  assert.equal(empate.temporada.estado,"finalizada");
+  assert.deepEqual(empate.ranking.map(f=>[f.user_id,Number(f.posicion)]),[[uid(1),1],[uid(2),2]],"Empate total: UUID estable, un solo puesto 1");
+  await assert.rejects(q("select * from private.ranking_liga_sin_partida($1,$2)",[second,uid(901)]),/permission denied/);
+  await db.exec("reset role");
+  assert.equal((await q("select count(*)::int n from pg_publication_tables where pubname='supabase_realtime' and tablename in ('liga_partidas','liga_temporadas')"))[0].n,2);
+  // Completar fixtures pendientes permite probar el cierre real de la RPC.
+  await q("update salas set estado='finalizada' where temporada_id=$1",[second]);
+  await q("update liga_partidas set finalizada_en=now() where temporada_id=$1 and finalizada_en is null",[second]);
+  await como(1);
+  await q("select finalizar_temporada($1)",[second]);
+  const historica=(await q("select detalle_liga($1,$2) v",[club,second]))[0].v;
+  assert.equal(historica.temporada.estado,'finalizada');
+  assert.equal(historica.ranking[0].user_id,uid(2));
+  const siguiente=(await q("select crear_temporada($1,'2028') id",[club]))[0].id;
+  assert.equal((await q("select detalle_liga($1,$2) v",[club,siguiente]))[0].v.ranking.length,0,'Nueva temporada empieza desde cero');
+  assert.equal((await q("select detalle_liga($1,$2) v",[club,second]))[0].v.ranking.length,3,'Nueva temporada conserva resultados históricos');
   console.log(
     "Clubes: Free, cuenta obligatoria para administrar, legacy, roles, revocación, temporadas, datos y RPC/RLS OK",
   );

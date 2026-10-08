@@ -67,6 +67,7 @@ export type DetalleLiga = {
   temporada: TemporadaLiga | null;
   temporadas: TemporadaLiga[];
   ranking: FilaRanking[];
+  movimientos?: Record<string,number>;
   partidas: PartidaLiga[];
   miembros: MiembroLiga[];
 };

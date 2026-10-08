@@ -1,6 +1,23 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Temporada en curso": ["Season in progress","Temporada em andamento"],
+  "Temporada finalizada": ["Season completed","Temporada finalizada"],
+  "MVP ACTUAL": ["CURRENT MVP","MVP ATUAL"],
+  "CAMPEÓN DE TEMPORADA": ["SEASON CHAMPION","CAMPEÃO DA TEMPORADA"],
+  "{n} victorias": ["{n} wins","{n} vitórias"],
+  "{n} puntos": ["{n} points","{n} pontos"],
+  "El puesto 1 del ranking es el MVP. Cambia con los resultados.": ["The player ranked first is the MVP. It changes with results.","O primeiro colocado do ranking é o MVP. Ele muda com os resultados."],
+  "Esta temporada conserva sus partidas y su clasificación final.": ["This season retains its games and final standings.","Esta temporada conserva suas partidas e sua classificação final."],
+  "Subió {n} posiciones": ["Up {n} places","Subiu {n} posições"],
+  "Bajó {n} posiciones": ["Down {n} places","Caiu {n} posições"],
+  "Mantiene su posición": ["Position unchanged","Mantém sua posição"],
+  "RACE FOR MVP": ["RACE FOR MVP","DISPUTA PELO MVP"],
+  "A {n} puntos del líder": ["{n} points behind the leader","A {n} pontos do líder"],
+  "Una partida puede cambiar el líder.": ["One game can change the leader.","Uma partida pode mudar o líder."],
+  "Ranking en vivo": ["Live standings","Ranking ao vivo"],
+  "Podés actualizar el ranking manualmente.": ["You can update the standings manually.","Você pode atualizar o ranking manualmente."],
+  "Actualizar ranking": ["Update standings","Atualizar ranking"],
   "Protegé tu cuenta para ver tu historial y participar en clubes.": ["Protect your account to view your history and participate in clubs.","Proteja sua conta para ver seu histórico e participar de clubes."],
   "Protegé tu historial con una clave de recuperación en Mi cuenta.": ["Protect your history with a recovery key in My account.","Proteja seu histórico com uma chave de recuperação em Minha conta."],
   "Primero aceptá la invitación del club para jugar esta partida de liga.": ["First accept the club invitation to play this league game.","Primeiro aceite o convite do clube para jogar esta partida da liga."],
