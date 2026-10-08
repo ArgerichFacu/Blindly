@@ -2,7 +2,9 @@
 param(
   [string]$AabPath,
   [string]$OutputPath,
-  [string]$ExpectedSha256 = 'A496C7E80823A7B895ECD3EBA2162F6463ECEB75EFBE3DC9A74C342FAFB8E6C6'
+  [string]$ExpectedSha256 = 'A496C7E80823A7B895ECD3EBA2162F6463ECEB75EFBE3DC9A74C342FAFB8E6C6',
+  [ValidateRange(1,2147483647)] [int]$VersionCode = 6,
+  [string]$ReadinessPath
 )
 
 $ErrorActionPreference = 'Stop'
@@ -13,6 +15,9 @@ if ([string]::IsNullOrWhiteSpace($AabPath)) {
 }
 if ([string]::IsNullOrWhiteSpace($OutputPath)) {
   $OutputPath = Join-Path $repoRoot 'release\Blindly-1.0.0-play-console-package.zip'
+}
+if ([string]::IsNullOrWhiteSpace($ReadinessPath)) {
+  $ReadinessPath = Join-Path $repoRoot 'docs\final-readiness.md'
 }
 
 if (-not (Test-Path -LiteralPath $AabPath -PathType Leaf)) {
@@ -32,7 +37,9 @@ $files = @(
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'assets\store\README.md'); Destination = 'graficos/README.md' },
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\store-listing.md'); Destination = 'metadatos/store-listing.md' },
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\release-checklist.md'); Destination = 'metadatos/release-checklist.md' },
-  [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\final-readiness.md'); Destination = 'metadatos/final-readiness.md' },
+  [pscustomobject]@{ Source = $ReadinessPath; Destination = 'metadatos/final-readiness.md' },
+  [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\evolucion.md'); Destination = 'metadatos/evolucion.md' },
+  [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\qa-metas40.md'); Destination = 'metadatos/qa-metas40.md' },
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\play-closed-test.md'); Destination = 'metadatos/play-closed-test.md' },
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\security-review.md'); Destination = 'metadatos/security-review.md' },
   [pscustomobject]@{ Source = (Join-Path $repoRoot 'docs\privacy.html'); Destination = 'legal/privacy.html' },
@@ -82,11 +89,11 @@ try {
 Blindly 1.0.0 - paquete para Google Play Console
 ================================================
 
-Bundle aprobado:
+Bundle comprobado (aceptacion fisica pendiente):
   bundle/Blindly-1.0.0-playstore.aab
   package: com.blindly.app
   versionName: 1.0.0
-  versionCode: 6
+  versionCode: $VersionCode
   SHA-256: $actualAabSha256
 
 Antes de enviar a revision:

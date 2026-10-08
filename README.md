@@ -151,14 +151,16 @@ RevenueCat Test Store está activo solamente en `development`, donde la build es
 
 `eas.json` incluye perfiles `development`, `preview`, `ios-simulator` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus usa Test Store solo en development; preview y production permanecen desactivados hasta disponer de productos reales. Android se publicará en Google Play; los iPhone de amigos pueden recibir una IPA privada o una invitación cerrada de TestFlight sin publicar Blindly en App Store. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
 
-Los artefactos Android finales de Blindly 1.0.0 fueron generados por EAS desde el commit funcional `a147e78`:
+Los siguientes artefactos son de la release base `a147e78`. No incluyen el desarrollo posterior de las 40 metas; consultar [la entrega actual](docs/release-metas40.md) y su estado de compilación.
+
+La entrega de las 40 metas ya compiló: APK/AAB locales universales `Blindly-metas40-v7` con firma original y simulador iOS `acaf0ba7`. Los archivos están en la carpeta local `release` y su copia OneDrive; hashes, límites de 16 KB y aceptación pendiente están en el informe actual. Para esta entrega se usa `LEEME-metas40.txt`; la tabla siguiente es histórica.
 
 - [APK preview instalable](https://expo.dev/artifacts/eas/ZWvYWkflL1iX6jr9uxLDnwxrTxvjoB3cnHese3Q9DFc.apk), build EAS [`3cd26009-81ce-4a67-8778-87a28d0d121e`](https://expo.dev/accounts/facuargerich/projects/blindly/builds/3cd26009-81ce-4a67-8778-87a28d0d121e), `versionCode 5`, SHA-256 `F62B57844824B5C85AF4E8C8976FF69C1A52C7DD1FD5008C371CE0EB31B12928`.
 - [AAB de producción para Play Store](https://expo.dev/artifacts/eas/CZ76WUrBEQxZXI9k8-C09DHOIVVo2_uotMfpw9nXZ40.aab), build EAS [`da6f7279-a681-4c09-86f9-7b879bdded73`](https://expo.dev/accounts/facuargerich/projects/blindly/builds/da6f7279-a681-4c09-86f9-7b879bdded73), `versionCode 6`, SHA-256 `A496C7E80823A7B895ECD3EBA2162F6463ECEB75EFBE3DC9A74C342FAFB8E6C6`.
 
-El APK verificó su firma v2 y el AAB pasó `bundletool validate` y `jarsigner`. Ambos contienen `com.blindly.app` 1.0.0, SDK objetivo 36 y la entrega actual de Ligas, Temporadas, Ranking y Blindly Plus. El AAB puede cargarse en una pista interna de Google Play cuando esté disponible la cuenta; todavía requiere la prueba física y las acciones externas detalladas en el checklist.
+El APK base verificó su firma v2 y el AAB base pasó `bundletool validate` y `jarsigner`. Ambos contienen `com.blindly.app` 1.0.0, SDK objetivo 36 y el alcance funcional anterior de Ligas, Temporadas, Ranking y Blindly Plus. Se conservan como referencia; requieren prueba física y no representan el código actual de `main`.
 
-La entrega actual también compiló en iOS desde el commit `a147e78`: [paquete para simulador](https://expo.dev/artifacts/eas/g2xejQ1cr9udaplB7q_qkhkjpC45ugSIL-xQHg_4bk8.tar.gz), build 1, SHA-256 `03022B72932A77409975C43EF9E7C8C82DA6F259C3A6E4D0E19BFFE089B24A31`. El archivo contiene `Blindly.app`; se verificaron `com.blindly.app`, versión 1.0.0, cifrado exento y los esquemas de enlace. Se instala en el simulador de macOS; una IPA para iPhone requiere firma de Apple Developer.
+La release base también compiló en iOS desde el commit `a147e78`: [paquete para simulador](https://expo.dev/artifacts/eas/g2xejQ1cr9udaplB7q_qkhkjpC45ugSIL-xQHg_4bk8.tar.gz), build 1, SHA-256 `03022B72932A77409975C43EF9E7C8C82DA6F259C3A6E4D0E19BFFE089B24A31`. El archivo contiene `Blindly.app`; se verificaron `com.blindly.app`, versión 1.0.0, cifrado exento y los esquemas de enlace. Se instala en el simulador de macOS; una IPA para iPhone requiere firma de Apple Developer.
 
 La ficha y las declaraciones iniciales para las tiendas están en [docs/store-listing.md](docs/store-listing.md).
 
@@ -202,15 +204,15 @@ Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migr
 
 ## Pendientes antes de publicar
 
-La release base fue cerrada en `f953239`. `main` ya desarrolla la siguiente versión: navegación Atrás y parches compatibles de Expo 57. Los binarios enlazados arriba conservan el código de `a147e78`. El avance y la aceptación pendiente están en [evolución incremental](docs/evolucion.md).
+La release base fue cerrada en `f953239`. `main` incluye la implementación de las 40 metas y sus pruebas; el avance está en [evolución incremental](docs/evolucion.md) y los binarios nuevos en [release-metas40.md](docs/release-metas40.md). Los enlaces EAS anteriores conservan el código de `a147e78`.
 
 - Configurar SMTP, aplicar las plantillas y probar la vinculación y recuperación de una identidad con puntos.
-- Instalar el APK EAS ya generado en dispositivos físicos y completar la matriz de aceptación.
+- Instalar el APK correspondiente a las 40 metas una vez aprobado y completar la [matriz de aceptación](docs/qa-metas40.md).
 - Validar el splash en arranque en frío, la pausa de música al pasar a segundo plano y la reconexión después de bloquear el teléfono o perder la red.
 - Completar una partida con varios celulares y verificar apuestas, reparto de pozos y cierre del torneo.
 - Probar compra, restauración y eliminación con RevenueCat Test Store en una build `development`; después crear los productos comerciales en las tiendas.
 
-La configuración nativa y las pruebas automatizadas están preparadas; estas verificaciones físicas siguen pendientes. El [estado final de preparación](docs/final-readiness.md) reúne la evidencia comprobada, los artefactos aprobados y el orden exacto de las acciones externas restantes.
+La configuración nativa y las pruebas automatizadas están preparadas; estas verificaciones físicas siguen pendientes. La [entrega actual](docs/release-metas40.md) reúne la evidencia y los bloqueos externos. El [estado de la release base](docs/final-readiness.md) conserva su auditoría histórica.
 
 ## Créditos
 

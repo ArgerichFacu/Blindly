@@ -21,6 +21,9 @@ La matriz automática pasó; **no reemplaza** estas pruebas con la nueva APK. Lo
 - ES/EN/PT: 830 textos, 64 errores. Configuración nativa, recursos, páginas legales, tipos y lint verificados.
 - Iconos: PNG 1024 RGBA, alfa, margen y círculo/squircle/rounded revisados.
 - Bundles web/Android/iOS y CI de GitHub.
+- APK/AAB locales v7 completos y firmados, integridad/manifiestos/certificado original comprobados; simulador iOS de las 40 metas compilado e inspeccionado. Hashes y limitaciones en [release-metas40.md](release-metas40.md).
+- Revisión web real con Metro reiniciado: menú, preferencia de vibraciones y evaluador Free a 390 px; escalera real con exactamente cinco cartas marcadas. No reemplaza pruebas nativas.
+- Android 16 KB: ZIP y PT_LOAD aprobados; criterio estricto de final RELRO pendiente en 45 bibliotecas. No declarar esa aceptación completa con sólo bundletool.
 
 ## Android físico: tres teléfonos
 

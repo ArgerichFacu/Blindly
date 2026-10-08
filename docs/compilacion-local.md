@@ -6,7 +6,7 @@ La compilación local usa Expo SDK 57, Gradle de su plantilla, Android SDK 36 y 
 
 ## Preparación
 
-1. Instalar Java compatible con Gradle 9.3.1 y herramientas oficiales de Android. Esta PC usa `C:\Program Files\Java\jdk-25.0.4` y SDK en `C:\Users\facun\Documents\Codex\android-sdk-blindly`.
+1. Instalar JDK 17 y herramientas oficiales de Android. Esta PC usa Temurin en `C:\Users\facun\Documents\Codex\java17-blindly\jdk-17.0.20.1+1` y SDK en `C:\Users\facun\Documents\Codex\android-sdk-blindly`. El primer intento con Java 25 falló al configurar CMake en dependencias nativas; no se cambió código de la app para ocultar ese fallo.
 2. Instalar platform-tools, plataforma android-36, build-tools 36.0.0, NDK 27.1.12297006 y CMake 3.22.1. Con command-line tools 23, `sdkmanager` deriva al nuevo Android CLI; su compatibilidad acepta rutas con `/`, como `platforms/android-36`, no el formato antiguo con `;`.
 3. Recuperar la firma con `npx eas-cli credentials -p android`, elegir preview y **credentials.json → Download credentials from EAS to credentials.json**. No crear otra firma ni mostrar las contraseñas. `credentials.json` y `credentials/` están excluidos de Git.
 4. Confirmar el próximo versionCode antes de publicar. La compilación local no actualiza automáticamente la versión remota de EAS. No reutilizar un código ya cargado en Play.
@@ -16,7 +16,7 @@ La compilación local usa Expo SDK 57, Gradle de su plantilla, Android SDK 36 y 
 ```powershell
 .\scripts\build-android-local.ps1 `
   -SdkRoot C:\Users\facun\Documents\Codex\android-sdk-blindly `
-  -JavaHome 'C:\Program Files\Java\jdk-25.0.4' `
+  -JavaHome 'C:\Users\facun\Documents\Codex\java17-blindly\jdk-17.0.20.1+1' `
   -VersionCode 7
 ```
 
@@ -29,6 +29,8 @@ Las flags comerciales, email y push se mantienen en false porque faltan tiendas,
 ## Validación y límites
 
 Comprobar firma con apksigner, AAB con bundletool/jarsigner, manifiesto (paquete, versionCode, SDK y permisos), coincidencia con el certificado anterior y SHA-256. Registrar commit fuente y hashes en el informe de la release antes de distribuir. Copiar a OneDrive únicamente binarios validados con nombres distintos de la release anterior.
+
+La compilación v7 terminó correctamente con JDK 17. Ver [release-metas40.md](release-metas40.md) para hashes, firma, simulador iOS y la comprobación pendiente de RELRO/16 KB. El script `verificar-elf-16kb.py` audita APK/AAB; no sustituye `zipalign` ni ejecución nativa. Para empaquetar este AAB usar `create-play-console-package.ps1` con su hash, `-VersionCode 7`, un nombre ZIP distinto y `-ReadinessPath docs/release-metas40.md`. Los valores predeterminados conservan la release base v6.
 
 No hay un Android conectado en la comprobación del 8 de octubre. La generación del APK no permite afirmar que splash, haptics, reconexión o compras funcionan en teléfonos reales. Ejecutar [qa-metas40.md](qa-metas40.md). Windows no permite compilar iOS con Xcode; un bundle JS iOS no es una IPA.
 

@@ -1,5 +1,7 @@
 # Estado final de preparación de Blindly 1.0.0
 
+> Informe histórico de la release base `a147e78`. El estado del desarrollo posterior y sus nuevos binarios se registra en [release-metas40.md](release-metas40.md); no usar los archivos de esta tabla como versión actual de las 40 metas.
+
 Auditoría actualizada el 7 de octubre de 2026. Este documento separa la evidencia técnica comprobada de las acciones que requieren una cuenta externa, dinero, dispositivos físicos o autorización del propietario.
 
 ## Resultado por área
