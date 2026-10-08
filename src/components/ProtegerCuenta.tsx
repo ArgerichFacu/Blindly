@@ -12,10 +12,14 @@ export function ProtegerCuenta({
   error,
   volver,
   liga,
+  seccion,
+  temporada,
 }: {
   error: unknown;
   volver: "ligas" | "liga" | "puntuacion" | "head-to-head";
   liga?: string;
+  seccion?: string;
+  temporada?: string;
 }) {
   const router = useRouter(),
     { t } = usePreferencias();
@@ -26,7 +30,7 @@ export function ProtegerCuenta({
       onPress={() =>
         router.push({
           pathname: "/cuenta",
-          params: { volver, ...(liga ? { liga } : {}) },
+          params: { volver, ...(liga ? { liga } : {}), ...(seccion ? { seccion } : {}), ...(temporada ? { temporada } : {}) },
         })
       }
     />

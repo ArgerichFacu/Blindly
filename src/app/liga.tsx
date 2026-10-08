@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { Alert, View } from "react-native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Alert, ScrollView, View } from "react-native";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import {
   Boton,
@@ -33,11 +33,18 @@ import { ProximaFechaClub } from "../components/ProximaFechaClub";
 import { RivalidadesClub } from "../components/RivalidadesClub";
 import { FeedClub } from "../components/FeedClub";
 import { PreferenciasAvisosClub } from "../components/PreferenciasAvisosClub";
+import { seccionClub, type SeccionClub } from "../lib/destinoAviso";
 
 export default function Liga() {
-  const { id, temporada: temporadaParam } = useLocalSearchParams<{
+  const { id, temporada } = useLocalSearchParams<{ id: string; temporada?: string }>();
+  return <ContenidoLiga key={`${id}:${temporada ?? ""}`} />;
+}
+
+function ContenidoLiga() {
+  const { id, temporada: temporadaParam, seccion } = useLocalSearchParams<{
     id: string;
     temporada?: string;
+    seccion?: string;
   }>();
   const router = useRouter();
   const { t, mensajeError, preferencias } = usePreferencias();
@@ -54,6 +61,16 @@ export default function Liga() {
   const [descripcion, setDescripcion] = useState("");
   const [nuevaTemporada, setNuevaTemporada] = useState("");
   const [observada,setObservada] = useState<{liga:string;temporada:string}|null>(null);
+  const scroll = useRef<ScrollView>(null), posiciones = useRef<Partial<Record<SeccionClub, number>>>({});
+  const destino = seccionClub(seccion), desplazado = useRef("");
+  const irAlDestino = useCallback(() => {
+    const clave = `${id}:${temporadaParam ?? ""}:${destino ?? ""}`;
+    if (!destino || desplazado.current === clave) return;
+    const y = posiciones.current[destino];
+    if (y != null) { scroll.current?.scrollTo({ y, animated: false }); desplazado.current = clave; }
+  }, [id, temporadaParam, destino]);
+  useEffect(() => { desplazado.current = ""; posiciones.current = {}; }, [id, temporadaParam, revision]);
+  useEffect(() => { desplazado.current = ""; irAlDestino(); }, [irAlDestino]);
 
   useFocusEffect(
     useCallback(() => {
@@ -105,11 +122,12 @@ export default function Liga() {
     <Pantalla
       titulo={datos?.liga.nombre ?? t("Liga")}
       subtitulo={datos?.temporada?.nombre ?? t("Sin temporada")}
+      scrollRef={scroll} alMedirContenido={irAlDestino}
     >
       {!!error && (
         <Tarjeta>
           <Texto>{mensajeError(error)}</Texto>
-          <ProtegerCuenta error={error} volver="liga" liga={id} />
+          <ProtegerCuenta error={error} volver="liga" liga={id} seccion={destino ?? undefined} temporada={temporadaParam} />
           <Boton
             titulo={t("Reintentar")}
             onPress={() => setRevision((v) => v + 1)}
@@ -152,7 +170,7 @@ export default function Liga() {
             ))}
           </View>
 
-          <Seccion titulo={t("Ranking")} inicial>
+          <View onLayout={e => { posiciones.current.ranking=e.nativeEvent.layout.y; }}><Seccion titulo={t("Ranking")} inicial>
             <Texto suave>{t(enVivo?"Ranking en vivo":"Podés actualizar el ranking manualmente.")}</Texto>
             <Boton titulo={t("Actualizar ranking")} compacto secundario disabled={ocupado} onPress={()=>setRevision(v=>v+1)} />
             <ClasificacionTemporada ranking={datos.ranking} temporada={datos.temporada} movimientos={datos.movimientos} />
@@ -233,15 +251,15 @@ export default function Liga() {
             )}
           </Seccion>
 
-          <Seccion titulo={t("Próxima fecha")} inicial>
+          </View><View onLayout={e => { posiciones.current.fecha=e.nativeEvent.layout.y; }}><Seccion titulo={t("Próxima fecha")} inicial>
             <ProximaFechaClub liga={datos.liga.id} fecha={datos.proxima_fecha} administrar={datos.liga.puede_administrar} activa={datos.liga.estado === "activa"} alCambiar={actualizarRanking} />
           </Seccion>
 
-          <Seccion titulo={t("Rivalidades")} inicial>
+          </View><View onLayout={e => { posiciones.current.rivalidades=e.nativeEvent.layout.y; }}><Seccion titulo={t("Rivalidades")} inicial>
             <RivalidadesClub datos={datos.rivalidades} pique={datos.preferencias_avisos?.pique === true} />
           </Seccion>
 
-          <Seccion titulo={t("Notificaciones del club")}>
+          </View><Seccion titulo={t("Notificaciones del club")}>
             <PreferenciasAvisosClub liga={datos.liga.id} preferencias={datos.preferencias_avisos}
               actualizar={actualizarRanking} alGuardar={preferencias => setDatos(actual => actual ? { ...actual, preferencias_avisos: preferencias } : null)} />
           </Seccion>

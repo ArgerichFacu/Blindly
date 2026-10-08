@@ -83,6 +83,7 @@ export type DetalleLiga = {
 export type EventoClub = { id: string; fecha: string; precision: "dia" | "instante" } & (
   { tipo: "partida"; codigo: string; jugadores: number | null } |
   { tipo: "temporada"; nombre: string } |
+  { tipo: "mvp"; nombre: string } |
   { tipo: "fecha"; cuando: string }
 );
 

@@ -1,5 +1,5 @@
 import { useVolver } from "../lib/useVolver";
-import { useState, type ReactNode } from "react";
+import { useState, type ReactNode, type RefObject } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -320,6 +320,8 @@ export function Pantalla({
   onVolver,
   subtitulo,
   pie,
+  scrollRef,
+  alMedirContenido,
 }: {
   titulo: string;
   children: ReactNode;
@@ -327,6 +329,8 @@ export function Pantalla({
   onVolver?: () => void;
   subtitulo?: string;
   pie?: ReactNode;
+  scrollRef?: RefObject<ScrollView | null>;
+  alMedirContenido?: () => void;
 }) {
   const { tema } = useTema(),
     { t } = usePreferencias();
@@ -338,6 +342,8 @@ export function Pantalla({
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView
+          ref={scrollRef}
+          onContentSizeChange={alMedirContenido}
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={estilos.pagina}
         >

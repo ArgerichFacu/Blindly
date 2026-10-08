@@ -1,6 +1,11 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "NUEVO MVP": ["NEW MVP", "NOVO MVP"],
+  "{nombre} tomó el MVP": ["{nombre} took the MVP", "{nombre} assumiu o MVP"],
+  "Al guardar con avisos activados, te pediremos permiso en este dispositivo.": ["When saving with notifications enabled, we will ask for permission on this device.", "Ao salvar com avisos ativados, pediremos permissão neste dispositivo."],
+  "Este dispositivo todavía no tiene notificaciones habilitadas.": ["Notifications are not enabled on this device yet.", "As notificações ainda não estão habilitadas neste dispositivo."],
+  "Permití las notificaciones en los ajustes del sistema para recibir los avisos.": ["Allow notifications in your system settings to receive alerts.", "Permita notificações nas configurações do sistema para receber os avisos."],
   "Notificaciones del club": ["Club notifications", "Notificações do clube"],
   "Estas preferencias son tuyas y se conservan al recuperar tu cuenta.": ["These are your preferences and they are preserved when you recover your account.", "Estas preferências são suas e são mantidas ao recuperar sua conta."],
   "El envío push todavía no está habilitado en esta versión.": ["Push delivery is not enabled in this version yet.", "O envio push ainda não está habilitado nesta versão."],
@@ -782,6 +787,8 @@ export const textos: Record<string, [string, string]> = {
 };
 
 export const errores: Record<string, string> = {
+  PUSH_NO_DISPONIBLE: "Este dispositivo todavía no tiene notificaciones habilitadas.",
+  PUSH_PERMISO_DENEGADO: "Permití las notificaciones en los ajustes del sistema para recibir los avisos.",
   AVISOS_CAMBIARON: "Tus preferencias cambiaron en otro dispositivo. Actualizá el club antes de guardar.",
   NOMBRE_INVALIDO: "Completá tu nombre y el código.",
   SESION_REQUERIDA: "No se pudo completar. Probá de nuevo.",

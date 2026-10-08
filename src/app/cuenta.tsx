@@ -33,12 +33,16 @@ export default function Cuenta() {
     liga,
     codigo: codigoClub,
     nombre: nombreMesa,
+    seccion,
+    temporada,
   } = useLocalSearchParams<{
     inicio?: string;
     volver?: string;
     liga?: string;
     codigo?: string;
     nombre?: string;
+    seccion?: string;
+    temporada?: string;
   }>();
   const inicio = useInicio();
   const desdeInicio = origen === "1";
@@ -82,7 +86,7 @@ export default function Cuenta() {
                 })
             : volver === "liga" && liga
               ? () =>
-                  router.replace({ pathname: "/liga", params: { id: liga } })
+                  router.replace({ pathname: "/liga", params: { id: liga, seccion, temporada } })
               : null;
   useFocusEffect(
     useCallback(() => {

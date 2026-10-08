@@ -130,6 +130,8 @@ Antes de enviar push de cambio MVP, se necesita registrar esa transición una so
 
 ## Preferencias de avisos y modo pique (meta 25; base de 26)
 
+El bloque posterior implementó eventos persistentes de MVP, reservas, cupo y servidor de envío; el estado vigente y los pendientes de activación están en [notificaciones.md](notificaciones.md). La descripción siguiente conserva el alcance del bloque inicial de preferencias.
+
 Cada jugador configura sus preferencias Free dentro de **Notificaciones del club**. Se guardan por `(liga_id,user_id)` en `private.preferencias_avisos_club`, nunca por nombre ni en el dispositivo exclusivamente. Cuenta protegida y membresía autorizada son obligatorias. Owner/admin no pueden consultar ni cambiar las preferencias de otros miembros. Recuperar el mismo UUID conserva la configuración; silenciar no borra los interruptores ni el tono elegido. Club archivado puede silenciarse; miembro expulsado pierde acceso mientras conserva su registro para una eventual reincorporación.
 
 Consentimiento general y pique empiezan apagados. Se configuran MVP, rivalidades, próximas fechas, cierre de temporada y recordatorios, más un límite social de 0, 1 o 2 por club/semana. El pique cambia únicamente un mensaje de la tarjeta de némesis cuando hay datos: neutral «Pueden organizar otra fecha para seguir jugando juntos.»; activado «La revancha se juega en la mesa. ¿Organizan otra noche?». No cambia datos, permisos ni cálculos; sin una preferencia guardada se usa el tono neutral.

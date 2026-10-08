@@ -5,12 +5,13 @@ import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 import { guardarPreferenciasAvisos } from "../lib/ligas";
 import { AVISOS_INICIALES, type PreferenciasAvisos } from "../lib/avisosClub";
+import { activarPush, pushDisponible } from "../lib/pushNativo";
 
 export function PreferenciasAvisosClub({ liga, preferencias, alGuardar, actualizar }: {
   liga: string; preferencias?: PreferenciasAvisos;
   alGuardar: (p: PreferenciasAvisos) => void; actualizar: () => void;
 }) {
-  const { t, mensajeError } = usePreferencias();
+  const { t, mensajeError, preferencias: locales } = usePreferencias();
   const { tema } = useTema();
   const [borrador, setBorrador] = useState(preferencias ?? AVISOS_INICIALES);
   const [ocupado, setOcupado] = useState(false), [guardado, setGuardado] = useState(false);
@@ -29,6 +30,7 @@ export function PreferenciasAvisosClub({ liga, preferencias, alGuardar, actualiz
     if (enviando.current || !preferencias) return;
     enviando.current = true; setOcupado(true); setError(null); setGuardado(false);
     try {
+      if (borrador.activos && pushDisponible) await activarPush(locales.idioma);
       const resultado = await guardarPreferenciasAvisos(liga, borrador);
       setBorrador(resultado); alGuardar(resultado); setGuardado(true);
     } catch (e) { setError(e); }
@@ -36,7 +38,7 @@ export function PreferenciasAvisosClub({ liga, preferencias, alGuardar, actualiz
   }
   return <Tarjeta>
     <Texto suave>{t("Estas preferencias son tuyas y se conservan al recuperar tu cuenta.")}</Texto>
-    <Texto suave>{t("El envío push todavía no está habilitado en esta versión.")}</Texto>
+    <Texto suave>{t(pushDisponible ? "Al guardar con avisos activados, te pediremos permiso en este dispositivo." : "El envío push todavía no está habilitado en esta versión.")}</Texto>
     {campos.map(([clave, etiqueta]) => <View key={clave} style={{ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 48 }}>
       <Texto style={{ flex: 1 }}>{t(etiqueta)}</Texto>
       <Switch accessibilityLabel={t(etiqueta)} value={borrador[clave]} disabled={ocupado || !preferencias}

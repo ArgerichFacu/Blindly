@@ -400,6 +400,7 @@ async function falla(sql, args, codigo) {
   await db.exec("reset role");
   await q("insert into liga_temporadas(id,liga_id,nombre,estado) values($1,$2,'Empate','finalizada')",[uid(903),club]);
   await q("update liga_miembros set nombre='Facu' where liga_id=$1 and user_id in ($2,$3)",[club,uid(1),uid(2)]);
+  await q("insert into liga_partidas(sala_id,temporada_id,codigo_sala,finalizada_en) values($1,$2,'TIEZZ',now())",[uid(902),uid(903)]);
   for(const n of [1,2]) await q("insert into puntuacion_partidas(sala_id,user_id,jugador_id,jugadores,stack_inicio,puesto,puntos,finalizada_en,temporada_id) values($1,$2,$3,2,1000,1,1.5,now(),$4)",[uid(902),uid(n),uid(920+n),uid(903)]);
   await como(1);
   const empate=(await q("select detalle_liga($1,$2) v",[club,uid(903)]))[0].v;

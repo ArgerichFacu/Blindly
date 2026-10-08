@@ -38,6 +38,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      ["expo-notifications", { "defaultChannel": "club", "color": "#D5B768" }],
       "expo-router",
       [
         "expo-splash-screen",

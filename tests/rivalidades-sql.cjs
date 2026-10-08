@@ -13,6 +13,7 @@ async function como(n){await db.exec('reset role');await q("select set_config('r
   for(let n=2;n<=7;n++)await q("insert into liga_miembros(liga_id,user_id,nombre) values($1,$2,'Mismo nombre')",[club,uid(n)]);
   async function partida(n,puestos,temporada=season,completa=true){
     await db.exec('reset role');
+    await q('insert into liga_partidas(sala_id,temporada_id,codigo_sala,finalizada_en) values($1,$2,$3,$4)',[uid(100+n),temporada,`R${String(n).padStart(4,'0')}`,completa?new Date(Date.UTC(2026,9,n)).toISOString():null]);
     for(const [user,puesto] of puestos)await q('insert into puntuacion_partidas(sala_id,user_id,jugador_id,jugadores,stack_inicio,puesto,puntos,finalizada_en,temporada_id) values($1,$2,$3,$4,1000,$5,1,$6,$7)',[uid(100+n),uid(user),uid(1000+n*10+user),puestos.length,puesto,completa?new Date(Date.UTC(2026,9,n)).toISOString():null,temporada]);
   }
   await partida(1,[[1,2],[2,1],[3,1],[7,1]]);

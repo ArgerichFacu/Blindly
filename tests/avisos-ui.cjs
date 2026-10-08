@@ -10,6 +10,7 @@ vm.runInNewContext(ts.transpileModule(fs.readFileSync('src/components/Preferenci
  if(name.includes('Preferencias'))return {usePreferencias:()=>({t:s=>s,mensajeError:e=>e.message})};
  if(name.includes('TemaContext'))return {useTema:()=>({tema:{acento:'gold'}})};
  if(name.includes('avisosClub'))return {AVISOS_INICIALES:inicial};
+ if(name.includes('pushNativo'))return {pushDisponible:false};
  if(name.includes('ligas'))return {guardarPreferenciasAvisos:(...args)=>{llamadas++;argumentos=args;return new Promise((res,rej)=>{finalizar=res;rechazar=rej;});}};
  throw Error(name);
 }});
