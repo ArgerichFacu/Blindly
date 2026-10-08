@@ -57,6 +57,7 @@ export type MiembroLiga = {
 };
 
 export type DetalleLiga = {
+  proxima_fecha?: ProximaFecha | null;
   liga: {
     id: string;
     nombre: string;
@@ -74,6 +75,18 @@ export type DetalleLiga = {
   partidas: PartidaLiga[];
   miembros: MiembroLiga[];
 };
+
+export type RespuestaFecha = "voy" | "no_puedo" | "pendiente";
+export type ProximaFecha = { id: string; cuando: string; lugar: string; nota: string; confirmados: number; no_pueden: number; pendientes: number; mi_respuesta: RespuestaFecha };
+export async function programarFechaLiga(liga: string, cuando: string, lugar: string, nota: string, reemplazar: string | null) {
+  return rpc<string>("programar_fecha_liga", { p_liga: liga, p_cuando: cuando, p_lugar: lugar, p_nota: nota, p_reemplazar: reemplazar });
+}
+export async function responderFechaLiga(fecha: string, respuesta: RespuestaFecha) {
+  await rpc<null>("responder_fecha_liga", { p_fecha: fecha, p_respuesta: respuesta });
+}
+export async function cancelarFechaLiga(fecha: string) {
+  await rpc<null>("cancelar_fecha_liga", { p_fecha: fecha });
+}
 
 export type TemporadaPropia = {
   liga_id: string;

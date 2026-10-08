@@ -17,5 +17,5 @@ callbacks[0]();callbacks[1]();assert.equal(revisiones,3);
 app('background');assert.equal(revisiones,3);app('active');assert.equal(revisiones,4);
 estado('CHANNEL_ERROR');assert.equal(conectado,false);estado('SUBSCRIBED');assert.equal(revisiones,5);
 limpiar();callbacks[0]();estado('SUBSCRIBED');app('active');assert.equal(revisiones,5);assert.equal(eliminados,1);assert.equal(listenerRetirado,1);
-exportsModulo.useLigaEnVivo('club',null,()=>revisiones++);assert.equal(efecto(),undefined);assert.equal(filtros.length,3);
+exportsModulo.useLigaEnVivo('club',null,()=>revisiones++);assert.equal(efecto(),undefined);assert.equal(filtros.length,5);
 console.log('Ranking Realtime: filtros, reconexión, regreso a primer plano y limpieza OK');
