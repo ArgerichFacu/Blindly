@@ -15,7 +15,9 @@ Aplicación desarrollada con Expo, React Native, TypeScript y Supabase. La rama 
 - Usar presets de torneo o editar niveles y descansos; controlar el reloj con avisos sonoros y vibración.
 - Mantener un dealer fijo mientras el botón y las ciegas rotan entre los jugadores, incluido el caso de dos participantes.
 - Seguir el turno de apuesta y el estado de la mesa en tiempo real; cada jugador declara su propia acción desde el celular.
-- Consultar las combinaciones de poker con ejemplos de cartas y criterios de desempate.
+- Elegir invitado o cuenta recuperable en la bienvenida y recorrer una guía rápida de tres pasos, sin exigir registro para jugar.
+- Aprender póker con ejemplos, combinaciones y una herramienta Free para seleccionar cartas y resaltar la mejor mano de cinco.
+- Activar el modo principiante para consultar las reglas y los montos de tu turno, sin recomendaciones de estrategia.
 - Elegir tema verde, rojo o negro e idioma español, inglés o portugués.
 - Activar música de ambiente y consultar tu puntuación e historial personal.
 - Crear ligas Plus con temporadas, miembros invitados Free, historial de torneos y ranking compartido.
@@ -23,7 +25,7 @@ Aplicación desarrollada con Expo, React Native, TypeScript y Supabase. La rama 
 - Consultar estadísticas avanzadas, historial completo y comparaciones privadas entre amigos con Plus.
 - Ver un recap al terminar cada torneo y, con Plus, compartir una tarjeta vertical del resultado.
 
-Blindly acompaña la mesa: las cartas se reparten físicamente y el dealer determina los ganadores. La app no evalúa automáticamente las manos.
+Blindly acompaña la mesa: las cartas se reparten físicamente y el dealer determina los ganadores. El evaluador educativo usa cartas ingresadas manualmente y no decide repartos en una partida real. La bienvenida, el aprendizaje y la ayuda están documentados en [inicio.md](docs/inicio.md) y [aprender-poker.md](docs/aprender-poker.md).
 
 ## Dos modos de fichas
 

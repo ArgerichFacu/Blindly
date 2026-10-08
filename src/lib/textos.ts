@@ -1,6 +1,214 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Modo principiante": ["Beginner mode", "Modo iniciante"],
+  "Activa ayuda sobre las reglas durante tu turno. No cambia las apuestas ni recomienda estrategia.":
+    [
+      "Enables rule explanations on your turn. It doesn't change bets or recommend strategy.",
+      "Ativa explicações das regras na sua vez. Não altera apostas nem recomenda estratégia.",
+    ],
+  "? Ayuda de este turno": ["? Help for this turn", "? Ajuda nesta vez"],
+  "Reglas de tu turno": ["Rules for your turn", "Regras na sua vez"],
+  "Apuesta actual: {actual}. Tu aporte: {aporte}.": [
+    "Current bet: {actual}. Your contribution: {aporte}.",
+    "Aposta atual: {actual}. Sua contribuição: {aporte}.",
+  ],
+  "No podés pasar: hay una apuesta pendiente que igualar.": [
+    "You can't check: there's an outstanding bet to call.",
+    "Você não pode passar: há uma aposta pendente para pagar.",
+  ],
+  "Igualar agrega {n} fichas; tu total en esta ronda queda en {total}.": [
+    "Calling adds {n} chips; your total for this round becomes {total}.",
+    "Pagar adiciona {n} fichas; seu total nesta rodada fica em {total}.",
+  ],
+  "Tu stack no alcanza para igualar todo: la igualada será all-in por tus fichas restantes.":
+    [
+      "Your stack can't cover the full call: calling goes all-in with your remaining chips.",
+      "Seu stack não cobre toda a aposta: pagar será all-in com suas fichas restantes.",
+    ],
+  "Solo podés subir all-in a {max}, por debajo del mínimo de una subida completa.":
+    [
+      "You can only raise all-in to {max}, below the minimum for a full raise.",
+      "Você só pode aumentar all-in para {max}, abaixo do mínimo de um aumento completo.",
+    ],
+  "Mínimo para subir: total {min}. Máximo: total {max}.": [
+    "Minimum raise: total {min}. Maximum: total {max}.",
+    "Mínimo para aumentar: total {min}. Máximo: total {max}.",
+  ],
+  "Subir no está disponible en este turno. Puede faltar stack, otro jugador capaz de apostar o una subida que reabra la acción.":
+    [
+      "Raising isn't available this turn. There may be insufficient chips, no other player able to bet, or no raise that reopens the action.",
+      "Aumentar não está disponível nesta vez. Pode faltar stack, outro jogador capaz de apostar ou um aumento que reabra a ação.",
+    ],
+  "Con fichas físicas, verificá en la mesa la apuesta pendiente y el mínimo antes de registrar tu acción.":
+    [
+      "With physical chips, check the outstanding bet and minimum at the table before recording your action.",
+      "Com fichas físicas, confira na mesa a aposta pendente e o mínimo antes de registrar sua ação.",
+    ],
+  "Cerrar ayuda": ["Close help", "Fechar ajuda"],
+  "Parte de tu mejor mano.": [
+    "Part of your best hand.",
+    "Parte da sua melhor mão.",
+  ],
+  "Las cartas ya usadas no se pueden repetir.": [
+    "Cards already in use can't be selected again.",
+    "As cartas já usadas não podem ser repetidas.",
+  ],
+  "Probar mis cartas": ["Try my cards", "Testar minhas cartas"],
+  "Explorar manos": ["Explore hands", "Explorar mãos"],
+  "Aprender póker": ["Learn poker", "Aprender poker"],
+  "Reglas claras. Cartas reales.": [
+    "Clear rules. Real cards.",
+    "Regras claras. Cartas reais.",
+  ],
+  "Probá tus cartas y encontrá las cinco mejores.": [
+    "Try your cards and find the best five.",
+    "Teste suas cartas e encontre as cinco melhores.",
+  ],
+  "CÓMO SE JUEGA": ["HOW TO PLAY", "COMO JOGAR"],
+  "Recibís dos cartas privadas. La mesa puede mostrar hasta cinco cartas compartidas. Gana la mejor mano de cinco, o el último jugador que no se retiró.":
+    [
+      "You get two private cards. The table can show up to five shared cards. The best five-card hand wins, or the last player who hasn't folded.",
+      "Você recebe duas cartas privadas. A mesa pode mostrar até cinco cartas compartilhadas. Vence a melhor mão de cinco cartas, ou o último jogador que não desistiu.",
+    ],
+  "Las cuatro rondas": ["The four rounds", "As quatro rodadas"],
+  "Preflop: dos cartas por jugador y primera ronda de apuestas.": [
+    "Preflop: two cards per player and the first betting round.",
+    "Preflop: duas cartas por jogador e a primeira rodada de apostas.",
+  ],
+  "Flop: se muestran tres cartas de la mesa y se apuesta otra vez.": [
+    "Flop: three community cards are revealed, followed by another betting round.",
+    "Flop: três cartas da mesa são reveladas e há outra rodada de apostas.",
+  ],
+  "Turn: se agrega la cuarta carta. River: se agrega la quinta. Cada etapa tiene su ronda de apuestas.":
+    [
+      "Turn: the fourth card is added. River: the fifth is added. Each stage has a betting round.",
+      "Turn: entra a quarta carta. River: entra a quinta. Cada etapa tem sua rodada de apostas.",
+    ],
+  "Si queda más de un jugador, se comparan las manos. Si todos menos uno se retiran, ese jugador gana sin mostrar cartas.":
+    [
+      "If more than one player remains, hands are compared. If everyone but one folds, that player wins without showing cards.",
+      "Se restar mais de um jogador, as mãos são comparadas. Se todos menos um desistirem, ele vence sem mostrar as cartas.",
+    ],
+  "Acciones de tu turno": ["Actions on your turn", "Ações na sua vez"],
+  "Pasar (check): seguís sin agregar fichas, solo cuando no tenés una apuesta pendiente.":
+    [
+      "Check: continue without adding chips, only when you don't have an outstanding bet to call.",
+      "Passar (check): continue sem adicionar fichas, somente quando não há uma aposta pendente para pagar.",
+    ],
+  "Igualar (call): agregás la diferencia hasta la apuesta actual, o tu stack restante si no te alcanza.":
+    [
+      "Call: add the difference up to the current bet, or your remaining stack if you don't have enough.",
+      "Pagar (call): adicione a diferença até a aposta atual, ou seu stack restante se não tiver o suficiente.",
+    ],
+  "Subir (raise): aumentás el total de tu apuesta. La mesa indica el mínimo permitido.":
+    [
+      "Raise: increase your total bet. The table shows the minimum allowed.",
+      "Aumentar (raise): aumente o total da sua aposta. A mesa indica o mínimo permitido.",
+    ],
+  "Retirarse (fold): dejás de participar en esa mano. Las fichas ya apostadas quedan en el pozo.":
+    [
+      "Fold: leave the hand. Chips already bet remain in the pot.",
+      "Desistir (fold): saia da mão. As fichas já apostadas permanecem no pote.",
+    ],
+  "EJEMPLO DE IGUALADA": ["CALL EXAMPLE", "EXEMPLO DE CALL"],
+  "La apuesta actual es 500 y ya pusiste 200. Igualar agrega 300; tu total en esa ronda queda en 500.":
+    [
+      "The current bet is 500 and you've already put in 200. Calling adds 300; your total for this round becomes 500.",
+      "A aposta atual é 500 e você já colocou 200. Pagar adiciona 300; seu total nesta rodada fica em 500.",
+    ],
+  "Estas ayudas explican reglas, no recomiendan qué acción jugar.": [
+    "These tips explain rules; they don't recommend which action to play.",
+    "Estas dicas explicam regras; não recomendam qual ação jogar.",
+  ],
+  "Ciegas y botón": ["Blinds and button", "Blinds e botão"],
+  "SB es la ciega pequeña y BB la grande: apuestas obligatorias al inicio. BTN marca el botón que rota con las ciegas.":
+    [
+      "SB is the small blind and BB the big blind: mandatory opening bets. BTN marks the button that rotates with the blinds.",
+      "SB é o small blind e BB o big blind: apostas obrigatórias no início. BTN marca o botão que gira com os blinds.",
+    ],
+  "Antes del flop empieza quien sigue a BB. Después del flop empieza el primer jugador activo a la izquierda de BTN. En heads-up, BTN/SB empieza preflop y BB después del flop.":
+    [
+      "Before the flop, the player after BB acts first. After the flop, the first active player to BTN's left acts first. Heads-up: BTN/SB acts first preflop and BB after the flop.",
+      "Antes do flop, começa quem vem depois de BB. Após o flop, começa o primeiro jogador ativo à esquerda de BTN. No heads-up, BTN/SB começa no preflop e BB após o flop.",
+    ],
+  "All-in": ["All-in", "All-in"],
+  "All-in significa apostar todas tus fichas restantes. Seguís en la mano, pero solo podés ganar la parte del pozo cubierta por tu aporte.":
+    [
+      "All-in means betting all your remaining chips. You stay in the hand, but can only win the part of the pot covered by your contribution.",
+      "All-in significa apostar todas as suas fichas restantes. Você continua na mão, mas só pode ganhar a parte do pote coberta por sua contribuição.",
+    ],
+  "Un all-in corto puede no reabrir la posibilidad de subir para quienes ya actuaron. Blindly muestra las acciones legales.":
+    [
+      "A short all-in may not reopen raising for players who have already acted. Blindly shows legal actions.",
+      "Um all-in curto pode não reabrir aumentos para quem já agiu. Blindly mostra as ações legais.",
+    ],
+  "Pozos secundarios (side pots)": [
+    "Side pots",
+    "Potes secundários (side pots)",
+  ],
+  "Ejemplo: A aporta 100, B 300 y C 300. El pozo principal tiene 300 y pueden ganarlo A, B o C. El pozo secundario tiene 400 y solo pueden ganarlo B o C.":
+    [
+      "Example: A contributes 100, B 300 and C 300. The main pot has 300 and A, B or C can win it. The side pot has 400 and only B or C can win it.",
+      "Exemplo: A contribui 100, B 300 e C 300. O pote principal tem 300 e A, B ou C podem ganhá-lo. O pote secundário tem 400 e só B ou C podem ganhá-lo.",
+    ],
+  "Si A gana la mejor mano, recibe el principal. B y C comparan sus manos para el secundario. La suma sigue siendo 700.":
+    [
+      "If A has the best hand, A receives the main pot. B and C compare their hands for the side pot. The total is still 700.",
+      "Se A tiver a melhor mão, recebe o principal. B e C comparam suas mãos pelo secundário. A soma continua sendo 700.",
+    ],
+  "Blindly en la mesa": ["Blindly at the table", "Blindly na mesa"],
+  "Con fichas físicas, las apuestas y el reparto se hacen en la mesa. Blindly organiza las ciegas y los turnos que correspondan al modo.":
+    [
+      "With physical chips, betting and distribution happen at the table. Blindly organizes the blinds and turns supported by the mode.",
+      "Com fichas físicas, as apostas e a distribuição acontecem na mesa. Blindly organiza os blinds e turnos correspondentes ao modo.",
+    ],
+  "Editar {valor} de {palo}": [
+    "Edit {valor} of {palo}",
+    "Editar {valor} de {palo}",
+  ],
+  "Elegir carta {n} de {zona}": [
+    "Choose card {n} from {zona}",
+    "Escolher carta {n} de {zona}",
+  ],
+  "PROBÁ TU MANO · FREE": ["TRY YOUR HAND · FREE", "TESTE SUA MÃO · FREE"],
+  "Elegí dos cartas propias y hasta cinco de la mesa. Tocá una carta para cambiarla.":
+    [
+      "Choose two hole cards and up to five community cards. Tap a card to change it.",
+      "Escolha duas cartas próprias e até cinco da mesa. Toque em uma carta para trocá-la.",
+    ],
+  "Tus cartas": ["Your cards", "Suas cartas"],
+  "Cartas de la mesa": ["Community cards", "Cartas da mesa"],
+  "Elegí tus dos cartas": ["Choose your two cards", "Escolha suas duas cartas"],
+  "Las cinco cartas doradas forman tu mejor mano; los kickers también cuentan.":
+    [
+      "The five gold cards form your best hand; kickers count too.",
+      "As cinco cartas douradas formam sua melhor mão; os kickers também contam.",
+    ],
+  "Resultado provisional. Necesitás al menos tres cartas de la mesa para formar una mano de cinco.":
+    [
+      "Provisional result. You need at least three community cards to form a five-card hand.",
+      "Resultado provisório. Você precisa de pelo menos três cartas da mesa para formar uma mão de cinco.",
+    ],
+  "Elegí valor y palo": ["Choose rank and suit", "Escolha valor e naipe"],
+  "Editando carta {n} de {zona}": [
+    "Editing card {n} from {zona}",
+    "Editando carta {n} de {zona}",
+  ],
+  "Valor {valor}": ["Rank {valor}", "Valor {valor}"],
+  "Seleccionar {palo}": ["Select {palo}", "Selecionar {palo}"],
+  "Quitar esta carta": ["Remove this card", "Remover esta carta"],
+  "Cerrar selector": ["Close card picker", "Fechar seletor"],
+  "Ver ejemplo de escalera real": [
+    "See royal flush example",
+    "Ver exemplo de royal flush",
+  ],
+  "Limpiar cartas": ["Clear cards", "Limpar cartas"],
+  "Herramienta de aprendizaje: no predice cartas ni decide el ganador de una partida real.":
+    [
+      "Learning tool: it doesn't predict cards or decide the winner of a real game.",
+      "Ferramenta de aprendizado: não prevê cartas nem decide o vencedor de uma partida real.",
+    ],
   "Tu mesa.\nTu liga.\nTus rivalidades.": [
     "Your table.\nYour league.\nYour rivalries.",
     "Sua mesa.\nSua liga.\nSuas rivalidades.",

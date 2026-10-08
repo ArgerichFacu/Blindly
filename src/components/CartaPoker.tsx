@@ -5,10 +5,12 @@ export function CartaPoker({
   valor,
   palo,
   resaltada = true,
+  compacta = false,
 }: {
   valor: string;
   palo: Palo;
   resaltada?: boolean;
+  compacta?: boolean;
 }) {
   const rojo = palo === "♥" || palo === "♦",
     color = rojo ? "#B13646" : "#20362C";
@@ -48,14 +50,32 @@ export function CartaPoker({
       ]}
     >
       <View style={styles.esquina}>
-        <Text style={[styles.valor, { color }]}>{valor}</Text>
-        <Text style={[styles.paloChico, { color }]}>{palo}</Text>
+        <Text
+          style={[
+            styles.valor,
+            { color },
+            compacta && { fontSize: 12, lineHeight: 14 },
+          ]}
+        >
+          {valor}
+        </Text>
+        {!compacta && <Text style={[styles.paloChico, { color }]}>{palo}</Text>}
       </View>
-      <Text style={[styles.centro, { color }]}>{palo}</Text>
-      <View style={[styles.esquina, styles.invertida]}>
-        <Text style={[styles.valor, { color }]}>{valor}</Text>
-        <Text style={[styles.paloChico, { color }]}>{palo}</Text>
-      </View>
+      <Text
+        style={[
+          styles.centro,
+          { color },
+          compacta && { fontSize: 19, lineHeight: 22 },
+        ]}
+      >
+        {palo}
+      </Text>
+      {!compacta && (
+        <View style={[styles.esquina, styles.invertida]}>
+          <Text style={[styles.valor, { color }]}>{valor}</Text>
+          <Text style={[styles.paloChico, { color }]}>{palo}</Text>
+        </View>
+      )}
     </View>
   );
 }

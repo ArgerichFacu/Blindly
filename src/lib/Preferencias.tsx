@@ -15,12 +15,14 @@ type Preferencias = {
   sonido: boolean;
   volumenRonda: number;
   volumenMusica: number;
+  principiante: boolean;
 };
 const inicial: Preferencias = {
   idioma: "es",
   sonido: true,
   volumenRonda: 0.8,
   volumenMusica: 0.3,
+  principiante: false,
 };
 const Contexto = createContext({
   preferencias: inicial,
@@ -40,6 +42,8 @@ export function PreferenciasProvider({ children }: { children: ReactNode }) {
         const datos = texto ? JSON.parse(texto) : { sonido };
         const nuevas = { ...inicial, ...datos };
         if (!["es", "en", "pt"].includes(nuevas.idioma)) nuevas.idioma = "es";
+        if (typeof nuevas.principiante !== "boolean")
+          nuevas.principiante = false;
         for (const clave of ["volumenRonda", "volumenMusica"] as const)
           if (
             !Number.isFinite(nuevas[clave]) ||

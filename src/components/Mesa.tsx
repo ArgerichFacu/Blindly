@@ -15,6 +15,7 @@ import {
   Pasos,
 } from "./Controles";
 import { PanelApuesta } from "./PanelApuesta";
+import { AyudaTurno } from "./AyudaTurno";
 import { MesaAsientos } from "./MesaAsientos";
 import { AudioMesa } from "./AudioMesa";
 import { useSala } from "../lib/useSala";
@@ -34,7 +35,7 @@ import {
 
 export function Mesa({ codigo }: { codigo: string }) {
   const router = useRouter(),
-    { t, mensajeError } = usePreferencias(),
+    { t, mensajeError, preferencias } = usePreferencias(),
     { tema } = useTema();
   const mesa = useSala(codigo),
     { sala, jugadores, usuario } = mesa,
@@ -60,9 +61,7 @@ export function Mesa({ codigo }: { codigo: string }) {
     jugadores.length,
   );
   const corriendo = sala?.estado === "jugando";
-  const volver = useSalidaMesa(
-    protegerSalidaMesa(sala?.estado, !!mesa.error),
-  );
+  const volver = useSalidaMesa(protegerSalidaMesa(sala?.estado, !!mesa.error));
   useFocusEffect(
     useCallback(() => {
       setEnfocada(true);
@@ -273,20 +272,27 @@ export function Mesa({ codigo }: { codigo: string }) {
               yo &&
               !yo.retirado &&
               !yo.eliminado_en && (
-              <PanelApuesta
-                key={sala.mano + "-" + sala.calle}
-                faltan={faltan}
-                stack={yo.fichas}
-                aporte={yo.aporte_calle}
-                actual={sala.apuesta_actual}
-                minima={sala.subida_minima}
-                puedeSubir={puedeSubir}
-                ocupado={accion.ocupado}
-                monto={monto}
-                cambiar={setMonto}
-                actuar={apostar}
-              />
-            )}
+                <PanelApuesta
+                  key={sala.mano + "-" + sala.calle}
+                  faltan={faltan}
+                  stack={yo.fichas}
+                  aporte={yo.aporte_calle}
+                  actual={sala.apuesta_actual}
+                  minima={sala.subida_minima}
+                  puedeSubir={puedeSubir}
+                  ocupado={accion.ocupado}
+                  monto={monto}
+                  cambiar={setMonto}
+                  actuar={apostar}
+                />
+              )}
+            {!virtual &&
+              preferencias.principiante &&
+              miTurno &&
+              corriendo &&
+              yo &&
+              !yo.retirado &&
+              !yo.eliminado_en && <AyudaTurno />}
             {!virtual &&
               miTurno &&
               corriendo &&
@@ -492,7 +498,9 @@ export function Mesa({ codigo }: { codigo: string }) {
         <>
           <Boton
             titulo={t("Ver resumen de la partida")}
-            onPress={() => router.push(`/recap?sala=${encodeURIComponent(sala.id)}` as Href)}
+            onPress={() =>
+              router.push(`/recap?sala=${encodeURIComponent(sala.id)}` as Href)
+            }
           />
           <Boton
             titulo={t("Ver mis puntos")}

@@ -79,7 +79,7 @@ export default function Menu() {
       />
       <View style={{ flexDirection: "row", gap: 10, marginTop: 4 }}>
         <Boton
-          titulo={t("Cómo jugar")}
+          titulo={t("Aprender póker")}
           secundario
           compacto
           style={{ flex: 1 }}

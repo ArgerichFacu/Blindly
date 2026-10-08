@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { View, Pressable } from "react-native";
-import { Pantalla, Texto, Tarjeta, Etiqueta } from "../components/Controles";
+import {
+  Pantalla,
+  Texto,
+  Tarjeta,
+  Etiqueta,
+  Boton,
+} from "../components/Controles";
+import { EvaluadorMano } from "../components/EvaluadorMano";
 import { CartaPoker, type Palo } from "../components/CartaPoker";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
@@ -156,138 +163,162 @@ export default function Combinaciones() {
   const { t } = usePreferencias(),
     { tema } = useTema();
   const [abierta, setAbierta] = useState<string | null>(null);
+  const [probar, setProbar] = useState(true);
   return (
     <Pantalla
       titulo={t("Combinaciones de poker")}
       subtitulo={t("Tu guía para leer la mesa.")}
     >
-      <View style={{ gap: 10, marginBottom: 6 }}>
-        <Etiqueta activa>{t("DE MAYOR A MENOR")}</Etiqueta>
-        <Texto suave>
-          {t(
-            "Diez manos, un vistazo. Tocá una combinación para ver cómo se desempata.",
-          )}
-        </Texto>
+      <View style={{ flexDirection: "row", gap: 10 }}>
+        <Boton
+          titulo={t("Probar mis cartas")}
+          secundario={!probar}
+          style={{ flex: 1 }}
+          onPress={() => setProbar(true)}
+        />
+        <Boton
+          titulo={t("Explorar manos")}
+          secundario={probar}
+          style={{ flex: 1 }}
+          onPress={() => setProbar(false)}
+        />
       </View>
-      {manos.map((mano, i) => {
-        const expandida = abierta === mano.nombre;
-        return (
-          <View
-            key={mano.nombre}
-            style={{
-              padding: 17,
-              gap: 14,
-              backgroundColor: tema.fondoTarjeta,
-              borderRadius: 22,
-              borderWidth: 1,
-              borderColor: expandida ? tema.acento : tema.borde,
-            }}
-          >
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={
-                t(mano.nombre) + ". " + t("Cómo se desempata")
-              }
-              accessibilityState={{ expanded: expandida }}
-              onPress={() => setAbierta(expandida ? null : mano.nombre)}
+      <View style={{ display: probar ? "flex" : "none", gap: 16 }}>
+        <EvaluadorMano />
+      </View>
+      <View style={{ display: probar ? "none" : "flex", gap: 16 }}>
+        <View style={{ gap: 10, marginBottom: 6 }}>
+          <Etiqueta activa>{t("DE MAYOR A MENOR")}</Etiqueta>
+          <Texto suave>
+            {t(
+              "Diez manos, un vistazo. Tocá una combinación para ver cómo se desempata.",
+            )}
+          </Texto>
+        </View>
+        {manos.map((mano, i) => {
+          const expandida = abierta === mano.nombre;
+          return (
+            <View
+              key={mano.nombre}
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 12,
-                minHeight: 44,
+                padding: 17,
+                gap: 14,
+                backgroundColor: tema.fondoTarjeta,
+                borderRadius: 22,
+                borderWidth: 1,
+                borderColor: expandida ? tema.acento : tema.borde,
               }}
             >
-              <View
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={
+                  t(mano.nombre) + ". " + t("Cómo se desempata")
+                }
+                accessibilityState={{ expanded: expandida }}
+                onPress={() => setAbierta(expandida ? null : mano.nombre)}
                 style={{
-                  height: 37,
-                  width: 37,
-                  borderRadius: 12,
+                  flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: i === 0 ? tema.acento : tema.fondo,
+                  gap: 12,
+                  minHeight: 44,
                 }}
               >
-                <Texto
+                <View
                   style={{
-                    fontSize: 13,
-                    fontWeight: "800",
-                    color: i === 0 ? tema.acentoTexto : tema.acento,
+                    height: 37,
+                    width: 37,
+                    borderRadius: 12,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: i === 0 ? tema.acento : tema.fondo,
                   }}
                 >
-                  {String(i + 1).padStart(2, "0")}
-                </Texto>
-              </View>
-              <View style={{ flex: 1 }}>
-                <Texto
-                  style={{ fontSize: 17, fontWeight: "700", lineHeight: 23 }}
-                >
-                  {t(mano.nombre)}
-                </Texto>
-                {i === 0 && (
-                  <Texto suave style={{ fontSize: 10, letterSpacing: 1 }}>
-                    {t("LA MANO MÁS ALTA")}
+                  <Texto
+                    style={{
+                      fontSize: 13,
+                      fontWeight: "800",
+                      color: i === 0 ? tema.acentoTexto : tema.acento,
+                    }}
+                  >
+                    {String(i + 1).padStart(2, "0")}
                   </Texto>
-                )}
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Texto
+                    style={{
+                      fontSize: 17,
+                      fontWeight: "700",
+                      lineHeight: 23,
+                    }}
+                  >
+                    {t(mano.nombre)}
+                  </Texto>
+                  {i === 0 && (
+                    <Texto suave style={{ fontSize: 10, letterSpacing: 1 }}>
+                      {t("LA MANO MÁS ALTA")}
+                    </Texto>
+                  )}
+                </View>
+                <Texto suave style={{ fontSize: 19 }}>
+                  {expandida ? "−" : "+"}
+                </Texto>
+              </Pressable>
+              <View style={{ flexDirection: "row", gap: 7, paddingTop: 3 }}>
+                {mano.cartas.map(([valor, palo], idx) => (
+                  <CartaPoker
+                    key={idx}
+                    valor={valor}
+                    palo={palo}
+                    resaltada={mano.destacadas.includes(idx)}
+                  />
+                ))}
               </View>
-              <Texto suave style={{ fontSize: 19 }}>
-                {expandida ? "−" : "+"}
+              <Texto suave style={{ fontSize: 13, lineHeight: 20 }}>
+                {t(mano.descripcion)}
               </Texto>
-            </Pressable>
-            <View style={{ flexDirection: "row", gap: 7, paddingTop: 3 }}>
-              {mano.cartas.map(([valor, palo], idx) => (
-                <CartaPoker
-                  key={idx}
-                  valor={valor}
-                  palo={palo}
-                  resaltada={mano.destacadas.includes(idx)}
-                />
-              ))}
-            </View>
-            <Texto suave style={{ fontSize: 13, lineHeight: 20 }}>
-              {t(mano.descripcion)}
-            </Texto>
-            {expandida && (
-              <View
-                style={{
-                  paddingTop: 12,
-                  borderTopWidth: 1,
-                  borderColor: tema.borde,
-                  gap: 5,
-                }}
-              >
-                <Texto
+              {expandida && (
+                <View
                   style={{
-                    fontSize: 12,
-                    fontWeight: "700",
-                    color: tema.acento,
+                    paddingTop: 12,
+                    borderTopWidth: 1,
+                    borderColor: tema.borde,
+                    gap: 5,
                   }}
                 >
-                  {t("Cómo se desempata")}
-                </Texto>
-                <Texto style={{ fontSize: 13 }}>{t(mano.desempate)}</Texto>
-              </View>
+                  <Texto
+                    style={{
+                      fontSize: 12,
+                      fontWeight: "700",
+                      color: tema.acento,
+                    }}
+                  >
+                    {t("Cómo se desempata")}
+                  </Texto>
+                  <Texto style={{ fontSize: 13 }}>{t(mano.desempate)}</Texto>
+                </View>
+              )}
+            </View>
+          );
+        })}
+        <Tarjeta>
+          <Texto style={{ fontWeight: "700" }}>{t("Acordate de esto")}</Texto>
+          <Texto suave>
+            {t(
+              "En Texas Hold’em usás la mejor combinación de cinco cartas entre tus dos cartas y las cinco de la mesa.",
             )}
-          </View>
-        );
-      })}
-      <Tarjeta>
-        <Texto style={{ fontWeight: "700" }}>{t("Acordate de esto")}</Texto>
-        <Texto suave>
-          {t(
-            "En Texas Hold’em usás la mejor combinación de cinco cartas entre tus dos cartas y las cinco de la mesa.",
-          )}
-        </Texto>
-        <Texto suave>
-          {t(
-            "Los palos no tienen jerarquía. Si la combinación y los cinco valores son iguales, se divide el pozo.",
-          )}
-        </Texto>
-        <Texto suave style={{ fontSize: 12 }}>
-          {t(
-            "Resaltamos el grupo principal; las otras cartas también pueden desempatar.",
-          )}
-        </Texto>
-      </Tarjeta>
+          </Texto>
+          <Texto suave>
+            {t(
+              "Los palos no tienen jerarquía. Si la combinación y los cinco valores son iguales, se divide el pozo.",
+            )}
+          </Texto>
+          <Texto suave style={{ fontSize: 12 }}>
+            {t(
+              "Resaltamos el grupo principal; las otras cartas también pueden desempatar.",
+            )}
+          </Texto>
+        </Tarjeta>
+      </View>
     </Pantalla>
   );
 }

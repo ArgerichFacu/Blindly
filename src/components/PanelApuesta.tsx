@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View } from "react-native";
 import { Boton, Campo, Texto } from "./Controles";
 import { usePreferencias } from "../lib/Preferencias";
+import { AyudaTurno } from "./AyudaTurno";
 export function PanelApuesta({
   faltan,
   stack,
@@ -25,7 +26,7 @@ export function PanelApuesta({
   cambiar: (s: string) => void;
   actuar: (tipo: string) => void;
 }) {
-  const { t } = usePreferencias();
+  const { t, preferencias } = usePreferencias();
   const [editor, setEditor] = useState<"igualar" | "subir" | null>(null);
   const max = stack + aporte,
     min = actual + minima,
@@ -35,14 +36,27 @@ export function PanelApuesta({
     Number(monto) > actual &&
     Number(monto) <= max &&
     (Number(monto) >= min || Number(monto) === max);
-  const igualadaValida =
-    /^\d+$/.test(monto) && Number(monto) === totalIgualar;
+  const igualadaValida = /^\d+$/.test(monto) && Number(monto) === totalIgualar;
   const cerrarEditor = () => {
     setEditor(null);
     cambiar("");
   };
   return (
     <View style={{ gap: 10 }}>
+      {preferencias.principiante && (
+        <AyudaTurno
+          virtual={{
+            actual,
+            aporte,
+            igualar: Math.min(faltan, stack),
+            totalIgualar,
+            puedePasar: !faltan,
+            puedeSubir: puedeSubir && max > actual,
+            min,
+            max,
+          }}
+        />
+      )}
       {editor && (
         <>
           <View style={{ flexDirection: "row", gap: 8 }}>
@@ -90,7 +104,8 @@ export function PanelApuesta({
                   : t("Subir a {n}", { n: Number(monto) || 0 })
             }
             disabled={
-              ocupado || (editor === "igualar" ? !igualadaValida : !subidaValida)
+              ocupado ||
+              (editor === "igualar" ? !igualadaValida : !subidaValida)
             }
             onPress={() => actuar(editor)}
           />

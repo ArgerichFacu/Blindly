@@ -13,6 +13,28 @@ export default function Opciones() {
   return (
     <Pantalla titulo={t("Opciones")}>
       <Tarjeta>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+          }}
+        >
+          <Texto style={{ flex: 1 }}>{t("Modo principiante")}</Texto>
+          <Switch
+            accessibilityLabel={t("Modo principiante")}
+            value={preferencias.principiante}
+            onValueChange={(principiante) => cambiar({ principiante })}
+          />
+        </View>
+        <Texto suave>
+          {t(
+            "Activa ayuda sobre las reglas durante tu turno. No cambia las apuestas ni recomienda estrategia.",
+          )}
+        </Texto>
+      </Tarjeta>
+      <Tarjeta>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Texto>{t("Sonido de ronda")}</Texto>
           <Switch
@@ -96,7 +118,7 @@ export default function Opciones() {
         })}
       </Tarjeta>
       <Boton
-        titulo={t("Instrucciones")}
+        titulo={t("Aprender póker")}
         secundario
         onPress={() => router.push("/instrucciones")}
       />
