@@ -1,6 +1,50 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Protegé tu cuenta para usar las funciones del club.": [
+    "Protect your account to use club features.",
+    "Proteja sua conta para usar as funções do clube.",
+  ],
+  "Solo el owner o un administrador puede hacer esto.": [
+    "Only the owner or an administrator can do this.",
+    "Somente o owner ou um administrador pode fazer isso.",
+  ],
+  "Este miembro ya no está activo en el club.": [
+    "This member is no longer active in the club.",
+    "Este membro não está mais ativo no clube.",
+  ],
+  "Nuestro club de póker": ["Our poker club", "Nosso clube de pôquer"],
+  "Un grupo, muchas temporadas. El historial se queda en el club.": [
+    "One group, many seasons. The history stays with the club.",
+    "Um grupo, muitas temporadas. O histórico fica no clube.",
+  ],
+  Administrador: ["Administrator", "Administrador"],
+  Miembro: ["Member", "Membro"],
+  "Hacer admin": ["Make admin", "Tornar admin"],
+  "Quitar admin": ["Remove admin role", "Remover função de admin"],
+  "Descripción del club": ["Club description", "Descrição do clube"],
+  "Guardar descripción": ["Save description", "Salvar descrição"],
+  "Volver a mi club": ["Return to my club", "Voltar ao meu clube"],
+  "Proteger mi cuenta": ["Protect my account", "Proteger minha conta"],
+  "Protegé tu cuenta para crear tu club": [
+    "Protect your account to create your club",
+    "Proteja sua conta para criar seu clube",
+  ],
+  "Las ligas son Free. Una clave de recuperación conserva tu identidad, tus puntos y tus temporadas.":
+    [
+      "Leagues are Free. A recovery key preserves your identity, points and seasons.",
+      "As ligas são Free. Uma chave de recuperação preserva sua identidade, pontos e temporadas.",
+    ],
+  "Tu club y sus temporadas son Free. Protegé tu cuenta para conservar tu lugar al cambiar de celular.":
+    [
+      "Your club and its seasons are Free. Protect your account to keep your place when changing phones.",
+      "Seu clube e suas temporadas são Free. Proteja sua conta para manter seu lugar ao trocar de celular.",
+    ],
+  "Tus datos siguen guardados. Protegé esta identidad para administrar tu club.":
+    [
+      "Your data is still saved. Protect this identity to manage your club.",
+      "Seus dados continuam salvos. Proteja esta identidade para administrar seu clube.",
+    ],
   "Protección pendiente": ["Protection pending", "Proteção pendente"],
   "ID de tu identidad": ["Your identity ID", "ID da sua identidade"],
   "Este ID conserva tus puntos y tu lugar en las ligas aunque cambies tu nombre.":
@@ -585,6 +629,9 @@ export const textos: Record<string, [string, string]> = {
 export const errores: Record<string, string> = {
   NOMBRE_INVALIDO: "Completá tu nombre y el código.",
   SESION_REQUERIDA: "No se pudo completar. Probá de nuevo.",
+  CUENTA_REQUERIDA: "Protegé tu cuenta para usar las funciones del club.",
+  SOLO_ADMIN: "Solo el owner o un administrador puede hacer esto.",
+  MIEMBRO_NO_EXISTE: "Este miembro ya no está activo en el club.",
   SALA_NO_EXISTE: "No existe una sala con ese código.",
   SALA_LLENA: "La sala ya tiene 10 jugadores.",
   PARTIDA_INICIADA: "La partida ya comenzó.",

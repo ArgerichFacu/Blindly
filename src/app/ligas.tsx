@@ -1,14 +1,19 @@
 import { useCallback, useState } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import { View } from "react-native";
-import { Acceso, Boton, Etiqueta, Pantalla, Tarjeta, Texto } from "../components/Controles";
+import {
+  Acceso,
+  Boton,
+  Etiqueta,
+  Pantalla,
+  Tarjeta,
+  Texto,
+} from "../components/Controles";
 import { misLigas, type ResumenLiga } from "../lib/ligas";
-import { usePlus } from "../lib/PlusContext";
 import { usePreferencias } from "../lib/Preferencias";
 
 export default function Ligas() {
   const router = useRouter();
-  const plus = usePlus();
   const { t, mensajeError, preferencias } = usePreferencias();
   const [ligas, setLigas] = useState<ResumenLiga[] | null>(null);
   const [error, setError] = useState<unknown>(null);
@@ -39,18 +44,23 @@ export default function Ligas() {
           {t("Convertí tus partidas en una temporada.")}
         </Texto>
         <Texto suave>
-          {t("Ranking, puntos y resultados compartidos para tu grupo. Los invitados juegan gratis.")}
+          {t(
+            "Ranking, puntos y resultados compartidos para tu grupo. Los invitados juegan gratis.",
+          )}
         </Texto>
         <Boton
-          titulo={t(plus.activo ? "+ Crear liga" : "Crear mi liga con Plus")}
-          onPress={() => router.push(plus.activo ? "/liga-nueva" : "/plus")}
+          titulo={t("+ Crear liga")}
+          onPress={() => router.push("/liga-nueva")}
         />
       </Tarjeta>
 
       {!!error && (
         <Tarjeta>
           <Texto>{mensajeError(error)}</Texto>
-          <Boton titulo={t("Reintentar")} onPress={() => setRevision((v) => v + 1)} />
+          <Boton
+            titulo={t("Reintentar")}
+            onPress={() => setRevision((v) => v + 1)}
+          />
         </Tarjeta>
       )}
       {!ligas && !error && <Texto>{t("Cargando…")}</Texto>}
@@ -81,7 +91,9 @@ export default function Ligas() {
         ))}
       </View>
       <Texto suave>
-        {t("Una liga existente permanece visible si el owner deja Plus. La administración queda en pausa hasta restaurarlo.")}
+        {t(
+          "Tu club y sus temporadas son Free. Protegé tu cuenta para conservar tu lugar al cambiar de celular.",
+        )}
       </Texto>
     </Pantalla>
   );

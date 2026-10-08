@@ -1,5 +1,5 @@
 import { asegurarSesion } from "./sesion";
-import { sincronizarPlusServidor } from "./plusServidor";
+import { identidadUsuario } from "./identidad";
 import { supabase } from "./supabase";
 
 export type ResumenLiga = {
@@ -51,6 +51,7 @@ export type MiembroLiga = {
   nombre: string;
   activo: boolean;
   owner: boolean;
+  rol: "owner" | "admin" | "member";
 };
 
 export type DetalleLiga = {
@@ -60,6 +61,8 @@ export type DetalleLiga = {
     estado: "activa" | "archivada";
     soy_owner: boolean;
     puede_administrar: boolean;
+    descripcion: string;
+    rol: "owner" | "admin" | "member";
   };
   temporada: TemporadaLiga | null;
   temporadas: TemporadaLiga[];
@@ -84,8 +87,27 @@ async function rpc<T>(nombre: string, parametros?: Record<string, unknown>) {
 }
 
 async function prepararAdministracion() {
-  const estado = await sincronizarPlusServidor();
-  if (!estado.activo) throw new Error("PLUS_REQUERIDO");
+  if (!identidadUsuario(await asegurarSesion()).recuperable)
+    throw new Error("CUENTA_REQUERIDA");
+}
+export async function actualizarClub(ligaId: string, descripcion: string) {
+  await prepararAdministracion();
+  await rpc<null>("actualizar_club", {
+    p_liga: ligaId,
+    p_descripcion: descripcion,
+  });
+}
+export async function cambiarRolLiga(
+  ligaId: string,
+  usuarioId: string,
+  rol: "admin" | "member",
+) {
+  await prepararAdministracion();
+  await rpc<null>("cambiar_rol_liga", {
+    p_liga: ligaId,
+    p_usuario: usuarioId,
+    p_rol: rol,
+  });
 }
 
 export function misLigas() {

@@ -2,7 +2,7 @@ import type { Nivel } from "./niveles";
 import type { Configuracion } from "./mesa";
 import { asegurarSesion } from "./sesion";
 import { supabase } from "./supabase";
-import { sincronizarPlusServidor } from "./plusServidor";
+import { identidadUsuario } from "./identidad";
 export type Sala = {
   id: string;
   codigo: string;
@@ -34,10 +34,10 @@ export async function crearSala(
   niveles: Nivel[],
   temporadaId: string | null = null,
 ): Promise<Sala> {
-  await asegurarSesion();
+  const usuario = await asegurarSesion();
   if (temporadaId) {
-    const estado = await sincronizarPlusServidor();
-    if (!estado.activo) throw new Error("PLUS_REQUERIDO");
+    if (!identidadUsuario(usuario).recuperable)
+      throw new Error("CUENTA_REQUERIDA");
   }
   const { data, error } = await supabase.rpc("crear_sala", {
     p_niveles: niveles,

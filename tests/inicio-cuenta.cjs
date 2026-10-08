@@ -20,7 +20,7 @@ vm.runInNewContext(
   }).outputText,
   { exports: identidad },
 );
-function escenario(origen = "1") {
+function escenario(origen = "1", volver, liga) {
   let indice = 0,
     efecto,
     usuario = { id: "uuid-original", is_anonymous: true },
@@ -63,7 +63,7 @@ function escenario(origen = "1") {
       useFocusEffect: (fn) => {
         efecto = fn;
       },
-      useLocalSearchParams: () => ({ inicio: origen }),
+      useLocalSearchParams: () => ({ inicio: origen, volver, liga }),
       useRouter: () => ({
         replace: (ruta) => llamadas.push(["replace", ruta]),
         dismissTo: (ruta) => llamadas.push(["dismissTo", ruta]),
@@ -90,6 +90,7 @@ function escenario(origen = "1") {
       recuperarConClave: async () => ({
         id: "uuid-recuperado",
         is_anonymous: false,
+        email: "uuid-recuperado@recovery.blindly.invalid",
       }),
     },
   };
@@ -236,6 +237,51 @@ async function main() {
     [],
     "Proteger una cuenta existente no reinicia introducción",
   );
+  const nuevoClub = escenario("0", "liga-nueva");
+  await nuevoClub.cargar();
+  assert.ok(!nuevoClub.botones().some((b) => b.titulo === "Volver a mi club"));
+  nuevoClub
+    .botones()
+    .find((b) => b.titulo === "Crear clave de recuperación")
+    .onPress();
+  await flush();
+  assert.deepEqual(
+    nuevoClub.llamadas,
+    [],
+    "Mantiene visible la clave antes de regresar",
+  );
+  nuevoClub
+    .botones()
+    .find((b) => b.titulo === "Guardé mi clave. Continuar")
+    .onPress();
+  assert.deepEqual(nuevoClub.llamadas, [["replace", "/liga-nueva"]]);
+
+  const clubExistente = escenario("0", "liga", "club-prueba");
+  await clubExistente.cargar();
+  clubExistente
+    .botones()
+    .find((b) => b.titulo === "Ya tengo una clave")
+    .onPress();
+  clubExistente
+    .elementos(clubExistente.render(), "Campo")
+    .find((c) => c.etiqueta === "Clave de recuperación")
+    .onChangeText("CLAVE-DE-PRUEBA");
+  clubExistente
+    .botones()
+    .find((b) => b.titulo === "Recuperar mi cuenta")
+    .onPress();
+  await flush();
+  assert.deepEqual(
+    clubExistente.llamadas,
+    [],
+    "Recuperación conserva el club de origen",
+  );
+  clubExistente
+    .botones()
+    .find((b) => b.titulo === "Volver a mi club")
+    .onPress();
+  assert.equal(clubExistente.llamadas[0][1].pathname, "/liga");
+  assert.equal(clubExistente.llamadas[0][1].params.id, "club-prueba");
   console.log(
     "OK: invitado, vinculación con UUID, clave visible, recuperación y contexto de inicio.",
   );

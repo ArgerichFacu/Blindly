@@ -21,7 +21,7 @@ Aplicación desarrollada con Expo, React Native, TypeScript y Supabase. La rama 
 - Elegir tema verde, rojo o negro e idioma español, inglés o portugués.
 - Controlar música, ambiente, efectos y botonera por separado, con silencio global persistido. [Audio y reacciones](docs/audio.md).
 - Activar música de ambiente y consultar tu puntuación e historial personal.
-- Crear ligas Plus con temporadas, miembros invitados Free, historial de torneos y ranking compartido.
+- Crear clubes Free con cuenta recuperable, temporadas, roles owner/admin/member, historial y ranking compartido.
 - Guardar mesas habituales Plus con jugadores de referencia, fichas, ciegas, duración, tema y liga opcional.
 - Consultar estadísticas avanzadas, historial completo y comparaciones privadas entre amigos con Plus.
 - Ver un recap al terminar cada torneo y, con Plus, compartir una tarjeta vertical del resultado.
@@ -127,7 +127,7 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `16_ligas_temporadas_ranking.sql` | Ligas Plus, temporadas, asociación segura de resultados, ranking y verificación server-side del entitlement |
 | `17_plus_mesas_estadisticas_recap.sql` | Mesas habituales, historial Free/Plus, estadísticas privadas, head-to-head y recap autoritativo |
 
-Las nueve migraciones están aplicadas y registradas en el proyecto remoto `ddvbbkwhisuezloorhfg`. La migración 17 se auditó además con una identidad Free temporal para comprobar lectura propia, límites Plus, privacidad del recap y eliminación posterior de la cuenta de prueba.
+Las diez migraciones están aplicadas y registradas en el proyecto remoto `ddvbbkwhisuezloorhfg`. La incremental `20261008042305_clubes_free_roles.sql` convierte las ligas básicas en clubes Free con descripción y roles seguros. Los archivos numerados 16/17 documentan estados históricos; para reconstruir el estado actual se usa la cadena completa de `supabase/migrations`. La migración 17 se auditó además con una identidad Free temporal para comprobar lectura propia, límites Plus, privacidad del recap y eliminación posterior de la cuenta de prueba.
 
 La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas. La [revisión de seguridad remota](docs/security-review.md) documenta los permisos efectivos y los avisos intencionales del asesor de Supabase.
 
@@ -135,9 +135,9 @@ Los HTML en `supabase/email-templates/` son plantillas preparadas; requieren con
 
 ## Blindly Plus
 
-La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Plus permite que un host cree ligas privadas, temporadas y partidas asociadas con ranking; los invitados Free participan normalmente. También habilita mesas habituales, historial completo, métricas avanzadas, head-to-head privado, tarjetas de recap, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis.
+La app ya integra el SDK y el paywall nativo de RevenueCat, restauración de compras, acceso a la administración de la suscripción y validación del entitlement `blindly_plus`. Los clubes básicos, temporadas y ranking son Free en la próxima versión. Plus habilita personalización de la botonera, mesas habituales, historial completo, métricas avanzadas, head-to-head privado, tarjetas de recap, temas premium y estructuras de ciegas personalizadas. Usa el UUID de Supabase como identificador estable y mantiene el juego esencial gratis.
 
-La administración de ligas no confía en el estado del teléfono. La Edge Function `sincronizar-plus` consulta RevenueCat con un secreto de servidor y las RPC de Supabase exigen una verificación vigente. Si el owner cancela, la liga queda en modo lectura y conserva todos sus datos. Arquitectura y pruebas: [ligas, temporadas y ranking](docs/ligas.md).
+La administración de clubes no confía en el estado del teléfono: Supabase verifica cuenta, pertenencia y rol. Cancelar Plus conserva el acceso a las funciones básicas del club. Las funciones comerciales restantes siguen usando `sincronizar-plus` y una verificación vigente de RevenueCat. Arquitectura y pruebas: [clubes](docs/clubes.md) y [ligas, temporadas y ranking](docs/ligas.md).
 
 Los precios de lanzamiento previstos son USD 0,99 mensual, USD 9,99 anual —el plan recomendado— y USD 24,99 por la Founder Edition vitalicia. El precio regular futuro del acceso vitalicio será USD 39,99.
 

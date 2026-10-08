@@ -26,6 +26,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261003005104_monto_igualar.sql",
     "20261004221957_ligas_temporadas_ranking.sql",
     "20261005170548_plus_mesas_estadisticas_recap.sql",
+    "20261008042305_clubes_free_roles.sql",
   ]);
 
   const baseSources = fs
@@ -69,7 +70,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
   );
 
   await db.exec(
-    "create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key); create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;",
+    "create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key, is_anonymous boolean not null default false); create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;",
   );
 
   for (const file of migrationFiles) {
@@ -138,7 +139,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
   ).rows[0].definition;
   assert.match(leagueDefinition, /liga_miembros/);
   assert.match(leagueDefinition, /temporada_id/);
-  assert.match(leagueDefinition, /private\.exigir_plus\(auth\.uid\(\)\)/);
+  assert.match(leagueDefinition, /private\.exigir_cuenta\(\)/);
   assert.match(leagueDefinition, /TEMPORADA_NO_FINALIZABLE/);
   const stackDefinition = (
     await db.query(

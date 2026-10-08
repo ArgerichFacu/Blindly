@@ -1,5 +1,7 @@
 # Ligas, temporadas y ranking
 
+> Registro del sprint original de la release cerrada. Desde el 8 de octubre de 2026, la migración `20261008042305_clubes_free_roles.sql` elimina Plus como requisito de las funciones básicas de liga y agrega roles y cuenta recuperable. El comportamiento vigente y las pruebas de la cadena completa se describen en [clubes.md](clubes.md). Las pruebas indicadas aquí reconstruyen el estado histórico previo.
+
 Blindly Free conserva intacto el juego presencial: cualquier usuario puede crear o unirse a una sala, jugar con fichas físicas o virtuales y completar un torneo. Blindly Plus permite que el host habitual organice esos torneos dentro de una liga privada.
 
 ## Flujo de uso

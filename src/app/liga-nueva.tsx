@@ -1,13 +1,19 @@
 import { useState } from "react";
 import { useRouter } from "expo-router";
-import { Boton, Campo, Pantalla, Tarjeta, Texto } from "../components/Controles";
+import {
+  Boton,
+  Campo,
+  Pantalla,
+  Tarjeta,
+  Texto,
+} from "../components/Controles";
 import { crearLiga } from "../lib/ligas";
-import { usePlus } from "../lib/PlusContext";
+import { useIdentidad } from "../lib/useIdentidad";
 import { usePreferencias } from "../lib/Preferencias";
 
 export default function LigaNueva() {
   const router = useRouter();
-  const plus = usePlus();
+  const identidad = useIdentidad();
   const { t, mensajeError } = usePreferencias();
   const [nombre, setNombre] = useState("");
   const [temporada, setTemporada] = useState("");
@@ -29,22 +35,48 @@ export default function LigaNueva() {
     }
   }
 
-  if (!plus.activo)
+  if (identidad.cargando)
+    return (
+      <Pantalla titulo={t("Crear liga")}>
+        <Texto>{t("Cargando…")}</Texto>
+      </Pantalla>
+    );
+  if (!identidad.recuperable)
     return (
       <Pantalla titulo={t("Crear liga")}>
         <Tarjeta>
-          <Texto style={{ fontWeight: "700" }}>{t("Esta función requiere Blindly Plus.")}</Texto>
-          <Texto suave>{t("Solo el owner necesita Plus. Todos sus invitados pueden participar gratis.")}</Texto>
-          <Boton titulo={t("Ver planes de Blindly Plus")} onPress={() => router.replace("/plus")} />
+          <Texto style={{ fontWeight: "700" }}>
+            {t("Protegé tu cuenta para crear tu club")}
+          </Texto>
+          <Texto suave>
+            {t(
+              "Las ligas son Free. Una clave de recuperación conserva tu identidad, tus puntos y tus temporadas.",
+            )}
+          </Texto>
+          {!!identidad.error && <Texto>{mensajeError(identidad.error)}</Texto>}
+          <Boton
+            titulo={t("Proteger mi cuenta")}
+            onPress={() =>
+              router.push({
+                pathname: "/cuenta",
+                params: { volver: "liga-nueva" },
+              })
+            }
+          />
         </Tarjeta>
       </Pantalla>
     );
 
-  const valido = nombre.trim().length >= 2 && temporada.trim().length >= 2 && jugador.trim().length >= 1;
+  const valido =
+    nombre.trim().length >= 2 &&
+    temporada.trim().length >= 2 &&
+    jugador.trim().length >= 1;
   return (
     <Pantalla
       titulo={t("Crear liga")}
-      subtitulo={t("Dale una identidad a tu grupo y empezá su primera temporada.")}
+      subtitulo={t(
+        "Dale una identidad a tu grupo y empezá su primera temporada.",
+      )}
     >
       <Campo
         etiqueta={t("Nombre de la liga")}
@@ -67,7 +99,11 @@ export default function LigaNueva() {
         onChangeText={setJugador}
         maxLength={30}
       />
-      <Texto suave>{t("Los demás miembros se incorporan automáticamente al jugar su primera partida asociada.")}</Texto>
+      <Texto suave>
+        {t(
+          "Los demás miembros se incorporan automáticamente al jugar su primera partida asociada.",
+        )}
+      </Texto>
       {!!error && <Texto>{error}</Texto>}
       <Boton
         titulo={t(ocupado ? "Guardando…" : "Crear liga")}

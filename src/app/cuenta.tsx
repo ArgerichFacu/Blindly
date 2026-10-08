@@ -27,7 +27,15 @@ export default function Cuenta() {
   const { t, mensajeError } = usePreferencias(),
     router = useRouter(),
     plus = usePlus();
-  const { inicio: origen } = useLocalSearchParams<{ inicio?: string }>();
+  const {
+    inicio: origen,
+    volver,
+    liga,
+  } = useLocalSearchParams<{
+    inicio?: string;
+    volver?: string;
+    liga?: string;
+  }>();
   const inicio = useInicio();
   const desdeInicio = origen === "1";
   const [usuario, setUsuario] = useState<User | null>(null),
@@ -44,6 +52,12 @@ export default function Cuenta() {
     [confirmarBorrado, setConfirmarBorrado] = useState(false);
   const cerrojo = useRef(false);
   const identidad = usuario ? identidadUsuario(usuario) : null;
+  const regresar =
+    volver === "liga-nueva"
+      ? () => router.replace("/liga-nueva")
+      : volver === "liga" && liga
+        ? () => router.replace({ pathname: "/liga", params: { id: liga } })
+        : null;
   useFocusEffect(
     useCallback(() => {
       let activo = true;
@@ -228,7 +242,7 @@ export default function Cuenta() {
                         setUsuario(recuperado);
                         setClave("");
                         setMostrarRecuperacion(false);
-                        if (!desdeInicio) router.replace("/cuenta");
+                        if (!desdeInicio && !regresar) router.replace("/cuenta");
                       })
                     }
                   />
@@ -311,7 +325,7 @@ export default function Cuenta() {
                         setSolicitud(null);
                         setCodigo("");
                         setRecuperar(false);
-                        if (!desdeInicio) router.replace("/cuenta");
+                        if (!desdeInicio && !regresar) router.replace("/cuenta");
                       })
                     }
                   />
@@ -356,6 +370,17 @@ export default function Cuenta() {
                 }
               />
             </Tarjeta>
+          )}
+          {!desdeInicio && regresar && identidad?.recuperable && (
+            <Boton
+              titulo={t(
+                claveGenerada
+                  ? "Guardé mi clave. Continuar"
+                  : "Volver a mi club",
+              )}
+              disabled={ocupado}
+              onPress={regresar}
+            />
           )}
           <Tarjeta style={{ borderColor: "#B91C1C" }}>
             <Texto style={{ fontWeight: "700" }}>
