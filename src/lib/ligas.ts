@@ -57,6 +57,7 @@ export type MiembroLiga = {
 };
 
 export type DetalleLiga = {
+  rivalidades?: { rivales: RivalLiga[]; nemesis: RivalLiga | null };
   proxima_fecha?: ProximaFecha | null;
   liga: {
     id: string;
@@ -74,6 +75,12 @@ export type DetalleLiga = {
   movimientos?: Record<string,number>;
   partidas: PartidaLiga[];
   miembros: MiembroLiga[];
+};
+
+export type RivalLiga = {
+  user_id: string; nombre: string; titulo_personalizado: string | null;
+  compartidas: number; victorias: number; derrotas: number; empates: number;
+  recientes: number; derrotas_recientes: number;
 };
 
 export type RespuestaFecha = "voy" | "no_puedo" | "pendiente";

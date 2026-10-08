@@ -33,6 +33,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261008152128_ranking_desempate_uuid.sql",
     "20261008153145_titulos_personalizados_club.sql",
     "20261008153853_proximas_fechas_club.sql",
+    "20261008160416_rivalidades_temporada.sql",
   ]);
 
   const baseSources = fs

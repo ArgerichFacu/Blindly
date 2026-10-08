@@ -1,6 +1,15 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Rivalidades": ["Rivalries", "Rivalidades"],
+  "TU NÉMESIS": ["YOUR NEMESIS", "SUA NÊMESIS"],
+  "Compara posiciones finales de torneos de esta temporada. Requiere al menos 3 compartidos.": ["Compares final tournament positions this season. Requires at least 3 shared tournaments.", "Compara posições finais dos torneios desta temporada. Exige pelo menos 3 compartilhados."],
+  "Entre tus balances desfavorables, es quien más veces terminó por encima de vos.": ["Among opponents with a winning record against you, this player finished ahead most often.", "Entre seus confrontos desfavoráveis, é quem mais vezes terminou à sua frente."],
+  "Todavía faltan torneos compartidos para mostrar rivalidades.": ["More shared tournaments are needed to show rivalries.", "Ainda faltam torneios compartilhados para mostrar rivalidades."],
+  "Por ahora no tenés una némesis con balance desfavorable.": ["You currently have no nemesis with a winning record against you.", "Por enquanto você não tem uma nêmesis com saldo desfavorável."],
+  "{n} torneos juntos": ["{n} tournaments together", "{n} torneios juntos"],
+  "Vos {vos} · Rival {rival} · Empates {empates}": ["You {vos} · Opponent {rival} · Ties {empates}", "Você {vos} · Rival {rival} · Empates {empates}"],
+  "Terminó por encima de vos en {n} de los últimos 4 torneos compartidos.": ["Finished ahead of you in {n} of the last 4 shared tournaments.", "Terminou à sua frente em {n} dos últimos 4 torneios compartilhados."],
   "Tu respuesta: {respuesta}": ["Your response: {respuesta}", "Sua resposta: {respuesta}"],
   "Actualizar club": ["Refresh club", "Atualizar clube"],
   "Próxima fecha": ["Next game night", "Próximo encontro"],

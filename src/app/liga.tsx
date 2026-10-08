@@ -30,6 +30,7 @@ import { clasificacion } from "../lib/clasificacion";
 import { permisosClub } from "../lib/permisosClub";
 import { TituloPersonalizado } from "../components/TituloPersonalizado";
 import { ProximaFechaClub } from "../components/ProximaFechaClub";
+import { RivalidadesClub } from "../components/RivalidadesClub";
 
 export default function Liga() {
   const { id, temporada: temporadaParam } = useLocalSearchParams<{
@@ -232,6 +233,10 @@ export default function Liga() {
 
           <Seccion titulo={t("Próxima fecha")} inicial>
             <ProximaFechaClub liga={datos.liga.id} fecha={datos.proxima_fecha} administrar={datos.liga.puede_administrar} activa={datos.liga.estado === "activa"} alCambiar={actualizarRanking} />
+          </Seccion>
+
+          <Seccion titulo={t("Rivalidades")} inicial>
+            <RivalidadesClub datos={datos.rivalidades} />
           </Seccion>
 
           <Seccion titulo={t("Títulos automáticos")}>
