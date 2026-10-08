@@ -23,7 +23,7 @@ import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 import { estadoActual, numeroDeNivel } from "../lib/niveles";
 import { ahoraServidor } from "../lib/tiempoServidor";
-import { useSalidaMesa } from "../lib/useSalidaMesa";
+import { protegerSalidaMesa, useSalidaMesa } from "../lib/useSalidaMesa";
 import {
   entero,
   calcularPozos,
@@ -61,7 +61,7 @@ export function Mesa({ codigo }: { codigo: string }) {
   );
   const corriendo = sala?.estado === "jugando";
   const volver = useSalidaMesa(
-    (!sala && !mesa.error) || corriendo || sala?.estado === "pausada",
+    protegerSalidaMesa(sala?.estado, !!mesa.error),
   );
   useFocusEffect(
     useCallback(() => {

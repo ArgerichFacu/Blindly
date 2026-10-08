@@ -5,6 +5,12 @@ import { Alert, Platform } from "react-native";
 import { usePreferencias } from "./Preferencias";
 import { useVolver } from "./useVolver";
 
+export function protegerSalidaMesa(estado?: string, errorCarga = false) {
+  if (!estado) return !errorCarga;
+  // Only states known to be inactive allow leaving without confirmation.
+  return estado !== "esperando" && estado !== "finalizada";
+}
+
 export function useSalidaMesa(proteger: boolean) {
   const navigation = useNavigation();
   const { t } = usePreferencias();

@@ -70,7 +70,7 @@ function mesa(os, proteger, aceptacionWeb = false) {
   let callback, bloqueo;
   const dialogs = [], dispatches = [];
   const volver = () => {};
-  const { useSalidaMesa } = cargar("useSalidaMesa", {
+  const { useSalidaMesa, protegerSalidaMesa } = cargar("useSalidaMesa", {
     "expo-router": { useNavigation: () => ({ dispatch: (action) => dispatches.push(action) }) },
     "expo-router/react-navigation": { usePreventRemove: (enabled, fn) => { bloqueo = enabled; callback = fn; } },
     react: { useRef: (value) => ({ current: value }) },
@@ -79,8 +79,18 @@ function mesa(os, proteger, aceptacionWeb = false) {
     "./useVolver": { useVolver: () => volver },
   }, { confirm: () => aceptacionWeb });
   assert.equal(useSalidaMesa(proteger), volver);
-  return { callback, bloqueo, dialogs, dispatches };
+  return { callback, bloqueo, dialogs, dispatches, protegerSalidaMesa };
 }
+
+const { protegerSalidaMesa } = mesa("android", false);
+assert.equal(protegerSalidaMesa("jugando"), true);
+assert.equal(protegerSalidaMesa("pausado"), true, "El estado de pausa del backend es pausado");
+assert.equal(protegerSalidaMesa("esperando"), false);
+assert.equal(protegerSalidaMesa("finalizada"), false);
+assert.equal(protegerSalidaMesa(undefined), true, "La carga inicial protege una mesa todavía desconocida");
+assert.equal(protegerSalidaMesa(undefined, true), false, "Una sala que no carga permite volver");
+assert.equal(protegerSalidaMesa("desconocido"), true, "Un estado no reconocido no permite una salida accidental");
+assert.equal(protegerSalidaMesa("pausado", true), true, "Una desconexión no retira la protección de una mesa conocida");
 
 for (const os of ["android", "ios"]) {
   const active = mesa(os, true);
