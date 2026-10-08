@@ -101,6 +101,11 @@ export default function Opciones() {
         onPress={() => router.push("/instrucciones")}
       />
       <Boton
+        titulo={t("Guía rápida")}
+        secundario
+        onPress={() => router.push("/tutorial")}
+      />
+      <Boton
         titulo={t("Combinaciones de poker")}
         secundario
         onPress={() => router.push("/combinaciones")}

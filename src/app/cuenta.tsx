@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import type { User } from "@supabase/supabase-js";
 import {
   Pantalla,
@@ -20,11 +20,15 @@ import {
 } from "../lib/sesion";
 import { usePreferencias } from "../lib/Preferencias";
 import { usePlus } from "../lib/PlusContext";
+import { useInicio } from "../lib/InicioContext";
 const correoListo = process.env.EXPO_PUBLIC_EMAIL_AUTH_READY === "true";
 export default function Cuenta() {
   const { t, mensajeError } = usePreferencias(),
     router = useRouter(),
     plus = usePlus();
+  const { inicio: origen } = useLocalSearchParams<{ inicio?: string }>();
+  const inicio = useInicio();
+  const desdeInicio = origen === "1";
   const [usuario, setUsuario] = useState<User | null>(null),
     [email, setEmail] = useState(""),
     [codigo, setCodigo] = useState(""),
@@ -71,6 +75,15 @@ export default function Cuenta() {
   }
   return (
     <Pantalla titulo={t("Mi cuenta")}>
+      {desdeInicio && (
+        <Tarjeta>
+          <Texto>
+            {t(
+              "Protegé tu identidad con una clave privada o recuperá tu cuenta existente. Después seguimos con la guía rápida.",
+            )}
+          </Texto>
+        </Tarjeta>
+      )}
       {!correoListo && (
         <Tarjeta>
           <Texto>
@@ -201,7 +214,7 @@ export default function Cuenta() {
                         setUsuario(recuperado);
                         setClave("");
                         setMostrarRecuperacion(false);
-                        router.replace("/cuenta");
+                        if (!desdeInicio) router.replace("/cuenta");
                       })
                     }
                   />
@@ -284,7 +297,7 @@ export default function Cuenta() {
                         setSolicitud(null);
                         setCodigo("");
                         setRecuperar(false);
-                        router.replace("/cuenta");
+                        if (!desdeInicio) router.replace("/cuenta");
                       })
                     }
                   />
@@ -308,8 +321,32 @@ export default function Cuenta() {
               )}
             </Texto>
           )}
+          {desdeInicio && !usuario.is_anonymous && (
+            <Tarjeta>
+              {inicio.error && (
+                <Texto>
+                  {t("No se pudo guardar tu progreso. Probá otra vez.")}
+                </Texto>
+              )}
+              <Boton
+                titulo={t(
+                  claveGenerada
+                    ? "Guardé mi clave. Continuar"
+                    : "Continuar con esta cuenta",
+                )}
+                disabled={ocupado || inicio.ocupado}
+                onPress={() =>
+                  void ejecutar(async () => {
+                    if (await inicio.elegir("cuenta")) router.dismissTo("/");
+                  })
+                }
+              />
+            </Tarjeta>
+          )}
           <Tarjeta style={{ borderColor: "#B91C1C" }}>
-            <Texto style={{ fontWeight: "700" }}>{t("Eliminar mi cuenta")}</Texto>
+            <Texto style={{ fontWeight: "700" }}>
+              {t("Eliminar mi cuenta")}
+            </Texto>
             <Texto suave>
               {t(
                 "Elimina tu identidad, tus puntos y tu historial. No se puede deshacer.",

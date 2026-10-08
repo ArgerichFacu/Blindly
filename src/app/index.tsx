@@ -9,9 +9,13 @@ import {
   Boton,
 } from "../components/Controles";
 import { usePreferencias } from "../lib/Preferencias";
+import { useInicio } from "../lib/InicioContext";
+import { Introduccion } from "../components/Introduccion";
 export default function Menu() {
   const router = useRouter(),
     { t } = usePreferencias();
+  const inicio = useInicio();
+  if (inicio.datos?.fase !== "terminado") return <Introduccion />;
   return (
     <Pantalla titulo="blindly." volver={false}>
       <View style={{ paddingVertical: 18, gap: 20 }}>
@@ -67,7 +71,9 @@ export default function Menu() {
       />
       <Acceso
         titulo={t("Blindly Plus")}
-        detalle={t("Más personalización, estadísticas y herramientas para el host.")}
+        detalle={t(
+          "Más personalización, estadísticas y herramientas para el host.",
+        )}
         simbolo="♛"
         onPress={() => router.push("/plus")}
       />

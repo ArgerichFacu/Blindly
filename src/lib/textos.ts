@@ -1,6 +1,93 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Tu mesa.\nTu liga.\nTus rivalidades.": [
+    "Your table.\nYour league.\nYour rivalries.",
+    "Sua mesa.\nSua liga.\nSuas rivalidades.",
+  ],
+  "Jugá ahora como invitado o protegé tu identidad para llevar tu historia a otro celular.":
+    [
+      "Play as a guest now or protect your identity to take your history to another phone.",
+      "Jogue agora como convidado ou proteja sua identidade para levar seu histórico a outro celular.",
+    ],
+  "Continuar como invitado": [
+    "Continue as a guest",
+    "Continuar como convidado",
+  ],
+  "Crear o recuperar cuenta": [
+    "Create or recover account",
+    "Criar ou recuperar conta",
+  ],
+  "Podés proteger tu cuenta más adelante desde Opciones → Mi cuenta.": [
+    "You can protect your account later in Settings → My account.",
+    "Você pode proteger sua conta depois em Opções → Minha conta.",
+  ],
+  "No se pudo cargar tu inicio. Probá de nuevo.": [
+    "Your introduction could not be loaded. Try again.",
+    "Não foi possível carregar sua introdução. Tente novamente.",
+  ],
+  "No se pudo guardar tu progreso. Probá otra vez.": [
+    "Your progress could not be saved. Try again.",
+    "Não foi possível salvar seu progresso. Tente novamente.",
+  ],
+  "Paso {n} de 3": ["Step {n} of 3", "Passo {n} de 3"],
+  "EN LA MISMA MESA": ["AT THE SAME TABLE", "NA MESMA MESA"],
+  "CADA UNO JUEGA SU TURNO": [
+    "EVERYONE PLAYS THEIR TURN",
+    "CADA UM JOGA SUA VEZ",
+  ],
+  "LA HISTORIA DE TU GRUPO": [
+    "YOUR GROUP'S HISTORY",
+    "A HISTÓRIA DO SEU GRUPO",
+  ],
+  "Jugamos con cartas de verdad.": [
+    "We play with real cards.",
+    "Jogamos com cartas de verdade.",
+  ],
+  "Tu mesa bajo control.": [
+    "Your table under control.",
+    "Sua mesa sob controle.",
+  ],
+  "Convertí tus noches en una liga.": [
+    "Turn your poker nights into a league.",
+    "Transforme suas noites em uma liga.",
+  ],
+  "Blindly lleva el resto: ciegas, stacks y turnos. Las cartas se reparten en la mesa.":
+    [
+      "Blindly handles the rest: blinds, stacks and turns. Cards are dealt at the table.",
+      "Blindly cuida do resto: blinds, stacks e turnos. As cartas são distribuídas na mesa.",
+    ],
+  "Con fichas virtuales, cada jugador pasa, iguala, sube o se retira desde su celular. El dealer indica al ganador y reparte el pozo.":
+    [
+      "With virtual chips, each player checks, calls, raises or folds from their phone. The dealer selects the winner and distributes the pot.",
+      "Com fichas virtuais, cada jogador passa, paga, aumenta ou desiste pelo celular. O dealer indica o vencedor e distribui o pote.",
+    ],
+  "Temporadas · Ranking · Historia": [
+    "Seasons · Rankings · History",
+    "Temporadas · Ranking · História",
+  ],
+  "Juntá a tu grupo, sumen partidas y sigan su progreso. Para una partida casual podés seguir como invitado.":
+    [
+      "Bring your group together, play games and follow your progress. For a casual game, you can stay a guest.",
+      "Reúna seu grupo, joguem partidas e acompanhem seu progresso. Para uma partida casual, você pode continuar como convidado.",
+    ],
+  Empezar: ["Get started", "Começar"],
+  "Paso anterior": ["Previous step", "Passo anterior"],
+  "Omitir tutorial": ["Skip tutorial", "Pular tutorial"],
+  "Guía rápida": ["Quick guide", "Guia rápido"],
+  "Protegé tu identidad con una clave privada o recuperá tu cuenta existente. Después seguimos con la guía rápida.":
+    [
+      "Protect your identity with a private recovery key or recover your existing account. Then we'll continue with the quick guide.",
+      "Proteja sua identidade com uma chave privada ou recupere sua conta existente. Depois seguimos com o guia rápido.",
+    ],
+  "Guardé mi clave. Continuar": [
+    "I've saved my key. Continue",
+    "Salvei minha chave. Continuar",
+  ],
+  "Continuar con esta cuenta": [
+    "Continue with this account",
+    "Continuar com esta conta",
+  ],
   "Poker presencial, sin vueltas": [
     "Poker with friends, made simple",
     "Poker presencial, sem complicações",
@@ -12,10 +99,11 @@ export const textos: Record<string, [string, string]> = {
   "¿Salir de la mesa?": ["Leave the table?", "Sair da mesa?"],
   "Seguir en la mesa": ["Stay at the table", "Continuar na mesa"],
   "Salir de la mesa": ["Leave the table", "Sair da mesa"],
-  "La partida sigue en curso. Salir de esta pantalla no te retira de la mano ni pausa la mesa. Podés volver con el código de sala.": [
-    "The game is still running. Leaving this screen does not fold your hand or pause the table. You can return with the room code.",
-    "A partida continua. Sair desta tela não desiste da mão nem pausa a mesa. Você pode voltar com o código da sala.",
-  ],
+  "La partida sigue en curso. Salir de esta pantalla no te retira de la mano ni pausa la mesa. Podés volver con el código de sala.":
+    [
+      "The game is still running. Leaving this screen does not fold your hand or pause the table. You can return with the room code.",
+      "A partida continua. Sair desta tela não desiste da mão nem pausa a mesa. Você pode voltar com o código da sala.",
+    ],
   Continuar: ["Continue", "Continuar"],
   Guardar: ["Save", "Salvar"],
   Cancelar: ["Cancel", "Cancelar"],
@@ -315,12 +403,16 @@ Object.assign(textos, {
     "Turn your games into a season.",
     "Transforme suas partidas em uma temporada.",
   ],
-  "Ranking, puntos y resultados compartidos para tu grupo. Los invitados juegan gratis.": [
-    "Shared standings, points and results for your group. Guests play for free.",
-    "Classificação, pontos e resultados compartilhados para seu grupo. Convidados jogam grátis.",
-  ],
+  "Ranking, puntos y resultados compartidos para tu grupo. Los invitados juegan gratis.":
+    [
+      "Shared standings, points and results for your group. Guests play for free.",
+      "Classificação, pontos e resultados compartilhados para seu grupo. Convidados jogam grátis.",
+    ],
   "+ Crear liga": ["+ Create league", "+ Criar liga"],
-  "Crear mi liga con Plus": ["Create my league with Plus", "Criar minha liga com Plus"],
+  "Crear mi liga con Plus": [
+    "Create my league with Plus",
+    "Criar minha liga com Plus",
+  ],
   "Todavía no participás en ninguna liga.": [
     "You are not in a league yet.",
     "Você ainda não participa de nenhuma liga.",
@@ -328,20 +420,25 @@ Object.assign(textos, {
   "Sin temporada": ["No season", "Sem temporada"],
   "{n} miembros": ["{n} members", "{n} membros"],
   "Última partida: {fecha}": ["Last game: {fecha}", "Última partida: {fecha}"],
-  "Sin partidas finalizadas": ["No completed games", "Sem partidas finalizadas"],
-  "Una liga existente permanece visible si el owner deja Plus. La administración queda en pausa hasta restaurarlo.": [
-    "An existing league stays visible if its owner leaves Plus. Management pauses until Plus is restored.",
-    "Uma liga existente continua visível se o owner deixar o Plus. A administração fica pausada até a restauração.",
+  "Sin partidas finalizadas": [
+    "No completed games",
+    "Sem partidas finalizadas",
   ],
+  "Una liga existente permanece visible si el owner deja Plus. La administración queda en pausa hasta restaurarlo.":
+    [
+      "An existing league stays visible if its owner leaves Plus. Management pauses until Plus is restored.",
+      "Uma liga existente continua visível se o owner deixar o Plus. A administração fica pausada até a restauração.",
+    ],
   "Crear liga": ["Create league", "Criar liga"],
   "Esta función requiere Blindly Plus.": [
     "This feature requires Blindly Plus.",
     "Este recurso exige Blindly Plus.",
   ],
-  "Solo el owner necesita Plus. Todos sus invitados pueden participar gratis.": [
-    "Only the owner needs Plus. Every guest can participate for free.",
-    "Somente o owner precisa do Plus. Todos os convidados podem participar grátis.",
-  ],
+  "Solo el owner necesita Plus. Todos sus invitados pueden participar gratis.":
+    [
+      "Only the owner needs Plus. Every guest can participate for free.",
+      "Somente o owner precisa do Plus. Todos os convidados podem participar grátis.",
+    ],
   "Dale una identidad a tu grupo y empezá su primera temporada.": [
     "Give your group an identity and start its first season.",
     "Dê uma identidade ao seu grupo e comece a primeira temporada.",
@@ -352,10 +449,11 @@ Object.assign(textos, {
   "Temporada 2026": ["2026 Season", "Temporada 2026"],
   "Tu nombre en la liga": ["Your league name", "Seu nome na liga"],
   "Nombre de jugador": ["Player name", "Nome do jogador"],
-  "Los demás miembros se incorporan automáticamente al jugar su primera partida asociada.": [
-    "Other members join automatically when they play their first associated game.",
-    "Os outros membros entram automaticamente ao jogar a primeira partida associada.",
-  ],
+  "Los demás miembros se incorporan automáticamente al jugar su primera partida asociada.":
+    [
+      "Other members join automatically when they play their first associated game.",
+      "Os outros membros entram automaticamente ao jogar a primeira partida associada.",
+    ],
   Liga: ["League", "Liga"],
   Ranking: ["Standings", "Classificação"],
   "El ranking aparecerá al finalizar la primera partida de esta temporada.": [
@@ -382,10 +480,11 @@ Object.assign(textos, {
     "A pessoa deixará de ver a liga, mas seus resultados históricos serão preservados.",
   ],
   "Liga en modo lectura": ["Read-only league", "Liga em modo de leitura"],
-  "Tus datos siguen guardados. Restaurá Plus para crear temporadas o partidas asociadas y administrar miembros.": [
-    "Your data remains saved. Restore Plus to create seasons or associated games and manage members.",
-    "Seus dados continuam salvos. Restaure o Plus para criar temporadas ou partidas associadas e gerenciar membros.",
-  ],
+  "Tus datos siguen guardados. Restaurá Plus para crear temporadas o partidas asociadas y administrar miembros.":
+    [
+      "Your data remains saved. Restore Plus to create seasons or associated games and manage members.",
+      "Seus dados continuam salvos. Restaure o Plus para criar temporadas ou partidas associadas e gerenciar membros.",
+    ],
   "Restaurar Blindly Plus": ["Restore Blindly Plus", "Restaurar Blindly Plus"],
   "Administrar liga": ["Manage league", "Gerenciar liga"],
   "Editar nombre": ["Edit name", "Editar nome"],
@@ -406,10 +505,11 @@ Object.assign(textos, {
   "Archivar liga": ["Archive league", "Arquivar liga"],
   "PARTIDA DE LIGA": ["LEAGUE GAME", "PARTIDA DE LIGA"],
   "Temporada activa": ["Active season", "Temporada ativa"],
-  "Al finalizar, los puntos se sumarán automáticamente al ranking de esta temporada.": [
-    "When the game ends, points will be added automatically to this season's standings.",
-    "Ao finalizar, os pontos serão somados automaticamente à classificação desta temporada.",
-  ],
+  "Al finalizar, los puntos se sumarán automáticamente al ranking de esta temporada.":
+    [
+      "When the game ends, points will be added automatically to this season's standings.",
+      "Ao finalizar, os pontos serão somados automaticamente à classificação desta temporada.",
+    ],
   "Temporadas, ranking y partidas de tu grupo.": [
     "Your group's seasons, standings and games.",
     "Temporadas, classificação e partidas do seu grupo.",
@@ -455,7 +555,10 @@ Object.assign(textos, {
     "The season is not active or does not exist.",
     "A temporada não está ativa ou não existe.",
   ],
-  "La liga está archivada.": ["The league is archived.", "A liga está arquivada."],
+  "La liga está archivada.": [
+    "The league is archived.",
+    "A liga está arquivada.",
+  ],
   "El owner no puede quitarse de su propia liga.": [
     "The owner cannot be removed from their own league.",
     "O owner não pode ser removido da própria liga.",
@@ -996,10 +1099,11 @@ Object.assign(textos, {
       "Email recovery is being set up. You can keep playing as a guest.",
       "A recuperação por email está sendo preparada. Você pode continuar jogando como convidado.",
     ],
-  "El correo está en preparación. La clave de recuperación ya está disponible.": [
-    "Email is being set up. The recovery key is already available.",
-    "O email está sendo preparado. A chave de recuperação já está disponível.",
-  ],
+  "El correo está en preparación. La clave de recuperación ya está disponible.":
+    [
+      "Email is being set up. The recovery key is already available.",
+      "O email está sendo preparado. A chave de recuperação já está disponível.",
+    ],
 });
 
 Object.assign(textos, {
@@ -1007,10 +1111,11 @@ Object.assign(textos, {
   Igualar: ["Call", "Pagar"],
   Retirarse: ["Fold", "Desistir"],
   "Apostar / subir": ["Bet / raise", "Apostar / aumentar"],
-  "Cada jugador registra su propia acción desde el celular. El dealer solo cierra la mano y entrega el pozo.": [
-    "Each player records their own action from their phone. The dealer only closes the hand and awards the pot.",
-    "Cada jogador registra a própria ação pelo celular. O dealer apenas encerra a mão e entrega o pote.",
-  ],
+  "Cada jugador registra su propia acción desde el celular. El dealer solo cierra la mano y entrega el pozo.":
+    [
+      "Each player records their own action from their phone. The dealer only closes the hand and awards the pot.",
+      "Cada jogador registra a própria ação pelo celular. O dealer apenas encerra a mão e entrega o pote.",
+    ],
 });
 
 Object.assign(textos, {
@@ -1025,14 +1130,16 @@ Object.assign(textos, {
   ],
   PLUS: ["PLUS", "PLUS"],
   "Tu mesa, a tu manera.": ["Your table, your way.", "Sua mesa, do seu jeito."],
-  "Blindly Plus ampliará la personalización y el análisis sin quitar funciones esenciales de la versión gratuita.": [
-    "Blindly Plus will expand customization and insights without removing essential features from the free version.",
-    "Blindly Plus ampliará a personalização e as análises sem remover recursos essenciais da versão gratuita.",
-  ],
-  "Blindly Plus amplía la personalización y el análisis sin quitar funciones esenciales de la versión gratuita.": [
-    "Blindly Plus expands customization and insights without removing essential features from the free version.",
-    "Blindly Plus amplia a personalização e as análises sem remover recursos essenciais da versão gratuita.",
-  ],
+  "Blindly Plus ampliará la personalización y el análisis sin quitar funciones esenciales de la versión gratuita.":
+    [
+      "Blindly Plus will expand customization and insights without removing essential features from the free version.",
+      "Blindly Plus ampliará a personalização e as análises sem remover recursos essenciais da versão gratuita.",
+    ],
+  "Blindly Plus amplía la personalización y el análisis sin quitar funciones esenciales de la versión gratuita.":
+    [
+      "Blindly Plus expands customization and insights without removing essential features from the free version.",
+      "Blindly Plus amplia a personalização e as análises sem remover recursos essenciais da versão gratuita.",
+    ],
   "PLUS ACTIVO": ["PLUS ACTIVE", "PLUS ATIVO"],
   "Tu mesa ya es Plus.": ["Your table is now Plus.", "Sua mesa agora é Plus."],
   "Las funciones Plus están habilitadas para esta cuenta.": [
@@ -1073,18 +1180,16 @@ Object.assign(textos, {
     "Poker with friends stays free",
     "O poker entre amigos continua grátis",
   ],
-  "Crear y unirse a salas, gestionar turnos, usar fichas físicas o virtuales y repartir el pozo seguirán disponibles para todos.": [
-    "Creating and joining rooms, managing turns, using physical or virtual chips and awarding the pot will remain available to everyone.",
-    "Criar e entrar em salas, gerenciar turnos, usar fichas físicas ou virtuais e entregar o pote continuarão disponíveis para todos.",
-  ],
+  "Crear y unirse a salas, gestionar turnos, usar fichas físicas o virtuales y repartir el pozo seguirán disponibles para todos.":
+    [
+      "Creating and joining rooms, managing turns, using physical or virtual chips and awarding the pot will remain available to everyone.",
+      "Criar e entrar em salas, gerenciar turnos, usar fichas físicas ou virtuais e entregar o pote continuarão disponíveis para todos.",
+    ],
   "Ver planes de Blindly Plus": [
     "View Blindly Plus plans",
     "Ver planos do Blindly Plus",
   ],
-  "Administrar suscripción": [
-    "Manage subscription",
-    "Gerenciar assinatura",
-  ],
+  "Administrar suscripción": ["Manage subscription", "Gerenciar assinatura"],
   "Restaurar compras": ["Restore purchases", "Restaurar compras"],
   "Estructura personalizada": [
     "Custom blind structure",
@@ -1112,10 +1217,11 @@ Object.assign(textos, {
     "Best finish in the last 30",
     "Melhor posição nas últimas 30",
   ],
-  "Activá Blindly Plus para ver promedios, victorias, podios y tu mejor resultado.": [
-    "Activate Blindly Plus to see averages, wins, podiums and your best result.",
-    "Ative o Blindly Plus para ver médias, vitórias, pódios e seu melhor resultado.",
-  ],
+  "Activá Blindly Plus para ver promedios, victorias, podios y tu mejor resultado.":
+    [
+      "Activate Blindly Plus to see averages, wins, podiums and your best result.",
+      "Ative o Blindly Plus para ver médias, vitórias, pódios e seu melhor resultado.",
+    ],
   "Blindly Plus está en preparación": [
     "Blindly Plus is being prepared",
     "Blindly Plus está em preparação",
@@ -1132,22 +1238,21 @@ Object.assign(textos, {
     "Account protected with a recovery key",
     "Conta protegida com chave de recuperação",
   ],
-  "Protección sin correo": [
-    "Protection without email",
-    "Proteção sem email",
-  ],
+  "Protección sin correo": ["Protection without email", "Proteção sem email"],
   "Tu cuenta tiene una clave de recuperación": [
     "Your account has a recovery key",
     "Sua conta tem uma chave de recuperação",
   ],
-  "Guardá una clave privada para recuperar este mismo usuario, sus puntos, historial y compras en otro celular.": [
-    "Save a private key to recover this same user, points, history and purchases on another phone.",
-    "Guarde uma chave privada para recuperar este mesmo usuário, pontos, histórico e compras em outro celular.",
-  ],
-  "Guardala ahora en un lugar seguro. Blindly no puede mostrarla de nuevo; crear otra reemplaza la anterior.": [
-    "Save it somewhere safe now. Blindly cannot show it again; creating another key replaces the previous one.",
-    "Guarde-a agora em um local seguro. O Blindly não pode exibi-la novamente; criar outra substitui a anterior.",
-  ],
+  "Guardá una clave privada para recuperar este mismo usuario, sus puntos, historial y compras en otro celular.":
+    [
+      "Save a private key to recover this same user, points, history and purchases on another phone.",
+      "Guarde uma chave privada para recuperar este mesmo usuário, pontos, histórico e compras em outro celular.",
+    ],
+  "Guardala ahora en un lugar seguro. Blindly no puede mostrarla de nuevo; crear otra reemplaza la anterior.":
+    [
+      "Save it somewhere safe now. Blindly cannot show it again; creating another key replaces the previous one.",
+      "Guarde-a agora em um local seguro. O Blindly não pode exibi-la novamente; criar outra substitui a anterior.",
+    ],
   "Crear una clave nueva": ["Create a new key", "Criar uma nova chave"],
   "Crear clave de recuperación": [
     "Create recovery key",
@@ -1156,14 +1261,16 @@ Object.assign(textos, {
   "Ya tengo una clave": ["I already have a key", "Já tenho uma chave"],
   "Clave de recuperación": ["Recovery key", "Chave de recuperação"],
   "Agregar un email": ["Add an email", "Adicionar um email"],
-  "Tu identidad ya se puede recuperar con la clave privada. También podrás agregar un email cuando el correo esté habilitado.": [
-    "Your identity can now be recovered with the private key. You can also add an email when email service is enabled.",
-    "Sua identidade já pode ser recuperada com a chave privada. Você também poderá adicionar um email quando o serviço estiver habilitado.",
-  ],
-  "La clave no es válida. Revisala o creá una nueva desde el dispositivo donde todavía tenés acceso.": [
-    "The key is invalid. Check it or create a new one on a device where you still have access.",
-    "A chave é inválida. Confira-a ou crie uma nova em um dispositivo no qual você ainda tenha acesso.",
-  ],
+  "Tu identidad ya se puede recuperar con la clave privada. También podrás agregar un email cuando el correo esté habilitado.":
+    [
+      "Your identity can now be recovered with the private key. You can also add an email when email service is enabled.",
+      "Sua identidade já pode ser recuperada com a chave privada. Você também poderá adicionar um email quando o serviço estiver habilitado.",
+    ],
+  "La clave no es válida. Revisala o creá una nueva desde el dispositivo donde todavía tenés acceso.":
+    [
+      "The key is invalid. Check it or create a new one on a device where you still have access.",
+      "A chave é inválida. Confira-a ou crie uma nova em um dispositivo no qual você ainda tenha acesso.",
+    ],
   "No se pudo crear la clave de recuperación. Probá de nuevo.": [
     "The recovery key could not be created. Try again.",
     "Não foi possível criar a chave de recuperação. Tente novamente.",
@@ -1172,10 +1279,11 @@ Object.assign(textos, {
     "Deletes your identity, points and history. This cannot be undone.",
     "Exclui sua identidade, pontos e histórico. Esta ação não pode ser desfeita.",
   ],
-  "Confirmá solo si querés borrar definitivamente todos tus datos de Blindly.": [
-    "Confirm only if you want to permanently delete all your Blindly data.",
-    "Confirme apenas se quiser excluir definitivamente todos os seus dados do Blindly.",
-  ],
+  "Confirmá solo si querés borrar definitivamente todos tus datos de Blindly.":
+    [
+      "Confirm only if you want to permanently delete all your Blindly data.",
+      "Confirme apenas se quiser excluir definitivamente todos os seus dados do Blindly.",
+    ],
   "Eliminar definitivamente": ["Delete permanently", "Excluir definitivamente"],
   "Terminá o abandoná la partida activa antes de eliminar tu cuenta.": [
     "Finish or leave the active game before deleting your account.",
@@ -1185,10 +1293,11 @@ Object.assign(textos, {
     "The account could not be deleted. Please try again.",
     "Não foi possível excluir a conta. Tente novamente.",
   ],
-  "Eliminar tu cuenta no cancela tu suscripción de Apple o Google. Administrala antes de borrar la cuenta.": [
-    "Deleting your account does not cancel your Apple or Google subscription. Manage it before deleting the account.",
-    "Excluir sua conta não cancela a assinatura da Apple ou do Google. Gerencie-a antes de excluir a conta.",
-  ],
+  "Eliminar tu cuenta no cancela tu suscripción de Apple o Google. Administrala antes de borrar la cuenta.":
+    [
+      "Deleting your account does not cancel your Apple or Google subscription. Manage it before deleting the account.",
+      "Excluir sua conta não cancela a assinatura da Apple ou do Google. Gerencie-a antes de excluir a conta.",
+    ],
   "Blindly Plus todavía no está disponible en este dispositivo.": [
     "Blindly Plus is not available on this device yet.",
     "O Blindly Plus ainda não está disponível neste dispositivo.",
@@ -1216,114 +1325,214 @@ Object.assign(textos, {
     "Last updated: October 1, 2026",
     "Última atualização: 1 de outubro de 2026",
   ],
-  "Datos que guarda Blindly": ["Data Blindly stores", "Dados que o Blindly armazena"],
-  "Guardamos un identificador de cuenta, tu nombre de jugador, salas, acciones de mesa, stacks, puntuación e historial. El email es opcional y solo se guarda si protegés tu cuenta.": [
-    "We store an account identifier, player name, rooms, table actions, stacks, score and history. Email is optional and is stored only when you protect your account.",
-    "Armazenamos um identificador de conta, nome de jogador, salas, ações da mesa, stacks, pontuação e histórico. O email é opcional e só é salvo quando você protege a conta.",
+  "Datos que guarda Blindly": [
+    "Data Blindly stores",
+    "Dados que o Blindly armazena",
   ],
+  "Guardamos un identificador de cuenta, tu nombre de jugador, salas, acciones de mesa, stacks, puntuación e historial. El email es opcional y solo se guarda si protegés tu cuenta.":
+    [
+      "We store an account identifier, player name, rooms, table actions, stacks, score and history. Email is optional and is stored only when you protect your account.",
+      "Armazenamos um identificador de conta, nome de jogador, salas, ações da mesa, stacks, pontuação e histórico. O email é opcional e só é salvo quando você protege a conta.",
+    ],
   "Para qué se usan": ["How data is used", "Como os dados são usados"],
-  "Los datos permiten autenticarte, sincronizar la partida entre celulares, calcular rangos, recuperar tu historial y proteger la integridad de fichas y puntos.": [
-    "Data is used to authenticate you, sync games across phones, calculate ranks, restore history and protect chip and score integrity.",
-    "Os dados permitem autenticar você, sincronizar partidas entre celulares, calcular posições, recuperar o histórico e proteger fichas e pontos.",
-  ],
+  "Los datos permiten autenticarte, sincronizar la partida entre celulares, calcular rangos, recuperar tu historial y proteger la integridad de fichas y puntos.":
+    [
+      "Data is used to authenticate you, sync games across phones, calculate ranks, restore history and protect chip and score integrity.",
+      "Os dados permitem autenticar você, sincronizar partidas entre celulares, calcular posições, recuperar o histórico e proteger fichas e pontos.",
+    ],
   "Cámara y dispositivo": ["Camera and device", "Câmera e dispositivo"],
-  "La cámara solo lee códigos QR de salas. Blindly no guarda ni envía fotos. El tema, el idioma y el volumen se guardan localmente en tu dispositivo.": [
-    "The camera only reads room QR codes. Blindly does not store or send photos. Theme, language and volume are stored locally on your device.",
-    "A câmera apenas lê códigos QR das salas. O Blindly não salva nem envia fotos. Tema, idioma e volume ficam armazenados localmente no dispositivo.",
-  ],
+  "La cámara solo lee códigos QR de salas. Blindly no guarda ni envía fotos. El tema, el idioma y el volumen se guardan localmente en tu dispositivo.":
+    [
+      "The camera only reads room QR codes. Blindly does not store or send photos. Theme, language and volume are stored locally on your device.",
+      "A câmera apenas lê códigos QR das salas. O Blindly não salva nem envia fotos. Tema, idioma e volume ficam armazenados localmente no dispositivo.",
+    ],
   Servicios: ["Services", "Serviços"],
-  "Supabase aloja la autenticación y la base de datos. RevenueCat gestiona el estado de Blindly Plus cuando está activado. Apple, Google y Expo pueden procesar datos técnicos al distribuir o ejecutar la app. Blindly no vende datos ni usa publicidad.": [
-    "Supabase hosts authentication and the database. RevenueCat manages Blindly Plus status when enabled. Apple, Google and Expo may process technical data when distributing or running the app. Blindly does not sell data or use advertising.",
-    "O Supabase hospeda a autenticação e o banco de dados. A RevenueCat gerencia o estado do Blindly Plus quando ativado. Apple, Google e Expo podem processar dados técnicos ao distribuir ou executar o app. O Blindly não vende dados nem usa publicidade.",
+  "Supabase aloja la autenticación y la base de datos. RevenueCat gestiona el estado de Blindly Plus cuando está activado. Apple, Google y Expo pueden procesar datos técnicos al distribuir o ejecutar la app. Blindly no vende datos ni usa publicidad.":
+    [
+      "Supabase hosts authentication and the database. RevenueCat manages Blindly Plus status when enabled. Apple, Google and Expo may process technical data when distributing or running the app. Blindly does not sell data or use advertising.",
+      "O Supabase hospeda a autenticação e o banco de dados. A RevenueCat gerencia o estado do Blindly Plus quando ativado. Apple, Google e Expo podem processar dados técnicos ao distribuir ou executar o app. O Blindly não vende dados nem usa publicidade.",
+    ],
+  "Conservación y eliminación": [
+    "Retention and deletion",
+    "Retenção e exclusão",
   ],
-  "Conservación y eliminación": ["Retention and deletion", "Retenção e exclusão"],
-  "Los datos se conservan mientras exista tu cuenta. Desde Mi cuenta podés eliminar la identidad, los puntos y el historial. Una partida activa debe finalizar antes para no romper la mesa de otros jugadores.": [
-    "Data is retained while your account exists. In My account you can delete your identity, points and history. An active game must finish first to avoid disrupting other players.",
-    "Os dados são mantidos enquanto a conta existir. Em Minha conta, você pode excluir identidade, pontos e histórico. Uma partida ativa deve terminar antes para não interromper os outros jogadores.",
-  ],
+  "Los datos se conservan mientras exista tu cuenta. Desde Mi cuenta podés eliminar la identidad, los puntos y el historial. Una partida activa debe finalizar antes para no romper la mesa de otros jugadores.":
+    [
+      "Data is retained while your account exists. In My account you can delete your identity, points and history. An active game must finish first to avoid disrupting other players.",
+      "Os dados são mantidos enquanto a conta existir. Em Minha conta, você pode excluir identidade, pontos e histórico. Uma partida ativa deve terminar antes para não interromper os outros jogadores.",
+    ],
   "Tus opciones": ["Your choices", "Suas opções"],
-  "Podés jugar sin email, vincular uno para recuperar la cuenta o eliminar todos tus datos. La cámara es opcional porque también podés ingresar el código de sala.": [
-    "You can play without email, link one to recover the account, or delete all your data. Camera access is optional because you can enter the room code instead.",
-    "Você pode jogar sem email, vincular um para recuperar a conta ou excluir todos os dados. A câmera é opcional porque também é possível digitar o código da sala.",
+  "Podés jugar sin email, vincular uno para recuperar la cuenta o eliminar todos tus datos. La cámara es opcional porque también podés ingresar el código de sala.":
+    [
+      "You can play without email, link one to recover the account, or delete all your data. Camera access is optional because you can enter the room code instead.",
+      "Você pode jogar sem email, vincular um para recuperar a conta ou excluir todos os dados. A câmera é opcional porque também é possível digitar o código da sala.",
+    ],
+  "Para consultas de privacidad, usá el canal de soporte publicado en el repositorio oficial de Blindly.":
+    [
+      "For privacy questions, use the support channel published in the official Blindly repository.",
+      "Para dúvidas de privacidade, use o canal de suporte publicado no repositório oficial do Blindly.",
+    ],
+  "Blindly organiza partidas presenciales entre amigos. No procesa apuestas con dinero real ni premios. Los jugadores acuerdan las reglas y el dealer valida los resultados.":
+    [
+      "Blindly organizes in-person games with friends. It does not process real-money wagers or prizes. Players agree on the rules and the dealer validates results.",
+      "O Blindly organiza partidas presenciais entre amigos. Não processa apostas com dinheiro real nem prêmios. Os jogadores combinam as regras e o dealer valida os resultados.",
+    ],
+  "Blindly Plus podrá ofrecer funciones digitales opcionales mediante las tiendas oficiales. La partida esencial seguirá disponible sin una suscripción.":
+    [
+      "Blindly Plus may offer optional digital features through official stores. Essential gameplay will remain available without a subscription.",
+      "O Blindly Plus poderá oferecer recursos digitais opcionais pelas lojas oficiais. A partida essencial continuará disponível sem assinatura.",
+    ],
+  "Jugadores habituales esperados": [
+    "Expected regular players",
+    "Jogadores habituais esperados",
   ],
-  "Para consultas de privacidad, usá el canal de soporte publicado en el repositorio oficial de Blindly.": [
-    "For privacy questions, use the support channel published in the official Blindly repository.",
-    "Para dúvidas de privacidade, use o canal de suporte publicado no repositório oficial do Blindly.",
+  "Es una referencia: cada jugador debe entrar con el código o QR.": [
+    "This is a reference: every player must join with the code or QR.",
+    "Esta é uma referência: cada jogador deve entrar com o código ou QR.",
   ],
-  "Blindly organiza partidas presenciales entre amigos. No procesa apuestas con dinero real ni premios. Los jugadores acuerdan las reglas y el dealer valida los resultados.": [
-    "Blindly organizes in-person games with friends. It does not process real-money wagers or prizes. Players agree on the rules and the dealer validates results.",
-    "O Blindly organiza partidas presenciais entre amigos. Não processa apostas com dinheiro real nem prêmios. Os jogadores combinam as regras e o dealer valida os resultados.",
-  ],
-  "Blindly Plus podrá ofrecer funciones digitales opcionales mediante las tiendas oficiales. La partida esencial seguirá disponible sin una suscripción.": [
-    "Blindly Plus may offer optional digital features through official stores. Essential gameplay will remain available without a subscription.",
-    "O Blindly Plus poderá oferecer recursos digitais opcionais pelas lojas oficiais. A partida essencial continuará disponível sem assinatura.",
-  ],
-  "Jugadores habituales esperados": ["Expected regular players", "Jogadores habituais esperados"],
-  "Es una referencia: cada jugador debe entrar con el código o QR.": ["This is a reference: every player must join with the code or QR.", "Esta é uma referência: cada jogador deve entrar com o código ou QR."],
   "MESA HABITUAL": ["REGULAR TABLE", "MESA HABITUAL"],
   "Mesa habitual": ["Regular table", "Mesa habitual"],
-  "La sala se creará con la configuración guardada. Podrás ajustarla antes de iniciar.": ["The room will use the saved settings. You can adjust them before starting.", "A sala usará as configurações salvas. Você poderá ajustá-las antes de iniciar."],
+  "La sala se creará con la configuración guardada. Podrás ajustarla antes de iniciar.":
+    [
+      "The room will use the saved settings. You can adjust them before starting.",
+      "A sala usará as configurações salvas. Você poderá ajustá-las antes de iniciar.",
+    ],
   "Entre amigos": ["Among friends", "Entre amigos"],
-  "Compará resultados con quienes compartiste mesa.": ["Compare results with people who shared your table.", "Compare resultados com quem compartilhou sua mesa."],
+  "Compará resultados con quienes compartiste mesa.": [
+    "Compare results with people who shared your table.",
+    "Compare resultados com quem compartilhou sua mesa.",
+  ],
   "BLINDLY PLUS": ["BLINDLY PLUS", "BLINDLY PLUS"],
-  "Descubrí quién terminó más veces arriba, sus victorias y sus podios compartidos.": ["See who finished ahead more often, with shared wins and podiums.", "Veja quem terminou mais vezes na frente, com vitórias e pódios compartilhados."],
-  "Solo aparecen jugadores con los que compartiste partidas finalizadas.": ["Only players from completed games you shared are shown.", "Apenas jogadores de partidas concluídas que vocês compartilharam aparecem."],
-  "Jugá y finalizá una partida con amigos para comparar resultados.": ["Play and finish a game with friends to compare results.", "Jogue e finalize uma partida com amigos para comparar resultados."],
-  "VOS": ["YOU", "VOCÊ"],
+  "Descubrí quién terminó más veces arriba, sus victorias y sus podios compartidos.":
+    [
+      "See who finished ahead more often, with shared wins and podiums.",
+      "Veja quem terminou mais vezes na frente, com vitórias e pódios compartilhados.",
+    ],
+  "Solo aparecen jugadores con los que compartiste partidas finalizadas.": [
+    "Only players from completed games you shared are shown.",
+    "Apenas jogadores de partidas concluídas que vocês compartilharam aparecem.",
+  ],
+  "Jugá y finalizá una partida con amigos para comparar resultados.": [
+    "Play and finish a game with friends to compare results.",
+    "Jogue e finalize uma partida com amigos para comparar resultados.",
+  ],
+  VOS: ["YOU", "VOCÊ"],
   "{n} partidas juntos": ["{n} games together", "{n} partidas juntos"],
   "Terminó arriba": ["Finished ahead", "Terminou na frente"],
-  "Victorias": ["Wins", "Vitórias"],
+  Victorias: ["Wins", "Vitórias"],
   "{n} empates": ["{n} ties", "{n} empates"],
-  "La comparación usa solo resultados de partidas que ambos compartieron. No muestra el historial privado de otra persona.": ["The comparison only uses results from games you both shared. It does not show another person's private history.", "A comparação usa apenas resultados de partidas que ambos compartilharam. Ela não mostra o histórico privado de outra pessoa."],
+  "La comparación usa solo resultados de partidas que ambos compartieron. No muestra el historial privado de otra persona.":
+    [
+      "The comparison only uses results from games you both shared. It does not show another person's private history.",
+      "A comparação usa apenas resultados de partidas que ambos compartilharam. Ela não mostra o histórico privado de outra pessoa.",
+    ],
   "Mis mesas": ["My tables", "Minhas mesas"],
-  "Plantillas listas para tu grupo habitual.": ["Templates ready for your regular group.", "Modelos prontos para seu grupo habitual."],
+  "Plantillas listas para tu grupo habitual.": [
+    "Templates ready for your regular group.",
+    "Modelos prontos para seu grupo habitual.",
+  ],
   "Editar mesa habitual": ["Edit regular table", "Editar mesa habitual"],
   "Nueva mesa habitual": ["New regular table", "Nova mesa habitual"],
-  "Una plantilla privada para el host.": ["A private template for the host.", "Um modelo privado para o host."],
+  "Una plantilla privada para el host.": [
+    "A private template for the host.",
+    "Um modelo privado para o host.",
+  ],
   "Nombre de la mesa": ["Table name", "Nome da mesa"],
   "Jugadores habituales": ["Regular players", "Jogadores habituais"],
-  "Son una lista de referencia. Cada persona igualmente entra con el código o QR.": ["This is a reference list. Each person still joins with the code or QR.", "Esta é uma lista de referência. Cada pessoa ainda entra com o código ou QR."],
+  "Son una lista de referencia. Cada persona igualmente entra con el código o QR.":
+    [
+      "This is a reference list. Each person still joins with the code or QR.",
+      "Esta é uma lista de referência. Cada pessoa ainda entra com o código ou QR.",
+    ],
   "Nombre del jugador": ["Player name", "Nome do jogador"],
   "Agregar jugador": ["Add player", "Adicionar jogador"],
-  "Fichas": ["Chips", "Fichas"],
-  "Virtuales": ["Virtual", "Virtuais"],
-  "Físicas": ["Physical", "Físicas"],
-  "Se usará el reparto físico estándar; podés ajustarlo en la sala antes de iniciar.": ["The standard physical chip setup will be used; you can adjust it in the room before starting.", "A distribuição física padrão será usada; você poderá ajustá-la na sala antes de iniciar."],
+  Fichas: ["Chips", "Fichas"],
+  Virtuales: ["Virtual", "Virtuais"],
+  Físicas: ["Physical", "Físicas"],
+  "Se usará el reparto físico estándar; podés ajustarlo en la sala antes de iniciar.":
+    [
+      "The standard physical chip setup will be used; you can adjust it in the room before starting.",
+      "A distribuição física padrão será usada; você poderá ajustá-la na sala antes de iniciar.",
+    ],
   "Estructura y duración": ["Structure and duration", "Estrutura e duração"],
   "Minutos por nivel": ["Minutes per level", "Minutos por nível"],
-  "Los descansos conservan la duración del preset elegido.": ["Breaks keep the duration from the selected preset.", "Os intervalos mantêm a duração do preset escolhido."],
+  "Los descansos conservan la duración del preset elegido.": [
+    "Breaks keep the duration from the selected preset.",
+    "Os intervalos mantêm a duração do preset escolhido.",
+  ],
   "Liga opcional": ["Optional league", "Liga opcional"],
   "Sin liga": ["No league", "Sem liga"],
   "Guardar mesa": ["Save table", "Salvar mesa"],
   "Eliminar mesa": ["Delete table", "Excluir mesa"],
-  "La plantilla se eliminará. Las partidas anteriores no cambian.": ["The template will be deleted. Previous games will not change.", "O modelo será excluído. As partidas anteriores não serão alteradas."],
-  "Eliminar": ["Delete", "Excluir"],
-  "Solo vos podés ver y administrar esta plantilla.": ["Only you can see and manage this template.", "Somente você pode ver e gerenciar este modelo."],
-  "Tu partida de siempre, lista en pocos toques.": ["Your usual game, ready in a few taps.", "Sua partida de sempre, pronta em poucos toques."],
-  "Guardá la mesa de tu grupo": ["Save your group's table", "Salve a mesa do seu grupo"],
-  "Reutilizá jugadores habituales, fichas, ciegas, duración, tema y liga sin configurar todo otra vez.": ["Reuse regular players, chips, blinds, duration, theme and league without setting everything up again.", "Reutilize jogadores habituais, fichas, blinds, duração, tema e liga sem configurar tudo novamente."],
-  "Todavía no guardaste una mesa habitual.": ["You have not saved a regular table yet.", "Você ainda não salvou uma mesa habitual."],
-  "{n} jugadores habituales": ["{n} regular players", "{n} jogadores habituais"],
+  "La plantilla se eliminará. Las partidas anteriores no cambian.": [
+    "The template will be deleted. Previous games will not change.",
+    "O modelo será excluído. As partidas anteriores não serão alteradas.",
+  ],
+  Eliminar: ["Delete", "Excluir"],
+  "Solo vos podés ver y administrar esta plantilla.": [
+    "Only you can see and manage this template.",
+    "Somente você pode ver e gerenciar este modelo.",
+  ],
+  "Tu partida de siempre, lista en pocos toques.": [
+    "Your usual game, ready in a few taps.",
+    "Sua partida de sempre, pronta em poucos toques.",
+  ],
+  "Guardá la mesa de tu grupo": [
+    "Save your group's table",
+    "Salve a mesa do seu grupo",
+  ],
+  "Reutilizá jugadores habituales, fichas, ciegas, duración, tema y liga sin configurar todo otra vez.":
+    [
+      "Reuse regular players, chips, blinds, duration, theme and league without setting everything up again.",
+      "Reutilize jogadores habituais, fichas, blinds, duração, tema e liga sem configurar tudo novamente.",
+    ],
+  "Todavía no guardaste una mesa habitual.": [
+    "You have not saved a regular table yet.",
+    "Você ainda não salvou uma mesa habitual.",
+  ],
+  "{n} jugadores habituales": [
+    "{n} regular players",
+    "{n} jogadores habituais",
+  ],
   "SOLO LECTURA": ["READ ONLY", "SOMENTE LEITURA"],
   "de stack": ["starting stack", "de stack"],
   "min por nivel": ["min per level", "min por nível"],
   "Crear partida": ["Create game", "Criar partida"],
   "Editar mesa": ["Edit table", "Editar mesa"],
   "Recuperar Blindly Plus": ["Restore Blindly Plus", "Recuperar Blindly Plus"],
-  "Guardá una plantilla para tu próxima partida.": ["Save a template for your next game.", "Salve um modelo para sua próxima partida."],
+  "Guardá una plantilla para tu próxima partida.": [
+    "Save a template for your next game.",
+    "Salve um modelo para sua próxima partida.",
+  ],
   "Rendimiento por mes": ["Performance by month", "Desempenho por mês"],
   "{n} partidas · {p} pts": ["{n} games · {p} pts", "{n} partidas · {p} pts"],
   "Comparar con amigos": ["Compare with friends", "Comparar com amigos"],
-  "Blindly Plus muestra tu historial completo.": ["Blindly Plus shows your complete history.", "O Blindly Plus mostra seu histórico completo."],
-  "Blindly Free muestra tus últimas 10 partidas. Tu historial anterior sigue guardado.": ["Blindly Free shows your last 10 games. Your earlier history remains saved.", "O Blindly Free mostra suas últimas 10 partidas. Seu histórico anterior continua salvo."],
+  "Blindly Plus muestra tu historial completo.": [
+    "Blindly Plus shows your complete history.",
+    "O Blindly Plus mostra seu histórico completo.",
+  ],
+  "Blindly Free muestra tus últimas 10 partidas. Tu historial anterior sigue guardado.":
+    [
+      "Blindly Free shows your last 10 games. Your earlier history remains saved.",
+      "O Blindly Free mostra suas últimas 10 partidas. Seu histórico anterior continua salvo.",
+    ],
   "Resultado final": ["Final result", "Resultado final"],
   "Compartir resultado": ["Share result", "Compartilhar resultado"],
   "Resumen de la partida": ["Game recap", "Resumo da partida"],
-  "Una noche para recordar.": ["A night to remember.", "Uma noite para lembrar."],
-  "GANADOR": ["WINNER", "VENCEDOR"],
-  "Tu resultado: puesto {p} · +{n} puntos": ["Your result: place {p} · +{n} points", "Seu resultado: posição {p} · +{n} pontos"],
+  "Una noche para recordar.": [
+    "A night to remember.",
+    "Uma noite para lembrar.",
+  ],
+  GANADOR: ["WINNER", "VENCEDOR"],
+  "Tu resultado: puesto {p} · +{n} puntos": [
+    "Your result: place {p} · +{n} points",
+    "Seu resultado: posição {p} · +{n} pontos",
+  ],
   "Preparando imagen…": ["Preparing image…", "Preparando imagem…"],
-  "La tarjeta para compartir es una función de Blindly Plus.": ["The share card is a Blindly Plus feature.", "O cartão para compartilhar é um recurso do Blindly Plus."],
+  "La tarjeta para compartir es una función de Blindly Plus.": [
+    "The share card is a Blindly Plus feature.",
+    "O cartão para compartilhar é um recurso do Blindly Plus.",
+  ],
   "Ver resumen de la partida": ["View game recap", "Ver resumo da partida"],
   "NOCHE DE POKER": ["POKER NIGHT", "NOITE DE POKER"],
   "JUGADO CON BLINDLY": ["PLAYED WITH BLINDLY", "JOGADO COM BLINDLY"],
@@ -1331,11 +1540,24 @@ Object.assign(textos, {
   "Posición promedio": ["Average position", "Posição média"],
   "Mejor posición": ["Best position", "Melhor posição"],
   "Peor posición": ["Worst position", "Pior posição"],
-  "Mejor racha de victorias": ["Best win streak", "Melhor sequência de vitórias"],
+  "Mejor racha de victorias": [
+    "Best win streak",
+    "Melhor sequência de vitórias",
+  ],
   "Historial completo": ["Complete history", "Histórico completo"],
-  "Revisá todas tus partidas y compará resultados entre amigos.": ["Review every game and compare results among friends.", "Revise todas as partidas e compare resultados entre amigos."],
+  "Revisá todas tus partidas y compará resultados entre amigos.": [
+    "Review every game and compare results among friends.",
+    "Revise todas as partidas e compare resultados entre amigos.",
+  ],
   "Mesas habituales": ["Regular tables", "Mesas habituais"],
-  "Guardá la configuración de tu grupo y creá la próxima partida en segundos.": ["Save your group's setup and create the next game in seconds.", "Salve a configuração do seu grupo e crie a próxima partida em segundos."],
+  "Guardá la configuración de tu grupo y creá la próxima partida en segundos.":
+    [
+      "Save your group's setup and create the next game in seconds.",
+      "Salve a configuração do seu grupo e crie a próxima partida em segundos.",
+    ],
   "Recaps para compartir": ["Shareable recaps", "Resumos para compartilhar"],
-  "Convertí el resultado final en una tarjeta lista para tus redes.": ["Turn the final result into a card ready for social sharing.", "Transforme o resultado final em um cartão pronto para suas redes."],
+  "Convertí el resultado final en una tarjeta lista para tus redes.": [
+    "Turn the final result into a card ready for social sharing.",
+    "Transforme o resultado final em um cartão pronto para suas redes.",
+  ],
 });

@@ -7,6 +7,7 @@ import { TemaProvider } from "../lib/TemaContext";
 import { PreferenciasProvider } from "../lib/Preferencias";
 import { PantallaCarga } from "../components/PantallaCarga";
 import { PlusProvider } from "../lib/PlusContext";
+import { InicioProvider } from "../lib/InicioContext";
 export const unstable_settings = { anchor: "index" };
 if (Platform.OS !== "web")
   void SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -21,19 +22,21 @@ export default function RootLayout() {
     <PlusProvider>
       <TemaProvider>
         <PreferenciasProvider>
-          <SesionNativa />
-          {lista ? (
-            <View style={{ flex: 1 }} onLayout={alMostrar}>
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  contentStyle: { backgroundColor: "#0A1713" },
-                }}
-              />
-            </View>
-          ) : (
-            <PantallaCarga onLoadEnd={alCargar} />
-          )}
+          <InicioProvider>
+            <SesionNativa />
+            {lista ? (
+              <View style={{ flex: 1 }} onLayout={alMostrar}>
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    contentStyle: { backgroundColor: "#0A1713" },
+                  }}
+                />
+              </View>
+            ) : (
+              <PantallaCarga onLoadEnd={alCargar} />
+            )}
+          </InicioProvider>
         </PreferenciasProvider>
       </TemaProvider>
     </PlusProvider>
