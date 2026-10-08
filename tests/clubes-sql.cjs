@@ -277,6 +277,10 @@ async function falla(sql, args, codigo) {
     )
   )[0];
   assert.deepEqual(privileges, { a: false, b: false, c: false });
+  const indices = await q("select indexname from pg_indexes where schemaname='public' and indexname in ('salas_temporada_id_idx','mesas_habituales_temporada_id_idx')");
+  assert.equal(indices.length,2,"Claves foráneas de temporada cubiertas por índices");
+  const policy=(await q("select qual from pg_policies where schemaname='public' and tablename='mesas_habituales' and policyname='owner ve sus mesas habituales'"))[0].qual;
+  assert.match(policy,/SELECT auth.uid/);
   for (const firma of [
     "public.obtener_invitacion_liga(uuid,boolean)",
     "public.consultar_invitacion_liga(text)",

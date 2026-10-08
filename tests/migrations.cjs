@@ -28,6 +28,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261005170548_plus_mesas_estadisticas_recap.sql",
     "20261008042305_clubes_free_roles.sql",
     "20261008043539_invitaciones_club.sql",
+    "20261008043933_rendimiento_clubes.sql",
   ]);
 
   const baseSources = fs
