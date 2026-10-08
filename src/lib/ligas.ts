@@ -57,6 +57,7 @@ export type MiembroLiga = {
 };
 
 export type DetalleLiga = {
+  feed?: EventoClub[];
   rivalidades?: { rivales: RivalLiga[]; nemesis: RivalLiga | null };
   proxima_fecha?: ProximaFecha | null;
   liga: {
@@ -76,6 +77,12 @@ export type DetalleLiga = {
   partidas: PartidaLiga[];
   miembros: MiembroLiga[];
 };
+
+export type EventoClub = { id: string; fecha: string; precision: "dia" | "instante" } & (
+  { tipo: "partida"; codigo: string; jugadores: number | null } |
+  { tipo: "temporada"; nombre: string } |
+  { tipo: "fecha"; cuando: string }
+);
 
 export type RivalLiga = {
   user_id: string; nombre: string; titulo_personalizado: string | null;

@@ -1,6 +1,15 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Actividad del club": ["Club activity", "Atividade do clube"],
+  "Lo que pasó en esta temporada y la próxima fecha del club.": ["This season's events and the club's next game night.", "Os acontecimentos desta temporada e o próximo encontro do clube."],
+  "La historia del club empieza con su primera partida terminada.": ["The club's story starts with its first completed game.", "A história do clube começa com sua primeira partida concluída."],
+  "TORNEO TERMINADO": ["TOURNAMENT COMPLETED", "TORNEIO CONCLUÍDO"],
+  "TEMPORADA CERRADA": ["SEASON CLOSED", "TEMPORADA ENCERRADA"],
+  "PRÓXIMA FECHA PROGRAMADA": ["NEXT GAME NIGHT SCHEDULED", "PRÓXIMO ENCONTRO AGENDADO"],
+  "Terminó la partida {codigo}": ["Game {codigo} finished", "A partida {codigo} terminou"],
+  "Terminó {nombre}": ["{nombre} finished", "{nombre} terminou"],
+  "Mostrando los 20 eventos más recientes.": ["Showing the 20 most recent events.", "Mostrando os 20 eventos mais recentes."],
   "Rivalidades": ["Rivalries", "Rivalidades"],
   "TU NÉMESIS": ["YOUR NEMESIS", "SUA NÊMESIS"],
   "Compara posiciones finales de torneos de esta temporada. Requiere al menos 3 compartidos.": ["Compares final tournament positions this season. Requires at least 3 shared tournaments.", "Compara posições finais dos torneios desta temporada. Exige pelo menos 3 compartilhados."],

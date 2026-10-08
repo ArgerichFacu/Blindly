@@ -1,0 +1,30 @@
+const {PGlite}=require('@electric-sql/pglite'),assert=require('node:assert/strict'),fs=require('node:fs');
+const db=new PGlite(),uid=n=>`60000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
+const q=async(sql,args=[])=> (await db.query(sql,args)).rows;
+async function como(n){await db.exec('reset role');await q("select set_config('request.jwt.claim.sub',$1,false)",[uid(n)]);await db.exec('set role authenticated');}
+(async()=>{
+ await db.exec("create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key,is_anonymous boolean not null default false); create function auth.uid() returns uuid language sql as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;");
+ for(const file of fs.readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')).sort())await db.exec(fs.readFileSync(`supabase/migrations/${file}`,'utf8'));
+ for(let n=1;n<=4;n++)await q('insert into auth.users values($1,$2)',[uid(n),n===4]);
+ await como(1);const {liga_id:club,temporada_id:season}=(await q("select crear_liga('Feed','Octubre','Facu') v"))[0].v;
+ const detalle=async()=> (await q('select detalle_liga($1,$2) v',[club,season]))[0].v;
+ assert.deepEqual((await detalle()).feed,[]);
+ await db.exec('reset role');await q("insert into liga_miembros(liga_id,user_id,nombre) values($1,$2,'Nico')",[club,uid(2)]);
+ for(let n=1;n<=23;n++)await q('insert into liga_partidas(sala_id,temporada_id,codigo_sala,finalizada_en,jugadores) values($1,$2,$3,$4,2)',[uid(100+n),season,`G${String(n).padStart(4,'0')}`,new Date(Date.UTC(2026,9,n)).toISOString()]);
+ await q("insert into liga_partidas(sala_id,temporada_id,codigo_sala) values($1,$2,'WAITX')",[uid(130),season]);
+ await como(2);let feed=(await detalle()).feed;
+ assert.equal(feed.length,20);assert.equal(feed[0].codigo,'G0023');assert.equal(feed[19].codigo,'G0004');assert.ok(feed.every(e=>e.tipo==='partida'&&e.precision==='instante'));assert.equal(new Set(feed.map(e=>e.id)).size,20);
+ await db.exec('reset role');await q('update liga_partidas set finalizada_en=(select finalizada_en from liga_partidas where sala_id=$1) where sala_id=$2',[uid(123),uid(122)]);await como(2);
+ assert.equal((await detalle()).feed[0].codigo,'G0022','Orden estable ante marcas de tiempo iguales');
+ await como(1);await q('select finalizar_temporada($1)',[season]);
+ feed=(await detalle()).feed;const cierre=feed.find(e=>e.tipo==='temporada');assert.ok(cierre);assert.equal(cierre.precision,'dia');assert.match(cierre.fecha,/^\d{4}-\d{2}-\d{2}$/);assert.equal(cierre.nombre,'Octubre');
+ const cuando=new Date(Date.now()+2*86400000).toISOString();const fecha=(await q("select programar_fecha_liga($1,$2,'','',null) id",[club,cuando]))[0].id;
+ feed=(await detalle()).feed;assert.ok(feed.some(e=>e.id===`fecha:${fecha}`&&Date.parse(e.cuando)===Date.parse(cuando)));
+ await q('select cancelar_fecha_liga($1)',[fecha]);assert.ok(!(await detalle()).feed.some(e=>e.tipo==='fecha'),'No anuncia fecha cancelada');
+ const nueva=(await q("select crear_temporada($1,'Noviembre') id",[club]))[0].id;
+ assert.deepEqual((await q('select detalle_liga($1,$2) v',[club,nueva]))[0].v.feed,[],'No mezcla partidas/cierre de otra temporada');
+ await como(3);await assert.rejects(detalle(),/LIGA_NO_DISPONIBLE/);
+ await como(4);await assert.rejects(detalle(),/CUENTA_REQUERIDA/);
+ await como(2);await assert.rejects(q('select private.feed_club($1,$2)',[club,season]),/permission denied/);
+ console.log('Feed SQL: Free, límite y orden, eventos reales, precisión de fecha, cancelación, temporadas y privacidad OK');await db.close();
+})().catch(async e=>{console.error(e);await db.close();process.exitCode=1;});

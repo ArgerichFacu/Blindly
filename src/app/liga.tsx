@@ -31,6 +31,7 @@ import { permisosClub } from "../lib/permisosClub";
 import { TituloPersonalizado } from "../components/TituloPersonalizado";
 import { ProximaFechaClub } from "../components/ProximaFechaClub";
 import { RivalidadesClub } from "../components/RivalidadesClub";
+import { FeedClub } from "../components/FeedClub";
 
 export default function Liga() {
   const { id, temporada: temporadaParam } = useLocalSearchParams<{
@@ -244,6 +245,10 @@ export default function Liga() {
             <Texto>{t("MVP: puesto 1 de la temporada activa, con el mismo desempate del ranking.")}</Texto>
             <Texto>{t("TIBURÓN: al menos 5 partidas y victoria en el 50% o más.")}</Texto>
             <Texto>{t("REY DEL PODIO: al menos 5 partidas y top 3 en el 80% o más.")}</Texto>
+          </Seccion>
+
+          <Seccion titulo={t("Actividad del club")} inicial>
+            <FeedClub eventos={datos.feed} />
           </Seccion>
 
           <Seccion titulo={t("Partidas")} inicial>
