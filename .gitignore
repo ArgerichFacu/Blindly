@@ -14,6 +14,9 @@ expo-env.d.ts
 .kotlin/
 *.orig.*
 *.jks
+/credentials.json
+/.credentials/
+/credentials/
 *.p8
 *.p12
 *.key

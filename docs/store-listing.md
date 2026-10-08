@@ -58,6 +58,8 @@ La app crea una identidad de invitado para sincronizar datos. El usuario puede c
 
 ## Declaración orientativa de datos
 
+Para la versión de las 40 metas: los clubes guardan roles, títulos, resultados y preferencias de avisos. Las notificaciones permanecen desactivadas en el binario sin FCM. Antes de activarlas, revisar la declaración de identificadores de dispositivo/tokens, contenido de los avisos y su entrega mediante Expo/FCM/APNs. Consentimiento opcional, sin publicidad; baja por club y desde el sistema. El borrado de cuenta retira tokens, preferencias y snapshots MVP propios.
+
 - **Información personal:** nombre elegido e identificador de usuario, necesarios para la cuenta y la funcionalidad de la sala. El email es opcional y se usa únicamente para autenticación y recuperación cuando se habilite SMTP.
 - **Actividad de la aplicación:** contenido de sala, acciones, puntuación e historial, necesarios para sincronizar la partida y mostrar resultados.
 - **Información financiera:** historial de compras, recopilado por RevenueCat para ofrecer, validar, analizar y restaurar Blindly Plus. No se recopilan números de tarjeta.

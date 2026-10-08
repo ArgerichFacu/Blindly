@@ -1,6 +1,9 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Clubes y notificaciones": ["Clubs and notifications", "Clubes e notificações"],
+  "Los clubes guardan miembros, roles, títulos, temporadas, resultados, fechas y tus preferencias de avisos. Si activás notificaciones y das permiso, guardamos el token de este dispositivo para enviar avisos mediante Expo y Google o Apple. Podés desactivarlos por club o en el sistema. Los tokens y eventos de MVP asociados se eliminan al borrar tu cuenta.": ["Clubs store members, roles, titles, seasons, results, game nights and your notification preferences. If you enable notifications and grant permission, we store this device's token to send alerts through Expo and Google or Apple. You can disable them for each club or in system settings. Associated tokens and MVP events are deleted when you delete your account.", "Os clubes armazenam membros, funções, títulos, temporadas, resultados, encontros e suas preferências de avisos. Se você ativar notificações e permitir, guardamos o token deste dispositivo para enviar avisos via Expo e Google ou Apple. Você pode desativá-los por clube ou no sistema. Os tokens e eventos de MVP associados são excluídos ao apagar sua conta."],
+  "Última actualización: 8 de octubre de 2026": ["Last updated: October 8, 2026", "Última atualização: 8 de outubro de 2026"],
   "Ver partidas anteriores": ["View earlier games", "Ver partidas anteriores"],
   "Volver a las más recientes": ["Back to the latest games", "Voltar às partidas mais recentes"],
   "Vibraciones de momentos importantes": ["Haptics for important moments", "Vibrações em momentos importantes"],

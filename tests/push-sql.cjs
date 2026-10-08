@@ -60,5 +60,11 @@ const accion=async(sala,tipo,datos={},req=`push-test-${++solicitud}`)=>(await q(
  await q('select confirmar_aviso_push($1,$2,$3,null,$4)',[secret,lote[0].id,'fallida','DeviceNotRegistered']);
  assert.equal((await q('select recibos_avisos_push($1) v',[secret]))[0].v.length,0);
  await como(1);await assert.rejects(q('select * from private.config_push'),/permission denied/);
+ await db.exec('reset role');await q('insert into auth.users values($1,false)',[uid(5)]);
+ await q("insert into private.eventos_club(id,liga_id,tipo,datos) values('mvp-borrado',$1,'mvp',$2)",[club,JSON.stringify({user_id:uid(5),nombre:'Nombre privado'})]);
+ await como(5);await q("select registrar_dispositivo_push('ExpoPushToken[abcdefghijklmnop5]','es')");
+ await db.exec('reset role');await q('delete from auth.users where id=$1',[uid(5)]);
+ assert.equal((await q("select count(*)::int n from private.eventos_club where id='mvp-borrado'"))[0].n,0,'Borrar cuenta retira snapshot personal MVP');
+ assert.equal((await q('select count(*)::int n from private.dispositivos_push where user_id=$1',[uid(5)]))[0].n,0,'Token eliminado por FK');
  console.log('Push SQL: torneos reales, cambio MVP idempotente, consentimiento, tokens privados, cupo combinado, cancelación, expulsión y recibos OK');await db.close();
 })().catch(async e=>{console.error(e);await db.close();process.exitCode=1;});

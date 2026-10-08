@@ -25,6 +25,10 @@ export default function Privacidad() {
       "Los datos se conservan mientras exista tu cuenta. Desde Mi cuenta podés eliminar la identidad, los puntos y el historial. Una partida activa debe finalizar antes para no romper la mesa de otros jugadores.",
     ],
     [
+      "Clubes y notificaciones",
+      "Los clubes guardan miembros, roles, títulos, temporadas, resultados, fechas y tus preferencias de avisos. Si activás notificaciones y das permiso, guardamos el token de este dispositivo para enviar avisos mediante Expo y Google o Apple. Podés desactivarlos por club o en el sistema. Los tokens y eventos de MVP asociados se eliminan al borrar tu cuenta.",
+    ],
+    [
       "Tus opciones",
       "Podés jugar sin email, vincular uno para recuperar la cuenta o eliminar todos tus datos. La cámara es opcional porque también podés ingresar el código de sala.",
     ],
@@ -32,7 +36,7 @@ export default function Privacidad() {
   return (
     <Pantalla
       titulo={t("Política de privacidad")}
-      subtitulo={t("Última actualización: 1 de octubre de 2026")}
+      subtitulo={t("Última actualización: 8 de octubre de 2026")}
     >
       {secciones.map(([titulo, detalle]) => (
         <Tarjeta key={titulo}>
