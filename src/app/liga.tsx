@@ -25,6 +25,8 @@ import { InvitacionClub } from "../components/InvitacionClub";
 import { ProtegerCuenta } from "../components/ProtegerCuenta";
 import { ClasificacionTemporada } from "../components/ClasificacionTemporada";
 import { useLigaEnVivo } from "../lib/useLigaEnVivo";
+import { TitulosJugador } from "../components/TitulosJugador";
+import { clasificacion } from "../lib/clasificacion";
 
 export default function Liga() {
   const { id, temporada: temporadaParam } = useLocalSearchParams<{
@@ -71,6 +73,7 @@ export default function Liga() {
   const temporadaObservada=observada?.liga===id ? observada.temporada : null;
   const actualizarRanking = useCallback(() => setRevision(v => v + 1), []);
   const enVivo = useLigaEnVivo(id, temporadaObservada, actualizarRanking);
+  const mvpId = datos ? clasificacion(datos.ranking, datos.temporada?.estado).mvp?.user_id : undefined;
 
   async function ejecutar(accion: () => Promise<void>) {
     if (ocupado) return;
@@ -194,12 +197,10 @@ export default function Liga() {
                     >
                       {fila.posicion}°
                     </Texto>
-                    <Texto
-                      numberOfLines={1}
-                      style={{ flex: 1, fontWeight: "700" }}
-                    >
-                      {fila.nombre}
-                    </Texto>
+                    <View style={{ flex: 1, gap: 4 }}>
+                      <Texto numberOfLines={1} style={{ fontWeight: "700" }}>{fila.nombre}</Texto>
+                      <TitulosJugador fila={fila} esMvp={mvpId===fila.user_id} />
+                    </View>
                     <Texto style={{ width: 38, textAlign: "right" }}>
                       {fila.partidas}
                     </Texto>
@@ -223,6 +224,13 @@ export default function Liga() {
                 ))}
               </Tarjeta>
             )}
+          </Seccion>
+
+          <Seccion titulo={t("Títulos automáticos")}>
+            <Texto suave>{t("Méritos Free de esta temporada. Se recalculan con cada resultado.")}</Texto>
+            <Texto>{t("MVP: puesto 1 de la temporada activa, con el mismo desempate del ranking.")}</Texto>
+            <Texto>{t("TIBURÓN: al menos 5 partidas y victoria en el 50% o más.")}</Texto>
+            <Texto>{t("REY DEL PODIO: al menos 5 partidas y top 3 en el 80% o más.")}</Texto>
           </Seccion>
 
           <Seccion titulo={t("Partidas")} inicial>

@@ -19,6 +19,7 @@ const {ClasificacionTemporada}=cargar('src/components/ClasificacionTemporada.tsx
   if(name==='react/jsx-runtime')return {jsx,jsxs:jsx,Fragment:'fragment'};
   if(name==='react-native')return {View:'view'};
   if(name==='./Controles')return {Etiqueta:'label',Tarjeta:'card',Texto:'text'};
+  if(name==='./TitulosJugador')return {TitulosJugador:()=>null};
   if(name.includes('TemaContext'))return {useTema:()=>({tema:{acento:'gold',borde:'black',textoFuerte:'white'}})};
   if(name.includes('Preferencias'))return {usePreferencias:()=>({t,preferencias:{idioma:'es'}})};
   if(name.includes('clasificacion'))return {clasificacion};

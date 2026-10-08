@@ -4,6 +4,7 @@ import { useTema } from "../lib/TemaContext";
 import { usePreferencias } from "../lib/Preferencias";
 import { clasificacion } from "../lib/clasificacion";
 import type { FilaRanking,TemporadaLiga } from "../lib/ligas";
+import { TitulosJugador } from "./TitulosJugador";
 export function ClasificacionTemporada({ranking,temporada,movimientos}:{ranking:FilaRanking[];temporada:TemporadaLiga|null;movimientos?:Record<string,number>}) {
  const {t,preferencias}=usePreferencias(),{tema}=useTema();
  const datos=clasificacion(ranking,temporada?.estado);
@@ -27,6 +28,7 @@ export function ClasificacionTemporada({ranking,temporada,movimientos}:{ranking:
      <Texto style={{fontSize:22,fontWeight:"800",color:tema.acento}}>{numero(f.puntos)}</Texto>
     </View>
     <Texto suave>{t("{n} partidas",{n:f.partidas})} · {t("{n} victorias",{n:f.victorias})}</Texto>
+    <TitulosJugador fila={f} esMvp={datos.mvp?.user_id===f.user_id} />
     {Number.isFinite(movimiento) && <Texto suave>{t(movimiento!>0?"Subió {n} posiciones":movimiento!<0?"Bajó {n} posiciones":"Mantiene su posición",{n:Math.abs(movimiento!)})}</Texto>}
    </Tarjeta>;
   })}</View>}

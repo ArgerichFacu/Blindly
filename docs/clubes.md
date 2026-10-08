@@ -67,3 +67,15 @@ Los movimientos comparan el ranking actual con el calculado excluyendo todos los
 `20261008152128_ranking_desempate_uuid.sql` se aplicó en Supabase: 26 resultados conservados, desempate único verificado, helper de comparación sin ejecución cliente y dos tablas añadidas a Realtime. RLS continúa exigiendo miembro con cuenta protegida. La pantalla mantiene una suscripción al club/temporada mientras está enfocada, refresca al reconectar o volver a primer plano y la retira al salir. También permite actualizar manualmente. Documentación: [Postgres Changes y RLS](https://supabase.com/docs/guides/realtime/authorization#interaction-with-postgres-changes).
 
 Las pruebas SQL cubren dos torneos completos, subida/bajada, ingreso sin posición previa, empate total, cierre, conservación y nueva temporada vacía. Las pruebas de lógica/UI cubren MVP, campeón, vacíos, datos inválidos, barras y movimientos. `tests/liga-realtime.cjs` ejecuta el hook con dobles de transporte para comprobar filtros, reconexión y limpieza; no sustituye una prueba WebSocket entre celulares físicos. El advisor conserva los avisos de seguridad documentados arriba y cinco índices sin uso observado; no introdujo nuevas categorías de avisos.
+
+## Títulos automáticos Free (meta 19)
+
+El ranking y su top 3 muestran títulos calculados sobre resultados de la temporada seleccionada. Las reglas también se explican en la pantalla:
+
+- **MVP:** exclusivamente el puesto 1 único de una temporada activa.
+- **TIBURÓN:** al menos cinco partidas finalizadas y victorias en el 50% o más.
+- **REY DEL PODIO:** al menos cinco partidas finalizadas y top 3 en el 80% o más.
+
+Pueden coexistir. Se recalculan, sin escritura manual ni premios persistidos; al dejar de cumplir un umbral desaparece ese mérito. Una temporada nueva no hereda los títulos de la anterior. Las finalizadas conservan Tiburón/Podio según sus resultados y muestran campeón sin un MVP activo. Una muestra menor de cinco no obtiene los dos títulos estadísticos. Métricas inválidas o inconsistentes no generan méritos.
+
+`src/lib/titulos.ts` contiene reglas reproducibles sin RevenueCat. No se infieren cartas, dinero perdido o asistencia no registrada. Las etiquetas/reglas se traducen a ES/EN/PT. `tests/titulos.cjs` cubre mínimos, umbrales exactos, pérdida, coexistencia y métricas inválidas; no requiere modificar datos productivos.

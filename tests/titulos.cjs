@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),ts=require('typescript'),exportsModulo={};
+vm.runInNewContext(ts.transpileModule(fs.readFileSync('src/lib/titulos.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText,{exports:exportsModulo});
+const titulos=(partidas,victorias,podios,mvp=false)=>Array.from(exportsModulo.titulosAutomaticos({partidas,victorias,podios},mvp));
+assert.deepEqual(titulos(4,4,4),[],'No premia muestras pequeñas');
+assert.deepEqual(titulos(5,3,4),['tiburon','podio']);
+assert.deepEqual(titulos(5,2,3),[]);
+assert.deepEqual(titulos(6,3,4),['tiburon'],'Umbral inclusivo de victoria');
+assert.deepEqual(titulos(5,0,4),['podio'],'Umbral inclusivo de podio');
+assert.deepEqual(titulos(10,4,7),[],'Se pierde al dejar de cumplir la regla');
+assert.deepEqual(titulos(0,0,0,true),['mvp'],'MVP lo autoriza únicamente la clasificación');
+for(const valores of [[NaN,3,4],[5,6,6],[5,4,3],[5,0,6],[-5,0,0],[5,2.5,4]])assert.deepEqual(titulos(...valores),[]);
+const texts=fs.readFileSync('src/lib/textos.ts','utf8');
+for(const titulo of ['MVP','TIBURÓN','REY DEL PODIO'])assert.ok(texts.includes(`"${titulo}":`));
+console.log('Títulos Free: muestra mínima, umbrales, pérdida, coexistencia MVP y métricas inválidas OK');

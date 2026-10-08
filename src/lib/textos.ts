@@ -1,6 +1,14 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "MVP": ["MVP", "MVP"],
+  "TIBURÓN": ["SHARK", "TUBARÃO"],
+  "REY DEL PODIO": ["PODIUM KING", "REI DO PÓDIO"],
+  "Títulos automáticos": ["Automatic titles", "Títulos automáticos"],
+  "Méritos Free de esta temporada. Se recalculan con cada resultado.": ["Free achievements for this season. Recalculated with each result.", "Conquistas Free desta temporada. Recalculadas a cada resultado."],
+  "MVP: puesto 1 de la temporada activa, con el mismo desempate del ranking.": ["MVP: first place in the active season, using the standings tiebreaker.", "MVP: primeiro lugar da temporada ativa, usando o desempate do ranking."],
+  "TIBURÓN: al menos 5 partidas y victoria en el 50% o más.": ["SHARK: at least 5 games and wins in 50% or more.", "TUBARÃO: pelo menos 5 partidas e vitórias em 50% ou mais."],
+  "REY DEL PODIO: al menos 5 partidas y top 3 en el 80% o más.": ["PODIUM KING: at least 5 games and top 3 in 80% or more.", "REI DO PÓDIO: pelo menos 5 partidas e top 3 em 80% ou mais."],
   "Temporada en curso": ["Season in progress","Temporada em andamento"],
   "Temporada finalizada": ["Season completed","Temporada finalizada"],
   "MVP ACTUAL": ["CURRENT MVP","MVP ATUAL"],
