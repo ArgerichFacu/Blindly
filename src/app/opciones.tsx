@@ -34,56 +34,11 @@ export default function Opciones() {
           )}
         </Texto>
       </Tarjeta>
-      <Tarjeta>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Texto>{t("Sonido de ronda")}</Texto>
-          <Switch
-            accessibilityLabel={t("Sonido de ronda")}
-            value={preferencias.sonido}
-            onValueChange={(sonido) => cambiar({ sonido })}
-          />
-        </View>
-        {(["volumenRonda", "volumenMusica"] as const).map((clave) => (
-          <View key={clave} style={{ gap: 8 }}>
-            <Texto>
-              {t(
-                clave === "volumenRonda"
-                  ? "Volumen de ronda"
-                  : "Volumen de música",
-              )}
-              : {Math.round(preferencias[clave] * 100)}%
-            </Texto>
-            <View style={{ flexDirection: "row", gap: 12 }}>
-              <Boton
-                titulo="−"
-                secundario
-                disabled={preferencias[clave] <= 0}
-                onPress={() =>
-                  cambiar({
-                    [clave]: Math.max(
-                      0,
-                      Math.round((preferencias[clave] - 0.1) * 10) / 10,
-                    ),
-                  })
-                }
-              />
-              <Boton
-                titulo="+"
-                secundario
-                disabled={preferencias[clave] >= 1}
-                onPress={() =>
-                  cambiar({
-                    [clave]: Math.min(
-                      1,
-                      Math.round((preferencias[clave] + 0.1) * 10) / 10,
-                    ),
-                  })
-                }
-              />
-            </View>
-          </View>
-        ))}
-      </Tarjeta>
+      <Boton
+        titulo={t("Sonidos y ambiente")}
+        secundario
+        onPress={() => router.push("/sonidos")}
+      />
       <Tarjeta>
         <Texto>{t("Idioma")}</Texto>
         {(["es", "en", "pt"] as const).map((idioma) => (

@@ -51,7 +51,7 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
-    "test": "node tests/mesa-logica.cjs && node tests/mesa-sql.cjs && node tests/turnos-sql.cjs && node tests/puntuacion-sql.cjs && node tests/ligas-sql.cjs && node tests/plus-experiencia-sql.cjs && node tests/seguridad-sql.cjs && node tests/migrations.cjs && node tests/sesion.cjs && node tests/navegacion.cjs && node tests/inicio.cjs && node tests/inicio-cuenta.cjs && node tests/poker.cjs && node tests/principiante.cjs && node tests/native-config.cjs && node tests/revenuecat-config.cjs && node tests/store-assets.cjs && node tests/legal-pages.cjs && node tests/traducciones.cjs",
+    "test": "node tests/mesa-logica.cjs && node tests/mesa-sql.cjs && node tests/turnos-sql.cjs && node tests/puntuacion-sql.cjs && node tests/ligas-sql.cjs && node tests/plus-experiencia-sql.cjs && node tests/seguridad-sql.cjs && node tests/migrations.cjs && node tests/sesion.cjs && node tests/navegacion.cjs && node tests/inicio.cjs && node tests/inicio-cuenta.cjs && node tests/poker.cjs && node tests/principiante.cjs && node tests/audio.cjs && node tests/audio-ui.cjs && node tests/native-config.cjs && node tests/revenuecat-config.cjs && node tests/store-assets.cjs && node tests/legal-pages.cjs && node tests/traducciones.cjs",
     "typecheck": "tsc --noEmit",
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",

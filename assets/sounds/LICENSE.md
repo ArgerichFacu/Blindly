@@ -10,3 +10,11 @@ Local file: casino-lounge.mp3
 The original recording is unmodified. The app repeats it during playback.
 
 campana.wav is the original synthesized round alert created for Blindly.
+
+## Original synthesized sound library
+
+ambiente-casino.wav, aplausos.wav, fichas.wav, grillos.wav, bocina.wav,
+trombon.wav, caja.wav and respeto.wav were synthesized for Blindly using
+scripts/generar-sonidos.cjs. They contain no third-party recordings or samples.
+They are covered by the repository LICENSE. Running the script reproduces these
+mono 22,050 Hz PCM files deterministically. Existing campana.wav remains unchanged.

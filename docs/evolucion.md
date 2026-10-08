@@ -22,9 +22,9 @@ Después del cierre se aplicaron los parches recomendados dentro de Expo SDK 57.
 | 4 | Aprender póker con ejemplos e interacción | Implementado con secciones breves, cartas, ejemplos y acceso al evaluador. [Detalle](aprender-poker.md). |
 | 5 | Selector de cartas y evaluación de las diez combinaciones, Free | Implementado; casos límite y 200 manos reproducibles probados, selección y layout web verificados. Aceptación física pendiente. [Detalle](aprender-poker.md). |
 | 6 | Modo principiante: reglas de acciones, sin estrategia | Implementado opcional/persistido; ayuda del turno usa los montos y permisos del panel. Pruebas automáticas aprobadas; turno físico multijugador pendiente. [Detalle](aprender-poker.md). |
-| 7 | Música, ambiente, efectos, botonera y mute persistidos | Pendiente |
-| 8 | Ambiente sutil de casino | Pendiente |
-| 9 | Botonera Free/Plus, favoritos y orden, sin uploads | Pendiente |
+| 7 | Música, ambiente, efectos, botonera y mute persistidos | Implementado y probado automáticamente/web; aceptación nativa pendiente. [Detalle](audio.md). |
+| 8 | Ambiente sutil de casino | Loop original local, opcional y con volumen propio; aceptación física pendiente. [Detalle](audio.md). |
+| 9 | Botonera Free/Plus, favoritos y orden, sin uploads | Implementada con entitlement actual, conservación al expirar y pruebas automáticas. Compras reales pendientes. [Detalle](audio.md). |
 | 10 | Identidad persistente por UUID y compatibilidad legacy | Pendiente de evolución; recuperación por clave ya existe |
 | 11 | Liga como club permanente | Pendiente de evolución; ligas básicas ya existen |
 | 12 | Login solo para funciones sociales persistentes | Pendiente |
@@ -50,7 +50,7 @@ Después del cierre se aplicaron los parches recomendados dentro de Expo SDK 57.
 | 32 | Migraciones no destructivas, RPC, RLS, índices y permisos | Requisito de cada bloque de backend |
 | 33 | Estética premium y feedback contextual | Requisito transversal |
 | 34 | Haptics en momentos relevantes | Pendiente |
-| 35 | Controles de audio independientes y persistidos | Compartido con meta 7 |
+| 35 | Controles de audio independientes y persistidos | Implementado junto con meta 7; aceptación nativa pendiente. [Detalle](audio.md). |
 | 36 | Español, inglés y portugués | Requisito de cada bloque; navegación, bienvenida, tutorial, aprendizaje y ayuda cubiertos |
 | 37 | Accesibilidad y movimiento reducido | Requisito de cada bloque |
 | 38 | Rendimiento y consultas/subscripciones acotadas | Requisito de cada bloque |

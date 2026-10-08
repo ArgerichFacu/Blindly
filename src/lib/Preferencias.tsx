@@ -9,15 +9,25 @@ import {
 } from "react";
 import { cargarSonidoActivado } from "./almacenamiento";
 import { errores, traducir, type Idioma } from "./textos";
+import {
+  AUDIO_INICIAL,
+  normalizarAudio,
+  type PreferenciasAudio,
+} from "./audio";
+import {
+  BOTONERA_INICIAL,
+  normalizarBotonera,
+  type ConfigBotonera,
+} from "./botonera";
 
-type Preferencias = {
-  idioma: Idioma;
-  sonido: boolean;
-  volumenRonda: number;
-  volumenMusica: number;
-  principiante: boolean;
-};
+type Preferencias = PreferenciasAudio &
+  ConfigBotonera & {
+    idioma: Idioma;
+    principiante: boolean;
+  };
 const inicial: Preferencias = {
+  ...AUDIO_INICIAL,
+  ...BOTONERA_INICIAL,
   idioma: "es",
   sonido: true,
   volumenRonda: 0.8,
@@ -32,15 +42,20 @@ export function PreferenciasProvider({ children }: { children: ReactNode }) {
   const [preferencias, setPreferencias] = useState(inicial);
   const actual = useRef(inicial);
   const secuencia = useRef(Promise.resolve());
-  const modificada = useRef(false);
+  const pendientes = useRef<Partial<Preferencias>>({});
   useEffect(() => {
-    Promise.all([
+    const carga = Promise.all([
       AsyncStorage.getItem("preferenciasBlindly"),
       cargarSonidoActivado(),
     ])
       .then(([texto, sonido]) => {
         const datos = texto ? JSON.parse(texto) : { sonido };
-        const nuevas = { ...inicial, ...datos };
+        const nuevas = {
+          ...inicial,
+          ...datos,
+          ...normalizarAudio(datos),
+          ...normalizarBotonera(datos),
+        };
         if (!["es", "en", "pt"].includes(nuevas.idioma)) nuevas.idioma = "es";
         if (typeof nuevas.principiante !== "boolean")
           nuevas.principiante = false;
@@ -51,20 +66,23 @@ export function PreferenciasProvider({ children }: { children: ReactNode }) {
             nuevas[clave] > 1
           )
             nuevas[clave] = inicial[clave];
-        if (!modificada.current) {
-          actual.current = nuevas;
-          setPreferencias(nuevas);
-        }
+        actual.current = { ...nuevas, ...pendientes.current };
+        setPreferencias(actual.current);
       })
       .catch((e) => console.warn("No se pudieron cargar las preferencias", e));
+    secuencia.current = secuencia.current.then(() => carga);
   }, []);
   function cambiar(cambios: Partial<Preferencias>) {
-    modificada.current = true;
+    pendientes.current = { ...pendientes.current, ...cambios };
     actual.current = { ...actual.current, ...cambios };
     setPreferencias(actual.current);
-    const texto = JSON.stringify(actual.current);
     secuencia.current = secuencia.current
-      .then(() => AsyncStorage.setItem("preferenciasBlindly", texto))
+      .then(() =>
+        AsyncStorage.setItem(
+          "preferenciasBlindly",
+          JSON.stringify(actual.current),
+        ),
+      )
       .catch((e) => console.warn("No se pudieron guardar las preferencias", e));
   }
   return (

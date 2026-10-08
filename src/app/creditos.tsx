@@ -9,7 +9,7 @@ export default function Creditos() {
       <Tarjeta>
         <Texto style={{ fontSize: 24, fontWeight: "700" }}>Lobby Time</Texto>
         <Texto>Kevin MacLeod · incompetech.com</Texto>
-        <AudioMesa indice={0} corriendo musica />
+        <AudioMesa indice={0} corriendo musica permitirAmbiente={false} />
         <Texto suave>{t("Jazz de salón para acompañar la mesa.")}</Texto>
         <Texto suave>
           {t(

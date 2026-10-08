@@ -2,6 +2,18 @@ const assert = require("node:assert/strict"),
   fs = require("node:fs"),
   vm = require("node:vm"),
   ts = require("typescript");
+function cargarPuro(file) {
+  const exports = {};
+  vm.runInNewContext(
+    ts.transpileModule(fs.readFileSync(file, "utf8"), {
+      compilerOptions: { module: ts.ModuleKind.CommonJS },
+    }).outputText,
+    { exports },
+  );
+  return exports;
+}
+const audio = cargarPuro("src/lib/audio.ts"),
+  botonera = cargarPuro("src/lib/botonera.ts");
 const flush = () => new Promise((res) => setImmediate(res));
 const t = (s, datos = {}) =>
   s.replace(/\{(\w+)\}/g, (_, key) => String(datos[key]));
@@ -149,8 +161,8 @@ assert.match(modal(corto), /igualada será all-in/);
 assert.match(modal({ ...ayuda, max: 600 }), /Solo podés subir all-in a 600/);
 assert.match(modal(noSube), /Subir no está disponible/);
 assert.match(modal(undefined), /Con fichas físicas, verificá en la mesa/);
-async function preferencias(datos) {
-  let efecto, persistido;
+async function preferencias(datos, demora = false) {
+  let efecto, persistido, completar;
   const instancia = componente("src/lib/Preferencias.tsx", {
     react: {
       useEffect: (fn) => {
@@ -158,11 +170,18 @@ async function preferencias(datos) {
       },
     },
     "@react-native-async-storage/async-storage": {
-      getItem: async () => JSON.stringify(datos),
+      getItem: () =>
+        demora
+          ? new Promise((res) => {
+              completar = res;
+            })
+          : Promise.resolve(JSON.stringify(datos)),
       setItem: async (_, valor) => {
         persistido = JSON.parse(valor);
       },
     },
+    "./audio": audio,
+    "./botonera": botonera,
     "./almacenamiento": { cargarSonidoActivado: async () => true },
     "./textos": { errores: {}, traducir: t },
   });
@@ -170,8 +189,17 @@ async function preferencias(datos) {
     instancia.render("PreferenciasProvider", { children: null }).props.value;
   render();
   efecto();
+  if (demora) {
+    render().cambiar({ silencio: true });
+    completar(JSON.stringify(datos));
+  }
   await flush();
   const value = render();
+  if (demora) {
+    assert.equal(value.preferencias.silencio, true);
+    assert.equal(persistido.idioma, "pt");
+    assert.equal(persistido.volumenMusica, 0.7);
+  }
   assert.equal(
     value.preferencias.principiante,
     typeof datos.principiante === "boolean" ? datos.principiante : false,
@@ -182,8 +210,29 @@ async function preferencias(datos) {
   assert.equal(persistido.idioma, "pt");
   assert.equal(persistido.volumenMusica, 0.7);
   assert.equal(render().preferencias.principiante, true);
+  render().cambiar({
+    silencio: true,
+    ambiente: "casino",
+    volumenAmbiente: 0.2,
+    volumenBotonera: 0.4,
+    botoneraFavoritos: ["caja"],
+    botoneraOrden: [
+      "caja",
+      ...botonera.BOTONERA_INICIAL.botoneraOrden.filter((id) => id !== "caja"),
+    ],
+  });
+  await flush();
+  assert.equal(persistido.silencio, true);
+  assert.equal(persistido.ambiente, "casino");
+  assert.equal(persistido.volumenAmbiente, 0.2);
+  assert.equal(persistido.volumenBotonera, 0.4);
+  assert.equal(persistido.botoneraFavoritos[0], "caja");
+  assert.equal(persistido.botoneraOrden[0], "caja");
+  assert.equal(persistido.idioma, "pt");
+  assert.equal(persistido.volumenMusica, 0.7);
 }
 Promise.all([
+  preferencias({ idioma: "pt", volumenMusica: 0.7 }, true),
   preferencias({ idioma: "pt", volumenMusica: 0.7 }),
   preferencias({ idioma: "pt", volumenMusica: 0.7, principiante: true }),
   preferencias({ idioma: "pt", volumenMusica: 0.7, principiante: "true" }),

@@ -1,6 +1,67 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Sonidos y ambiente": ["Sounds and ambience", "Sons e ambiente"],
+  "Bajar volumen de {canal}": [
+    "Lower {canal} volume",
+    "Diminuir volume de {canal}",
+  ],
+  "Subir volumen de {canal}": [
+    "Raise {canal} volume",
+    "Aumentar volume de {canal}",
+  ],
+  "Conocer Blindly Plus": ["Discover Blindly Plus", "Conhecer Blindly Plus"],
+  "Silenciar todo": ["Mute all", "Silenciar tudo"],
+  Música: ["Music", "Música"],
+  "Efectos de ronda": ["Round effects", "Efeitos de rodada"],
+  "Ambiente de casino": ["Casino ambience", "Ambiente de cassino"],
+  Botonera: ["Soundboard", "Painel de sons"],
+  Volumen: ["Volume", "Volume"],
+  "Detener ambiente": ["Stop ambience", "Parar ambiente"],
+  "Reproducir ambiente": ["Play ambience", "Reproduzir ambiente"],
+  "Escuchar una muestra": ["Listen to a sample", "Ouvir uma amostra"],
+  "Los ajustes se guardan en este dispositivo. Al volver del fondo, los sonidos esperan a que los reproduzcas.":
+    [
+      "Settings are saved on this device. When you return to the app, sounds wait for you to play them.",
+      "As configurações são salvas neste dispositivo. Ao voltar ao app, os sons aguardam você reproduzi-los.",
+    ],
+  "El ambiente combina sonidos suaves de fichas y cartas. Se inicia solo cuando lo elegís.":
+    [
+      "The ambience mixes soft chip and card sounds. It starts only when you choose to play it.",
+      "O ambiente combina sons suaves de fichas e cartas. Começa apenas quando você escolhe reproduzi-lo.",
+    ],
+  "Reacciones que suenan en tu celular, para compartir en la mesa.": [
+    "Reactions played on your phone, to share at the table.",
+    "Reações reproduzidas no seu celular, para compartilhar na mesa.",
+  ],
+  "No hay sonidos seleccionados. Elegilos en Sonidos y ambiente.": [
+    "No sounds selected. Choose them in Sounds and ambience.",
+    "Nenhum som selecionado. Escolha em Sons e ambiente.",
+  ],
+  "Más sonidos y personalización · Plus": [
+    "More sounds and customization · Plus",
+    "Mais sons e personalização · Plus",
+  ],
+  "Personalizar botonera · Plus": [
+    "Customize soundboard · Plus",
+    "Personalizar painel de sons · Plus",
+  ],
+  "Elegí tus sonidos, marcá favoritos y cambiá el orden. Tus ajustes se conservan si vence Plus.":
+    [
+      "Choose your sounds, mark favorites and change the order. Your settings are kept if Plus expires.",
+      "Escolha seus sons, marque favoritos e altere a ordem. Suas configurações são mantidas se o Plus expirar.",
+    ],
+  "Mostrar sonido": ["Show sound", "Mostrar som"],
+  "Quitar de favoritos": ["Remove from favorites", "Remover dos favoritos"],
+  "Añadir a favoritos": ["Add to favorites", "Adicionar aos favoritos"],
+  "Mover hacia arriba": ["Move up", "Mover para cima"],
+  Aplausos: ["Applause", "Aplausos"],
+  Grillos: ["Crickets", "Grilos"],
+  Campana: ["Bell", "Sino"],
+  Bocina: ["Horn", "Buzina"],
+  Trombón: ["Trombone", "Trombone"],
+  "Caja registradora": ["Cash register", "Caixa registradora"],
+  Respeto: ["Respect", "Respeito"],
   "Modo principiante": ["Beginner mode", "Modo iniciante"],
   "Activa ayuda sobre las reglas durante tu turno. No cambia las apuestas ni recomienda estrategia.":
     [

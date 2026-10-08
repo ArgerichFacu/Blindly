@@ -17,6 +17,7 @@ import {
 import { PanelApuesta } from "./PanelApuesta";
 import { AyudaTurno } from "./AyudaTurno";
 import { MesaAsientos } from "./MesaAsientos";
+import { Botonera } from "./Botonera";
 import { AudioMesa } from "./AudioMesa";
 import { useSala } from "../lib/useSala";
 import { useAccionMesa } from "../lib/useAccionMesa";
@@ -618,6 +619,16 @@ export function Mesa({ codigo }: { codigo: string }) {
                 : "Las apuestas y el reparto se realizan con las fichas de la mesa.",
             )}
           </Texto>
+        </Seccion>
+      )}
+      {!esperando && !finalizada && (
+        <Seccion titulo={t("Botonera")}>
+          <Botonera corriendo={!!corriendo && enfocada} />
+          <Boton
+            titulo={t("Sonidos y ambiente")}
+            secundario
+            onPress={() => router.push("/sonidos")}
+          />
         </Seccion>
       )}
       {(!virtual || esperando || finalizada) && errores}
