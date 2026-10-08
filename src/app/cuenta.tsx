@@ -21,6 +21,7 @@ import {
 import { usePreferencias } from "../lib/Preferencias";
 import { usePlus } from "../lib/PlusContext";
 import { useInicio } from "../lib/InicioContext";
+import { identidadUsuario } from "../lib/identidad";
 const correoListo = process.env.EXPO_PUBLIC_EMAIL_AUTH_READY === "true";
 export default function Cuenta() {
   const { t, mensajeError } = usePreferencias(),
@@ -42,6 +43,7 @@ export default function Cuenta() {
     [revision, setRevision] = useState(0),
     [confirmarBorrado, setConfirmarBorrado] = useState(false);
   const cerrojo = useRef(false);
+  const identidad = usuario ? identidadUsuario(usuario) : null;
   useFocusEffect(
     useCallback(() => {
       let activo = true;
@@ -113,11 +115,22 @@ export default function Cuenta() {
           <Tarjeta>
             <Texto>
               {t(
-                usuario.is_anonymous
+                identidad?.invitado
                   ? "Jugás como invitado"
                   : cuentaConClave(usuario)
                     ? "Cuenta protegida con clave"
-                    : "Cuenta recuperable",
+                    : identidad?.recuperable
+                      ? "Cuenta recuperable"
+                      : "Protección pendiente",
+              )}
+            </Texto>
+            <Texto suave>{t("ID de tu identidad")}</Texto>
+            <Texto selectable style={{ fontSize: 12 }}>
+              {usuario.id}
+            </Texto>
+            <Texto suave>
+              {t(
+                "Este ID conserva tus puntos y tu lugar en las ligas aunque cambies tu nombre.",
               )}
             </Texto>
             {!usuario.is_anonymous && !cuentaConClave(usuario) && (
@@ -201,7 +214,8 @@ export default function Cuenta() {
                     etiqueta={t("Clave de recuperación")}
                     value={clave}
                     onChangeText={setClave}
-                    autoCapitalize="characters"
+                    autoCapitalize="none"
+                    secureTextEntry
                     autoCorrect={false}
                     editable={!ocupado}
                   />

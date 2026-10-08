@@ -27,7 +27,10 @@ export type SolicitudCuenta = {
 const DOMINIO_RECUPERACION = "@recovery.blindly.invalid";
 
 export function cuentaConClave(usuario: User) {
-  return usuario.email?.endsWith(DOMINIO_RECUPERACION) ?? false;
+  return (
+    usuario.is_anonymous === false &&
+    usuario.email === `${usuario.id}${DOMINIO_RECUPERACION}`
+  );
 }
 
 async function codigoFuncion(error: unknown, fallback: string) {
@@ -40,6 +43,17 @@ async function codigoFuncion(error: unknown, fallback: string) {
   return respuesta?.code ?? fallback;
 }
 async function validarCambioCuenta(usuario: User) {
+  // Los invitados legacy pueden tener ligas o mesas guardadas aun sin puntos o Plus vigente.
+  const social = usuario.is_anonymous
+    ? await Promise.all([
+        supabase.rpc("mis_ligas"),
+        supabase.rpc("mis_mesas_habituales"),
+      ])
+    : [];
+  for (const respuesta of social) {
+    if (respuesta.error) throw respuesta.error;
+    if (!Array.isArray(respuesta.data)) throw new Error("SESION_REQUERIDA");
+  }
   const [puntos, plusActivo] = await Promise.all([
     supabase.rpc("mi_puntuacion"),
     tienePlusActivo(),
@@ -54,10 +68,17 @@ async function validarCambioCuenta(usuario: User) {
   if (partidas.error) throw partidas.error;
   if (
     (usuario.is_anonymous && puntos.data?.partidas > 0) ||
+    social.some(
+      (respuesta) => Array.isArray(respuesta.data) && respuesta.data.length > 0,
+    ) ||
     partidas.data?.length ||
     plusActivo
   )
     throw new Error("PROTEGER_INVITADO");
+  const vigente = await supabase.auth.getSession();
+  if (vigente.error) throw vigente.error;
+  if (vigente.data.session?.user.id !== usuario.id)
+    throw new Error("SESION_CAMBIO");
 }
 export async function solicitarCodigo(
   email: string,
@@ -85,15 +106,23 @@ export async function solicitarCodigo(
 }
 
 export async function crearClaveRecuperacion() {
-  await asegurarSesion();
-  const { data, error } = await supabase.functions.invoke("crear-recuperacion", {
-    method: "POST",
-  });
+  const original = await asegurarSesion();
+  const { data, error } = await supabase.functions.invoke(
+    "crear-recuperacion",
+    {
+      method: "POST",
+    },
+  );
   if (error) throw new Error(await codigoFuncion(error, "CLAVE_NO_CREADA"));
   if (typeof data?.clave !== "string") throw new Error("CLAVE_NO_CREADA");
   const actualizada = await supabase.auth.refreshSession();
   if (actualizada.error || !actualizada.data.user)
     throw actualizada.error ?? new Error("SESION_REQUERIDA");
+  if (
+    actualizada.data.user.id !== original.id ||
+    !data.clave.startsWith(`BLINDLY1:${original.id}:`)
+  )
+    throw new Error("SESION_CAMBIO");
   return { clave: data.clave as string, usuario: actualizada.data.user };
 }
 

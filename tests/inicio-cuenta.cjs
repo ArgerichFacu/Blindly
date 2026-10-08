@@ -13,6 +13,13 @@ const source = ts.transpileModule(
   },
 ).outputText;
 const flush = () => new Promise((res) => setImmediate(res));
+const identidad = {};
+vm.runInNewContext(
+  ts.transpileModule(fs.readFileSync("src/lib/identidad.ts", "utf8"), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS },
+  }).outputText,
+  { exports: identidad },
+);
 function escenario(origen = "1") {
   let indice = 0,
     efecto,
@@ -68,6 +75,7 @@ function escenario(origen = "1") {
     },
     "../lib/PlusContext": { usePlus: () => ({ activo: false }) },
     "../lib/InicioContext": { useInicio: () => inicio },
+    "../lib/identidad": identidad,
     "../lib/sesion": {
       asegurarSesion: async () => usuario,
       cuentaConClave: (u) => !!u?.email?.endsWith("@recovery.blindly.invalid"),
@@ -127,6 +135,12 @@ async function main() {
   const cuenta = escenario();
   await cuenta.cargar();
   assert.ok(
+    cuenta
+      .elementos(cuenta.render(), "Texto")
+      .some((e) => e.children === "uuid-original"),
+    "Muestra el UUID propio sin cambiarlo",
+  );
+  assert.ok(
     !cuenta.botones().some((b) => b.titulo === "Continuar con esta cuenta"),
     "No considera persistente al anónimo",
   );
@@ -175,6 +189,11 @@ async function main() {
     .botones()
     .find((b) => b.titulo === "Ya tengo una clave")
     .onPress();
+  const campoClave = recuperar
+    .elementos(recuperar.render(), "Campo")
+    .find((c) => c.etiqueta === "Clave de recuperación");
+  assert.equal(campoClave.autoCapitalize, "none");
+  assert.equal(campoClave.secureTextEntry, true);
   recuperar
     .elementos(recuperar.render(), "Campo")
     .find((c) => c.etiqueta === "Clave de recuperación")

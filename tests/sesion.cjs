@@ -11,6 +11,12 @@ let id = "guest",
   historial = 0,
   activas = [],
   plusActivo = false,
+  ligas = [],
+  mesas = [],
+  socialError = null,
+  refreshId = null,
+  claveAjena = false,
+  cambiarDuranteConsulta = false,
   functionError = null,
   deleted = 0;
 const auth = {
@@ -54,7 +60,13 @@ const auth = {
     };
   },
   refreshSession: async () => ({
-    data: { user: { id, is_anonymous: anonymous, email: emailActual } },
+    data: {
+      user: {
+        id: refreshId ?? id,
+        is_anonymous: anonymous,
+        email: emailActual,
+      },
+    },
     error: null,
   }),
   signInWithPassword: async ({ email, password }) => {
@@ -81,7 +93,7 @@ const sb = {
         emailActual = `${usuario}@recovery.blindly.invalid`;
         return {
           data: {
-            clave: `BLINDLY1:${usuario}:abcdefghijklmnopqrstuvwxyz123456`,
+            clave: `BLINDLY1:${claveAjena ? "otro" : usuario}:abcdefghijklmnopqrstuvwxyz123456`,
           },
           error: null,
         };
@@ -90,7 +102,13 @@ const sb = {
       return { data: { ok: true }, error: null };
     },
   },
-  rpc: async () => ({ data: { partidas: historial } }),
+  rpc: async (nombre) => {
+    if (cambiarDuranteConsulta && nombre === "mi_puntuacion")
+      id = "nueva-sesion";
+    return nombre === "mi_puntuacion"
+      ? { data: { partidas: historial } }
+      : { data: nombre === "mis_ligas" ? ligas : mesas, error: socialError };
+  },
   from: () => ({
     select: () => ({
       eq: () => ({ in: () => ({ limit: async () => ({ data: activas }) }) }),
@@ -145,6 +163,46 @@ vm.runInNewContext(
     /PROTEGER_INVITADO/,
   );
   plusActivo = false;
+  ligas = [{ id: "legacy" }];
+  await assert.rejects(
+    () => exportsAuth.solicitarCodigo("test@example.com", true),
+    /PROTEGER_INVITADO/,
+  );
+  ligas = [];
+  mesas = [{ id: "cancelled-plus" }];
+  await assert.rejects(
+    () =>
+      exportsAuth.recuperarConClave(
+        "BLINDLY1:11111111-1111-4111-8111-111111111111:abcdefghijklmnopqrstuvwxyz",
+      ),
+    /PROTEGER_INVITADO/,
+  );
+  mesas = [];
+  socialError = new Error("offline-social");
+  await assert.rejects(
+    () => exportsAuth.solicitarCodigo("test@example.com", true),
+    /offline-social/,
+  );
+  socialError = null;
+  ligas = null;
+  await assert.rejects(
+    () => exportsAuth.solicitarCodigo("test@example.com", true),
+    /SESION_REQUERIDA/,
+  );
+  ligas = [];
+  cambiarDuranteConsulta = true;
+  const escrituras = calls.length;
+  await assert.rejects(
+    () => exportsAuth.solicitarCodigo("test@example.com", true),
+    /SESION_CAMBIO/,
+  );
+  assert.equal(
+    calls.length,
+    escrituras,
+    "Cambio de sesión durante consultas no inicia otro login",
+  );
+  cambiarDuranteConsulta = false;
+  id = "guest";
   s = await exportsAuth.solicitarCodigo("test@example.com", true);
   assert.equal(calls.at(-1)[1].options.shouldCreateUser, false);
   assert.equal((await exportsAuth.confirmarCodigo(s, "123456")).id, "restored");
@@ -162,6 +220,19 @@ vm.runInNewContext(
   assert.equal(protegida.usuario.id, id);
   assert.equal(protegida.usuario.is_anonymous, false);
   assert.equal(exportsAuth.cuentaConClave(protegida.usuario), true);
+  assert.equal(
+    exportsAuth.cuentaConClave({
+      ...protegida.usuario,
+      email: "otro@recovery.blindly.invalid",
+    }),
+    false,
+  );
+  refreshId = "sesion-distinta";
+  await assert.rejects(exportsAuth.crearClaveRecuperacion(), /SESION_CAMBIO/);
+  refreshId = null;
+  claveAjena = true;
+  await assert.rejects(exportsAuth.crearClaveRecuperacion(), /SESION_CAMBIO/);
+  claveAjena = false;
   id = "22222222-2222-4222-8222-222222222222";
   anonymous = true;
   emailActual = null;

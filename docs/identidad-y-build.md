@@ -4,7 +4,7 @@
 
 Mi cuenta está en Opciones y Mi puntuación. **Crear clave de recuperación** convierte el invitado en una credencial de Supabase Auth sin cambiar su UUID. La Edge Function autenticada genera un secreto aleatorio, configura un alias interno y una contraseña confirmada mediante la API administrativa, y devuelve la clave una sola vez. En otro celular, la app separa el UUID y el secreto y usa `signInWithPassword`. La contraseña solo queda almacenada como hash en Supabase Auth. Rotar la clave invalida la anterior.
 
-El correo sigue como segunda opción: Proteger este invitado usa `updateUser(email)` y `verifyOtp(email_change)`, mientras Recuperar usa `signInWithOtp(shouldCreateUser:false)` y `verifyOtp(email)`. Ambos mecanismos conservan la privacidad de la puntuación y no fusionan cuentas. Se bloquea el cambio de identidad si el invitado tiene partidas puntuadas o Blindly Plus activo, o si el usuario tiene una partida jugando/pausada.
+El correo sigue como segunda opción: Proteger este invitado usa `updateUser(email)` y `verifyOtp(email_change)`, mientras Recuperar usa `signInWithOtp(shouldCreateUser:false)` y `verifyOtp(email)`. Ambos mecanismos conservan la privacidad de la puntuación y no fusionan cuentas. Se bloquea el cambio de identidad si el invitado tiene partidas puntuadas, ligas o mesas guardadas, si hay Blindly Plus activo, o si el usuario tiene una partida jugando/pausada. La meta 10 amplía esa protección y conserva las filas legacy: [identidad-uuid.md](identidad-uuid.md).
 
 Antes de probar correo en Supabase:
 1. Authentication > Sign In / Providers: Email y Confirm email habilitados; Allow manual linking ya fue activado con autorización del usuario; Confirm email sigue habilitado.

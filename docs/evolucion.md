@@ -25,7 +25,7 @@ Después del cierre se aplicaron los parches recomendados dentro de Expo SDK 57.
 | 7 | Música, ambiente, efectos, botonera y mute persistidos | Implementado y probado automáticamente/web; aceptación nativa pendiente. [Detalle](audio.md). |
 | 8 | Ambiente sutil de casino | Loop original local, opcional y con volumen propio; aceptación física pendiente. [Detalle](audio.md). |
 | 9 | Botonera Free/Plus, favoritos y orden, sin uploads | Implementada con entitlement actual, conservación al expirar y pruebas automáticas. Compras reales pendientes. [Detalle](audio.md). |
-| 10 | Identidad persistente por UUID y compatibilidad legacy | Pendiente de evolución; recuperación por clave ya existe |
+| 10 | Identidad persistente por UUID y compatibilidad legacy | Descriptor y propiedad por UUID, compatibilidad legacy y protección de datos sociales al recuperar implementados/testeados. Aceptación entre dispositivos pendiente. [Detalle](identidad-uuid.md). |
 | 11 | Liga como club permanente | Pendiente de evolución; ligas básicas ya existen |
 | 12 | Login solo para funciones sociales persistentes | Pendiente |
 | 13 | Invitaciones con código/link/QR y contexto tras login | Pendiente |

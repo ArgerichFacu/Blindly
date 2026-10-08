@@ -4,7 +4,7 @@ import { supabase } from "./supabase";
 export type Jugador = {
   id: string;
   sala_id: string;
-  user_id: string;
+  user_id: string | null;
   nombre: string;
   fichas: number;
   eliminado_en: string | null;

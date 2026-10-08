@@ -1,6 +1,13 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Protección pendiente": ["Protection pending", "Proteção pendente"],
+  "ID de tu identidad": ["Your identity ID", "ID da sua identidade"],
+  "Este ID conserva tus puntos y tu lugar en las ligas aunque cambies tu nombre.":
+    [
+      "This ID keeps your points and league membership even if you change your name.",
+      "Este ID mantém seus pontos e sua participação nas ligas mesmo se você mudar seu nome.",
+    ],
   "Sonidos y ambiente": ["Sounds and ambience", "Sons e ambiente"],
   "Bajar volumen de {canal}": [
     "Lower {canal} volume",

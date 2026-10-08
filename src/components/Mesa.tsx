@@ -23,6 +23,7 @@ import { useSala } from "../lib/useSala";
 import { useAccionMesa } from "../lib/useAccionMesa";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
+import { esMiJugador } from "../lib/identidad";
 import { estadoActual, numeroDeNivel } from "../lib/niveles";
 import { ahoraServidor } from "../lib/tiempoServidor";
 import { protegerSalidaMesa, useSalidaMesa } from "../lib/useSalidaMesa";
@@ -98,7 +99,7 @@ export function Mesa({ codigo }: { codigo: string }) {
       </Pantalla>
     );
   const host = sala.host_id === usuario,
-    yo = jugadores.find((j) => j.user_id === usuario),
+    yo = jugadores.find((j) => esMiJugador(j, usuario)),
     dealer = yo?.id === sala.dealer_id;
   const esperando = sala.estado === "esperando",
     finalizada = sala.estado === "finalizada",
