@@ -3,7 +3,7 @@ import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 import type { DetalleLiga } from "../lib/ligas";
 
-export function RivalidadesClub({ datos }: { datos?: DetalleLiga["rivalidades"] }) {
+export function RivalidadesClub({ datos, pique = false }: { datos?: DetalleLiga["rivalidades"]; pique?: boolean }) {
   const { t } = usePreferencias(), { tema } = useTema();
   const rivales = datos?.rivales ?? [];
   return <>
@@ -14,6 +14,7 @@ export function RivalidadesClub({ datos }: { datos?: DetalleLiga["rivalidades"] 
       <Texto>{t("{n} torneos juntos", { n: datos.nemesis.compartidas })}</Texto>
       <Texto>{t("Vos {vos} · Rival {rival} · Empates {empates}", { vos: datos.nemesis.victorias, rival: datos.nemesis.derrotas, empates: datos.nemesis.empates })}</Texto>
       <Texto suave>{t("Entre tus balances desfavorables, es quien más veces terminó por encima de vos.")}</Texto>
+      <Texto suave>{t(pique ? "La revancha se juega en la mesa. ¿Organizan otra noche?" : "Pueden organizar otra fecha para seguir jugando juntos.")}</Texto>
     </Tarjeta>}
     {rivales.length === 0 ? <Texto suave>{t("Todavía faltan torneos compartidos para mostrar rivalidades.")}</Texto> : <>
       {!datos?.nemesis && <Texto suave>{t("Por ahora no tenés una némesis con balance desfavorable.")}</Texto>}

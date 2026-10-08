@@ -1,6 +1,7 @@
 import { asegurarSesion } from "./sesion";
 import { identidadUsuario } from "./identidad";
 import { supabase } from "./supabase";
+import type { PreferenciasAvisos } from "./avisosClub";
 
 export type ResumenLiga = {
   id: string;
@@ -57,6 +58,7 @@ export type MiembroLiga = {
 };
 
 export type DetalleLiga = {
+  preferencias_avisos?: PreferenciasAvisos;
   feed?: EventoClub[];
   rivalidades?: { rivales: RivalLiga[]; nemesis: RivalLiga | null };
   proxima_fecha?: ProximaFecha | null;
@@ -120,6 +122,12 @@ async function rpc<T>(nombre: string, parametros?: Record<string, unknown>) {
 async function prepararAdministracion() {
   if (!identidadUsuario(await asegurarSesion()).recuperable)
     throw new Error("CUENTA_REQUERIDA");
+}
+export async function guardarPreferenciasAvisos(liga: string, preferencias: PreferenciasAvisos) {
+  const { revision, ...valores } = preferencias;
+  return rpc<PreferenciasAvisos>("guardar_preferencias_avisos", {
+    p_liga: liga, p_preferencias: valores, p_revision: revision,
+  });
 }
 export async function actualizarClub(ligaId: string, descripcion: string) {
   await prepararAdministracion();

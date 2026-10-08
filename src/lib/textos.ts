@@ -1,6 +1,25 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Notificaciones del club": ["Club notifications", "Notificações do clube"],
+  "Estas preferencias son tuyas y se conservan al recuperar tu cuenta.": ["These are your preferences and they are preserved when you recover your account.", "Estas preferências são suas e são mantidas ao recuperar sua conta."],
+  "El envío push todavía no está habilitado en esta versión.": ["Push delivery is not enabled in this version yet.", "O envio push ainda não está habilitado nesta versão."],
+  "Recibir avisos del club": ["Receive club notifications", "Receber avisos do clube"],
+  "Modo pique": ["Friendly banter", "Modo provocação"],
+  "Cambios de MVP": ["MVP changes", "Mudanças de MVP"],
+  "Avisos de rivalidades": ["Rivalry notifications", "Avisos de rivalidades"],
+  "Próximas fechas": ["Upcoming game nights", "Próximos encontros"],
+  "Cierre de temporadas": ["Season endings", "Encerramento de temporadas"],
+  "Recordatorios para juntarse": ["Reminders to get together", "Lembretes para se reunir"],
+  "Modo pique cambia el tono, nunca los resultados. Desactivado, los mensajes son neutrales.": ["Friendly banter changes the tone, never the results. When off, messages are neutral.", "O modo provocação muda o tom, nunca os resultados. Desativado, as mensagens são neutras."],
+  "Avisos sociales por semana en este club": ["Social notifications per week in this club", "Avisos sociais por semana neste clube"],
+  "Máximo {n} avisos sociales por semana": ["At most {n} social notifications per week", "No máximo {n} avisos sociais por semana"],
+  "MVP, fechas y cierres respetan su interruptor y no consumen el cupo social.": ["MVP, game nights and season endings respect their toggle and do not count towards the social limit.", "MVP, encontros e encerramentos respeitam seu controle e não consomem a cota social."],
+  "Preferencias del club guardadas.": ["Club preferences saved.", "Preferências do clube salvas."],
+  "Guardar preferencias": ["Save preferences", "Salvar preferências"],
+  "La revancha se juega en la mesa. ¿Organizan otra noche?": ["The rematch happens at the table. Another game night?", "A revanche acontece na mesa. Vamos marcar outra noite?"],
+  "Pueden organizar otra fecha para seguir jugando juntos.": ["You can schedule another game night to keep playing together.", "Vocês podem marcar outro encontro para continuar jogando juntos."],
+  "Tus preferencias cambiaron en otro dispositivo. Actualizá el club antes de guardar.": ["Your preferences changed on another device. Refresh the club before saving.", "Suas preferências mudaram em outro dispositivo. Atualize o clube antes de salvar."],
   "Actividad del club": ["Club activity", "Atividade do clube"],
   "Lo que pasó en esta temporada y la próxima fecha del club.": ["This season's events and the club's next game night.", "Os acontecimentos desta temporada e o próximo encontro do clube."],
   "La historia del club empieza con su primera partida terminada.": ["The club's story starts with its first completed game.", "A história do clube começa com sua primeira partida concluída."],
@@ -763,6 +782,7 @@ export const textos: Record<string, [string, string]> = {
 };
 
 export const errores: Record<string, string> = {
+  AVISOS_CAMBIARON: "Tus preferencias cambiaron en otro dispositivo. Actualizá el club antes de guardar.",
   NOMBRE_INVALIDO: "Completá tu nombre y el código.",
   SESION_REQUERIDA: "No se pudo completar. Probá de nuevo.",
   CUENTA_REQUERIDA: "Protegé tu cuenta para ver tu historial y participar en clubes.",

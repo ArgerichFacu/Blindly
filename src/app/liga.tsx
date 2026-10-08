@@ -32,6 +32,7 @@ import { TituloPersonalizado } from "../components/TituloPersonalizado";
 import { ProximaFechaClub } from "../components/ProximaFechaClub";
 import { RivalidadesClub } from "../components/RivalidadesClub";
 import { FeedClub } from "../components/FeedClub";
+import { PreferenciasAvisosClub } from "../components/PreferenciasAvisosClub";
 
 export default function Liga() {
   const { id, temporada: temporadaParam } = useLocalSearchParams<{
@@ -237,9 +238,13 @@ export default function Liga() {
           </Seccion>
 
           <Seccion titulo={t("Rivalidades")} inicial>
-            <RivalidadesClub datos={datos.rivalidades} />
+            <RivalidadesClub datos={datos.rivalidades} pique={datos.preferencias_avisos?.pique === true} />
           </Seccion>
 
+          <Seccion titulo={t("Notificaciones del club")}>
+            <PreferenciasAvisosClub liga={datos.liga.id} preferencias={datos.preferencias_avisos}
+              actualizar={actualizarRanking} alGuardar={preferencias => setDatos(actual => actual ? { ...actual, preferencias_avisos: preferencias } : null)} />
+          </Seccion>
           <Seccion titulo={t("Títulos automáticos")}>
             <Texto suave>{t("Méritos Free de esta temporada. Se recalculan con cada resultado.")}</Texto>
             <Texto>{t("MVP: puesto 1 de la temporada activa, con el mismo desempate del ranking.")}</Texto>
