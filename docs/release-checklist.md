@@ -28,8 +28,8 @@ La matriz consolidada de evidencia y dependencias externas está en [`final-read
 - [x] Borrado opcional del perfil de RevenueCat desde la eliminación autenticada de cuenta.
 - [x] Perfiles EAS de development, preview, ios-simulator y production preparados.
 - [x] Proyecto `@facuargerich/blindly` vinculado y variables públicas creadas en los tres entornos EAS.
-- [x] APK Android preview final regenerado con firma remota, Plus desactivado y permisos mínimos desde el commit `07aff0d` ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/adce6a93-dbe1-4ef9-a5db-c86eb084cb3b)); falta instalarlo en hardware real.
-- [x] AAB de producción final generado desde el mismo commit, con `versionCode 5` y firma remota ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/cef204be-b7bc-4da5-b81d-9da2d4317d61)).
+- [x] APK Android preview final regenerado con firma remota, Plus desactivado y permisos mínimos desde el commit `a147e78` ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/3cd26009-81ce-4a67-8778-87a28d0d121e)); usa `versionCode 5` y falta instalarlo en hardware real.
+- [x] AAB de producción final generado desde el mismo commit, con `versionCode 6` y firma remota ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/da6f7279-a681-4c09-86f9-7b879bdded73)).
 - [x] Build nativa iOS de simulador regenerada por Xcode y EAS desde el commit `a147e78` ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/b624dd9e-ffd0-4254-bf65-522f8cd316e1)); el paquete `.app`, su Info.plist y su hash fueron validados localmente.
 - [x] APK `development` generado para probar compras simuladas de RevenueCat Test Store ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/2d4f84b6-4ea7-41d0-9b2e-aee09d2e6e4b)).
 - [x] RevenueCat Test Store configurado con entitlement `blindly_plus` y la oferta predeterminada: mensual USD 0,99, anual USD 9,99 recomendado y Founder Edition vitalicia USD 24,99 como precio especial de lanzamiento.
@@ -71,10 +71,10 @@ La matriz consolidada de evidencia y dependencias externas está en [`final-read
 
 ## Artefactos Android 1.0.0
 
-Estos artefactos se generaron antes de Ligas, Temporadas y Ranking. Se conservan como referencia técnica y no deben cargarse como la versión final actual; la siguiente build necesita un `versionCode` nuevo.
+Estos artefactos contienen la entrega actual de Ligas, Temporadas, Ranking, mesas habituales, estadísticas y recap. Son los binarios aprobados para la prueba física y la futura carga en una pista interna; cualquier cambio posterior de código exige un AAB con un `versionCode` nuevo.
 
-- APK de prueba: [descarga directa](https://expo.dev/artifacts/eas/gMvdiijTDFWPn-ieGNCcx6L72TUeZMKDvx7cOffhK-c.apk), `versionCode 4`, SHA-256 `65216DAD2837E7E2882D5B94B68815495BDCCB86085FCB1A7AD664B87227F85E`.
-- AAB para Google Play: [descarga directa](https://expo.dev/artifacts/eas/mOaH1SBjZr8oFJZ2v6l11InH-A_rpgTT5f0uRpQfffs.aab), `versionCode 5`, SHA-256 `89F753CCFF4A47AC9B2501B220EE4649152FFBD2BC1944522FF7D0ACD581124C`.
+- APK de prueba: [descarga directa](https://expo.dev/artifacts/eas/ZWvYWkflL1iX6jr9uxLDnwxrTxvjoB3cnHese3Q9DFc.apk), build `3cd26009-81ce-4a67-8778-87a28d0d121e`, `versionCode 5`, SHA-256 `F62B57844824B5C85AF4E8C8976FF69C1A52C7DD1FD5008C371CE0EB31B12928`.
+- AAB para Google Play: [descarga directa](https://expo.dev/artifacts/eas/CZ76WUrBEQxZXI9k8-C09DHOIVVo2_uotMfpw9nXZ40.aab), build `da6f7279-a681-4c09-86f9-7b879bdded73`, `versionCode 6`, SHA-256 `A496C7E80823A7B895ECD3EBA2162F6463ECEB75EFBE3DC9A74C342FAFB8E6C6`.
 - APK de desarrollo para Test Store: [descarga directa](https://expo.dev/artifacts/eas/cO1utrQC2gAeLE63VkH1TfjxUIe-O-5DDPS4nsYguUM.apk), SHA-256 `9C3CD74DBC14724A173FBF14D4944589B1E6B814A33758D103AC0737CC6EAA8E`.
 - El APK preview y el AAB se generaron con Blindly Plus desactivado, por lo que no contienen una clave Test Store utilizable en una build release. La APK de desarrollo sí usa Test Store y no debe distribuirse como versión final.
 

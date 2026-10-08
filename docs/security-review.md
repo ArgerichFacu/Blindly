@@ -48,8 +48,10 @@ Referencias: [seguridad de la API de datos](https://supabase.com/docs/guides/api
 
 ## Dependencias JavaScript
 
-La revisión del 5 de octubre de 2026 produjo cero vulnerabilidades críticas. `npm audit --audit-level=critical` informó 23 altas y 13 moderadas en dependencias transitivas de Expo CLI, Metro, prebuild y React Native, pero ninguna crítica y ninguna corrección compatible automática.
+La revisión del 7 de octubre de 2026 detectó el nuevo aviso crítico de `shell-quote` 1.10.0. Se actualizó únicamente esa dependencia transitiva a 1.12.0 dentro del rango admitido por `react-devtools-core`; la auditoría posterior tiene cero críticas, 24 altas y 13 moderadas. React Native carga `react-devtools-core` dentro de `__DEV__`, por lo que esta corrección de herramientas no modifica los APK/AAB release generados desde `a147e78`.
+
+La matriz incluida en Expo 57.0.26 coincide con los paquetes bloqueados de la release. `expo install --check` y Expo Doctor con `EXPO_OFFLINE=1` verificaron esa matriz (21/21). El informe online recomienda seis parches posteriores: Expo 57.0.27, @expo/ui 57.0.22, expo-asset 57.0.19, expo-constants 57.0.21, expo-linking 57.0.12 y expo-router 57.0.25. CI conserva ese informe online como informativo y exige la matriz fija, auditoría crítica, tipos, lint, pruebas y bundles. Las recomendaciones nuevas deben revisarse al iniciar el siguiente bloque y requieren nuevos binarios si se aplican; este cierre conserva la relación entre los builds y su commit original.
 
 `npm audit fix --force` propone versiones incompatibles, incluida una regresión a Expo 44, por lo que no debe ejecutarse. La matriz obligatoria permanece en Expo SDK 57 y se valida con Expo Doctor, compatibilidad de paquetes, TypeScript, ESLint, pruebas y exportación de bundles en CI.
 
-Referencias: [aviso de `decode-uri-component`](https://github.com/advisories/GHSA-vcc3-ghjq-m6fr), [aviso de `braces`](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) y [aviso de `node-forge`](https://github.com/advisories/GHSA-86w9-cpqp-85rv).
+Referencias: [aviso de `shell-quote`](https://github.com/advisories/GHSA-pqg4-j6r4-53mv), [aviso de `decode-uri-component`](https://github.com/advisories/GHSA-vcc3-ghjq-m6fr), [aviso de `braces`](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) y [aviso de `node-forge`](https://github.com/advisories/GHSA-86w9-cpqp-85rv).

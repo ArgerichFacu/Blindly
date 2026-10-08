@@ -1,6 +1,6 @@
 # Estado final de preparación de Blindly 1.0.0
 
-Auditoría actualizada el 5 de octubre de 2026. Este documento separa la evidencia técnica comprobada de las acciones que requieren una cuenta externa, dinero, dispositivos físicos o autorización del propietario.
+Auditoría actualizada el 7 de octubre de 2026. Este documento separa la evidencia técnica comprobada de las acciones que requieren una cuenta externa, dinero, dispositivos físicos o autorización del propietario.
 
 ## Resultado por área
 
@@ -10,23 +10,27 @@ Auditoría actualizada el 5 de octubre de 2026. Este documento separa la evidenc
 | Identidad | Implementada | Invitado persistente, clave privada recuperable, rotación de clave, protección de UUID/puntos/historial/compras y eliminación autenticada de cuenta. | Configurar SMTP y probar el flujo opcional de correo en dos dispositivos. |
 | Supabase | Operativo | Proyecto `ddvbbkwhisuezloorhfg` con nueve migraciones remotas y Edge Functions `crear-recuperacion`, `eliminar-cuenta` y `sincronizar-plus`. Las pruebas reales de Auth, RevenueCat, caché servidor, RPC, experiencia Free/Plus y limpieza temporal terminaron correctamente. | SMTP solo afecta la recuperación opcional por correo. |
 | Seguridad de base | Revisada | La auditoría de la migración 17 comprobó 20 condiciones de tablas, RLS, privilegios, RPC públicas, helpers privados, historial Free y registro de migración con el resultado esperado. El asesor anterior muestra cero errores; los avisos intencionales están documentados en `security-review.md`. | Rotar la clave privada de RevenueCat que apareció anteriormente en un registro, después de autorización explícita. |
-| Android | Bundle JavaScript validado | Expo exportó correctamente web, Android e iOS con Ligas. Los APK/AAB firmados existentes son una base anterior a esta entrega. | Generar una nueva build nativa desde el commit final, incrementar `versionCode` y completar la matriz física antes de Play Store. |
+| Android | Artefactos nativos validados | APK preview `versionCode 5` y AAB production `versionCode 6` generados desde `a147e78`. Se comprobaron `com.blindly.app`, versión 1.0.0, SDK 36, integridad, firma, Billing y permisos mínimos. | Instalar el APK y completar la matriz física; cargar el AAB cuando exista la cuenta de Play Console. |
 | iOS | Compilación validada | Build de simulador iOS 1.0.0 regenerada desde `a147e78`, descargada e inspeccionada: contiene `Blindly.app`, bundle `com.blindly.app`, build 1 y configuración de cifrado correcta. | Membresía Apple Developer, certificados, perfiles y dispositivos registrados para producir una IPA o usar TestFlight. |
 | Blindly Plus | Integrado y protegido | SDK, entitlement, paywall, restauración, administración, borrado de perfil, Ligas, Temporadas y Ranking integrados. `sincronizar-plus` valida RevenueCat desde Supabase y las RPC no confían en el teléfono. Test Store existe solo en `development`; `preview` y `production` mantienen Plus desactivado. | Publicar el nuevo borrador del paywall tras la confirmación del propietario, probar compra/restauración en Android real, crear productos de Google Play, configurar las claves públicas de producción y reconstruir. |
 | Documentación y legales | Preparados | README, política de privacidad, términos, eliminación de cuenta, textos de tienda, gráficos, guía física, revisión de seguridad y paquete de Play Console versionados. | Autorizar y activar GitHub Pages; definir correo público de soporte y privacidad. |
 | Google Play | Paquete preparado | AAB firmado, ficha localizada, icono, gráfico, documentos legales y hashes incluidos en el ZIP. `targetSdkVersion 36` cumple el requisito vigente. | Pagar/crear la cuenta, cargar el bundle, completar formularios, ejecutar prueba cerrada con 12 testers durante 14 días y solicitar producción. |
-| GitHub y CI | Sincronizado | El commit `13052cf` pasó el workflow [`Verificar Blindly`](https://github.com/ArgerichFacu/Blindly/actions/runs/37243348765), que incluye Expo Doctor, dependencias, TypeScript, ESLint, pruebas y bundles web/Android/iOS. El remoto conserva únicamente `main`. | Ninguno para el código actual. |
+| GitHub y CI | Sincronizado | El commit funcional `a147e78` pasó el workflow [`Verificar Blindly`](https://github.com/ArgerichFacu/Blindly/actions/runs/37351110894). El cierre exige la matriz incluida en el SDK bloqueado, auditoría crítica, TypeScript, ESLint, pruebas y bundles web/Android/iOS; el informe de nuevos parches online permanece visible. El remoto conserva únicamente `main`. | Los seis parches nuevos recomendados por Expo se revisarán en el siguiente bloque; no están incorporados a estos binarios. |
 
 ## Artefactos aprobados
 
 | Uso | Build EAS | Versión | SHA-256 |
 | --- | --- | --- | --- |
-| Android instalable | [`adce6a93-dbe1-4ef9-a5db-c86eb084cb3b`](https://expo.dev/accounts/facuargerich/projects/blindly/builds/adce6a93-dbe1-4ef9-a5db-c86eb084cb3b) | 1.0.0 (`versionCode 4`) | `65216DAD2837E7E2882D5B94B68815495BDCCB86085FCB1A7AD664B87227F85E` |
-| Google Play AAB | [`cef204be-b7bc-4da5-b81d-9da2d4317d61`](https://expo.dev/accounts/facuargerich/projects/blindly/builds/cef204be-b7bc-4da5-b81d-9da2d4317d61) | 1.0.0 (`versionCode 5`) | `89F753CCFF4A47AC9B2501B220EE4649152FFBD2BC1944522FF7D0ACD581124C` |
+| Android instalable | [`3cd26009-81ce-4a67-8778-87a28d0d121e`](https://expo.dev/accounts/facuargerich/projects/blindly/builds/3cd26009-81ce-4a67-8778-87a28d0d121e) | 1.0.0 (`versionCode 5`) | `F62B57844824B5C85AF4E8C8976FF69C1A52C7DD1FD5008C371CE0EB31B12928` |
+| Google Play AAB | [`da6f7279-a681-4c09-86f9-7b879bdded73`](https://expo.dev/accounts/facuargerich/projects/blindly/builds/da6f7279-a681-4c09-86f9-7b879bdded73) | 1.0.0 (`versionCode 6`) | `A496C7E80823A7B895ECD3EBA2162F6463ECEB75EFBE3DC9A74C342FAFB8E6C6` |
 | Paquete Play Console | Local y OneDrive | 1.0.0 | Verificado al generar; el hash vigente se registra en `release/LEEME.txt`. |
 | Simulador iOS | [`b624dd9e-ffd0-4254-bf65-522f8cd316e1`](https://expo.dev/accounts/facuargerich/projects/blindly/builds/b624dd9e-ffd0-4254-bf65-522f8cd316e1) | 1.0.0 (`build 1`) | `03022B72932A77409975C43EF9E7C8C82DA6F259C3A6E4D0E19BFFE089B24A31` |
 
-Los binarios Android se generaron desde `07aff0db39e14643060e102ec9cfb07a116450f8` y no contienen Ligas, Temporadas ni Ranking. Se conservan como artefactos de referencia; la siguiente versión publicable debe reconstruirse después de cerrar las fases restantes autorizadas por el propietario.
+Los binarios Android se generaron desde `a147e78b154a7068f18b0bc838dcc93d0d3af21d` y contienen el alcance funcional validado de esta release. El APK pasó `apksigner` con firma v2; el AAB pasó `bundletool validate` y `jarsigner`, y su manifiesto confirmó `com.blindly.app`, `versionCode 6`, `targetSdkVersion 36`, Billing y ausencia de permisos de almacenamiento o superposición.
+
+El certificado de carga del APK y del AAB coincide: SHA-256 `C5B6C355789F93255B188CEF762DB78DE5A1900E286CE3B1EC9475F6C466422F`, RSA 2048, válido hasta el 16 de febrero de 2054. `jarsigner` normal verificó el AAB con código 0. Su modo estricto informa código 4 por certificado autofirmado y cadena no reconocida; Java 25 también avisa diferencias entre sus lectores JarFile/JarInputStream. Estos avisos se registran y no sustituyen la futura revisión de Play Console.
+
+La actualización de `shell-quote` a 1.12.0 corrige una vulnerabilidad en herramientas de desarrollo después de generar los binarios. No cambia el código de producción de esta release. Detalles y límites de la auditoría en [security-review.md](security-review.md).
 
 ## Orden restante de publicación
 

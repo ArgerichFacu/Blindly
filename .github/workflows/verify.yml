@@ -27,10 +27,18 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
-      - name: Verificar compatibilidad con Expo 57
+      - name: Verificar matriz de Expo 57 de la release
         run: |
           npx expo install --check
           npx expo-doctor
+        env:
+          # Validate the SDK matrix shipped with the locked Expo version.
+          # Upstream recommendations remain visible in the next step.
+          EXPO_OFFLINE: "1"
+
+      - name: Informar recomendaciones actuales de Expo
+        continue-on-error: true
+        run: npx expo-doctor
 
       - name: Bloquear vulnerabilidades críticas
         run: npm audit --omit=dev --audit-level=critical

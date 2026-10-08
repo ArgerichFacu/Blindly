@@ -146,12 +146,12 @@ RevenueCat Test Store está activo solamente en `development`, donde la build es
 
 `eas.json` incluye perfiles `development`, `preview`, `ios-simulator` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus usa Test Store solo en development; preview y production permanecen desactivados hasta disponer de productos reales. Android se publicará en Google Play; los iPhone de amigos pueden recibir una IPA privada o una invitación cerrada de TestFlight sin publicar Blindly en App Store. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
 
-Ya existen dos artefactos Android firmados por EAS para la versión 1.0.0:
+Los artefactos Android finales de Blindly 1.0.0 fueron generados por EAS desde el commit funcional `a147e78`:
 
-- [APK preview instalable](https://expo.dev/artifacts/eas/gMvdiijTDFWPn-ieGNCcx6L72TUeZMKDvx7cOffhK-c.apk), `versionCode 4`, SHA-256 `65216DAD2837E7E2882D5B94B68815495BDCCB86085FCB1A7AD664B87227F85E`.
-- [AAB de producción para Play Store](https://expo.dev/artifacts/eas/mOaH1SBjZr8oFJZ2v6l11InH-A_rpgTT5f0uRpQfffs.aab), `versionCode 5`, SHA-256 `89F753CCFF4A47AC9B2501B220EE4649152FFBD2BC1944522FF7D0ACD581124C`.
+- [APK preview instalable](https://expo.dev/artifacts/eas/ZWvYWkflL1iX6jr9uxLDnwxrTxvjoB3cnHese3Q9DFc.apk), build EAS [`3cd26009-81ce-4a67-8778-87a28d0d121e`](https://expo.dev/accounts/facuargerich/projects/blindly/builds/3cd26009-81ce-4a67-8778-87a28d0d121e), `versionCode 5`, SHA-256 `F62B57844824B5C85AF4E8C8976FF69C1A52C7DD1FD5008C371CE0EB31B12928`.
+- [AAB de producción para Play Store](https://expo.dev/artifacts/eas/CZ76WUrBEQxZXI9k8-C09DHOIVVo2_uotMfpw9nXZ40.aab), build EAS [`da6f7279-a681-4c09-86f9-7b879bdded73`](https://expo.dev/accounts/facuargerich/projects/blindly/builds/da6f7279-a681-4c09-86f9-7b879bdded73), `versionCode 6`, SHA-256 `A496C7E80823A7B895ECD3EBA2162F6463ECEB75EFBE3DC9A74C342FAFB8E6C6`.
 
-Estos binarios son una base nativa anterior a Ligas. Sirven para las pruebas ya documentadas, pero no incluyen la entrega de Ligas, Temporadas y Ranking y no deben cargarse como versión final en Play Store. La próxima compilación nativa deberá generarse desde el commit final del producto y usar un `versionCode` nuevo.
+El APK verificó su firma v2 y el AAB pasó `bundletool validate` y `jarsigner`. Ambos contienen `com.blindly.app` 1.0.0, SDK objetivo 36 y la entrega actual de Ligas, Temporadas, Ranking y Blindly Plus. El AAB puede cargarse en una pista interna de Google Play cuando esté disponible la cuenta; todavía requiere la prueba física y las acciones externas detalladas en el checklist.
 
 La entrega actual también compiló en iOS desde el commit `a147e78`: [paquete para simulador](https://expo.dev/artifacts/eas/g2xejQ1cr9udaplB7q_qkhkjpC45ugSIL-xQHg_4bk8.tar.gz), build 1, SHA-256 `03022B72932A77409975C43EF9E7C8C82DA6F259C3A6E4D0E19BFFE089B24A31`. El archivo contiene `Blindly.app`; se verificaron `com.blindly.app`, versión 1.0.0, cifrado exento y los esquemas de enlace. Se instala en el simulador de macOS; una IPA para iPhone requiere firma de Apple Developer.
 

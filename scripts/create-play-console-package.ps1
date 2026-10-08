@@ -2,7 +2,7 @@
 param(
   [string]$AabPath,
   [string]$OutputPath,
-  [string]$ExpectedSha256 = '89F753CCFF4A47AC9B2501B220EE4649152FFBD2BC1944522FF7D0ACD581124C'
+  [string]$ExpectedSha256 = 'A496C7E80823A7B895ECD3EBA2162F6463ECEB75EFBE3DC9A74C342FAFB8E6C6'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -86,7 +86,7 @@ Bundle aprobado:
   bundle/Blindly-1.0.0-playstore.aab
   package: com.blindly.app
   versionName: 1.0.0
-  versionCode: 5
+  versionCode: 6
   SHA-256: $actualAabSha256
 
 Antes de enviar a revision:
