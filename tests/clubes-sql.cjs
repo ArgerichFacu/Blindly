@@ -104,6 +104,172 @@ async function falla(sql, args, codigo) {
   await como(2);
   await falla("select actualizar_club($1,'Hack')", [club], "SOLO_ADMIN");
   await falla("update liga_miembros set rol='admin'", [], "permission denied");
+  await falla("select obtener_invitacion_liga($1)", [club], "SOLO_ADMIN");
+  await como(1);
+  const invitation = (
+    await q("select obtener_invitacion_liga($1) v", [club])
+  )[0].v;
+  assert.match(invitation.codigo, /^[A-F0-9]{20}$/);
+  assert.equal(
+    (await q("select obtener_invitacion_liga($1) v", [club]))[0].v.codigo,
+    invitation.codigo,
+    "Mostrar no renueva un código vigente",
+  );
+  await como(4);
+  await falla(
+    "select consultar_invitacion_liga($1)",
+    [invitation.codigo],
+    "CUENTA_REQUERIDA",
+  );
+  await falla(
+    "select aceptar_invitacion_liga($1,'Guest')",
+    [invitation.codigo],
+    "CUENTA_REQUERIDA",
+  );
+  await como(3);
+  await falla(
+    "select aceptar_invitacion_liga($1,'Facu')",
+    [invitation.codigo],
+    "MIEMBRO_RETIRADO",
+  );
+  await db.exec("reset role");
+  await q("insert into auth.users values($1,false)", [uid(5)]);
+  await como(5);
+  await falla("select detalle_liga($1)", [club], "LIGA_NO_DISPONIBLE");
+  const preview = (
+    await q("select consultar_invitacion_liga($1) v", [
+      invitation.codigo.toLowerCase(),
+    ])
+  )[0].v;
+  assert.equal(preview.nombre, "Los Pibes");
+  assert.equal(preview.ya_miembro, false);
+  assert.ok(
+    !("miembros" in preview) && !("ranking" in preview),
+    "Vista previa no divulga personas o resultados",
+  );
+  await falla(
+    "select aceptar_invitacion_liga($1,'')",
+    [invitation.codigo],
+    "DATOS_INVALIDOS",
+  );
+  assert.equal(
+    (
+      await q("select aceptar_invitacion_liga($1,'Facu') id", [
+        invitation.codigo,
+      ])
+    )[0].id,
+    club,
+  );
+  await q("select aceptar_invitacion_liga($1,'Otro nombre')", [
+    invitation.codigo,
+  ]);
+  const joined = (await q("select detalle_liga($1) v", [club]))[0].v;
+  assert.equal(joined.miembros.filter((m) => m.user_id === uid(5)).length, 1);
+  assert.equal(joined.miembros.find((m) => m.user_id === uid(5)).rol, "member");
+  assert.equal(
+    joined.miembros.find((m) => m.user_id === uid(5)).nombre,
+    "Facu",
+    "Reintentar no cambia nombre o rol",
+  );
+  await falla("select obtener_invitacion_liga($1,true)", [club], "SOLO_ADMIN");
+  await falla(
+    "select consultar_invitacion_liga('garbage')",
+    [],
+    "INVITACION_INVALIDA",
+  );
+  await como(1);
+  await q("select cambiar_rol_liga($1,$2,'admin')", [club, uid(2)]);
+  await como(2);
+  const renewed = (
+    await q("select obtener_invitacion_liga($1,true) v", [club])
+  )[0].v;
+  assert.notEqual(renewed.codigo, invitation.codigo);
+  await como(5);
+  await falla(
+    "select consultar_invitacion_liga($1)",
+    [invitation.codigo],
+    "INVITACION_INVALIDA",
+  );
+  assert.equal(
+    (await q("select consultar_invitacion_liga($1) v", [renewed.codigo]))[0].v
+      .ya_miembro,
+    true,
+  );
+  await db.exec("reset role");
+  await q(
+    "update liga_invitaciones set vence_en=now()-interval '1 second' where liga_id=$1",
+    [club],
+  );
+  await como(5);
+  await falla(
+    "select consultar_invitacion_liga($1)",
+    [renewed.codigo],
+    "INVITACION_INVALIDA",
+  );
+  await falla(
+    "select aceptar_invitacion_liga($1,'Facu')",
+    [renewed.codigo],
+    "INVITACION_INVALIDA",
+  );
+  await falla("select * from liga_invitaciones", [], "permission denied");
+  await como(1);
+  const current = (await q("select obtener_invitacion_liga($1) v", [club]))[0]
+    .v;
+  await q("select actualizar_liga($1,'Los Pibes',true)", [club]);
+  await como(5);
+  await falla(
+    "select consultar_invitacion_liga($1)",
+    [current.codigo],
+    "INVITACION_INVALIDA",
+  );
+  await como(1);
+  await q("select actualizar_liga($1,'Los Pibes',false)", [club]);
+  const sala = (
+    await q("select to_jsonb(crear_sala('[]'::jsonb,$1)) s", [second])
+  )[0].s;
+  const jugadores = [];
+  for (const n of [1, 3]) {
+    await como(n);
+    jugadores.push(
+      (await q("select unirse_mesa($1,$2) j", [sala.codigo, `Facu ${n}`]))[0].j
+        .jugadorId,
+    );
+  }
+  await como(1);
+  let solicitud = 0;
+  const accion = (a, datos = {}) =>
+    q("select accion_mesa($1,$2,$3::jsonb,$4)", [
+      sala.id,
+      a,
+      JSON.stringify(datos),
+      `invitaciones-${++solicitud}`,
+    ]);
+  await accion("ordenar", { orden: jugadores, dealer: jugadores[0] });
+  await accion("configurar", {
+    seccion: "fichas",
+    valor: { tipo: "virtuales", stack: 1000 },
+  });
+  await accion("configurar", {
+    seccion: "modo",
+    valor: {
+      id: "regular",
+      niveles: [{ minutos: 20, smallBlind: 5, bigBlind: 10 }],
+    },
+  });
+  await accion("iniciar");
+  await db.exec("reset role");
+  assert.equal(
+    (
+      await q(
+        "select activo from liga_miembros where liga_id=$1 and user_id=$2",
+        [club, uid(3)],
+      )
+    )[0].activo,
+    false,
+    "Iniciar no reactiva miembros retirados",
+  );
+  await como(3);
+  await falla("select detalle_liga($1)", [club], "LIGA_NO_DISPONIBLE");
   await db.exec("reset role");
   const privileges = (
     await q(
@@ -111,6 +277,17 @@ async function falla(sql, args, codigo) {
     )
   )[0];
   assert.deepEqual(privileges, { a: false, b: false, c: false });
+  for (const firma of [
+    "public.obtener_invitacion_liga(uuid,boolean)",
+    "public.consultar_invitacion_liga(text)",
+    "public.aceptar_invitacion_liga(text,text)",
+  ])
+    assert.equal(
+      (
+        await q("select has_function_privilege('anon',$1,'execute') p", [firma])
+      )[0].p,
+      false,
+    );
   console.log(
     "Clubes: Free, cuenta obligatoria para administrar, legacy, roles, revocación, temporadas, datos y RPC/RLS OK",
   );

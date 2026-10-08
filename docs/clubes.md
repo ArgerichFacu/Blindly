@@ -22,6 +22,18 @@ El advisor mantiene avisos sobre [RPC SECURITY DEFINER](https://supabase.com/doc
 
 `tests/clubes-sql.cjs` reconstruye todas las migraciones y prueba Free sin RevenueCat, guest casual, rechazo de administración anónima, escalada de privilegios, promoción/revocación, límites de admin, privacidad, cierre con salas pendientes, conservación de historia y escrituras directas denegadas. `tests/inicio-cuenta.cjs` ejecuta los handlers reales de generación/recuperación y regreso al club. Pasaron la suite completa, TypeScript, lint, traducciones ES/EN/PT y exportación web/Android/iOS.
 
-Pendientes del siguiente bloque: invitación explícita por código/link/QR, contexto tras recuperar desde esa invitación y endurecer la entrada social persistente sin romper membresías legacy. La incorporación automática de jugadores con cuenta protegida al iniciar una partida se mantiene por compatibilidad hasta implementar ese bloque. La aceptación entre celulares sigue pendiente.
+La migración siguiente elimina la incorporación automática de jugadores al iniciar una partida. La entrada permanente ahora es explícita mediante invitación. Falta endurecer la participación y puntuación social persistente sin romper partidas/membresías legacy; la aceptación entre celulares sigue pendiente.
 
 Los APK/AAB/iOS de la release anterior no contienen este cambio; se requiere una nueva compilación después de cerrar los bloques de evolución.
+
+## Invitaciones explícitas (meta 13)
+
+Owner/admin generan un código de 20 caracteres hexadecimales, enlace y QR desde el club. El código vence a los 30 días. Mostrarlo de nuevo conserva el código vigente; renovar lo invalida inmediatamente y no afecta a miembros actuales. Clubes archivados rechazan invitaciones.
+
+`liga-unirse` recibe código o enlace, también mediante cámara. Expo Linking genera enlaces `blindly://liga-unirse?codigo=...` en builds y enlaces del origen actual en web; Expo Go usa su URL de desarrollo. No hay dominio de Universal/App Links configurado: un QR nativo requiere la app instalada y un enlace web requiere un host accesible. Un localhost compartido no funciona fuera de esa PC. API utilizada: [Expo Linking SDK 57](https://docs.expo.dev/versions/v57.0.0/sdk/linking/).
+
+La cuenta invitada conserva localmente el código pendiente antes de abrir Cuenta. Generar o recuperar la clave mantiene el destino y vuelve a la invitación; si la app se reinicia, abrir **Unirme a un club** recupera el código pendiente. No se ingresa automáticamente: primero se consulta el nombre/descripción del club y luego se confirma con nombre y aviso de visibilidad. Cancelar o completar borra el pendiente; un rechazo lo conserva para reintentar. Nunca se navega a una URL pegada: se extrae el código de la ruta admitida.
+
+Supabase exige cuenta protegida para consulta y aceptación. La vista previa no revela miembros o resultados. La PK `(liga_id,user_id)` impide duplicados; reintentar no cambia nombre/rol. Miembros retirados no pueden recuperar acceso con un código conocido. Tampoco los reincorpora iniciar una partida. La renovación y aceptación bloquean primero el club para evitar aceptar un código que acaba de renovarse. La tabla de códigos tiene RLS y ningún permiso cliente, incluso de lectura; sólo RPC acotadas.
+
+`20261008043539_invitaciones_club.sql` se aplicó y registró en Supabase el 8 de octubre. Auditoría remota: RLS activo, lectura directa denegada, `anon` sin ejecución de aceptación, incorporación automática eliminada y **26 resultados conservados**. Pasaron pruebas SQL de Free/roles/invitación/expiración/renovación/archivo/retiro, parser/persistencia, handlers UI con doble toque y contexto en Cuenta. Se verificó en navegador la protección requerida, preservación de código al ir/volver de Cuenta y cancelación. Lectura con cámara y apertura del deep link en celulares físicos quedan para QA nativa.

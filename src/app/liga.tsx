@@ -21,6 +21,7 @@ import {
 } from "../lib/ligas";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
+import { InvitacionClub } from "../components/InvitacionClub";
 
 export default function Liga() {
   const { id, temporada: temporadaParam } = useLocalSearchParams<{
@@ -244,6 +245,9 @@ export default function Liga() {
             )}
           </Seccion>
 
+          {datos.liga.puede_administrar && datos.liga.estado === "activa" && (
+            <InvitacionClub key={datos.liga.id} ligaId={datos.liga.id} />
+          )}
           <Seccion titulo={t("Miembros")}>
             {datos.miembros.map((miembro) => (
               <View

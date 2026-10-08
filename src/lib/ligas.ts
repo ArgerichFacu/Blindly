@@ -171,3 +171,28 @@ export async function quitarMiembro(ligaId: string, usuarioId: string) {
     p_usuario: usuarioId,
   });
 }
+
+export type InvitacionLiga = {
+  liga_id: string;
+  nombre: string;
+  descripcion: string;
+  ya_miembro: boolean;
+};
+export async function obtenerInvitacionLiga(ligaId: string, renovar = false) {
+  await prepararAdministracion();
+  return rpc<{ codigo: string; vence_en: string }>("obtener_invitacion_liga", {
+    p_liga: ligaId,
+    p_renovar: renovar,
+  });
+}
+export async function consultarInvitacionLiga(codigo: string) {
+  await prepararAdministracion();
+  return rpc<InvitacionLiga>("consultar_invitacion_liga", { p_codigo: codigo });
+}
+export async function aceptarInvitacionLiga(codigo: string, nombre: string) {
+  await prepararAdministracion();
+  return rpc<string>("aceptar_invitacion_liga", {
+    p_codigo: codigo,
+    p_nombre: nombre,
+  });
+}

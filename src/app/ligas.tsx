@@ -52,6 +52,11 @@ export default function Ligas() {
           titulo={t("+ Crear liga")}
           onPress={() => router.push("/liga-nueva")}
         />
+        <Boton
+          titulo={t("Unirme a un club")}
+          secundario
+          onPress={() => router.push("/liga-unirse")}
+        />
       </Tarjeta>
 
       {!!error && (

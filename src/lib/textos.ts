@@ -1,6 +1,62 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Unirme a un club": ["Join a club", "Entrar em um clube"],
+  "Tu grupo, tus temporadas.": [
+    "Your group, your seasons.",
+    "Seu grupo, suas temporadas.",
+  ],
+  "Código o enlace de invitación": [
+    "Invitation code or link",
+    "Código ou link de convite",
+  ],
+  "Invitar al club": ["Invite to the club", "Convidar para o clube"],
+  "Compartí el código o QR. Cada persona confirma su ingreso con una cuenta protegida.":
+    [
+      "Share the code or QR. Each person confirms joining with a protected account.",
+      "Compartilhe o código ou QR. Cada pessoa confirma a entrada com uma conta protegida.",
+    ],
+  "Mostrar invitación": ["Show invitation", "Mostrar convite"],
+  "Código de invitación: {codigo}": [
+    "Invitation code: {codigo}",
+    "Código de convite: {codigo}",
+  ],
+  "Vence: {fecha}": ["Expires: {fecha}", "Expira: {fecha}"],
+  "Compartir invitación": ["Share invitation", "Compartilhar convite"],
+  "Invitación al club de Blindly": [
+    "Blindly club invitation",
+    "Convite para o clube do Blindly",
+  ],
+  "Renovar código": ["Renew code", "Renovar código"],
+  "El código anterior dejará de funcionar. Los miembros actuales conservan su lugar.":
+    [
+      "The previous code will stop working. Current members keep their place.",
+      "O código anterior deixará de funcionar. Os membros atuais mantêm seu lugar.",
+    ],
+  "La invitación no es válida o venció.": [
+    "The invitation is invalid or expired.",
+    "O convite é inválido ou expirou.",
+  ],
+  "Un administrador retiró tu acceso a este club.": [
+    "An administrator removed your access to this club.",
+    "Um administrador removeu seu acesso a este clube.",
+  ],
+  "Protegé tu cuenta para aceptar la invitación. La partida casual sigue siendo gratis y sin registro.":
+    [
+      "Protect your account to accept the invitation. Casual games remain free without registration.",
+      "Proteja sua conta para aceitar o convite. As partidas casuais continuam grátis e sem cadastro.",
+    ],
+  "Ver invitación": ["View invitation", "Ver convite"],
+  "Ya sos miembro de este club.": [
+    "You are already a member of this club.",
+    "Você já é membro deste clube.",
+  ],
+  "Al confirmar, tu nombre y resultados de liga serán visibles para los miembros del club.":
+    [
+      "By confirming, your name and league results will be visible to club members.",
+      "Ao confirmar, seu nome e resultados da liga serão visíveis aos membros do clube.",
+    ],
+  "Confirmar y unirme": ["Confirm and join", "Confirmar e entrar"],
   "Protegé tu cuenta para usar las funciones del club.": [
     "Protect your account to use club features.",
     "Proteja sua conta para usar as funções do clube.",
@@ -630,6 +686,8 @@ export const errores: Record<string, string> = {
   NOMBRE_INVALIDO: "Completá tu nombre y el código.",
   SESION_REQUERIDA: "No se pudo completar. Probá de nuevo.",
   CUENTA_REQUERIDA: "Protegé tu cuenta para usar las funciones del club.",
+  INVITACION_INVALIDA: "La invitación no es válida o venció.",
+  MIEMBRO_RETIRADO: "Un administrador retiró tu acceso a este club.",
   SOLO_ADMIN: "Solo el owner o un administrador puede hacer esto.",
   MIEMBRO_NO_EXISTE: "Este miembro ya no está activo en el club.",
   SALA_NO_EXISTE: "No existe una sala con ese código.",

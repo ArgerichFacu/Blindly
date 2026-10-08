@@ -20,7 +20,7 @@ vm.runInNewContext(
   }).outputText,
   { exports: identidad },
 );
-function escenario(origen = "1", volver, liga) {
+function escenario(origen = "1", volver, liga, codigo) {
   let indice = 0,
     efecto,
     usuario = { id: "uuid-original", is_anonymous: true },
@@ -63,7 +63,7 @@ function escenario(origen = "1", volver, liga) {
       useFocusEffect: (fn) => {
         efecto = fn;
       },
-      useLocalSearchParams: () => ({ inicio: origen, volver, liga }),
+      useLocalSearchParams: () => ({ inicio: origen, volver, liga, codigo }),
       useRouter: () => ({
         replace: (ruta) => llamadas.push(["replace", ruta]),
         dismissTo: (ruta) => llamadas.push(["dismissTo", ruta]),
@@ -282,6 +282,24 @@ async function main() {
     .onPress();
   assert.equal(clubExistente.llamadas[0][1].pathname, "/liga");
   assert.equal(clubExistente.llamadas[0][1].params.id, "club-prueba");
+  const invitacion = escenario(
+    "0",
+    "liga-unirse",
+    undefined,
+    "0123456789ABCDEF0123",
+  );
+  await invitacion.cargar();
+  invitacion
+    .botones()
+    .find((b) => b.titulo === "Crear clave de recuperación")
+    .onPress();
+  await flush();
+  invitacion
+    .botones()
+    .find((b) => b.titulo === "Guardé mi clave. Continuar")
+    .onPress();
+  assert.equal(invitacion.llamadas[0][1].pathname, "/liga-unirse");
+  assert.equal(invitacion.llamadas[0][1].params.codigo, "0123456789ABCDEF0123");
   console.log(
     "OK: invitado, vinculación con UUID, clave visible, recuperación y contexto de inicio.",
   );

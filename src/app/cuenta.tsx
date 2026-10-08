@@ -31,10 +31,12 @@ export default function Cuenta() {
     inicio: origen,
     volver,
     liga,
+    codigo: codigoClub,
   } = useLocalSearchParams<{
     inicio?: string;
     volver?: string;
     liga?: string;
+    codigo?: string;
   }>();
   const inicio = useInicio();
   const desdeInicio = origen === "1";
@@ -55,9 +57,17 @@ export default function Cuenta() {
   const regresar =
     volver === "liga-nueva"
       ? () => router.replace("/liga-nueva")
-      : volver === "liga" && liga
-        ? () => router.replace({ pathname: "/liga", params: { id: liga } })
-        : null;
+      : volver === "liga-unirse" &&
+          codigoClub &&
+          /^[A-F0-9]{20}$/.test(codigoClub)
+        ? () =>
+            router.replace({
+              pathname: "/liga-unirse",
+              params: { codigo: codigoClub },
+            })
+        : volver === "liga" && liga
+          ? () => router.replace({ pathname: "/liga", params: { id: liga } })
+          : null;
   useFocusEffect(
     useCallback(() => {
       let activo = true;
@@ -242,7 +252,8 @@ export default function Cuenta() {
                         setUsuario(recuperado);
                         setClave("");
                         setMostrarRecuperacion(false);
-                        if (!desdeInicio && !regresar) router.replace("/cuenta");
+                        if (!desdeInicio && !regresar)
+                          router.replace("/cuenta");
                       })
                     }
                   />
@@ -325,7 +336,8 @@ export default function Cuenta() {
                         setSolicitud(null);
                         setCodigo("");
                         setRecuperar(false);
-                        if (!desdeInicio && !regresar) router.replace("/cuenta");
+                        if (!desdeInicio && !regresar)
+                          router.replace("/cuenta");
                       })
                     }
                   />
