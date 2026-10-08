@@ -23,14 +23,24 @@ export const PLUS_DISPONIBLE =
   PLUS_HABILITADO && !!clave && (__DEV__ || !CLAVE_TEST_STORE);
 
 let preparando: Promise<CustomerInfo> | null = null;
+let usuarioPreparando: string | null = null;
 
 export function tieneEntitlementPlus(info: CustomerInfo | null | undefined) {
-  return !!info?.entitlements.active[PLUS_ENTITLEMENT]?.isActive;
+  const entitlement = info?.entitlements.active[PLUS_ENTITLEMENT];
+  return entitlement?.isActive === true && (entitlement.expirationDate == null
+    || Date.parse(entitlement.expirationDate) > Date.now());
 }
 
 export async function prepararCompras(usuarioId: string) {
   if (!PLUS_DISPONIBLE || !clave) throw new Error("PLUS_NO_CONFIGURADO");
-  if (preparando) return preparando;
+  if (preparando) {
+    if (usuarioPreparando === usuarioId) return preparando;
+    // Serializa cambios de cuenta: una consulta pendiente del UUID anterior
+    // nunca puede convertirse en el entitlement de la identidad nueva.
+    try { await preparando; } catch { /* La siguiente identidad vuelve a intentar. */ }
+    return prepararCompras(usuarioId);
+  }
+  usuarioPreparando = usuarioId;
   preparando = (async () => {
     if (!(await Purchases.isConfigured())) {
       await Purchases.setLogLevel(__DEV__ ? LOG_LEVEL.DEBUG : LOG_LEVEL.INFO);
@@ -48,6 +58,7 @@ export async function prepararCompras(usuarioId: string) {
     return await preparando;
   } finally {
     preparando = null;
+    usuarioPreparando = null;
   }
 }
 

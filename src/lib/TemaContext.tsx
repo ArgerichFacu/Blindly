@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { cargarTemaId, guardarTemaId } from "./almacenamiento";
 import { obtenerTema, TEMA_DEFECTO, type PaletaTema, type TemaId } from "./temas";
 import { usePlus } from "./PlusContext";
+import { capacidadesPlus } from "./capacidadesPlus";
 
 type ContextoTema = {
   tema: PaletaTema;
@@ -21,21 +22,17 @@ export function TemaProvider({ children }: { children: ReactNode }) {
     cargarTemaId().then((id) => setTema(obtenerTema(id)));
   }, []);
 
-  useEffect(() => {
-    if (plus.disponible && !plus.cargando && !plus.activo && tema.plus) {
-      // La pérdida externa del entitlement invalida inmediatamente el tema premium.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setTema(TEMA_DEFECTO);
-      void guardarTemaId(TEMA_DEFECTO.id);
-    }
-  }, [plus.activo, plus.cargando, plus.disponible, tema.plus]);
-
   function elegirTema(id: TemaId) {
-    setTema(obtenerTema(id));
+    const elegido = obtenerTema(id);
+    if (elegido.plus && !capacidadesPlus(plus).personalizar) return;
+    setTema(elegido);
     guardarTemaId(id);
   }
 
-  return <TemaContext.Provider value={{ tema, elegirTema }}>{children}</TemaContext.Provider>;
+  // El tema guardado permanece: expirar/cargar/offline muestra Free, restaurar
+  // el entitlement vuelve a mostrarlo sin reescribir preferencias.
+  const visible = tema.plus && !capacidadesPlus(plus).personalizar ? TEMA_DEFECTO : tema;
+  return <TemaContext.Provider value={{ tema: visible, elegirTema }}>{children}</TemaContext.Provider>;
 }
 
 export function useTema() {

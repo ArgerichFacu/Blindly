@@ -35,6 +35,7 @@ const cambios = [],
   rutas = [];
 const jsx = (type, props) => ({ type, props });
 const deps = {
+  "../lib/capacidadesPlus": cargar("src/lib/capacidadesPlus.ts"),
   "react/jsx-runtime": { jsx, jsxs: jsx, Fragment: "Fragment" },
   react: {
     useState: (v) => [v, () => {}],

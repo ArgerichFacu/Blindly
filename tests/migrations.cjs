@@ -39,6 +39,9 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261008165926_eventos_push_club.sql",
     "20261008170045_cron_avisos_club.sql",
     "20261008170310_privilegios_workers_push.sql",
+    "20261008172421_identidad_recap_capacidades.sql",
+    "20261008172425_historial_club_acotado.sql",
+    "20261008173230_realtime_identidad_club.sql",
   ]);
 
   const baseSources = fs

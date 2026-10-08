@@ -19,6 +19,7 @@ import { AyudaTurno } from "./AyudaTurno";
 import { MesaAsientos } from "./MesaAsientos";
 import { Botonera } from "./Botonera";
 import { AudioMesa } from "./AudioMesa";
+import { vibrarMomento } from "../lib/hapticos";
 import { useSala } from "../lib/useSala";
 import { useAccionMesa } from "../lib/useAccionMesa";
 import { usePreferencias } from "../lib/Preferencias";
@@ -146,7 +147,11 @@ export function Mesa({ codigo }: { codigo: string }) {
           tipo,
           ...(cantidad === undefined ? {} : { monto: cantidad }),
         },
-        () => setMonto(""),
+        () => {
+          setMonto("");
+          if (tipo === "allin" || (cantidad != null && cantidad === (yo?.fichas ?? 0) + (yo?.aporte_calle ?? 0)))
+            void vibrarMomento("allin", preferencias.hapticos, `allin:${sala!.id}:${sala!.mano}:${sala!.revision}:${yo?.id}`);
+        },
       );
     } catch (e) {
       setAviso(mensajeError(e));

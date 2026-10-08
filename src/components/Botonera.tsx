@@ -1,3 +1,4 @@
+import { capacidadesPlus } from "../lib/capacidadesPlus";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
@@ -70,8 +71,8 @@ export function Botonera({ corriendo = true }: { corriendo?: boolean }) {
     ultimoRef = useRef(0);
   useEffect(() => {
     control.detener();
-  }, [control, plus.activo]);
-  const lista = sonidosDisponibles(preferencias, plus.activo);
+  }, [control, plus.activo, plus.cargando, plus.error]);
+  const lista = sonidosDisponibles(preferencias, capacidadesPlus(plus).botonera);
   return (
     <>
       <Texto suave>
@@ -103,7 +104,7 @@ export function Botonera({ corriendo = true }: { corriendo?: boolean }) {
         </Texto>
       )}
       {error && <Texto>{t("No se pudo completar. Probá de nuevo.")}</Texto>}
-      {!plus.activo && (
+      {!capacidadesPlus(plus).botonera && (
         <Boton
           titulo={t("Más sonidos y personalización · Plus")}
           secundario

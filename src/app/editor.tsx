@@ -1,3 +1,4 @@
+import { capacidadesPlus } from "../lib/capacidadesPlus";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -165,7 +166,7 @@ export default function Editor() {
     }
   }
 
-  if (plus.disponible && !plus.activo)
+  if (!capacidadesPlus(plus).personalizar)
     return (
       <Pantalla titulo={t("Estructura personalizada")} onVolver={volver}>
         <Texto>

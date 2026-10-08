@@ -1,3 +1,4 @@
+import { capacidadesPlus } from "../lib/capacidadesPlus";
 import { useCallback, useState } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import { View } from "react-native";
@@ -45,6 +46,7 @@ export default function HeadToHead() {
   const router = useRouter();
   const { t, mensajeError } = usePreferencias();
   const plus = usePlus();
+  const premium = capacidadesPlus(plus).premium;
   const [datos, setDatos] = useState<Comparacion[]>([]);
   const [error, setError] = useState<unknown>(null);
   const [cargando, setCargando] = useState(true);
@@ -54,7 +56,7 @@ export default function HeadToHead() {
       setDatos([]);
       setError(null);
       setCargando(true);
-      if (!plus.activo) {
+      if (!premium) {
         setCargando(false);
         return () => {
           viva = false;
@@ -73,9 +75,9 @@ export default function HeadToHead() {
       return () => {
         viva = false;
       };
-    }, [plus.activo]),
+    }, [premium]),
   );
-  if (!plus.activo)
+  if (!capacidadesPlus(plus).premium)
     return (
       <Pantalla
         titulo={t("Entre amigos")}

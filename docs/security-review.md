@@ -57,3 +57,13 @@ Después del cierre `f953239` se aplicaron los parches recomendados para la sigu
 `npm audit fix --force` propone versiones incompatibles, incluida una regresión a Expo 44, por lo que no debe ejecutarse. La matriz obligatoria permanece en Expo SDK 57 y se valida con Expo Doctor, compatibilidad de paquetes, TypeScript, ESLint, pruebas y exportación de bundles en CI.
 
 Referencias: [aviso de `shell-quote`](https://github.com/advisories/GHSA-pqg4-j6r4-53mv), [aviso de `decode-uri-component`](https://github.com/advisories/GHSA-vcc3-ghjq-m6fr), [aviso de `braces`](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) y [aviso de `node-forge`](https://github.com/advisories/GHSA-86w9-cpqp-85rv).
+
+## Revisión de la evolución social (8 de octubre)
+
+25 migraciones registradas, cadena completa probada con PGlite y aplicada sin eliminar los 26 resultados existentes. Identity/recap/history usan RPC explícitas, cuenta y pertenencia verificadas; auxiliares privados sin EXECUTE cliente. Identidad Plus validada por presets versionados, nunca por URLs o bandera premium enviada por cliente. Historial indexado y paginado. Cambios MVP persistidos bajo bloqueo del club y cierre idempotente; worker push con secreto privado generado en la base, revalidación previa al envío y reserva atómica.
+
+Los asesores todavía informan reglas sobre RLS sin políticas en tablas privadas inaccesibles, ejecución de RPC SECURITY DEFINER por authenticated, políticas que permiten invitados en funciones casuales y protección de contraseñas filtradas apagada. Se revisaron los accesos relevantes con pruebas de roles/RPC; estos avisos no equivalen a una auditoría completamente limpia. Las funciones públicas privilegiadas son la API deliberada y verifican identidad/pertenencia en el cuerpo.
+
+`pg_net` es una extensión gestionada no relocatable que aparece en `public`. Sus objetos `net` pertenecen a `supabase_admin`; revocar desde postgres produjo advertencias y no retiró todos sus privilegios SQL. La verificación efectiva de Data API respondió PGRST106: sólo `public` y `graphql_public` están expuestos. **No exponer `net`, `cron` ni `private`**. `cron` quedó sin USAGE para clientes. El dispatch privado sale sólo del job de postgres y no publica el secreto. [Asesor de extensiones](https://supabase.com/docs/guides/database/database-linter?lint=0014_extension_in_public). Detalles en [notificaciones.md](notificaciones.md).
+
+No se habilitaron protección de contraseñas de planes pagos, compras comerciales, envío push ni se cambió el plan de Supabase. El historial de migraciones y los resultados de producción permanecen intactos.

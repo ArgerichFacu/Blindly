@@ -1,3 +1,4 @@
+import { capacidadesPlus } from "../lib/capacidadesPlus";
 import { useCallback, useRef, useState } from "react";
 import { Platform, Share, View } from "react-native";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
@@ -7,7 +8,7 @@ import { Boton, Etiqueta, Pantalla, Tarjeta, Texto } from "../components/Control
 import { TarjetaRecap } from "../components/TarjetaRecap";
 import { usePreferencias } from "../lib/Preferencias";
 import { usePlus } from "../lib/PlusContext";
-import { duracionLegible, obtenerRecap, type Recap } from "../lib/recap";
+import { duracionLegible, ganadoresRecap, obtenerRecap, type Recap } from "../lib/recap";
 
 export default function RecapPartida() {
   const { sala } = useLocalSearchParams<{ sala: string }>();
@@ -15,6 +16,7 @@ export default function RecapPartida() {
   const { t, mensajeError } = usePreferencias();
   const plus = usePlus();
   const tarjeta = useRef<View>(null);
+  const enviando = useRef(false);
   const [recap, setRecap] = useState<Recap | null>(null);
   const [error, setError] = useState<unknown>(null);
   const [compartiendo, setCompartiendo] = useState(false);
@@ -27,11 +29,12 @@ export default function RecapPartida() {
   }, [sala]));
 
   async function compartir() {
-    if (!recap) return;
-    if (!plus.activo) {
+    if (!recap || enviando.current || plus.cargando) return;
+    if (!capacidadesPlus(plus).premium) {
       router.push("/plus");
       return;
     }
+    enviando.current = true;
     setCompartiendo(true);
     setError(null);
     try {
@@ -45,6 +48,7 @@ export default function RecapPartida() {
     } catch (e) {
       setError(e);
     } finally {
+      enviando.current = false;
       setCompartiendo(false);
     }
   }
@@ -57,18 +61,19 @@ export default function RecapPartida() {
         <>
           <TarjetaRecap ref={tarjeta} recap={recap} />
           <Tarjeta>
-            <Etiqueta>{t("GANADOR")}</Etiqueta>
-            <Texto style={{ fontSize: 24, fontWeight: "900" }}>{recap.resultados[0]?.nombre ?? "—"}</Texto>
+            <Etiqueta>{t(ganadoresRecap(recap).length > 1 ? "GANADORES" : "GANADOR")}</Etiqueta>
+            <Texto style={{ fontSize: 24, fontWeight: "900" }}>{ganadoresRecap(recap).map(r => r.nombre).join(" · ") || "—"}</Texto>
+            {!!recap.nuevo_mvp && <Texto style={{ fontWeight: "800" }}>{t("{nombre} tomó el MVP", { nombre: recap.nuevo_mvp.nombre })}</Texto>}
             <Texto suave>
               {t("{n} jugadores", { n: recap.jugadores })}
               {duracionLegible(recap.duracion_ms) ? ` · ${duracionLegible(recap.duracion_ms)}` : ""}
             </Texto>
             {recap.resultados.filter((r) => r.soy_yo).map((r) => (
-              <Texto key={r.nombre}>{t("Tu resultado: puesto {p} · +{n} puntos", { p: r.puesto, n: r.puntos })}</Texto>
+              <Texto key={r.user_id ?? r.nombre}>{t("Tu resultado: puesto {p} · +{n} puntos", { p: r.puesto, n: r.puntos })}</Texto>
             ))}
           </Tarjeta>
-          <Boton titulo={t(compartiendo ? "Preparando imagen…" : "Compartir resultado")} disabled={compartiendo} onPress={() => void compartir()} />
-          {!plus.activo && <Texto suave style={{ textAlign: "center" }}>{t("La tarjeta para compartir es una función de Blindly Plus.")}</Texto>}
+          <Boton titulo={t(compartiendo ? "Preparando imagen…" : "Compartir resultado")} disabled={compartiendo || plus.cargando} onPress={() => void compartir()} />
+          {!capacidadesPlus(plus).premium && <Texto suave style={{ textAlign: "center" }}>{t("La tarjeta para compartir es una función de Blindly Plus.")}</Texto>}
         </>
       )}
     </Pantalla>

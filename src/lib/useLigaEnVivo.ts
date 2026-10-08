@@ -17,6 +17,7 @@ export function useLigaEnVivo(liga: string | undefined, temporada: string | null
       .on("postgres_changes", { event: "*", schema: "public", table: "liga_miembros", filter: `liga_id=eq.${liga}` }, refrescar)
       .on("postgres_changes", { event: "*", schema: "public", table: "liga_fechas", filter: `liga_id=eq.${liga}` }, refrescar)
       .on("postgres_changes", { event: "*", schema: "public", table: "liga_asistencias", filter: `liga_id=eq.${liga}` }, refrescar)
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "ligas", filter: `id=eq.${liga}` }, refrescar)
       .subscribe(estado => {
         if (!vivo) return;
         setEnVivo(estado === "SUBSCRIBED");

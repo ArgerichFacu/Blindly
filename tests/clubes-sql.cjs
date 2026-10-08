@@ -428,6 +428,11 @@ async function falla(sql, args, codigo) {
   await q("select cambiar_rol_liga($1,$2,'admin')",[club,uid(2)]);
   await como(2);
   await q("select asignar_titulo_liga($1,$2,$3)",[club,uid(5),'  EL\n PROFE   ']);
+  const identidad={version:1,color:'zafiro',emblema:'corazones',banner:'rayas'};
+  await q('select guardar_identidad_club($1,$2)',[club,identidad]);
+  assert.deepEqual((await q('select detalle_liga($1) v',[club]))[0].v.liga.identidad,identidad);
+  for(const invalida of [null,{}, {...identidad,version:2},{...identidad,color:'#fff'},{...identidad,url:'https://x.y'}, {...identidad,emblema:'__proto__'}])
+    await falla('select guardar_identidad_club($1,$2)',[club,invalida],'IDENTIDAD_CLUB_INVALIDA');
   let tituloClub=(await q('select detalle_liga($1,$2) v',[club,second]))[0].v;
   assert.equal(tituloClub.liga.permisos.editar_titulos,true);
   assert.equal(tituloClub.miembros.find(m=>m.user_id===uid(5)).titulo_personalizado,'EL PROFE');
@@ -436,6 +441,7 @@ async function falla(sql, args, codigo) {
   await q("select asignar_titulo_liga($1,$2,'EL JEFE')",[club,uid(5)]);
   await como(5);
   await falla("select asignar_titulo_liga($1,$2,'HACK')",[club,uid(5)],'SOLO_ADMIN');
+  await falla('select guardar_identidad_club($1,$2)',[club,identidad],'SOLO_ADMIN');
   const otro=(await q("select crear_liga('Otra Liga','Inicio','Paz') v"))[0].v.liga_id;
   await db.exec('reset role');
   await q("insert into accesos_plus(user_id,activo) values($1,true)",[uid(5)]);
@@ -445,6 +451,8 @@ async function falla(sql, args, codigo) {
   await q('update accesos_plus set activo=false where user_id=$1',[uid(1)]);
   await como(2);
   await falla('select asignar_titulo_liga($1,$2,null)',[club,uid(5)],'PLUS_CLUB_REQUERIDO');
+  await falla('select guardar_identidad_club($1,$2)',[club,identidad],'PLUS_CLUB_REQUERIDO');
+  assert.deepEqual((await q('select detalle_liga($1) v',[club]))[0].v.liga.identidad,identidad,'Expirar conserva identidad visible');
   tituloClub=(await q('select detalle_liga($1,$2) v',[club,second]))[0].v;
   assert.equal(tituloClub.liga.permisos.editar_titulos,false);
   assert.equal(tituloClub.miembros.find(m=>m.user_id===uid(5)).titulo_personalizado,'EL JEFE','Expirar conserva título visible');
@@ -460,6 +468,7 @@ async function falla(sql, args, codigo) {
   await q('update accesos_plus set verificado_en=now(),vence_en=null where user_id=$1',[uid(1)]);
   await como(2);
   assert.equal((await q('select detalle_liga($1) v',[club]))[0].v.liga.permisos.editar_titulos,true,'Restaurar habilita inmediatamente');
+  assert.equal((await q('select detalle_liga($1) v',[club]))[0].v.liga.permisos.editar_identidad,true);
   await como(1);
   await q("select actualizar_liga($1,'Los Pibes',true)",[club]);
   await como(2);

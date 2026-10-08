@@ -2,6 +2,7 @@ import { asegurarSesion } from "./sesion";
 import { identidadUsuario } from "./identidad";
 import { supabase } from "./supabase";
 import type { PreferenciasAvisos } from "./avisosClub";
+import type { IdentidadClub } from "./identidadClub";
 
 export type ResumenLiga = {
   id: string;
@@ -70,13 +71,15 @@ export type DetalleLiga = {
     puede_administrar: boolean;
     descripcion: string;
     rol: "owner" | "admin" | "member";
-    permisos?: { plus: boolean; editar_titulos: boolean };
+    identidad?: IdentidadClub;
+    permisos?: { plus: boolean; editar_titulos: boolean; editar_identidad?: boolean };
   };
   temporada: TemporadaLiga | null;
   temporadas: TemporadaLiga[];
   ranking: FilaRanking[];
   movimientos?: Record<string,number>;
   partidas: PartidaLiga[];
+  historial_hay_mas?: boolean;
   miembros: MiembroLiga[];
 };
 
@@ -137,6 +140,10 @@ export async function actualizarClub(ligaId: string, descripcion: string) {
     p_descripcion: descripcion,
   });
 }
+export async function guardarIdentidadClub(ligaId: string, identidad: IdentidadClub) {
+  await prepararAdministracion();
+  await rpc<null>("guardar_identidad_club", { p_liga: ligaId, p_identidad: identidad });
+}
 export async function asignarTituloLiga(ligaId: string, usuarioId: string, titulo: string | null) {
   await prepararAdministracion();
   await rpc<null>("asignar_titulo_liga", { p_liga: ligaId, p_usuario: usuarioId, p_titulo: titulo });
@@ -162,6 +169,11 @@ export function detalleLiga(ligaId: string, temporadaId?: string | null) {
   return rpc<DetalleLiga>("detalle_liga", {
     p_liga: ligaId,
     p_temporada: temporadaId ?? null,
+  });
+}
+export function historialClub(ligaId: string, temporadaId: string, cursor: PartidaLiga) {
+  return rpc<{ partidas: PartidaLiga[]; hay_mas: boolean }>("historial_club", {
+    p_liga: ligaId, p_temporada: temporadaId, p_antes: cursor.finalizada_en, p_sala: cursor.sala_id,
   });
 }
 

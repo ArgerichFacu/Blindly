@@ -1,6 +1,29 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Ver partidas anteriores": ["View earlier games", "Ver partidas anteriores"],
+  "Volver a las más recientes": ["Back to the latest games", "Voltar às partidas mais recentes"],
+  "Vibraciones de momentos importantes": ["Haptics for important moments", "Vibrações em momentos importantes"],
+  "Una vibración breve al confirmar all-in, clubes, títulos y fechas. Podés desactivarla.": ["A brief vibration when confirming all-in, clubs, titles and game nights. You can turn it off.", "Uma vibração breve ao confirmar all-in, clubes, títulos e encontros. Você pode desativá-la."],
+  "GANADORES": ["WINNERS", "VENCEDORES"],
+  "+{n} puntos": ["+{n} points", "+{n} pontos"],
+  "Personalizar club": ["Customize club", "Personalizar clube"],
+  "La identidad se conserva. Para editarla, el owner necesita Plus activo.": ["The identity is preserved. To edit it, the owner needs active Plus.", "A identidade é mantida. Para editá-la, o owner precisa do Plus ativo."],
+  "Color del club": ["Club color", "Cor do clube"],
+  "Emblema": ["Emblem", "Emblema"],
+  "Fondo del club": ["Club background", "Fundo do clube"],
+  "Guardar identidad": ["Save identity", "Salvar identidade"],
+  "Oro": ["Gold", "Ouro"],
+  "Esmeralda": ["Emerald", "Esmeralda"],
+  "Rubí": ["Ruby", "Rubi"],
+  "Zafiro": ["Sapphire", "Safira"],
+  "Picas": ["Spades", "Espadas"],
+  "Corazones": ["Hearts", "Copas"],
+  "Diamantes": ["Diamonds", "Ouros"],
+  "Tréboles": ["Clubs", "Paus"],
+  "Liso": ["Plain", "Liso"],
+  "Rayas": ["Stripes", "Listras"],
+  "Elegí un color, emblema y fondo válidos para el club.": ["Choose a valid club color, emblem and background.", "Escolha uma cor, emblema e fundo válidos para o clube."],
   "NUEVO MVP": ["NEW MVP", "NOVO MVP"],
   "{nombre} tomó el MVP": ["{nombre} took the MVP", "{nombre} assumiu o MVP"],
   "Al guardar con avisos activados, te pediremos permiso en este dispositivo.": ["When saving with notifications enabled, we will ask for permission on this device.", "Ao salvar com avisos ativados, pediremos permissão neste dispositivo."],
@@ -787,6 +810,7 @@ export const textos: Record<string, [string, string]> = {
 };
 
 export const errores: Record<string, string> = {
+  IDENTIDAD_CLUB_INVALIDA: "Elegí un color, emblema y fondo válidos para el club.",
   PUSH_NO_DISPONIBLE: "Este dispositivo todavía no tiene notificaciones habilitadas.",
   PUSH_PERMISO_DENEGADO: "Permití las notificaciones en los ajustes del sistema para recibir los avisos.",
   AVISOS_CAMBIARON: "Tus preferencias cambiaron en otro dispositivo. Actualizá el club antes de guardar.",

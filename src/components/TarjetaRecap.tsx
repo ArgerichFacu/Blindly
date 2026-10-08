@@ -39,10 +39,10 @@ export const TarjetaRecap = forwardRef<View, ViewProps & { recap: Recap }>(
             <Texto style={{ fontSize: 30, lineHeight: 36, fontWeight: "900" }}>{t("Resultado final")}</Texto>
           </View>
           <View style={{ gap: 12 }}>
-            {recap.resultados.slice(0, 3).map((resultado) => (
-              <View key={`${resultado.puesto}-${resultado.nombre}`} style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+            {recap.resultados.slice(0, 3).map((resultado, indice) => (
+              <View key={resultado.user_id ?? `${resultado.puesto}-${indice}`} style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
                 <Texto style={{ fontSize: 25, width: 42 }}>{medalla(resultado.puesto)}</Texto>
-                <Texto style={{ fontSize: 22, fontWeight: resultado.puesto === 1 ? "900" : "700", color: resultado.puesto === 1 ? tema.acento : tema.textoFuerte }}>{resultado.nombre}</Texto>
+                <View style={{ flex: 1 }}><Texto numberOfLines={2} style={{ fontSize: 22, fontWeight: resultado.puesto === 1 ? "900" : "700", color: resultado.puesto === 1 ? tema.acento : tema.textoFuerte }}>{resultado.nombre}</Texto><Texto suave>{t("+{n} puntos", { n: resultado.puntos })}</Texto></View>
               </View>
             ))}
           </View>
@@ -55,6 +55,7 @@ export const TarjetaRecap = forwardRef<View, ViewProps & { recap: Recap }>(
               <Texto suave>{recap.liga.temporada}</Texto>
             </View>
           )}
+          {!!recap.nuevo_mvp && <View style={{ padding: 14, borderRadius: 16, borderColor: tema.acento, borderWidth: 1 }}><Texto style={{ color: tema.acento, fontWeight: "800" }}>{t("NUEVO MVP")}</Texto><Texto numberOfLines={2}>{recap.nuevo_mvp.nombre}</Texto></View>}
         </View>
         <Texto suave style={{ textAlign: "center", letterSpacing: 1.5 }}>{t("JUGADO CON BLINDLY")}</Texto>
       </View>

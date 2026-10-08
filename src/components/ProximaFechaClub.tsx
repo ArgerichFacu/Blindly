@@ -4,6 +4,7 @@ import { Boton, Campo, Tarjeta, Texto } from "./Controles";
 import { usePreferencias } from "../lib/Preferencias";
 import { cancelarFechaLiga, programarFechaLiga, responderFechaLiga, type ProximaFecha } from "../lib/ligas";
 import { instanteFecha } from "../lib/fechasClub";
+import { vibrarMomento } from "../lib/hapticos";
 
 export function ProximaFechaClub({ liga, fecha, administrar, activa, alCambiar }: {
   liga: string; fecha?: ProximaFecha | null; administrar: boolean; activa: boolean; alCambiar: () => void;
@@ -45,7 +46,9 @@ export function ProximaFechaClub({ liga, fecha, administrar, activa, alCambiar }
       {!!fecha && <Texto suave>{t("Reprogramar pide confirmar asistencia de nuevo; las respuestas anteriores se conservan.")}</Texto>}
       <Boton titulo={t("Guardar fecha")} disabled={ocupado || !instante} onPress={() => { if (instante) void ejecutar(async () => {
         if (Date.parse(instante) <= Date.now()) throw new Error("FECHA_INVALIDA");
-        return programarFechaLiga(liga, instante, lugar, nota, fecha?.id ?? null);
+        const id = await programarFechaLiga(liga, instante, lugar, nota, fecha?.id ?? null);
+        void vibrarMomento("fecha", preferencias.hapticos, `fecha:${id}`);
+        return id;
       }); }} />
       <Boton titulo={t("Volver")} secundario disabled={ocupado} onPress={() => setEditar(false)} />
     </>)}

@@ -6,8 +6,9 @@ vm.runInNewContext(ts.transpileModule(fs.readFileSync('src/components/TituloPers
   if(name==='react/jsx-runtime')return {jsx,jsxs:jsx,Fragment:'fragment'};
   if(name==='react-native')return {View:'view'};
   if(name==='./Controles')return {Boton:'button',Campo:'input',Texto:'text'};
-  if(name.includes('Preferencias'))return {usePreferencias:()=>({t:s=>s,mensajeError:e=>e.message})};
+  if(name.includes('Preferencias'))return {usePreferencias:()=>({t:s=>s,mensajeError:e=>e.message,preferencias:{hapticos:true}})};
   if(name.includes('ligas'))return {asignarTituloLiga:()=>{llamadas++;return new Promise((res,rej)=>{finalizar=res;rechazar=rej;});}};
+  if(name.includes('hapticos'))return {vibrarMomento:()=>{}};
   throw Error(name);
 }});
 function nodos(n){if(!n)return [];if(Array.isArray(n))return n.flatMap(nodos);if(typeof n!=='object')return [n];return [n,...nodos(n.props?.children)];}

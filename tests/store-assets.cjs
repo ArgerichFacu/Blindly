@@ -50,6 +50,8 @@ assert.equal(iconoNativo.tipoColor, 2, "El ícono nativo debe ser RGB sin alfa")
 for (const nombre of [
   "blindly-icon-foreground.png",
   "blindly-icon-monochrome.png",
+  "blindly-icon-foreground-v2.png",
+  "blindly-icon-monochrome-v2.png",
 ]) {
   const imagen = leerPng(path.join("assets", "images", nombre));
   assert.equal(imagen.tipoColor, 6, `${nombre} debe conservar transparencia RGBA`);

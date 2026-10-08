@@ -1,3 +1,4 @@
+import { capacidadesPlus } from "../lib/capacidadesPlus";
 import { useCallback, useState } from "react";
 import { useFocusEffect, useRouter, type Href } from "expo-router";
 import { View } from "react-native";
@@ -80,7 +81,7 @@ export default function Mesas() {
           </Tarjeta>
         );
       })}
-      {!plus.activo ? (
+      {!capacidadesPlus(plus).premium ? (
         <Boton titulo={t("Recuperar Blindly Plus")} onPress={() => router.push("/plus")} />
       ) : (
         <Acceso

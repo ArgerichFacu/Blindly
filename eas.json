@@ -14,7 +14,8 @@
       "environment": "preview",
       "android": {
         "buildType": "apk"
-      }
+      },
+      "autoIncrement": true
     },
     "ios-simulator": {
       "distribution": "internal",

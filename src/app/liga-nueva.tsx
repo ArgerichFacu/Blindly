@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "expo-router";
 import {
   Boton,
@@ -10,11 +10,13 @@ import {
 import { crearLiga } from "../lib/ligas";
 import { useIdentidad } from "../lib/useIdentidad";
 import { usePreferencias } from "../lib/Preferencias";
+import { vibrarMomento } from "../lib/hapticos";
 
 export default function LigaNueva() {
   const router = useRouter();
   const identidad = useIdentidad();
-  const { t, mensajeError } = usePreferencias();
+  const { t, mensajeError, preferencias } = usePreferencias();
+  const enviando = useRef(false);
   const [nombre, setNombre] = useState("");
   const [temporada, setTemporada] = useState("");
   const [jugador, setJugador] = useState("");
@@ -22,15 +24,18 @@ export default function LigaNueva() {
   const [error, setError] = useState("");
 
   async function guardar() {
-    if (ocupado) return;
+    if (enviando.current) return;
+    enviando.current = true;
     setOcupado(true);
     setError("");
     try {
       const creada = await crearLiga(nombre, temporada, jugador);
+      void vibrarMomento("club", preferencias.hapticos, `club:${creada.liga_id}`);
       router.replace({ pathname: "/liga", params: { id: creada.liga_id } });
     } catch (e) {
       setError(mensajeError(e));
     } finally {
+      enviando.current = false;
       setOcupado(false);
     }
   }

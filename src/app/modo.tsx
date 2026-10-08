@@ -1,3 +1,4 @@
+import { capacidadesPlus } from "../lib/capacidadesPlus";
 import { useLocalSearchParams, useRouter, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import {
@@ -57,7 +58,7 @@ export default function ModoJuego() {
       niveles = adaptarNiveles(base, seleccion ?? "", fichas, jugadores.length);
   } catch {}
   function guardar() {
-    if (seleccion === "personalizado" && plus.disponible && !plus.activo) {
+    if (seleccion === "personalizado" && !capacidadesPlus(plus).personalizar) {
       router.push("/plus");
       return;
     }
@@ -123,7 +124,7 @@ export default function ModoJuego() {
           }
           activo={seleccion === id}
           onPress={() =>
-            id === "personalizado" && plus.disponible && !plus.activo
+            id === "personalizado" && !capacidadesPlus(plus).personalizar
               ? router.push("/plus")
               : setElegido(id)
           }

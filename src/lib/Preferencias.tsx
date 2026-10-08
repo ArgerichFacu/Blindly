@@ -24,6 +24,7 @@ type Preferencias = PreferenciasAudio &
   ConfigBotonera & {
     idioma: Idioma;
     principiante: boolean;
+    hapticos: boolean;
   };
 const inicial: Preferencias = {
   ...AUDIO_INICIAL,
@@ -33,6 +34,7 @@ const inicial: Preferencias = {
   volumenRonda: 0.8,
   volumenMusica: 0.3,
   principiante: false,
+  hapticos: true,
 };
 const Contexto = createContext({
   preferencias: inicial,
@@ -59,6 +61,7 @@ export function PreferenciasProvider({ children }: { children: ReactNode }) {
         if (!["es", "en", "pt"].includes(nuevas.idioma)) nuevas.idioma = "es";
         if (typeof nuevas.principiante !== "boolean")
           nuevas.principiante = false;
+        if (typeof nuevas.hapticos !== "boolean") nuevas.hapticos = inicial.hapticos;
         for (const clave of ["volumenRonda", "volumenMusica"] as const)
           if (
             !Number.isFinite(nuevas[clave]) ||

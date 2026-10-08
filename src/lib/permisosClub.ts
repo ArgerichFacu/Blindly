@@ -5,6 +5,8 @@ import type { DetalleLiga } from "./ligas";
 export function permisosClub(datos: DetalleLiga | null) {
   return {
     plus: datos?.liga.permisos?.plus === true,
+    editarIdentidad: datos?.liga.estado === "activa" && datos?.liga.puede_administrar === true
+      && datos?.liga.permisos?.editar_identidad === true,
     editarTitulos: datos?.liga.estado === "activa" && datos?.liga.puede_administrar === true
       && datos?.liga.permisos?.editar_titulos === true,
   };

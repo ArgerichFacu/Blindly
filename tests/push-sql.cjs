@@ -32,6 +32,12 @@ const accion=async(sala,tipo,datos={},req=`push-test-${++solicitud}`)=>(await q(
  await db.exec('reset role');let eventos=await q("select * from private.eventos_club where tipo='mvp' order by creado_en");
  assert.deepEqual(eventos.map(e=>e.datos.user_id),[uid(1),uid(2)],'Sólo cambios reales y primer MVP, nunca reintento');
  await como(1);assert.equal((await q('select detalle_liga($1) v',[club]))[0].v.feed.filter(e=>e.tipo==='mvp').length,2,'Feed conserva transiciones reales');
+ const recap1=(await q('select recap_partida($1) v',[salas[0]]))[0].v;
+ assert.equal(recap1.nuevo_mvp.user_id,uid(1),'Recap conserva MVP histórico, no líder actual');
+ assert.equal((await q('select recap_partida($1) v',[salas[1]]))[0].v.nuevo_mvp,null,'Empate estable no inventa cambio MVP');
+ assert.equal((await q('select recap_partida($1) v',[salas[2]]))[0].v.nuevo_mvp.user_id,uid(2));
+ assert.equal(new Set(recap1.resultados.map(r=>r.user_id)).size,2,'Identidad estable para resultados');
+ await como(3);await assert.rejects(q('select recap_partida($1)',[salas[0]]),/RECAP_NO_DISPONIBLE/);
  await db.exec('reset role');
  const secret=(await q('select secreto from private.config_push'))[0].secreto;
  await como(1);await assert.rejects(q('select reservar_avisos_push($1)',[secret]),/permission denied/);

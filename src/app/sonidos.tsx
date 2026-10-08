@@ -1,3 +1,4 @@
+import { capacidadesPlus } from "../lib/capacidadesPlus";
 import { Switch, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Pantalla, Tarjeta, Texto, Boton } from "../components/Controles";
@@ -14,7 +15,7 @@ export default function Sonidos() {
     clave: "botoneraVisibles" | "botoneraFavoritos",
     id: SonidoId,
   ) {
-    if (!plus.activo) {
+    if (!capacidadesPlus(plus).premium) {
       router.push("/plus");
       return;
     }
@@ -25,7 +26,7 @@ export default function Sonidos() {
     });
   }
   function subir(id: SonidoId) {
-    if (!plus.activo) {
+    if (!capacidadesPlus(plus).premium) {
       router.push("/plus");
       return;
     }
@@ -161,7 +162,7 @@ export default function Sonidos() {
             "Elegí tus sonidos, marcá favoritos y cambiá el orden. Tus ajustes se conservan si vence Plus.",
           )}
         </Texto>
-        {plus.activo ? (
+        {capacidadesPlus(plus).premium ? (
           p.botoneraOrden.map((id, i) => {
             const sonido = SONIDOS.find((s) => s.id === id)!;
             return (

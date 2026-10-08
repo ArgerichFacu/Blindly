@@ -17,3 +17,9 @@ Theme fix: blindly-logo-transparent.png was generated with the built-in image to
 `blindly-icon-foreground.png` es el foreground adaptativo RGBA. Prompt final: aislar únicamente la `b` dorada con el pique calado, eliminar el wordmark y todo el fondo, centrarla con margen seguro para máscaras Android y conservar transparencia real, sin sombra exterior, borde ni watermark.
 
 `blindly-icon-monochrome.png` deriva de la silueta alfa del foreground y reemplaza el símbolo monocromático de Expo que todavía quedaba en la plantilla. Android 13+ puede teñirlo cuando el usuario activa íconos temáticos.
+
+### Variante adaptativa v2 (meta 40)
+
+Se conserva el asset original y se agregan `blindly-icon-foreground-v2.png` y `blindly-icon-monochrome-v2.png`, referenciados en app.json. Generados con `image_gen` a partir del foreground existente, pidiendo conservar forma y pique calado y disminuir el símbolo dentro de un lienzo cuadrado transparente. La versión monocromática conserva la silueta y usa blanco. Se redujeron los outputs a 1024 × 1024 con Lanczos; no se recortó el símbolo.
+
+Alfa significativo (>16/255): foreground `(346, 282, 715, 754)` y monocromo `(347, 283, 714, 752)`. El centro queda a menos de 32 px del centro del lienzo. `scripts/verificar-iconos.py` valida que el símbolo visible permanezca dentro del círculo central de 72/108 dp y genera las vistas circular/squircle/rounded revisadas visualmente. El icono completo de iOS y el logo/splash no cambian. Su recepción en launchers Android reales requiere nueva build y aceptación física.

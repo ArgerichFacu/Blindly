@@ -11,6 +11,7 @@ vm.runInNewContext(ts.transpileModule(fs.readFileSync('src/components/ProximaFec
   if(name.includes('Preferencias'))return {usePreferencias:()=>({t,mensajeError:e=>e.message,preferencias:{idioma:'es'}})};
   if(name.includes('fechasClub'))return helper;
   if(name.includes('ligas'))return {responderFechaLiga:()=>{llamadas++;return new Promise((res,rej)=>{resolver=res;rechazar=rej;});},programarFechaLiga:(...args)=>{programada=args;return Promise.resolve('nueva');}};
+  if(name.includes('hapticos'))return {vibrarMomento:()=>{}};
   throw Error(name);
 }});
 function nodos(n){if(!n)return [];if(Array.isArray(n))return n.flatMap(nodos);if(typeof n!=='object')return [n];return [n,...nodos(n.props?.children)];}

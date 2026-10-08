@@ -7,13 +7,19 @@ export type Recap = {
   duracion_ms: number | null;
   jugadores: number;
   resultados: {
+    user_id?: string;
     puesto: number;
     nombre: string;
     puntos: number;
     soy_yo: boolean;
   }[];
   liga: { nombre: string; temporada: string } | null;
+  nuevo_mvp?: { nombre: string; user_id: string } | null;
 };
+
+export function ganadoresRecap(recap: Recap) {
+  return recap.resultados.filter(r => r.puesto === 1);
+}
 
 export async function obtenerRecap(salaId: string) {
   await asegurarSesion();

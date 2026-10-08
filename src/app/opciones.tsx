@@ -1,3 +1,4 @@
+import { capacidadesPlus } from "../lib/capacidadesPlus";
 import { useRouter } from "expo-router";
 import { Switch, View } from "react-native";
 import { Pantalla, Boton, Texto, Tarjeta } from "../components/Controles";
@@ -12,6 +13,10 @@ export default function Opciones() {
     plus = usePlus();
   return (
     <Pantalla titulo={t("Opciones")}>
+      <Tarjeta>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}><Texto style={{ flex: 1 }}>{t("Vibraciones de momentos importantes")}</Texto><Switch accessibilityLabel={t("Vibraciones de momentos importantes")} value={preferencias.hapticos} onValueChange={hapticos => cambiar({ hapticos })} /></View>
+        <Texto suave>{t("Una vibración breve al confirmar all-in, clubes, títulos y fechas. Podés desactivarla.")}</Texto>
+      </Tarjeta>
       <Tarjeta>
         <View
           style={{
@@ -59,7 +64,7 @@ export default function Opciones() {
       <Tarjeta>
         <Texto>{t("Tema")}</Texto>
         {TEMAS.map((paleta) => {
-          const bloqueado = !!paleta.plus && plus.disponible && !plus.activo;
+          const bloqueado = !!paleta.plus && !capacidadesPlus(plus).personalizar;
           return (
             <Boton
               key={paleta.id}

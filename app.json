@@ -17,8 +17,8 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#0A1713",
-        "foregroundImage": "./assets/images/blindly-icon-foreground.png",
-        "monochromeImage": "./assets/images/blindly-icon-monochrome.png"
+        "foregroundImage": "./assets/images/blindly-icon-foreground-v2.png",
+        "monochromeImage": "./assets/images/blindly-icon-monochrome-v2.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.blindly.app",

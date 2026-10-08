@@ -1,3 +1,4 @@
+import { HistorialClub } from "../components/HistorialClub";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
@@ -34,6 +35,8 @@ import { RivalidadesClub } from "../components/RivalidadesClub";
 import { FeedClub } from "../components/FeedClub";
 import { PreferenciasAvisosClub } from "../components/PreferenciasAvisosClub";
 import { seccionClub, type SeccionClub } from "../lib/destinoAviso";
+import { IdentidadClub } from "../components/IdentidadClub";
+import { vibrarMomento } from "../lib/hapticos";
 
 export default function Liga() {
   const { id, temporada } = useLocalSearchParams<{ id: string; temporada?: string }>();
@@ -61,6 +64,7 @@ function ContenidoLiga() {
   const [descripcion, setDescripcion] = useState("");
   const [nuevaTemporada, setNuevaTemporada] = useState("");
   const [observada,setObservada] = useState<{liga:string;temporada:string}|null>(null);
+  const ultima = useRef<{ clave: string; mvp?: string; estado?: string } | null>(null);
   const scroll = useRef<ScrollView>(null), posiciones = useRef<Partial<Record<SeccionClub, number>>>({});
   const destino = seccionClub(seccion), desplazado = useRef("");
   const irAlDestino = useCallback(() => {
@@ -82,6 +86,15 @@ function ContenidoLiga() {
       void detalleLiga(id, temporadaId)
         .then((resultado) => {
           if (!vivo) return;
+          const clasif = clasificacion(resultado.ranking, resultado.temporada?.estado);
+          const clave = `${id}:${resultado.temporada?.id ?? ""}`;
+          if (ultima.current?.clave === clave) {
+            if (clasif.mvp && ultima.current.mvp && clasif.mvp.user_id !== ultima.current.mvp)
+              void vibrarMomento("mvp", preferencias.hapticos, `mvp:${clave}:${resultado.feed?.find(e => e.tipo === "mvp")?.id ?? clasif.mvp.user_id}`);
+            if (resultado.temporada?.estado === "finalizada" && ultima.current.estado === "activa" && resultado.ranking.length)
+              void vibrarMomento("campeon", preferencias.hapticos, `campeon:${clave}`);
+          }
+          ultima.current = { clave, mvp: clasif.mvp?.user_id, estado: resultado.temporada?.estado };
           setDatos(resultado);
           setObservada(resultado.temporada ? {liga:resultado.liga.id,temporada:resultado.temporada.id} : null);
           setNombre(resultado.liga.nombre);
@@ -91,7 +104,7 @@ function ContenidoLiga() {
       return () => {
         vivo = false;
       };
-    }, [id, temporadaId, revision]),
+    }, [id, temporadaId, revision, preferencias.hapticos]),
   );
   const temporadaObservada=observada?.liga===id ? observada.temporada : null;
   const actualizarRanking = useCallback(() => setRevision(v => v + 1), []);
@@ -138,6 +151,7 @@ function ContenidoLiga() {
       {datos && (
         <>
           <Tarjeta>
+            <IdentidadClub ligaId={id} nombre={datos.liga.nombre} identidad={datos.liga.identidad} permitido={permisos.editarIdentidad} administrador={datos.liga.puede_administrar} alGuardar={actualizarRanking} />
             <Texto style={{ fontSize: 22, fontWeight: "800" }}>
               {t("Nuestro club de póker")}
             </Texto>
@@ -275,36 +289,7 @@ function ContenidoLiga() {
           </Seccion>
 
           <Seccion titulo={t("Partidas")} inicial>
-            {datos.partidas.length === 0 ? (
-              <Texto suave>
-                {t("Todavía no hay partidas finalizadas en esta temporada.")}
-              </Texto>
-            ) : (
-              datos.partidas.map((partida) => (
-                <Tarjeta key={partida.sala_id} style={{ padding: 14, gap: 5 }}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      gap: 8,
-                    }}
-                  >
-                    <Texto style={{ fontWeight: "700" }}>
-                      {t("Ganó {nombre}", { nombre: partida.ganador })}
-                    </Texto>
-                    <Texto style={{ color: tema.acento }}>
-                      {partida.codigo_sala}
-                    </Texto>
-                  </View>
-                  <Texto suave>
-                    {t("{n} jugadores", { n: partida.jugadores })} ·{" "}
-                    {new Date(partida.finalizada_en).toLocaleDateString(
-                      preferencias.idioma,
-                    )}
-                  </Texto>
-                </Tarjeta>
-              ))
-            )}
+            {!!datos.temporada && <HistorialClub key={`${datos.temporada.id}:${revision}`} liga={id} temporada={datos.temporada.id} inicial={datos.partidas} hayMas={datos.historial_hay_mas === true} />}
           </Seccion>
 
           {datos.liga.puede_administrar && datos.liga.estado === "activa" && (

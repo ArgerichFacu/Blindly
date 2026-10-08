@@ -3,11 +3,12 @@ import { View } from "react-native";
 import { Boton, Campo, Texto } from "./Controles";
 import { usePreferencias } from "../lib/Preferencias";
 import { asignarTituloLiga } from "../lib/ligas";
+import { vibrarMomento } from "../lib/hapticos";
 
 export function TituloPersonalizado({ ligaId, usuarioId, titulo, permitido, alGuardar }: {
   ligaId: string; usuarioId: string; titulo?: string | null; permitido: boolean; alGuardar: () => void;
 }) {
-  const { t, mensajeError } = usePreferencias();
+  const { t, mensajeError, preferencias } = usePreferencias();
   const [editando, setEditando] = useState(false), [valor, setValor] = useState(titulo ?? "");
   const [ocupado, setOcupado] = useState(false), [error, setError] = useState<unknown>(null);
   const enviando = useRef(false);
@@ -15,7 +16,7 @@ export function TituloPersonalizado({ ligaId, usuarioId, titulo, permitido, alGu
     if (enviando.current || !permitido) return;
     enviando.current = true;
     setOcupado(true); setError(null);
-    try { await asignarTituloLiga(ligaId, usuarioId, nuevo); setEditando(false); alGuardar(); }
+    try { await asignarTituloLiga(ligaId, usuarioId, nuevo); if (nuevo) void vibrarMomento("titulo", preferencias.hapticos, `titulo:${ligaId}:${usuarioId}:${nuevo}`); setEditando(false); alGuardar(); }
     catch (e) { setError(e); }
     finally { enviando.current = false; setOcupado(false); }
   }

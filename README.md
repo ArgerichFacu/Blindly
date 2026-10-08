@@ -24,7 +24,9 @@ Aplicación desarrollada con Expo, React Native, TypeScript y Supabase. La rama 
 - Crear clubes Free con cuenta recuperable, temporadas, roles owner/admin/member, historial y ranking compartido.
 - Guardar mesas habituales Plus con jugadores de referencia, fichas, ciegas, duración, tema y liga opcional.
 - Consultar estadísticas avanzadas, historial completo y comparaciones privadas entre amigos con Plus.
-- Ver un recap al terminar cada torneo y, con Plus, compartir una tarjeta vertical del resultado.
+- Ver un recap con ganadores, puntos y cambios reales de MVP y, con Plus, compartir una tarjeta vertical.
+- Personalizar con Plus la identidad de tu club; los títulos y cosméticos se conservan al vencer.
+- Consultar historial de clubes por páginas y activar vibraciones opcionales en momentos importantes. [Detalle](docs/personalizacion-recap.md).
 
 Blindly acompaña la mesa: las cartas se reparten físicamente y el dealer determina los ganadores. El evaluador educativo usa cartas ingresadas manualmente y no decide repartos en una partida real. La bienvenida, el aprendizaje y la ayuda están documentados en [inicio.md](docs/inicio.md) y [aprender-poker.md](docs/aprender-poker.md).
 
