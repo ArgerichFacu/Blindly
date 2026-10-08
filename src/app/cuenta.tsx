@@ -32,11 +32,13 @@ export default function Cuenta() {
     volver,
     liga,
     codigo: codigoClub,
+    nombre: nombreMesa,
   } = useLocalSearchParams<{
     inicio?: string;
     volver?: string;
     liga?: string;
     codigo?: string;
+    nombre?: string;
   }>();
   const inicio = useInicio();
   const desdeInicio = origen === "1";
@@ -55,19 +57,33 @@ export default function Cuenta() {
   const cerrojo = useRef(false);
   const identidad = usuario ? identidadUsuario(usuario) : null;
   const regresar =
-    volver === "liga-nueva"
-      ? () => router.replace("/liga-nueva")
-      : volver === "liga-unirse" &&
-          codigoClub &&
-          /^[A-F0-9]{20}$/.test(codigoClub)
-        ? () =>
-            router.replace({
-              pathname: "/liga-unirse",
-              params: { codigo: codigoClub },
-            })
-        : volver === "liga" && liga
-          ? () => router.replace({ pathname: "/liga", params: { id: liga } })
-          : null;
+    volver === "unirse" && codigoClub && /^[A-Z2-9]{5}$/.test(codigoClub)
+      ? () =>
+          router.replace({
+            pathname: "/unirse",
+            params: {
+              codigo: codigoClub,
+              nombre: nombreMesa?.slice(0, 30) ?? "",
+            },
+          })
+      : volver === "ligas" ||
+          volver === "puntuacion" ||
+          volver === "head-to-head"
+        ? () => router.replace(`/${volver}`)
+        : volver === "liga-nueva"
+          ? () => router.replace("/liga-nueva")
+          : volver === "liga-unirse" &&
+              codigoClub &&
+              /^[A-F0-9]{20}$/.test(codigoClub)
+            ? () =>
+                router.replace({
+                  pathname: "/liga-unirse",
+                  params: { codigo: codigoClub },
+                })
+            : volver === "liga" && liga
+              ? () =>
+                  router.replace({ pathname: "/liga", params: { id: liga } })
+              : null;
   useFocusEffect(
     useCallback(() => {
       let activo = true;
@@ -388,7 +404,11 @@ export default function Cuenta() {
               titulo={t(
                 claveGenerada
                   ? "Guardé mi clave. Continuar"
-                  : "Volver a mi club",
+                  : volver === "puntuacion" ||
+                      volver === "head-to-head" ||
+                      volver === "unirse"
+                    ? "Continuar con esta cuenta"
+                    : "Volver a mi club",
               )}
               disabled={ocupado}
               onPress={regresar}

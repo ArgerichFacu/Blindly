@@ -89,11 +89,59 @@ async function falla(sql, args, codigo) {
   await falla("select detalle_liga($1)", [club], "LIGA_NO_DISPONIBLE");
   await falla("select actualizar_club($1,'Hack')", [club], "SOLO_ADMIN");
   await como(4);
+  await falla("select detalle_liga($1) v", [club], "CUENTA_REQUERIDA");
+  await falla("select mi_puntuacion()", [], "CUENTA_REQUERIDA");
+  await falla("select mis_ligas()", [], "CUENTA_REQUERIDA");
+  await falla("select ranking_liga($1)", [second], "CUENTA_REQUERIDA");
   assert.equal(
-    (await q("select detalle_liga($1) v", [club]))[0].v.liga.puede_administrar,
-    false,
-    "Legacy guest remains visible until protected",
+    (await q("select mi_identidad_tiene_datos() v"))[0].v,
+    true,
+    "Presencia legacy propia permite proteger recuperación sin revelar datos",
   );
+  assert.equal(
+    (await q("select count(*)::int n from ligas"))[0].n,
+    0,
+    "RLS no revela clubes a un invitado legacy",
+  );
+  await db.exec("reset role");
+  await q(
+    "insert into puntuacion_partidas(sala_id,user_id,jugador_id,jugadores,stack_inicio,puesto,puntos,finalizada_en,temporada_id) values($1,$2,$3,2,1000,1,2,now(),$4)",
+    [uid(777), uid(4), uid(778), second],
+  );
+  await como(4);
+  const casual = (await q("select to_jsonb(crear_sala('[]'::jsonb)) s"))[0].s;
+  await q("select unirse_mesa($1,'Legacy')", [casual.codigo]);
+  assert.equal(
+    (await q("select rango from rangos_mesa($1)", [casual.id]))[0].rango,
+    null,
+    "Invitado no aparece en el rango persistente de la mesa",
+  );
+  await como(1);
+  assert.equal(
+    (await q("select count(*)::int n from ranking_liga($1)", [second]))[0].n,
+    0,
+    "Legacy no protegido no figura en ranking de liga",
+  );
+  await db.exec("reset role");
+  await q("update auth.users set is_anonymous=false where id=$1", [uid(4)]);
+  await como(4);
+  assert.equal(
+    (await q("select detalle_liga($1) v", [club]))[0].v.liga.rol,
+    "member",
+    "Proteger el mismo UUID recupera el club legacy",
+  );
+  assert.equal(
+    (await q("select mi_puntuacion() v"))[0].v.partidas,
+    1,
+    "Historial legacy se recupera sin borrar resultados",
+  );
+  assert.equal(
+    (await q("select rango from rangos_mesa($1)", [casual.id]))[0].rango,
+    1,
+  );
+  await db.exec("reset role");
+  await q("update auth.users set is_anonymous=true where id=$1", [uid(4)]);
+  await como(4);
   await falla("select finalizar_temporada($1)", [second], "CUENTA_REQUERIDA");
   await como(1);
   const detail = (await q("select detalle_liga($1) v", [club]))[0].v;
@@ -135,6 +183,11 @@ async function falla(sql, args, codigo) {
   await db.exec("reset role");
   await q("insert into auth.users values($1,false)", [uid(5)]);
   await como(5);
+  assert.equal(
+    (await q("select mi_identidad_tiene_datos() v"))[0].v,
+    false,
+    "No devuelve presencia de datos ajenos",
+  );
   await falla("select detalle_liga($1)", [club], "LIGA_NO_DISPONIBLE");
   const preview = (
     await q("select consultar_invitacion_liga($1) v", [
@@ -228,7 +281,19 @@ async function falla(sql, args, codigo) {
     await q("select to_jsonb(crear_sala('[]'::jsonb,$1)) s", [second])
   )[0].s;
   const jugadores = [];
-  for (const n of [1, 3]) {
+  await como(3);
+  await falla(
+    "select unirse_mesa($1,'Retirado')",
+    [sala.codigo],
+    "MEMBRESIA_REQUERIDA",
+  );
+  await como(4);
+  await falla(
+    "select unirse_mesa($1,'Guest')",
+    [sala.codigo],
+    "CUENTA_REQUERIDA",
+  );
+  for (const n of [1, 2]) {
     await como(n);
     jugadores.push(
       (await q("select unirse_mesa($1,$2) j", [sala.codigo, `Facu ${n}`]))[0].j
@@ -256,6 +321,19 @@ async function falla(sql, args, codigo) {
       niveles: [{ minutos: 20, smallBlind: 5, bigBlind: 10 }],
     },
   });
+  await q("select quitar_miembro($1,$2)", [club, uid(2)]);
+  await assert.rejects(accion("iniciar"), /MEMBRESIA_REQUERIDA/);
+  assert.equal(
+    (await q("select estado from salas where id=$1", [sala.id]))[0].estado,
+    "esperando",
+    "Un rechazo no comienza ni cobra ciegas",
+  );
+  await db.exec("reset role");
+  await q(
+    "update liga_miembros set activo=true,rol='member' where liga_id=$1 and user_id=$2",
+    [club, uid(2)],
+  );
+  await como(1);
   await accion("iniciar");
   await db.exec("reset role");
   assert.equal(
@@ -277,10 +355,20 @@ async function falla(sql, args, codigo) {
     )
   )[0];
   assert.deepEqual(privileges, { a: false, b: false, c: false });
-  const indices = await q("select indexname from pg_indexes where schemaname='public' and indexname in ('salas_temporada_id_idx','mesas_habituales_temporada_id_idx')");
-  assert.equal(indices.length,2,"Claves foráneas de temporada cubiertas por índices");
-  const policy=(await q("select qual from pg_policies where schemaname='public' and tablename='mesas_habituales' and policyname='owner ve sus mesas habituales'"))[0].qual;
-  assert.match(policy,/SELECT auth.uid/);
+  const indices = await q(
+    "select indexname from pg_indexes where schemaname='public' and indexname in ('salas_temporada_id_idx','mesas_habituales_temporada_id_idx')",
+  );
+  assert.equal(
+    indices.length,
+    2,
+    "Claves foráneas de temporada cubiertas por índices",
+  );
+  const policy = (
+    await q(
+      "select qual from pg_policies where schemaname='public' and tablename='mesas_habituales' and policyname='owner ve sus mesas habituales'",
+    )
+  )[0].qual;
+  assert.match(policy, /SELECT auth.uid/);
   for (const firma of [
     "public.obtener_invitacion_liga(uuid,boolean)",
     "public.consultar_invitacion_liga(text)",

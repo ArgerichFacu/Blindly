@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { View } from "react-native";
@@ -8,9 +8,17 @@ import { unirseASala } from "../lib/jugadores";
 export default function Unirse() {
   const router = useRouter(),
     { t, mensajeError } = usePreferencias();
-  const [nombre, setNombre] = useState(""),
-    [codigo, setCodigo] = useState(""),
+  const params = useLocalSearchParams<{ codigo?: string; nombre?: string }>();
+  const [nombre, setNombre] = useState(
+      typeof params.nombre === "string" ? params.nombre.slice(0, 30) : "",
+    ),
+    [codigo, setCodigo] = useState(
+      typeof params.codigo === "string" && /^[A-Z2-9]{5}$/.test(params.codigo)
+        ? params.codigo
+        : "",
+    ),
     [error, setError] = useState(""),
+    [acceso, setAcceso] = useState(""),
     [ocupado, setOcupado] = useState(false),
     [camara, setCamara] = useState(false);
   const [permiso, pedirPermiso] = useCameraPermissions();
@@ -25,11 +33,22 @@ export default function Unirse() {
     bloqueo.current = true;
     setOcupado(true);
     setError("");
+    setAcceso("");
     try {
       const { sala } = await unirseASala(codigo, nombre);
       router.replace({ pathname: "/sala", params: { codigo: sala.codigo } });
     } catch (e) {
       setError(mensajeError(e));
+      const mensaje = String(
+        typeof e === "object" && e && "message" in e ? e.message : e,
+      );
+      setAcceso(
+        mensaje.includes("CUENTA_REQUERIDA")
+          ? "cuenta"
+          : mensaje.includes("MEMBRESIA_REQUERIDA")
+            ? "club"
+            : "",
+      );
     } finally {
       bloqueo.current = false;
       setOcupado(false);
@@ -96,6 +115,25 @@ export default function Unirse() {
         <Boton titulo={t("Escanear QR")} secundario onPress={abrir} />
       )}
       {!!error && <Texto>{error}</Texto>}
+      {acceso === "cuenta" && (
+        <Boton
+          titulo={t("Proteger mi cuenta")}
+          secundario
+          onPress={() =>
+            router.push({
+              pathname: "/cuenta",
+              params: { volver: "unirse", codigo, nombre },
+            })
+          }
+        />
+      )}
+      {acceso === "club" && (
+        <Boton
+          titulo={t("Unirme a un club")}
+          secundario
+          onPress={() => router.push("/liga-unirse")}
+        />
+      )}
       <Boton
         titulo={t(ocupado ? "Cargando…" : "Unirme")}
         disabled={ocupado || !nombre.trim() || codigo.length !== 5}

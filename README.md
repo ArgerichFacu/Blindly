@@ -50,7 +50,7 @@ Al finalizar un torneo se asignan puntos una sola vez. Se parte de la escala `25
 
 Las eliminaciones simultáneas se ordenan por el stack previo; si persiste el empate, comparten posición y promedian los puntos de los puestos ocupados. El historial se conserva aunque se elimine la sala.
 
-Cada jugador consulta sus propios puntos e historial. Free recibe sus 10 resultados más recientes; el historial anterior permanece guardado y aparece completo al activar Plus. Las comparaciones entre amigos solo agregan resultados de partidas compartidas y nunca revelan el historial ajeno. Los demás participantes solo ven la posición global al compartir una sala. El acceso se controla mediante políticas y funciones de la base de datos.
+Con una cuenta protegida, cada jugador consulta sus propios puntos e historial. Free recibe sus 10 resultados más recientes; el historial anterior permanece guardado y aparece completo al activar Plus. Las comparaciones entre amigos solo agregan resultados de partidas compartidas y nunca revelan el historial ajeno. Los demás participantes solo ven la posición global al compartir una sala. El acceso se controla mediante políticas y funciones de la base de datos.
 
 ## Empezar en otra PC
 
@@ -127,7 +127,7 @@ Los scripts numerados de `supabase/` contienen la evolución del esquema y sus f
 | `16_ligas_temporadas_ranking.sql` | Ligas Plus, temporadas, asociación segura de resultados, ranking y verificación server-side del entitlement |
 | `17_plus_mesas_estadisticas_recap.sql` | Mesas habituales, historial Free/Plus, estadísticas privadas, head-to-head y recap autoritativo |
 
-Las doce migraciones están aplicadas y registradas en el proyecto remoto `ddvbbkwhisuezloorhfg`. Las incrementales `20261008042305_clubes_free_roles.sql` y `20261008043539_invitaciones_club.sql` convierten las ligas básicas en clubes Free con descripción, roles seguros e invitaciones explícitas por código/link/QR. Los archivos numerados 16/17 documentan estados históricos; para reconstruir el estado actual se usa la cadena completa de `supabase/migrations`. La migración 17 se auditó además con una identidad Free temporal para comprobar lectura propia, límites Plus, privacidad del recap y eliminación posterior de la cuenta de prueba.
+Las trece migraciones están aplicadas y registradas en el proyecto remoto `ddvbbkwhisuezloorhfg`. Las incrementales `20261008042305_clubes_free_roles.sql` y `20261008043539_invitaciones_club.sql` convierten las ligas básicas en clubes Free con descripción, roles seguros e invitaciones explícitas por código/link/QR. Los archivos numerados 16/17 documentan estados históricos; para reconstruir el estado actual se usa la cadena completa de `supabase/migrations`. La migración 17 se auditó además con una identidad Free temporal para comprobar lectura propia, límites Plus, privacidad del recap y eliminación posterior de la cuenta de prueba.
 
 La seguridad depende de las políticas RLS y las funciones de Supabase, no de ocultar controles en la interfaz. Las operaciones incluyen validación de usuario, estado y revisión de sala, y controles contra acciones duplicadas. La [revisión de seguridad remota](docs/security-review.md) documenta los permisos efectivos y los avisos intencionales del asesor de Supabase.
 

@@ -22,6 +22,7 @@ import {
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 import { InvitacionClub } from "../components/InvitacionClub";
+import { ProtegerCuenta } from "../components/ProtegerCuenta";
 
 export default function Liga() {
   const { id, temporada: temporadaParam } = useLocalSearchParams<{
@@ -48,6 +49,7 @@ export default function Liga() {
       void revision;
       let vivo = true;
       setError(null);
+      setDatos(null);
       if (!id) return;
       void detalleLiga(id, temporadaId)
         .then((resultado) => {
@@ -90,6 +92,7 @@ export default function Liga() {
       {!!error && (
         <Tarjeta>
           <Texto>{mensajeError(error)}</Texto>
+          <ProtegerCuenta error={error} volver="liga" liga={id} />
           <Boton
             titulo={t("Reintentar")}
             onPress={() => setRevision((v) => v + 1)}

@@ -43,22 +43,14 @@ async function codigoFuncion(error: unknown, fallback: string) {
   return respuesta?.code ?? fallback;
 }
 async function validarCambioCuenta(usuario: User) {
-  // Los invitados legacy pueden tener ligas o mesas guardadas aun sin puntos o Plus vigente.
-  const social = usuario.is_anonymous
-    ? await Promise.all([
-        supabase.rpc("mis_ligas"),
-        supabase.rpc("mis_mesas_habituales"),
-      ])
-    : [];
-  for (const respuesta of social) {
-    if (respuesta.error) throw respuesta.error;
-    if (!Array.isArray(respuesta.data)) throw new Error("SESION_REQUERIDA");
-  }
-  const [puntos, plusActivo] = await Promise.all([
-    supabase.rpc("mi_puntuacion"),
+  // Sólo consulta presencia de datos propios. El historial/social requiere
+  // cuenta protegida, pero la recuperación debe conservar también datos legacy.
+  const [propios, plusActivo] = await Promise.all([
+    supabase.rpc("mi_identidad_tiene_datos"),
     tienePlusActivo(),
   ]);
-  if (puntos.error) throw puntos.error;
+  if (propios.error) throw propios.error;
+  if (typeof propios.data !== "boolean") throw new Error("SESION_REQUERIDA");
   const partidas = await supabase
     .from("jugadores")
     .select("sala:salas!inner(estado)")
@@ -67,10 +59,7 @@ async function validarCambioCuenta(usuario: User) {
     .limit(1);
   if (partidas.error) throw partidas.error;
   if (
-    (usuario.is_anonymous && puntos.data?.partidas > 0) ||
-    social.some(
-      (respuesta) => Array.isArray(respuesta.data) && respuesta.data.length > 0,
-    ) ||
+    (usuario.is_anonymous && propios.data) ||
     partidas.data?.length ||
     plusActivo
   )

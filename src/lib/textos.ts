@@ -1,6 +1,10 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Protegé tu cuenta para ver tu historial y participar en clubes.": ["Protect your account to view your history and participate in clubs.","Proteja sua conta para ver seu histórico e participar de clubes."],
+  "Protegé tu historial con una clave de recuperación en Mi cuenta.": ["Protect your history with a recovery key in My account.","Proteja seu histórico com uma chave de recuperação em Minha conta."],
+  "Primero aceptá la invitación del club para jugar esta partida de liga.": ["First accept the club invitation to play this league game.","Primeiro aceite o convite do clube para jogar esta partida da liga."],
+  "Proteger mi historial": ["Protect my history","Proteger meu histórico"],
   "Unirme a un club": ["Join a club", "Entrar em um clube"],
   "Tu grupo, tus temporadas.": [
     "Your group, your seasons.",
@@ -685,9 +689,10 @@ export const textos: Record<string, [string, string]> = {
 export const errores: Record<string, string> = {
   NOMBRE_INVALIDO: "Completá tu nombre y el código.",
   SESION_REQUERIDA: "No se pudo completar. Probá de nuevo.",
-  CUENTA_REQUERIDA: "Protegé tu cuenta para usar las funciones del club.",
+  CUENTA_REQUERIDA: "Protegé tu cuenta para ver tu historial y participar en clubes.",
   INVITACION_INVALIDA: "La invitación no es válida o venció.",
   MIEMBRO_RETIRADO: "Un administrador retiró tu acceso a este club.",
+  MEMBRESIA_REQUERIDA: "Primero aceptá la invitación del club para jugar esta partida de liga.",
   SOLO_ADMIN: "Solo el owner o un administrador puede hacer esto.",
   MIEMBRO_NO_EXISTE: "Este miembro ya no está activo en el club.",
   SALA_NO_EXISTE: "No existe una sala con ese código.",

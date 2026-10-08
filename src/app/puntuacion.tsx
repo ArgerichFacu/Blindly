@@ -12,6 +12,7 @@ import {
 import { miPuntuacion, PUNTOS_F1, type Puntuacion } from "../lib/puntuacion";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
+import { ProtegerCuenta } from "../components/ProtegerCuenta";
 export default function MiPuntuacion() {
   const router = useRouter();
   const { t, mensajeError, preferencias } = usePreferencias(),
@@ -24,6 +25,7 @@ export default function MiPuntuacion() {
     useCallback(() => {
       let activo = true;
       setError(null);
+      setDatos(null);
       void miPuntuacion()
         .then((d) => {
           if (activo) setDatos(d);
@@ -58,6 +60,7 @@ export default function MiPuntuacion() {
       {!!error && (
         <Tarjeta>
           <Texto>{mensajeError(error)}</Texto>
+          <ProtegerCuenta error={error} volver="puntuacion" />
           <Boton
             titulo={t("Reintentar")}
             onPress={() => setRevision((v) => v + 1)}
@@ -250,7 +253,7 @@ export default function MiPuntuacion() {
         </Texto>
       </Seccion>
       <Texto suave>
-        {t("Protegé tu historial vinculando un email en Mi cuenta.")}
+        {t("Protegé tu historial con una clave de recuperación en Mi cuenta.")}
       </Texto>
       <Boton
         titulo={t("Mi cuenta")}

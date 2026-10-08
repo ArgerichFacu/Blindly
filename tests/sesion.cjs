@@ -103,11 +103,16 @@ const sb = {
     },
   },
   rpc: async (nombre) => {
-    if (cambiarDuranteConsulta && nombre === "mi_puntuacion")
+    if (cambiarDuranteConsulta && nombre === "mi_identidad_tiene_datos")
       id = "nueva-sesion";
-    return nombre === "mi_puntuacion"
-      ? { data: { partidas: historial } }
-      : { data: nombre === "mis_ligas" ? ligas : mesas, error: socialError };
+    assert.equal(nombre, "mi_identidad_tiene_datos");
+    return {
+      data:
+        Array.isArray(ligas) && Array.isArray(mesas)
+          ? historial > 0 || ligas.length > 0 || mesas.length > 0
+          : null,
+      error: socialError,
+    };
   },
   from: () => ({
     select: () => ({

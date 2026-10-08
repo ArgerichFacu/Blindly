@@ -20,7 +20,7 @@ vm.runInNewContext(
   }).outputText,
   { exports: identidad },
 );
-function escenario(origen = "1", volver, liga, codigo) {
+function escenario(origen = "1", volver, liga, codigo, nombre) {
   let indice = 0,
     efecto,
     usuario = { id: "uuid-original", is_anonymous: true },
@@ -63,7 +63,7 @@ function escenario(origen = "1", volver, liga, codigo) {
       useFocusEffect: (fn) => {
         efecto = fn;
       },
-      useLocalSearchParams: () => ({ inicio: origen, volver, liga, codigo }),
+      useLocalSearchParams: () => ({ inicio: origen, volver, liga, codigo, nombre }),
       useRouter: () => ({
         replace: (ruta) => llamadas.push(["replace", ruta]),
         dismissTo: (ruta) => llamadas.push(["dismissTo", ruta]),
@@ -300,6 +300,16 @@ async function main() {
     .onPress();
   assert.equal(invitacion.llamadas[0][1].pathname, "/liga-unirse");
   assert.equal(invitacion.llamadas[0][1].params.codigo, "0123456789ABCDEF0123");
+  for(const destino of ["ligas","puntuacion","head-to-head","unirse"]) {
+    const acceso=escenario("0",destino,undefined,"ABCDE","Nico");
+    await acceso.cargar();
+    acceso.botones().find(b=>b.titulo==="Crear clave de recuperación").onPress();
+    await flush();
+    acceso.botones().find(b=>b.titulo==="Guardé mi clave. Continuar").onPress();
+    const ruta=acceso.llamadas[0][1];
+    if(destino==="unirse") {assert.equal(ruta.pathname,"/unirse");assert.equal(ruta.params.codigo,"ABCDE");assert.equal(ruta.params.nombre,"Nico");}
+    else assert.equal(ruta,`/${destino}`);
+  }
   console.log(
     "OK: invitado, vinculación con UUID, clave visible, recuperación y contexto de inicio.",
   );

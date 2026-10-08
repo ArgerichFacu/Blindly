@@ -6,7 +6,7 @@ La próxima versión transforma las ligas en clubes permanentes Free. Crear un c
 
 El club muestra nombre, descripción, miembros, rol propio, temporadas y ranking. El owner puede editar nombre, archivar/reactivar y asignar o quitar administradores. Owner y admins pueden editar descripción, crear/cerrar temporadas, asociar partidas y retirar miembros normales. Un admin no puede retirar otro admin ni al owner. Un member consulta el club sin administrar. Retirar miembros conserva sus resultados históricos.
 
-Crear o administrar requiere una cuenta no anónima verificada por el servidor. La pantalla Cuenta conserva el destino `liga-nueva` o el club concreto al generar/recuperar una clave; exige continuar después de mostrar la clave. Las cuentas legacy anónimas mantienen lectura de sus clubes y pueden proteger su identidad sin cambiar de UUID. No se crea membresía permanente automáticamente para nuevos invitados anónimos al iniciar una partida.
+Crear o administrar requiere una cuenta no anónima verificada por el servidor. La pantalla Cuenta conserva el destino `liga-nueva` o el club concreto al generar/recuperar una clave; exige continuar después de mostrar la clave. Las cuentas legacy anónimas conservan sus datos y pueden proteger su identidad sin cambiar de UUID para consultar el club. No se crea membresía permanente automáticamente al iniciar una partida.
 
 ## Migración y seguridad
 
@@ -22,7 +22,7 @@ El advisor mantiene avisos sobre [RPC SECURITY DEFINER](https://supabase.com/doc
 
 `tests/clubes-sql.cjs` reconstruye todas las migraciones y prueba Free sin RevenueCat, guest casual, rechazo de administración anónima, escalada de privilegios, promoción/revocación, límites de admin, privacidad, cierre con salas pendientes, conservación de historia y escrituras directas denegadas. `tests/inicio-cuenta.cjs` ejecuta los handlers reales de generación/recuperación y regreso al club. Pasaron la suite completa, TypeScript, lint, traducciones ES/EN/PT y exportación web/Android/iOS.
 
-La migración siguiente elimina la incorporación automática de jugadores al iniciar una partida. La entrada permanente ahora es explícita mediante invitación. Falta endurecer la participación y puntuación social persistente sin romper partidas/membresías legacy; la aceptación entre celulares sigue pendiente.
+Las migraciones siguientes eliminan la incorporación automática de jugadores e incorporan el requisito de cuenta para acceso social persistente. La entrada permanente es explícita mediante invitación. La aceptación entre celulares sigue pendiente.
 
 Los APK/AAB/iOS de la release anterior no contienen este cambio; se requiere una nueva compilación después de cerrar los bloques de evolución.
 
@@ -43,3 +43,15 @@ Supabase exige cuenta protegida para consulta y aceptación. La vista previa no 
 `20261008043933_rendimiento_clubes.sql` agrega índices a las FK `salas.temporada_id` y `mesas_habituales.temporada_id`, y cambia la política de lectura de mesas habituales a `owner_id = (select auth.uid())`. Mantiene el mismo permiso, evaluando la identidad una vez por consulta. La cadena SQL completa prueba índices y política; Supabase confirmó ambos índices, la expresión y los 26 resultados conservados.
 
 Después de aplicar, el advisor de rendimiento dejó de informar [FK sin índice](https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys) y [recalcular auth por fila](https://supabase.com/docs/guides/database/database-linter?lint=0003_auth_rls_initplan). Sólo quedan cinco avisos informativos de índices sin uso observado en tablas con poco o ningún tráfico; no se eliminan índices requeridos por consultas o relaciones por ese motivo.
+
+## Cuenta para historial y clubes (meta 12)
+
+La migración `20261008044846_acceso_persistente.sql` exige cuenta protegida en las RPC de clubes, temporadas propias, ranking, detalle de liga, puntuación/historial personal y comparación privada. Las políticas de lectura de liga también verifican la cuenta mediante el helper privado: una identidad anónima legacy conserva sus filas, pero debe proteger el mismo UUID para volver a consultarlas. Los resultados anónimos legacy se excluyen de rangos globales y de liga hasta proteger la identidad; no se borran ni reasignan.
+
+La recuperación usa `mi_identidad_tiene_datos()`, que devuelve sólo un booleano sobre datos propios, sin aceptar otro UUID ni revelar historial. Así puede impedir abandonar un invitado con resultados, clubes o mesas guardadas aun cuando esas lecturas requieren cuenta. Fallos de red o respuestas malformadas bloquean el cambio de cuenta; sigue comprobando mesas activas, Plus y que la sesión no cambió durante la consulta.
+
+Unirse a una sala **casual** continúa funcionando con invitado. Unirse a una sala de liga en espera requiere cuenta y membresía confirmada. El inicio vuelve a comprobar a todos los jugadores para impedir iniciar después de retirar un miembro. Las partidas ya iniciadas mantienen reconexión legacy y sus acciones; no se cambia el motor de apuestas o reparto. Las pantallas ofrecen proteger la cuenta o aceptar la invitación, preservando código/nombre de sala y destino. Al enfocar listas/historial se limpia el resultado previo para no mostrar datos de una identidad anterior.
+
+Supabase confirmó registro de migración, control de cuenta en historial, membresía en ingreso a liga, helper histórico de ingreso no ejecutable por clientes y los **26 resultados conservados**. Las pruebas SQL incluyen lectura RLS denegada al guest, recuperación del club/historial con el mismo UUID, rangos ocultos antes y visibles después, invitado casual, ingreso rechazado, revocación antes del inicio y rollback sin cobrar ciegas. Pasaron la suite completa, typecheck, lint, traducciones y bundles. En web se verificó que clubes/historial muestran protección de cuenta y que la explicación Free de puntuación sigue disponible.
+
+Los binarios antiguos pueden mostrar el error de protección de cuenta sin el nuevo botón contextual. Para probar este flujo completo se necesita la próxima compilación. La validación entre celulares sigue pendiente. Títulos y estadísticas sociales nuevas usarán este mismo requisito cuando se implementen en sus metas.

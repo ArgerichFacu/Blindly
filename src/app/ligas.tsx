@@ -11,6 +11,7 @@ import {
 } from "../components/Controles";
 import { misLigas, type ResumenLiga } from "../lib/ligas";
 import { usePreferencias } from "../lib/Preferencias";
+import { ProtegerCuenta } from "../components/ProtegerCuenta";
 
 export default function Ligas() {
   const router = useRouter();
@@ -24,6 +25,7 @@ export default function Ligas() {
       void revision;
       let vivo = true;
       setError(null);
+      setLigas(null);
       void misLigas()
         .then((resultado) => vivo && setLigas(resultado))
         .catch((e) => vivo && setError(e));
@@ -62,6 +64,7 @@ export default function Ligas() {
       {!!error && (
         <Tarjeta>
           <Texto>{mensajeError(error)}</Texto>
+          <ProtegerCuenta error={error} volver="ligas" />
           <Boton
             titulo={t("Reintentar")}
             onPress={() => setRevision((v) => v + 1)}
