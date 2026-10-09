@@ -10,7 +10,11 @@ export function useControlAudio(permitido: boolean, exclusivo = false) {
         AppState.currentState === "active" || AppState.currentState === null;
       control.permitir(permitido && enPrimerPlano);
       const listener = AppState.addEventListener("change", (estado) => {
+        const vuelve = estado === "active" && !enPrimerPlano;
         enPrimerPlano = estado === "active";
+        // Expo Android puede reanudar sus players antes de emitir AppState.
+        // La vuelta debe seguir esperando una reproducción explícita.
+        if (vuelve) control.detener();
         control.permitir(permitido && enPrimerPlano);
       });
       return () => {

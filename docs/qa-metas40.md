@@ -28,6 +28,14 @@ La matriz automática pasó; **no reemplaza** estas pruebas con la nueva APK. Lo
 
 ## Android físico: tres teléfonos
 
+### Primera sesión en Galaxy A32 (8 de octubre)
+
+Galaxy A32, Android 13, ARM64 y páginas de 4096 bytes. APK v7 con el SHA-256 del informe de release instalado como actualización (`install -r`), sin desinstalar ni borrar datos. Arranque frío correcto (5737 ms), menú visible conservando la elección previa de onboarding, opciones por enlace y Back físico de regreso al menú. Guía de combinaciones y evaluador visibles en la interfaz nativa. Registro de crashes del proceso vacío.
+
+El usuario confirmó que «Lobby Time» se escucha bien. Android registró reproducción activa en primer plano y pausa al ir al launcher. **Fallo encontrado:** al regresar, Expo reanuda automáticamente la música; el botón vuelve a «Detener música», contra la promesa de reproducción manual. Se agregó una pausa explícita al retorno y una prueba de regresión que reproduce la reanudación nativa anterior al evento AppState. No dar por aprobada esta corrección hasta repetirla con el nuevo APK.
+
+Esta sesión no comprueba recuperación entre dispositivos, una partida completa, reconexión de red, haptics, compras, notificaciones ni ARM64 con páginas de 16 KB. No se cambiaron las preferencias de sonido del usuario.
+
 1. Instalar APK con la misma firma sin borrar datos de una versión anterior. Arranque frío, logo, nuevo icono y máscaras del launcher, Back físico/gesto.
 2. Invitado juega sin cuenta. Aprendizaje, tutorial omitido/repetido, evaluador en pantalla pequeña, escala de letra grande y TalkBack. Desactivar haptics y audio; verificar persistencia al reiniciar.
 3. Proteger cuenta por clave y recuperar mismo UUID en segundo teléfono; verificar historial. Nunca compartir la clave en evidencias.

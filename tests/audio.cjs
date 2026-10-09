@@ -79,11 +79,14 @@ function player() {
     loop: false,
     plays: 0,
     pauses: 0,
+    playing: false,
     play() {
       this.plays++;
+      this.playing = true;
     },
     pause() {
       this.pauses++;
+      this.playing = false;
     },
     seekTo() {
       return new Promise((resolve) => seeks.push(resolve));
@@ -171,10 +174,15 @@ function player() {
   assert.equal(await control.reproducir(z), true);
   prom = control.reproducir(z, true);
   listener("background");
+  const pausasAlSalir = z.pauses;
+  // El módulo nativo de Expo reanuda antes del evento active de React Native.
+  z.play();
   listener("active");
+  assert.ok(z.pauses > pausasAlSalir, "Foreground stops native auto-resume");
+  assert.equal(z.playing, false, "Native auto-resume is actually paused");
   z.seeks.shift()();
   assert.equal(await prom, false);
-  assert.equal(z.plays, 1, "Foreground does not autoplay");
+  assert.equal(z.plays, 2, "Hook does not add playback to native auto-resume");
   assert.equal(await control.reproducir(z), true);
   blur();
   assert.equal(removed, 1);
