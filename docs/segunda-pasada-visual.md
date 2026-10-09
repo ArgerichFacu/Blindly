@@ -101,3 +101,31 @@ Ajustar densidad, escalas de texto grandes, contraste y coste de sombras despué
 de probar esta versión en celulares físicos. Revisar una liga real con muchos
 miembros, nombres largos, varios títulos y fechas. Comparar con un bitmap del
 mockup si se aporta. No se inició ninguna nueva feature ni se habilitó Plus.
+
+## Entrega Android v13
+
+Fuente visual: `a4c6cae`; scripts npm preservados en `6d4fffa`. Ambos commits se
+subieron a `main` con mensaje `demo`. La segunda compilación final repitió la
+salida de la primera (mismos hashes), después de cerrar los cambios de código.
+No se incluye ninguna ruta temporal de preview.
+
+- APK: `Blindly-visual-v13.apk`, versionCode 13, aproximadamente 149.7 MiB.
+- AAB: `Blindly-visual-v13.aab`.
+- Ubicación de entrega: `G:\OneDrive\Documentos\ChatGPT\Blindly\release`.
+- Paquete `com.blindly.app`, versión 1.0.0, target SDK 36, mínimo 24, cuatro ABI.
+- Gradle: `BUILD SUCCESSFUL`, 1027 tareas, última compilación 5m14s.
+- Firma APK v2 y zipalign con páginas de 16 KB: aprobados.
+- AAB: bundletool y jarsigner aprobados.
+- Certificado conservado:
+  `C5B6C355789F93255B188CEF762DB78DE5A1900E286CE3B1EC9475F6C466422F`.
+- APK SHA-256:
+  `F3F288D192ABA1A7464970A0B8625FE55C4AA91A5C6453EF7251CA0F7E5DBFE4`.
+- AAB SHA-256:
+  `F8BED97CC3C1C67DD3C0BD9CE7D0EB00508E2322AE686044A878A24B9D73C848`.
+- Copias de entrega verificadas contra los originales por SHA-256.
+
+Auditoría ELF: 58 bibliotecas de 64 bits, cero fallos de alineación PT_LOAD y 30
+advertencias de comprobaciones estrictas GNU_RELRO. La versión anterior también
+tenía 30; esto no sustituye ejecución ARM64/16 KB ni significa que esa prueba haya
+pasado. No se certifica esta build en hardware físico por el hecho de compilarla.
+Plus, email y push conservan los flags de release desactivados.
