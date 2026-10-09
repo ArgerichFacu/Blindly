@@ -94,7 +94,9 @@ export async function solicitarCodigo(
   };
 }
 
-export async function crearClaveRecuperacion() {
+export async function crearClaveRecuperacion(
+  mostrarClave?: (clave: string) => void,
+) {
   const original = await asegurarSesion();
   const { data, error } = await supabase.functions.invoke(
     "crear-recuperacion",
@@ -104,13 +106,24 @@ export async function crearClaveRecuperacion() {
   );
   if (error) throw new Error(await codigoFuncion(error, "CLAVE_NO_CREADA"));
   if (typeof data?.clave !== "string") throw new Error("CLAVE_NO_CREADA");
-  const actualizada = await supabase.auth.refreshSession();
+  const partes = data.clave.split(":");
+  if (
+    partes.length !== 3 ||
+    partes[0] !== "BLINDLY1" ||
+    partes[1] !== original.id ||
+    !/^[A-Za-z0-9_-]{24,}$/.test(partes[2])
+  )
+    throw new Error("SESION_CAMBIO");
+  // Cambiar la contraseña desde Admin revoca la sesión anterior. Mostrar la
+  // clave antes del nuevo login evita perderla si esa segunda petición falla.
+  mostrarClave?.(data.clave);
+  const actualizada = await supabase.auth.signInWithPassword({
+    email: `${original.id}${DOMINIO_RECUPERACION}`,
+    password: partes[2],
+  });
   if (actualizada.error || !actualizada.data.user)
     throw actualizada.error ?? new Error("SESION_REQUERIDA");
-  if (
-    actualizada.data.user.id !== original.id ||
-    !data.clave.startsWith(`BLINDLY1:${original.id}:`)
-  )
+  if (actualizada.data.user.id !== original.id)
     throw new Error("SESION_CAMBIO");
   return { clave: data.clave as string, usuario: actualizada.data.user };
 }

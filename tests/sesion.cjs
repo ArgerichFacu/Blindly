@@ -14,7 +14,8 @@ let id = "guest",
   ligas = [],
   mesas = [],
   socialError = null,
-  refreshId = null,
+  loginId = null,
+  loginError = null,
   claveAjena = false,
   cambiarDuranteConsulta = false,
   functionError = null,
@@ -59,24 +60,16 @@ const auth = {
       },
     };
   },
-  refreshSession: async () => ({
-    data: {
-      user: {
-        id: refreshId ?? id,
-        is_anonymous: anonymous,
-        email: emailActual,
-      },
-    },
-    error: null,
-  }),
+  refreshSession: async () => { throw new Error("Refresh token revoked by password update"); },
   signInWithPassword: async ({ email, password }) => {
     calls.push(["password", email, password]);
+    if (loginError) return { data: { user: null }, error: loginError };
     const recuperado = email.split("@")[0];
     id = recuperado;
     anonymous = false;
     emailActual = email;
     return {
-      data: { user: { id, is_anonymous: false, email } },
+      data: { user: { id: loginId ?? id, is_anonymous: false, email } },
       error: null,
     };
   },
@@ -220,7 +213,12 @@ vm.runInNewContext(
   id = "11111111-1111-4111-8111-111111111111";
   anonymous = true;
   emailActual = null;
-  const protegida = await exportsAuth.crearClaveRecuperacion();
+  let claveMostrada;
+  const protegida = await exportsAuth.crearClaveRecuperacion((clave) => {
+    claveMostrada = clave;
+    assert.equal(calls.at(-1)[0], "function", "Key delivered before login");
+  });
+  assert.equal(claveMostrada, protegida.clave);
   assert.match(protegida.clave, /^BLINDLY1:/);
   assert.equal(protegida.usuario.id, id);
   assert.equal(protegida.usuario.is_anonymous, false);
@@ -232,11 +230,23 @@ vm.runInNewContext(
     }),
     false,
   );
-  refreshId = "sesion-distinta";
+  loginId = "sesion-distinta";
   await assert.rejects(exportsAuth.crearClaveRecuperacion(), /SESION_CAMBIO/);
-  refreshId = null;
+  loginId = null;
+  loginError = new Error("offline-login");
+  claveMostrada = null;
+  await assert.rejects(
+    exportsAuth.crearClaveRecuperacion((clave) => { claveMostrada = clave; }),
+    /offline-login/,
+  );
+  assert.ok(claveMostrada, "Created key remains available when new login fails");
+  loginError = null;
   claveAjena = true;
-  await assert.rejects(exportsAuth.crearClaveRecuperacion(), /SESION_CAMBIO/);
+  claveMostrada = null;
+  const llamadasAntes = calls.length;
+  await assert.rejects(exportsAuth.crearClaveRecuperacion((clave) => { claveMostrada = clave; }), /SESION_CAMBIO/);
+  assert.equal(claveMostrada, null, "Foreign key not displayed");
+  assert.equal(calls.length, llamadasAntes + 1, "Foreign key never starts login");
   claveAjena = false;
   id = "22222222-2222-4222-8222-222222222222";
   anonymous = true;

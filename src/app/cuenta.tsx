@@ -238,7 +238,9 @@ export default function Cuenta() {
                 disabled={ocupado}
                 onPress={() =>
                   void ejecutar(async () => {
-                    const resultado = await crearClaveRecuperacion();
+                    const resultado = await crearClaveRecuperacion(
+                      setClaveGenerada,
+                    );
                     setUsuario(resultado.usuario);
                     setClaveGenerada(resultado.clave);
                   })
