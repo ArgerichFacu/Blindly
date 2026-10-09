@@ -150,6 +150,9 @@ function ContenidoLiga() {
       {!datos && !error && <Texto>{t("Cargando…")}</Texto>}
       {datos && (
         <>
+          {datos.liga.puede_administrar && datos.liga.estado === "activa" && (
+            <InvitacionClub key={datos.liga.id} ligaId={datos.liga.id} nombre={datos.liga.nombre} />
+          )}
           <Tarjeta>
             <IdentidadClub ligaId={id} nombre={datos.liga.nombre} identidad={datos.liga.identidad} permitido={permisos.editarIdentidad} administrador={datos.liga.puede_administrar} alGuardar={actualizarRanking} />
             <Texto style={{ fontSize: 22, fontWeight: "800" }}>
@@ -292,9 +295,6 @@ function ContenidoLiga() {
             {!!datos.temporada && <HistorialClub key={`${datos.temporada.id}:${revision}`} liga={id} temporada={datos.temporada.id} inicial={datos.partidas} hayMas={datos.historial_hay_mas === true} />}
           </Seccion>
 
-          {datos.liga.puede_administrar && datos.liga.estado === "activa" && (
-            <InvitacionClub key={datos.liga.id} ligaId={datos.liga.id} />
-          )}
           <Seccion titulo={t("Miembros")}>
             {datos.liga.puede_administrar && !permisos.editarTitulos && <Texto suave>{t("Los títulos personalizados requieren Plus vigente del owner. Los guardados siguen visibles.")}</Texto>}
             {datos.miembros.map((miembro) => (

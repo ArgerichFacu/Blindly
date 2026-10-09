@@ -322,6 +322,8 @@ export function Pantalla({
   pie,
   scrollRef,
   alMedirContenido,
+  cabecera = true,
+  enTabs = false,
 }: {
   titulo: string;
   children: ReactNode;
@@ -331,12 +333,14 @@ export function Pantalla({
   pie?: ReactNode;
   scrollRef?: RefObject<ScrollView | null>;
   alMedirContenido?: () => void;
+  cabecera?: boolean;
+  enTabs?: boolean;
 }) {
   const { tema } = useTema(),
     { t } = usePreferencias();
   const regresar = useVolver(volver && !onVolver);
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: tema.fondo }}>
+    <SafeAreaView edges={enTabs ? ["top", "left", "right"] : ["top", "bottom", "left", "right"]} style={{ flex: 1, backgroundColor: tema.fondo }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -347,7 +351,7 @@ export function Pantalla({
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={estilos.pagina}
         >
-          <View style={estilos.cabecera}>
+          {cabecera && <View style={estilos.cabecera}>
             {volver && (
               <Pressable
                 accessibilityRole="button"
@@ -369,7 +373,7 @@ export function Pantalla({
             {volver && (
               <Texto style={{ color: tema.acento, fontSize: 22 }}>♠</Texto>
             )}
-          </View>
+          </View>}
           {children}
         </ScrollView>
         {!!pie && (

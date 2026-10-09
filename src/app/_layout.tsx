@@ -9,7 +9,7 @@ import { PantallaCarga } from "../components/PantallaCarga";
 import { PlusProvider } from "../lib/PlusContext";
 import { InicioProvider } from "../lib/InicioContext";
 import { AvisosNativos } from "../components/AvisosNativos";
-export const unstable_settings = { anchor: "index" };
+export const unstable_settings = { anchor: "(principal)" };
 if (Platform.OS !== "web")
   void SplashScreen.preventAutoHideAsync().catch(() => {});
 export default function RootLayout() {

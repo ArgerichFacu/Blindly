@@ -19,6 +19,8 @@ function escenario({
   inicial = codigo,
   pendiente = null,
   fallar = false,
+  yaMiembro = false,
+  consultaInvalida = false,
 } = {}) {
   let indice = 0,
     efecto,
@@ -68,6 +70,7 @@ function escenario({
     "../components/Controles": Object.fromEntries(
       ["Boton", "Campo", "Pantalla", "Tarjeta", "Texto"].map((x) => [x, x]),
     ),
+    "../lib/hapticos": { vibrarMomento: async () => {} },
     "../lib/useIdentidad": {
       useIdentidad: () => ({
         cargando: false,
@@ -76,7 +79,7 @@ function escenario({
       }),
     },
     "../lib/Preferencias": {
-      usePreferencias: () => ({ t: (k) => k, mensajeError: (e) => e.message }),
+      usePreferencias: () => ({ t: (k) => k, mensajeError: (e) => e.message, preferencias: { hapticos: true } }),
     },
     "../lib/invitaciones": {
       codigoInvitacion: (v) => (/^[A-F0-9]{20}$/.test(v) ? v : null),
@@ -91,11 +94,12 @@ function escenario({
     "../lib/ligas": {
       consultarInvitacionLiga: async (c) => {
         llamadas.push(["consulta", c]);
+        if (consultaInvalida) throw new Error("INVITACION_INVALIDA");
         return {
           liga_id: "club",
           nombre: "Los Pibes",
           descripcion: "Viernes",
-          ya_miembro: false,
+          ya_miembro: yaMiembro,
         };
       },
       aceptarInvitacionLiga: async (c, n) => {
@@ -158,19 +162,18 @@ function escenario({
   assert.equal(guest.llamadas[0][1].params.volver, "liga-unirse");
   assert.equal(guest.llamadas[0][1].params.codigo, codigo);
   const protegido = escenario({
-    inicial: undefined,
+    inicial: null,
     pendiente: guest.pendiente,
   });
   await protegido.cargar();
+  protegido.render();
+  await flush();
   assert.equal(
     protegido.elementos(protegido.render(), "Campo")[0].value,
     codigo,
     "Restaura la invitación pendiente",
   );
-  protegido
-    .botones()
-    .find((b) => b.titulo === "Ver invitación")
-    .onPress();
+  assert.ok(protegido.botones().some(b => b.titulo === "Confirmar y unirme"), "El enlace resuelve una vista previa sin ingresar");
   await flush();
   assert.equal(protegido.llamadas.filter((x) => x[0] === "aceptar").length, 0);
   assert.ok(
@@ -195,10 +198,7 @@ function escenario({
   assert.equal(protegido.pendiente, null);
   const invalida = escenario({ fallar: true });
   await invalida.cargar();
-  invalida
-    .botones()
-    .find((b) => b.titulo === "Ver invitación")
-    .onPress();
+  assert.ok(invalida.botones().some(b => b.titulo === "Confirmar y unirme"));
   await flush();
   invalida
     .elementos(invalida.render(), "Campo")
@@ -234,6 +234,14 @@ function escenario({
     [["replace", "/ligas"]],
     "Cancelar funciona también sin código válido",
   );
+  const miembro = escenario({ yaMiembro: true });
+  await miembro.cargar();
+  assert.equal(miembro.llamadas.filter(x => x[0] === "aceptar").length, 0);
+  assert.ok(miembro.llamadas.some(x => x[0] === "replace" && x[1].pathname === "/liga"), "Un miembro vuelve directamente a su club");
+  const vencida = escenario({ consultaInvalida: true });
+  await vencida.cargar();
+  assert.equal(vencida.llamadas.filter(x => x[0] === "aceptar" || x[0] === "replace").length, 0);
+  assert.ok(vencida.elementos(vencida.render(), "Texto").some(p => p.children === "INVITACION_INVALIDA"));
   console.log(
     "Invitaciones UI: invitado, cuenta, contexto, consentimiento, doble toque, rechazo y cancelar OK",
   );

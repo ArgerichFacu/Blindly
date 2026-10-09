@@ -20,13 +20,14 @@ import {
   invitacionPendiente,
   borrarInvitacion,
 } from "../lib/invitaciones";
+import { vibrarMomento } from "../lib/hapticos";
 import { useIdentidad } from "../lib/useIdentidad";
 import { usePreferencias } from "../lib/Preferencias";
 
 export default function UnirseClub() {
   const { codigo: inicial } = useLocalSearchParams<{ codigo?: string }>();
   const router = useRouter(),
-    { t, mensajeError } = usePreferencias(),
+    { t, mensajeError, preferencias } = usePreferencias(),
     identidad = useIdentidad();
   const [codigo, setCodigo] = useState(
     typeof inicial === "string" ? (codigoInvitacion(inicial) ?? "") : "",
@@ -43,6 +44,24 @@ export default function UnirseClub() {
   useEffect(() => {
     traducirError.current = mensajeError;
   }, [mensajeError]);
+  // Persistir antes de ir a auth o abandonar la app. Nunca implica consentir el ingreso.
+  useEffect(() => {
+    const c = codigoInvitacion(codigo);
+    if (c) void guardarInvitacion(c).catch(e => setError(traducirError.current(e)));
+  }, [codigo]);
+  useEffect(() => {
+    const c = codigoInvitacion(codigo);
+    if (!c || identidad.cargando || !identidad.recuperable) return;
+    let vivo = true;
+    void consultarInvitacionLiga(c).then(async resultado => {
+      if (!vivo) return;
+      if (resultado.ya_miembro) {
+        await borrarInvitacion(c);
+        if (vivo) router.replace({ pathname: "/liga", params: { id: resultado.liga_id } });
+      } else setVista(resultado);
+    }).catch(e => { if (vivo) setError(traducirError.current(e)); });
+    return () => { vivo = false; };
+  }, [codigo, identidad.cargando, identidad.recuperable, router]);
   useFocusEffect(
     useCallback(() => {
       let vivo = true;
@@ -179,7 +198,11 @@ export default function UnirseClub() {
           disabled={ocupado || !codigoInvitacion(codigo)}
           onPress={() =>
             void ejecutar(async (c) => {
-              setVista(await consultarInvitacionLiga(c));
+              const resultado = await consultarInvitacionLiga(c);
+              if (resultado.ya_miembro) {
+                await borrarInvitacion(c);
+                router.replace({ pathname: "/liga", params: { id: resultado.liga_id } });
+              } else setVista(resultado);
             })
           }
         />
@@ -226,6 +249,7 @@ export default function UnirseClub() {
                 onPress={() =>
                   void ejecutar(async (c) => {
                     const id = await aceptarInvitacionLiga(c, nombre);
+                    void vibrarMomento("club", preferencias.hapticos, `ingreso:${id}`);
                     await borrarInvitacion(c);
                     router.replace({ pathname: "/liga", params: { id } });
                   })

@@ -1,0 +1,13 @@
+const assert = require("node:assert/strict"), fs = require("node:fs"), vm = require("node:vm"), ts = require("typescript");
+const exportsModulo = {};
+vm.runInNewContext(ts.transpileModule(fs.readFileSync("src/lib/seleccionLiga.ts", "utf8"), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, { exports: exportsModulo });
+const { elegirLigaHome } = exportsModulo;
+const vieja = { id: "a", estado: "activa", ultima_partida: "2026-01-01" }, reciente = { id: "b", estado: "activa", ultima_partida: "2026-10-01" }, archivada = { id: "c", estado: "archivada", ultima_partida: "2026-10-08" };
+assert.equal(elegirLigaHome([], null), null);
+assert.equal(elegirLigaHome([archivada], "c"), null);
+assert.equal(elegirLigaHome([vieja, reciente, archivada], null), reciente);
+assert.equal(elegirLigaHome([vieja, reciente], "a"), vieja);
+assert.equal(elegirLigaHome([vieja, reciente, archivada], "c"), reciente);
+assert.equal(elegirLigaHome([vieja, reciente], "eliminada"), reciente);
+assert.equal(elegirLigaHome([{ ...vieja, ultima_partida: null }, { ...reciente, ultima_partida: null }], null).id, "a");
+console.log("Home: selección explícita, recencia, ausencia y liga archivada OK");

@@ -25,11 +25,14 @@ vm.runInNewContext(
 (async () => {
   const {
     codigoInvitacion,
+    enlaceInvitacion,
     guardarInvitacion,
     invitacionPendiente,
     borrarInvitacion,
   } = exportsModulo;
   assert.equal(codigoInvitacion(` ${codigo.toLowerCase()} `), codigo);
+  assert.equal(codigoInvitacion(enlaceInvitacion(codigo)), codigo, "Share, copy and QR use the same native invitation");
+  assert.throws(() => enlaceInvitacion("INVALIDO"), /INVITACION_INVALIDA/);
   for (const enlace of [
     `blindly://liga-unirse?codigo=${codigo}`,
     `https://blindly.example/liga-unirse?codigo=${codigo}`,

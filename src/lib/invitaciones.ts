@@ -1,5 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const CLAVE = "blindly.invitacion-liga.v1";
+export function enlaceInvitacion(codigo: string) {
+  if (!/^[A-F0-9]{20}$/.test(codigo)) throw new Error("INVITACION_INVALIDA");
+  return `blindly://liga-unirse?codigo=${codigo}`;
+}
 // Solo acepta un código o un enlace de la ruta conocida; nunca navega a la URL pegada.
 export function codigoInvitacion(valor: string): string | null {
   const directo = valor.trim().toUpperCase();

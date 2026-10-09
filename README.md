@@ -202,6 +202,10 @@ eas.json           Perfiles de compilación
 
 Las pruebas SQL usan PGlite y recorren distintos estados históricos de las migraciones. Cubren turnos, permisos, conservación de fichas, pozos, puntuación, ligas, temporadas, mesas habituales, invitados Free, cancelación/restauración de Plus, historial Free/Plus, estadísticas, head-to-head, recap, RLS, privacidad y operaciones repetidas. Las pruebas de sesión usan dobles de Supabase: no envían correos ni sustituyen una prueba de autenticación real.
 
+## Experiencia principal
+
+La navegación principal reúne Inicio, Ligas, Perfil y Config. Inicio prioriza crear/unirse a una partida y muestra el contexto real de la liga. Las invitaciones Free usan un mismo código para compartir enlace y QR, conservando el contexto durante la recuperación de cuenta. El [informe del rediseño](docs/redisenio-principal.md) detalla arquitectura, pruebas y validaciones nativas pendientes.
+
 ## Pendientes antes de publicar
 
 La release base fue cerrada en `f953239`. `main` incluye la implementación de las 40 metas y sus pruebas; el avance está en [evolución incremental](docs/evolucion.md) y los binarios nuevos en [release-metas40.md](docs/release-metas40.md). Los enlaces EAS anteriores conservan el código de `a147e78`.

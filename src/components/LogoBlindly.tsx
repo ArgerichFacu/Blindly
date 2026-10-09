@@ -14,7 +14,7 @@ export function LogoBlindly({
         width: ancho,
         height: 220 * escala,
         alignSelf: "center",
-        overflow: "hidden",
+        // Preserve the wordmark dot; never crop the transparent source.
       }}
     >
       <Image
@@ -24,10 +24,10 @@ export function LogoBlindly({
         onLoadEnd={onLoadEnd}
         style={{
           position: "absolute",
-          width: 340 * escala,
-          height: 340 * escala,
-          left: -40 * escala,
-          top: -60 * escala,
+          width: ancho,
+          height: 220 * escala,
+          left: 0,
+          top: 0,
         }}
       />
     </View>
