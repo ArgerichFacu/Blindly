@@ -26,6 +26,24 @@ La matriz automática pasó; **no reemplaza** estas pruebas con la nueva APK. Lo
 - Android 16 KB: ZIP y PT_LOAD aprobados; criterio estricto de final RELRO pendiente en 45 bibliotecas. No declarar esa aceptación completa con sólo bundletool.
 - Prueba nativa real en emulador acelerado Android 16 x86_64: páginas de 16384 bytes y compatibilidad desactivada; APK v7 instalado, onboarding, combinaciones/opciones por enlace, background/resume y segundo arranque frío sin crashes. Se verificó actividad/proceso y captura. ARM64/16 KB y funciones de partida siguen pendientes; ver el informe de release.
 
+## Partida nativa con un teléfono y dos emuladores (9 de octubre)
+
+APK v9 instalada como actualización en Galaxy A32, sin borrar su identidad ni preferencias, y en dos AVD independientes Android 16 x86_64. Ambos emuladores usan páginas de 16384 bytes y tienen el modo de compatibilidad desactivado. Los avisos de falta de respuesta de System UI al arrancar los AVD corresponden al sistema del emulador; se redujo su carga usando GPU del host y dos núcleos. No se confundieron con fallos de Blindly.
+
+Torneo virtual QA de tres participantes y 15000 fichas completado mediante los controles nativos de cada jugador. Se comprobaron monto incorrecto bloqueado, igualdad exacta, pasar, retirarse, subida y all-in, preflop/flop/turn/river y reparto del dealer. El dealer permaneció fijo y SB/BB/BTN rotaron. El no dealer no recibió controles para repartir ni modificar stacks virtuales. Al avanzar el reloj, la segunda mano usó las nuevas ciegas 50/100; la primera conservó las de su inicio.
+
+La tercera mano generó un pozo principal de 14700, un secundario de 100 y un excedente de 200 con único beneficiario. Principal y secundario se asignaron a jugadores distintos; el participante con aporte insuficiente no era elegible para los secundarios. La cuarta mano terminó el torneo con un ganador, 15000 fichas y pozo cero. Resumen real y puntuación para tres jugadores: 4/2/1. Los 26 resultados históricos previos no se borraron; esta prueba añade sus tres resultados QA.
+
+**Fallo de recuperación encontrado antes de la partida:** proteger al invitado cambiaba la contraseña en Auth y revocaba la sesión, por lo que `refreshSession()` fallaba después de que el servidor creara la clave. La corrección v9 muestra primero la clave y abre sesión con ella conservando el UUID original. Crear la clave pasó en un AVD; después del torneo se recuperó la misma identidad en el otro AVD, con sus 4 puntos y la partida del historial. La clave y los UUID se conservan sólo en evidencia privada excluida de Git. No se alteraron la función de Auth ni sus verificaciones JWT.
+
+**Fallo de conexión encontrado en v9:** una acción enviada sin red dejó los controles bloqueados incluso después de restaurar la conexión. Se volvió a abrir únicamente el emulador para continuar el torneo, sin atribuirle un resultado aprobado de reconexión. La corrección v10 limita la espera de confirmación a 15 segundos, aborta el transporte y conserva el identificador y monto originales para Reintentar. Una recarga lenta posterior a una acción confirmada tampoco bloquea los controles. Las regresiones verifican transporte que ignora abort, respuesta tardía, rechazo del servidor y reintento idéntico.
+
+**Repetición nativa v10 aprobada:** ambos AVD actualizaron a código 10, nuevamente con páginas de 16384 bytes y compatibilidad desactivada. En una segunda mesa QA de dos usuarios, se abrió la igualdad de 25 fichas (total de ronda 50), se apagaron Wi-Fi/datos y se activó modo avión exclusivamente en el emulador que apostaba. Aparecieron el mensaje de conexión incierta y Reintentar habilitado. El servidor conservó pozo 75 y revisión 6 hasta volver la red. Reintentar confirmó una sola apuesta: pozo 100, revisión 7, turno del otro jugador, stacks sumando 9900 y exactamente un registro `apostar` en `operaciones_mesa`. Sin reiniciar Blindly ni perder la identidad. La mesa de reconexión queda pausada e identificada como QA, sin añadir otro resultado al ranking. Ambos emuladores se apagaron después del ensayo; sin crashes de Blindly en sus buffers.
+
+Sin crashes de Blindly en los dos emuladores durante este torneo. El buffer del A32 contiene nueve crashes históricos entre el 2 y el 7 de octubre (RevenueCat de prueba/audio de versiones anteriores), ninguno posterior a instalar v9 el 9 de octubre. No se borraron sus registros ni datos. Se utilizó una herramienta temporal de instrumentación para leer la vista actual mientras corría el reloj; se desinstaló de los tres dispositivos al terminar el QA.
+
+Esto cubre tres clientes Android, no tres teléfonos físicos. Siguen pendientes ARM64/16 KB, fichas físicas entre dispositivos, accesibilidad completa, compras reales y push configurado.
+
 ## Android físico: tres teléfonos
 
 ### Primera sesión en Galaxy A32 (8 de octubre)

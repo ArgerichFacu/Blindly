@@ -1,6 +1,6 @@
 # Release de las 40 metas
 
-Registro del 8 de octubre de 2026. Este informe corresponde al desarrollo posterior a la release base `a147e78`; los APK/AAB anteriores no incluyen estas metas.
+Registro actualizado el 9 de octubre de 2026. Este informe corresponde al desarrollo posterior a la release base `a147e78`; los APK/AAB anteriores no incluyen estas metas.
 
 ## Implementación y pruebas
 
@@ -9,6 +9,21 @@ Código de producto: `6eef30f301b908fd09991a22b9d3c316e2e0c71f`. [CI aprobada](h
 Tipos, lint, pruebas de juego, identidades, permisos, roles, SQL/RLS, traducciones y bundles web/Android/iOS aprobados. Supabase tiene 26 migraciones aplicadas y conserva los 26 registros de puntuación anteriores. La eliminación de cuenta también limpia tokens, preferencias y copias personales en eventos de MVP.
 
 ## Android
+
+### Actualización de recuperación y conexión v10
+
+Código de producto `47419e756b69da4b30f2e3ce082a28c0afd2dfdc`. Incluye la corrección v9 de protección por clave: mostrar la clave antes de abrir la nueva sesión, sin depender de un refresh token revocado. La recuperación real conservó UUID, puntos e historial entre dos emuladores después de completar un torneo con un Galaxy A32 como dealer fijo.
+
+La desconexión durante una apuesta reveló una espera sin límite. La acción ahora vence a los 15 segundos, aborta su transporte y conserva el identificador original para reintentar sin duplicar la operación; una recarga lenta posterior tampoco mantiene el bloqueo. Suite completa, tipos y lint aprobados, con regresiones de respuesta tardía, transporte que ignora abort y reintento idéntico. [Resultados nativos y límites](qa-metas40.md).
+
+Compilación local correcta en 5 minutos 25 segundos, 990 tareas (83 ejecutadas), cuatro arquitecturas y firma original comprobada. AAB validado con bundletool y jarsigner; APK alineado para páginas de 16 KB. La auditoría ELF conserva los 45 avisos estrictos RELRO y cero fallos PT_LOAD de las 56 bibliotecas.
+
+| Archivo actual | Versión | SHA-256 |
+| --- | --- | --- |
+| `Blindly-metas40-v10.apk` | 1.0.0, código 10 | `EFFC52731CED8CB5CBB6A87E45823BFFFE8FBF155565B1561475637D47842513` |
+| `Blindly-metas40-v10.aab` | 1.0.0, código 10 | `61E8FEAD6D1E3E37EF90584ED829E663C65A2EDB7FF9A5E1797EBDB159B8B387` |
+
+El torneo QA añadió tres resultados identificados como prueba; los 26 anteriores se conservan (29 en total). Plus, correo y push permanecen desactivados hasta configurar sus servicios. La compilación iOS más abajo es anterior a las correcciones v8–v10 y no es una IPA para iPhone físico.
 
 ### Actualización de audio v8
 
