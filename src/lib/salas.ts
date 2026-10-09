@@ -87,14 +87,33 @@ export async function ejecutarAccion(
   datos: Record<string, unknown>,
   solicitud: string,
 ): Promise<Sala> {
-  const { data, error } = await supabase.rpc("accion_mesa", {
-    p_sala: salaId,
-    p_accion: accion,
-    p_datos: datos,
-    p_solicitud: solicitud,
+  const control = new AbortController();
+  let temporizador: ReturnType<typeof setTimeout> | undefined;
+  // Cortar la espera no demuestra que el servidor no haya aplicado la acción.
+  // El hook conserva la solicitud original para que Reintentar sea idempotente.
+  const limite = new Promise<never>((_, rechazar) => {
+    temporizador = setTimeout(() => {
+      rechazar(new Error("MESA_CONFIRMACION_TIMEOUT"));
+      control.abort();
+    }, 15000);
   });
-  if (error) throw error;
-  return data as Sala;
+  try {
+    const { data, error } = await Promise.race([
+      supabase
+        .rpc("accion_mesa", {
+          p_sala: salaId,
+          p_accion: accion,
+          p_datos: datos,
+          p_solicitud: solicitud,
+        })
+        .abortSignal(control.signal),
+      limite,
+    ]);
+    if (error) throw error;
+    return data as Sala;
+  } finally {
+    if (temporizador !== undefined) clearTimeout(temporizador);
+  }
 }
 export function nombreCanalUnico(prefijo: string) {
   return prefijo + "-" + nuevaSolicitud();

@@ -40,7 +40,9 @@ export function useAccionMesa(
       alGuardar(nueva);
       pendiente.current = null;
       setIncierto(false);
-      await refrescar?.();
+      // La acción ya está confirmada. Una lectura lenta o fallida no debe
+      // bloquear los controles ni presentarla como una apuesta incierta.
+      void refrescar?.().catch((e) => console.warn("[Mesa] recarga", e));
       peticion.despues?.();
     } catch (e) {
       console.warn("[Mesa] operación", peticion.accion, e);
