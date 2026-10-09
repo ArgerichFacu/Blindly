@@ -10,6 +10,21 @@ Tipos, lint, pruebas de juego, identidades, permisos, roles, SQL/RLS, traduccion
 
 ## Android
 
+### Candidato nativo v11 — validación 16 KB en curso
+
+El plugin `plugins/with-android-page-sizes.js` registra los flags de enlace `max-page-size=16384` y `common-page-size=16384` antes de que el plugin raíz de React Native evalúe `:app`. Conserva flags existentes y detiene la configuración si un proyecto CMake omite alguno. No modifica las bibliotecas precompiladas ni elimina RELRO.
+
+Compilación local correcta: 9 minutos 36 segundos, 990 tareas (66 ejecutadas), cuatro arquitecturas y firma original. Configuración nativa y lint del plugin aprobados. APK firmado y alineado para 16 KB; AAB validado con bundletool y jarsigner, código 11.
+
+| Candidato | SHA-256 |
+| --- | --- |
+| `Blindly-metas40-v11.apk` | `D2C3C58229FD989BE8F002B258D18104F7A1DF3B2741941E4D74D04D62DF18E4` |
+| `Blindly-metas40-v11.aab` | `8DFE594EC933C5C0872FA125F1FA8C259B80E6C0EF3659F0D4CF41C2A301D202` |
+
+La auditoría de 56 ELF64 conserva cero fallos PT_LOAD y baja de 45 a **30 avisos estrictos RELRO**: 15 ARM64 y 15 x86_64. Los 15 avisos corregidos pertenecían a módulos compilados con la app. Los restantes corresponden a bibliotecas externas; el comprobador sigue devolviendo código 1. Actualizar el NDK no recompila esos binarios. No equivale a compatibilidad completa ni a autorización para publicación.
+
+Se reservó un Galaxy A56 de la categoría Samsung Remote Test Lab «16KB Page Size», Android 16. El usuario autorizó cargar sólo la APK. La consola quedó bloqueada como ventana emergente; todavía no se subió ni ejecutó la APK, ni se comprobó `PAGE_SIZE` por ADB. La ejecución ARM64/16 KB continúa pendiente. La entrega v10 documentada más abajo conserva sus resultados anteriores; no atribuirlos automáticamente a v11.
+
 ### Actualización de recuperación y conexión v10
 
 Código de producto `47419e756b69da4b30f2e3ce082a28c0afd2dfdc`. Incluye la corrección v9 de protección por clave: mostrar la clave antes de abrir la nueva sesión, sin depender de un refresh token revocado. La recuperación real conservó UUID, puntos e historial entre dos emuladores después de completar un torneo con un Galaxy A32 como dealer fijo.
