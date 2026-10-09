@@ -23,7 +23,9 @@ Compilación local correcta en 5 minutos 25 segundos, 990 tareas (83 ejecutadas)
 | `Blindly-metas40-v10.apk` | 1.0.0, código 10 | `EFFC52731CED8CB5CBB6A87E45823BFFFE8FBF155565B1561475637D47842513` |
 | `Blindly-metas40-v10.aab` | 1.0.0, código 10 | `61E8FEAD6D1E3E37EF90584ED829E663C65A2EDB7FF9A5E1797EBDB159B8B387` |
 
-El torneo QA añadió tres resultados identificados como prueba; los 26 anteriores se conservan (29 en total). Plus, correo y push permanecen desactivados hasta configurar sus servicios. La compilación iOS más abajo es anterior a las correcciones v8–v10 y no es una IPA para iPhone físico.
+El torneo QA añadió tres resultados terminados identificados como prueba y conservó los 26 anteriores. No usar el total de filas como cantidad de partidas terminadas: otras salas QA tienen registros con puntos y finalización nulos. Plus, correo y push permanecen desactivados hasta configurar sus servicios. La compilación iOS más abajo es anterior a las correcciones v8–v10 y no es una IPA para iPhone físico.
+
+La sesión final disponible en A32 y un emulador verificó fichas físicas, acciones propias, edición de stacks sólo por dealer aunque otro usuario sea anfitrión, cierres y rotación de ciegas. Ambos clientes sincronizaron stacks 4500/5500 y el servidor confirmó 10000 fichas. Menú e ingreso se probaron con letra al 200%; el ingreso también con TalkBack. Android ejecutó el haptic de all-in y la preferencia apagada lo bloqueó después de reiniciar; el usuario no confirmó haberlo sentido. Ajustes restaurados y herramienta temporal retirada. [Alcance exacto y límites](qa-metas40.md).
 
 ### Actualización de audio v8
 
@@ -65,6 +67,8 @@ La comprobación estricta adicional de [la guía Android](https://developer.andr
 
 Se instaló la imagen oficial Android 36 `google_apis_ps16k/x86_64` y se creó el AVD `Blindly36_16kb_metas40`. Los dos intentos iniciales sin aceleración no iniciaron Android. Después de habilitar virtualización en la PC, `emulator -accel-check` confirmó WHPX disponible y el AVD arrancó con aceleración.
 
+**Revisión v10 del 9 de octubre:** 24 avisos corresponden a ARM64 y 21 a x86_64. Afectan tanto módulos compilados con la app (`libappmodules`, codegen y módulos Expo/React Native) como bibliotecas externas incluidas en la entrega (Hermes, fbjni, imágenes y AndroidX, entre otras). Cambiar solamente el NDK de la app no recompila las bibliotecas precompiladas. La [guía Android](https://developer.android.com/guide/practices/page-sizes) indica usar NDK r28 o posterior, o en r27 ambos flags `-Wl,-z,max-page-size=16384` y `-Wl,-z,common-page-size=16384`, y reconstruir/actualizar los SDK afectados. Próximo trabajo nativo: identificar el origen exacto de cada `.so`, corregir los módulos compilados y conseguir versiones compatibles de los precompilados; después repetir auditoría y ejecución ARM64/16 KB. No quitar RELRO ni parchear el binario firmado para silenciar el informe. El A32 no puede convertirse en un dispositivo de 16 KB mediante un ajuste de la app.
+
 **Prueba de arranque 16 KB x86_64 aprobada el 8 de octubre:** Android 16, `getconf PAGE_SIZE=16384`, APK v7 con hash comprobado e instalación correcta. Se desactivó el modo de compatibilidad exclusivamente en el emulador con `bionic.linker.16kb.app_compat.enabled=false` y `pm.16kb.app_compat.disabled=true`, siguiendo la guía Android. Arranque frío de 3389 ms, onboarding visible, enlaces a combinaciones/opciones, retorno desde segundo plano y segundo arranque frío por enlace (1936 ms). Proceso activo, actividad en primer plano y registro de crashes vacío. Se inspeccionaron los textos de las vistas nativas y una captura de opciones.
 
 Este resultado verifica el arranque y esas vistas en x86_64; no demuestra todas las funcionalidades ni la arquitectura ARM64 en 16 KB. El aviso estático RELRO permanece registrado sin rebajar su criterio. Pendientes: partida completa, cámara, audio/haptics reales, compras/push configurados y aceptación ARM64. No se recompiló ni alteró el APK para estas pruebas.
@@ -77,7 +81,7 @@ No es una IPA instalable en iPhone. La distribución física requiere una firma 
 
 ## Lo que impide declarar publicación completa
 
-- Completar aceptación con tres Android físicos: partida completa, reconexión, haptics, recap, iconos y accesibilidad. La primera sesión en Galaxy A32 con Android 13 y páginas de 4 KB está registrada en [qa-metas40.md](qa-metas40.md); incluye arranque, Back, vistas nativas y música audible, y encontró el fallo de reanudación corregido en v8.
+- Ampliar aceptación física según dispositivos disponibles: recap, cámara y accesibilidad completa; falta confirmación táctil del haptic. La partida virtual de tres usuarios, recuperación y reconexión pasaron con un A32 y dos emuladores; el modo físico pasó con A32 y un emulador. Ese alcance está registrado en [qa-metas40.md](qa-metas40.md), sin atribuir tres teléfonos físicos a la prueba.
 - Completar aceptación de funcionalidades y ARM64 en 16 KB, incluyendo el aviso RELRO. Arranque y vistas básicas x86_64 ya comprobados sin compatibilidad.
 - Configurar FCM/APNs y verificar recepción real de notificaciones. El backend está desplegado, pero `EXPO_PUBLIC_PUSH_READY=false` evita ofrecer un servicio no configurado.
 - Productos y claves comerciales de las tiendas, compras/restauración físicas y paywall publicado. `EXPO_PUBLIC_PLUS_READY=false` protege la build de validación; no usa la clave Test Store que provocaba el cierre anterior.

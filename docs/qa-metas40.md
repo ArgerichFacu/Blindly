@@ -67,6 +67,17 @@ Esta sesión no comprueba recuperación entre dispositivos, una partida completa
 9. Con FCM configurado y nueva build habilitada: opt-in explícito, permiso denegado/permitido/revocado, notificaciones por tipo/cupo/pique, app abierta/cerrada y enlaces a ranking/fecha/rivalidades. Cancelar fecha/expulsar usuario antes del dispatch. Recibir un ticket no prueba recepción en pantalla.
 10. Eliminar una cuenta inactiva: historial/UUID/tokens/preferencias/snapshot MVP propios desaparecen. No eliminar identidad durante mesa activa.
 
+## Cierre de pruebas disponibles en A32 y emulador (9 de octubre, APK v10)
+
+La última sesión usó el Galaxy A32 Android 13 ARM64/4 KB y un AVD Android 16 x86_64. El anfitrión del AVD y el dealer del A32 fueron usuarios distintos. No se borró la identidad del teléfono ni se modificó Auth.
+
+- **Fichas físicas:** configuración de 400 fichas de 25, reparto de 200 por jugador y stack inicial 5000. Cada participante registró su propia acción. Apostar/subir, igualar y pasar completaron preflop, flop, turn y river; retirarse cerró otra mano. Sólo el A32 dealer mostró y pudo guardar «Actualizar stack físico» y «Cerrar mano y rotar ciegas». El AVD anfitrión recibió ambos stacks actualizados, 4500 y 5500, sin controles para editarlos. Dos cierres llevaron a mano 3, conservaron el dealer y rotaron SB/BB/BTN. El servidor confirmó 10000 fichas y pozo cero. Se probó el registro y sincronización del modo físico; no se observó un reparto de fichas tangibles.
+- **Accesibilidad disponible:** con letra al 200%, se inspeccionaron menú desplazable y formulario de ingreso sin cortes que impidieran usarlos. TalkBack de Samsung activo mostró foco nativo y permitió completar el ingreso a la sala con doble toque. Se rechazó su permiso opcional de llamadas. Esto no certifica todas las pantallas ni confirma verbalmente la lectura de cada etiqueta.
+- **Haptics:** el teléfono tenía apagada la vibración táctil del sistema y su intensidad en cero. Con ambas habilitadas temporalmente, un all-in confirmado produjo un evento TOUCH de `com.blindly.app`, finalizado, de 53 ms, con un paso de 45 ms. El usuario no estaba atento: la sensación física no quedó confirmada. Al apagar la preferencia de Blindly y reiniciar, permaneció apagada y otro all-in no generó un evento nuevo, aun con el sistema habilitado. Se restauró la preferencia de Blindly encendida y los dos ajustes del sistema en cero.
+- **Limpieza:** letra original 1.1, TalkBack desactivado, servicios de accesibilidad como antes; herramienta `com.blindly.qadump` desinstalada del teléfono y AVD, y emulador apagado. No se reinstaló desde cero ni se eliminó el historial. Las salas de esta sesión quedaron pausadas; sus registros de puntuación tienen puesto, puntos y finalización nulos y no aportan un resultado terminado al ranking.
+
+**Límite de aceptación:** terminar estas pruebas no cierra ARM64 con páginas de 16 KB ni los 45 avisos estáticos RELRO. El A32 tiene páginas de 4 KB; la prueba x86_64 de 16 KB no sustituye esa arquitectura. Compras y push reales dependen de servicios todavía desactivados. Una vez resuelto ese pendiente nativo, el orden acordado es rediseño completo del layout, nueva validación, activación de Blindly Plus y publicación.
+
 ## iOS
 
 Bundles aprobados no son una IPA. En un Mac/simulador revisar layouts, navegación, logo y API nativa; en iPhone físico se necesita firma válida, haptics/audio/background/reconexión, cámara y APNs. No se distribuye APK a iPhone. Firma Apple y recepción física siguen pendientes.
