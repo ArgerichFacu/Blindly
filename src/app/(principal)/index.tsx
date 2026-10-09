@@ -16,7 +16,7 @@ export default function Menu() {
     const clubes = useClubes(true), liga = clubes.datos?.ligas.find(l => l.id === clubes.datos?.elegida);
     return <Pantalla titulo="" volver={false} enTabs cabecera={false}>
     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 16, paddingTop: 8 }}>
-      <Texto style={{ fontSize: 32, lineHeight: 44, fontWeight: "900", letterSpacing: -1.4, paddingRight: 6, color: tema.acento }}>blindly.</Texto>
+      <Texto style={{ fontSize: 32, lineHeight: 48, fontWeight: "900", letterSpacing: 0, paddingRight: 10, paddingVertical: 2, color: tema.acento }}>blindly.</Texto>
       {!plus.activo && <Pressable accessibilityRole="button" accessibilityLabel={t("Blindly Plus")} onPress={() => router.push("/plus")} style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 6, borderWidth: 1, borderColor: velo(tema.acento, "55"), backgroundColor: tema.fondoTarjeta, ...RELIEVE.bajo, borderRadius: 30, paddingHorizontal: 13, paddingVertical: 10, opacity: pressed ? .7 : 1 })}><Acabado /><Icono nombre="plus" color={tema.acento} size={15}/><Texto style={{ fontSize: 11, fontWeight: "800", letterSpacing: 1, color: tema.acento }}>PLUS</Texto></Pressable>}
     </View>
     <EntradaSuave><Superficie variante="hero" style={{ gap: 20, marginTop: 6 }}><View style={{ paddingTop: 4, paddingBottom: 8, gap: 12 }}>

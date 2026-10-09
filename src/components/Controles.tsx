@@ -34,6 +34,12 @@ export function Texto({
   numberOfLines?: number;
 }) {
   const { tema } = useTema();
+  const personalizado = StyleSheet.flatten(style);
+  const fontSize = personalizado?.fontSize ?? 14;
+  const lineHeight = Math.max(
+    personalizado?.lineHeight ?? Math.ceil(fontSize * 1.5),
+    Math.ceil(fontSize * 1.2),
+  );
   return (
     <Text
       selectable={selectable}
@@ -42,6 +48,7 @@ export function Texto({
         estilos.texto,
         { color: suave ? tema.textoSuave : tema.textoFuerte },
         style,
+        { lineHeight, includeFontPadding: true },
       ]}
     >
       {children}
