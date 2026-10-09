@@ -24,6 +24,7 @@ La matriz automática pasó; **no reemplaza** estas pruebas con la nueva APK. Lo
 - APK/AAB locales v7 completos y firmados, integridad/manifiestos/certificado original comprobados; simulador iOS de las 40 metas compilado e inspeccionado. Hashes y limitaciones en [release-metas40.md](release-metas40.md).
 - Revisión web real con Metro reiniciado: menú, preferencia de vibraciones y evaluador Free a 390 px; escalera real con exactamente cinco cartas marcadas. No reemplaza pruebas nativas.
 - Android 16 KB: ZIP y PT_LOAD aprobados; criterio estricto de final RELRO pendiente en 45 bibliotecas. No declarar esa aceptación completa con sólo bundletool.
+- Prueba nativa real en emulador acelerado Android 16 x86_64: páginas de 16384 bytes y compatibilidad desactivada; APK v7 instalado, onboarding, combinaciones/opciones por enlace, background/resume y segundo arranque frío sin crashes. Se verificó actividad/proceso y captura. ARM64/16 KB y funciones de partida siguen pendientes; ver el informe de release.
 
 ## Android físico: tres teléfonos
 

@@ -31,7 +31,11 @@ Los tres binarios, `Blindly-metas40-v7-play-console-package.zip` y `LEEME-metas4
 
 La comprobación estricta adicional de [la guía Android](https://developer.android.com/guide/practices/page-sizes) encuentra 45 bibliotecas cuyo final GNU_RELRO no es múltiplo de 16 KB. No se detectaron PT_LOAD escribibles que se solapen con el redondeo de esos rangos. Esto no demuestra un fallo en ejecución ni permite dar por aprobada la compatibilidad completa: registrar el aviso y probar con sistema de 16 KB antes de producción. `scripts/verificar-elf-16kb.py` conserva el informe y devuelve código 1 mientras no se cumplan todos los criterios documentados. No se ocultó el resultado ni se modificaron binarios para silenciarlo.
 
-Se instaló la imagen oficial Android 36 `google_apis_ps16k/x86_64` y se creó el AVD `Blindly36_16kb_metas40`. El intento sin aceleración con SwiftShader quedó offline; el segundo con un núcleo y renderizado alternativo salió con código 1 antes de iniciar Android. Se detuvieron los procesos de prueba. No se instaló ni ejecutó Blindly en ese emulador. La ausencia de virtualización/hipervisor impide registrar una prueba nativa válida en esta PC; conservar el AVD para una futura máquina preparada.
+Se instaló la imagen oficial Android 36 `google_apis_ps16k/x86_64` y se creó el AVD `Blindly36_16kb_metas40`. Los dos intentos iniciales sin aceleración no iniciaron Android. Después de habilitar virtualización en la PC, `emulator -accel-check` confirmó WHPX disponible y el AVD arrancó con aceleración.
+
+**Prueba de arranque 16 KB x86_64 aprobada el 8 de octubre:** Android 16, `getconf PAGE_SIZE=16384`, APK v7 con hash comprobado e instalación correcta. Se desactivó el modo de compatibilidad exclusivamente en el emulador con `bionic.linker.16kb.app_compat.enabled=false` y `pm.16kb.app_compat.disabled=true`, siguiendo la guía Android. Arranque frío de 3389 ms, onboarding visible, enlaces a combinaciones/opciones, retorno desde segundo plano y segundo arranque frío por enlace (1936 ms). Proceso activo, actividad en primer plano y registro de crashes vacío. Se inspeccionaron los textos de las vistas nativas y una captura de opciones.
+
+Este resultado verifica el arranque y esas vistas en x86_64; no demuestra todas las funcionalidades ni la arquitectura ARM64 en 16 KB. El aviso estático RELRO permanece registrado sin rebajar su criterio. Pendientes: partida completa, cámara, audio/haptics reales, compras/push configurados y aceptación ARM64. No se recompiló ni alteró el APK para estas pruebas.
 
 ## iOS
 
@@ -41,8 +45,8 @@ No es una IPA instalable en iPhone. La distribución física requiere una firma 
 
 ## Lo que impide declarar publicación completa
 
-- Aceptación con tres Android físicos: partida completa, reconexión, audio en segundo plano, haptics, navegación, recap, iconos y accesibilidad. No hay teléfono conectado; la PC tampoco tiene virtualización habilitada para una prueba acelerada en emulador.
-- Prueba en sistema Android de páginas de 16 KB, incluyendo el aviso RELRO registrado arriba.
+- Aceptación con tres Android físicos: partida completa, reconexión, audio en segundo plano, haptics, navegación, recap, iconos y accesibilidad. Un Galaxy A32 con Android 13 y páginas de 4 KB está conectado/autorizado; la prueba documentada arriba se hizo únicamente en el emulador.
+- Completar aceptación de funcionalidades y ARM64 en 16 KB, incluyendo el aviso RELRO. Arranque y vistas básicas x86_64 ya comprobados sin compatibilidad.
 - Configurar FCM/APNs y verificar recepción real de notificaciones. El backend está desplegado, pero `EXPO_PUBLIC_PUSH_READY=false` evita ofrecer un servicio no configurado.
 - Productos y claves comerciales de las tiendas, compras/restauración físicas y paywall publicado. `EXPO_PUBLIC_PLUS_READY=false` protege la build de validación; no usa la clave Test Store que provocaba el cierre anterior.
 - SMTP y prueba de correo opcional. Se mantiene `EXPO_PUBLIC_EMAIL_AUTH_READY=false`; la identidad recuperable mediante clave propia sigue disponible.
