@@ -23,6 +23,7 @@ const {ClasificacionTemporada}=cargar('src/components/ClasificacionTemporada.tsx
   if(name.includes('TemaContext'))return {useTema:()=>({tema:{acento:'gold',borde:'black',textoFuerte:'white'}})};
   if(name.includes('Preferencias'))return {usePreferencias:()=>({t,preferencias:{idioma:'es'}})};
   if(name.includes('clasificacion'))return {clasificacion};
+  if(name==='../lib/visual')return cargar('src/lib/visual.ts');
   throw Error(name);
 });
 function nodos(n){if(!n)return [];if(Array.isArray(n))return n.flatMap(nodos);if(typeof n!=='object')return [n];return [n,...nodos(n.props?.children)];}

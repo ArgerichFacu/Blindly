@@ -1,6 +1,7 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Elegí el clima de tu mesa.": ["Set the mood for your table.", "Escolha o clima da sua mesa."],
   "Inicio": ["Home", "Início"],
   "Ligas": ["Leagues", "Ligas"],
   "Perfil": ["Profile", "Perfil"],

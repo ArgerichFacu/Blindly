@@ -5,6 +5,7 @@ import { usePreferencias } from "../lib/Preferencias";
 import { clasificacion } from "../lib/clasificacion";
 import type { FilaRanking,TemporadaLiga } from "../lib/ligas";
 import { TitulosJugador } from "./TitulosJugador";
+import { velo } from "../lib/visual";
 export function ClasificacionTemporada({ranking,temporada,movimientos}:{ranking:FilaRanking[];temporada:TemporadaLiga|null;movimientos?:Record<string,number>}) {
  const {t,preferencias}=usePreferencias(),{tema}=useTema();
  const datos=clasificacion(ranking,temporada?.estado);
@@ -13,17 +14,20 @@ export function ClasificacionTemporada({ranking,temporada,movimientos}:{ranking:
  const destacado=datos.mvp??datos.campeon;
  return <>
   {temporada && <Texto suave>{t(temporada.estado==="activa"?"Temporada en curso":"Temporada finalizada")} · {fecha(temporada.inicio)}{temporada.fin?` — ${fecha(temporada.fin)}`:""}</Texto>}
-  {destacado && <Tarjeta style={{borderColor:tema.acento,gap:6}}>
+  {destacado && <Tarjeta variante="hero" style={{borderColor:tema.acento,gap:10}}>
    <Etiqueta>{t(datos.mvp?"MVP ACTUAL":"CAMPEÓN DE TEMPORADA")}</Etiqueta>
-   <Texto style={{fontSize:28,fontWeight:"800",color:tema.acento}}>{destacado.nombre}</Texto>
+   <View style={{flexDirection:"row",alignItems:"center",gap:14}}>
+    <View style={{width:54,height:54,borderRadius:27,borderWidth:1,borderColor:velo(tema.acento,"70"),backgroundColor:velo(tema.acento,"12"),alignItems:"center",justifyContent:"center"}}><Texto style={{fontSize:25,fontWeight:"800",color:tema.acento}}>{destacado.nombre.trim().slice(0,1).toUpperCase()}</Texto></View>
+    <Texto style={{flex:1,fontSize:28,fontWeight:"800",color:tema.acento}}>{destacado.nombre}</Texto>
+   </View>
    <Texto>{t("{n} puntos",{n:numero(destacado.puntos)})} · {t("{n} victorias",{n:destacado.victorias})}</Texto>
    <Texto suave>{t(datos.mvp?"El puesto 1 del ranking es el MVP. Cambia con los resultados.":"Esta temporada conserva sus partidas y su clasificación final.")}</Texto>
   </Tarjeta>}
   {datos.top.length>0 && <View style={{gap:8}}>{datos.top.map(f=> {
    const movimiento=movimientos?.[f.user_id];
-   return <Tarjeta key={f.user_id} style={{padding:14,gap:4}}>
+   return <Tarjeta key={f.user_id} variante="suave" style={{padding:16,gap:8}}>
     <View style={{flexDirection:"row",alignItems:"center",gap:10}}>
-     <Texto style={{fontSize:24,color:Number(f.posicion)===1?tema.acento:tema.textoFuerte}}>{["🥇","🥈","🥉"][Number(f.posicion)-1]}</Texto>
+     <View style={{width:34,height:34,borderRadius:17,alignItems:"center",justifyContent:"center",backgroundColor:velo(tema.acento,Number(f.posicion)===1?"22":"0B"),borderWidth:1,borderColor:velo(tema.acento,Number(f.posicion)===1?"65":"25")}}><Texto style={{fontSize:16,fontWeight:"800",color:Number(f.posicion)===1?tema.acento:tema.textoFuerte}}>{f.posicion}</Texto></View>
      <Texto style={{flex:1,fontSize:20,fontWeight:"800"}}>{f.nombre}</Texto>
      <Texto style={{fontSize:22,fontWeight:"800",color:tema.acento}}>{numero(f.puntos)}</Texto>
     </View>

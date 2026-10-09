@@ -8,6 +8,8 @@ function escenario(activo, conLiga) {
     "expo-router": { useRouter: () => ({ push: r => llamadas.push(r) }) },
     "react-native": { Pressable: "Pressable", View: "View" },
     "../../components/Controles": { Pantalla: "Pantalla", Texto: "Texto", Boton: "Boton" },
+    "../../components/Superficie": { Superficie: "Superficie", Acabado: "Acabado" },
+    "../../lib/visual": { RELIEVE: {}, velo: c => c },
     "../../components/Icono": { Icono: "Icono" },
     "../../components/ResumenClub": { ResumenClub: "ResumenClub" },
     "../../components/FilaOpcion": { FilaOpcion: "FilaOpcion" },

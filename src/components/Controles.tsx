@@ -1,3 +1,5 @@
+import { Acabado, Superficie } from "./Superficie";
+import { RELIEVE, velo } from "../lib/visual";
 import { useVolver } from "../lib/useVolver";
 import { useState, type ReactNode, type RefObject } from "react";
 import {
@@ -75,7 +77,11 @@ export function Boton({
         estilos.boton,
         {
           backgroundColor: secundario ? tema.fondoTarjeta : tema.acento,
-          borderColor: secundario ? tema.borde : tema.acento,
+          borderColor: secundario ? tema.borde : "#F4D996",
+          borderBottomWidth: 3,
+          borderBottomColor: secundario ? tema.fondo : "#A88842",
+          transform: [{ scale: pressed ? 0.985 : 1 }],
+          ...(!disabled && (secundario ? RELIEVE.bajo : RELIEVE.panel)),
           opacity: disabled ? 0.42 : pressed ? 0.76 : 1,
         },
         compacto && {
@@ -86,6 +92,7 @@ export function Boton({
         style,
       ]}
     >
+      <Acabado material={secundario ? "panel" : "oro"} radio={16} />
       <Text
         style={[
           estilos.textoBoton,
@@ -127,6 +134,7 @@ export function Campo({
             color: tema.textoFuerte,
             borderColor: focus ? tema.acento : tema.borde,
             backgroundColor: tema.fondo,
+            boxShadow: focus ? `0 0 0 3px ${velo(tema.acento, "18")}` : "inset 0 2px 4px rgba(0,0,0,0.18)",
           },
           props.style,
         ]}
@@ -137,22 +145,13 @@ export function Campo({
 export function Tarjeta({
   children,
   style,
+  variante = "panel",
 }: {
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
+  variante?: "panel" | "hero" | "suave";
 }) {
-  const { tema } = useTema();
-  return (
-    <View
-      style={[
-        estilos.tarjeta,
-        { backgroundColor: tema.fondoTarjeta, borderColor: tema.borde },
-        style,
-      ]}
-    >
-      {children}
-    </View>
-  );
+  return <Superficie variante={variante} style={style}>{children}</Superficie>;
 }
 export function Etiqueta({
   children,
@@ -166,7 +165,9 @@ export function Etiqueta({
     <View
       style={{
         alignSelf: "flex-start",
-        backgroundColor: activa ? tema.acento : tema.fondoTarjeta,
+        backgroundColor: activa ? tema.acento : velo(tema.acento, "0D"),
+        borderWidth: 1,
+        borderColor: velo(tema.acento, "22"),
         borderRadius: 8,
         paddingHorizontal: 9,
         paddingVertical: 4,
@@ -214,6 +215,7 @@ export function Acceso({
         {
           backgroundColor: tema.fondoTarjeta,
           borderColor: activo ? tema.acento : tema.borde,
+          ...RELIEVE.bajo,
           opacity: disabled ? 0.45 : pressed ? 0.8 : 1,
         },
       ]}
@@ -255,8 +257,8 @@ export function Seccion({
       style={{
         gap: 12,
         borderTopWidth: 1,
-        borderColor: tema.borde,
-        paddingTop: 6,
+        borderColor: velo(tema.acento, "24"),
+        paddingTop: 10,
       }}
     >
       <Pressable
@@ -341,6 +343,7 @@ export function Pantalla({
   const regresar = useVolver(volver && !onVolver);
   return (
     <SafeAreaView edges={enTabs ? ["top", "left", "right"] : ["top", "bottom", "left", "right"]} style={{ flex: 1, backgroundColor: tema.fondo }}>
+      <Acabado material="fondo" />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -357,13 +360,13 @@ export function Pantalla({
                 accessibilityRole="button"
                 accessibilityLabel={t("Volver")}
                 onPress={onVolver ?? regresar}
-                style={[estilos.volver, { borderColor: tema.borde }]}
+                style={[estilos.volver, RELIEVE.bajo, { borderColor: tema.borde, backgroundColor: tema.fondoTarjeta }]}
               >
                 <Texto style={{ fontSize: 22 }}>‹</Texto>
               </Pressable>
             )}
             <View style={{ flex: 1, gap: 3 }}>
-              <Texto style={estilos.titulo}>{titulo}</Texto>
+              <Texto style={[estilos.titulo, titulo.length > 20 && { fontSize: 23, lineHeight: 30 }]}>{titulo}</Texto>
               {!!subtitulo && (
                 <Texto suave style={{ fontSize: 13, lineHeight: 19 }}>
                   {subtitulo}
@@ -415,18 +418,18 @@ const estilos = StyleSheet.create({
     borderRadius: 14,
   },
   titulo: {
-    fontSize: 24,
-    lineHeight: 31,
+    fontSize: 27,
+    lineHeight: 35,
     fontWeight: "700",
     letterSpacing: -0.6,
   },
   texto: { fontSize: 14, lineHeight: 21 },
   textoBoton: { fontSize: 14, fontWeight: "700", textAlign: "center" },
   boton: {
-    minHeight: 50,
+    minHeight: 52,
     justifyContent: "center",
     padding: 14,
-    borderRadius: 14,
+    borderRadius: 16,
     borderWidth: 1,
   },
   campo: { gap: 7, flexGrow: 1, flexShrink: 1, minWidth: 0 },

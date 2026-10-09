@@ -1,3 +1,5 @@
+import { VolumenAudio } from "../components/VolumenAudio";
+import { useTema } from "../lib/TemaContext";
 import { capacidadesPlus } from "../lib/capacidadesPlus";
 import { Switch, View } from "react-native";
 import { useRouter } from "expo-router";
@@ -10,7 +12,7 @@ import { SONIDOS, type SonidoId } from "../lib/botonera";
 export default function Sonidos() {
   const { t, preferencias: p, cambiar } = usePreferencias(),
     plus = usePlus(),
-    router = useRouter();
+    router = useRouter(), { tema } = useTema();
   function alternarLista(
     clave: "botoneraVisibles" | "botoneraFavoritos",
     id: SonidoId,
@@ -38,7 +40,7 @@ export default function Sonidos() {
     }
   }
   return (
-    <Pantalla titulo={t("Sonidos y ambiente")}>
+    <Pantalla titulo={t("Sonidos y ambiente")} subtitulo={t("Elegí el clima de tu mesa.")}>
       <Tarjeta>
         <View
           style={{
@@ -61,7 +63,7 @@ export default function Sonidos() {
           )}
         </Texto>
       </Tarjeta>
-      {(
+      <Tarjeta style={{ gap: 0 }}>{(
         [
           {
             nombre: "Música",
@@ -92,7 +94,7 @@ export default function Sonidos() {
           },
         ] as const
       ).map((categoria) => (
-        <Tarjeta key={categoria.volumen}>
+        <View key={categoria.volumen} style={{ paddingVertical: 14, gap: 8, borderBottomWidth: 1, borderColor: tema.borde }}>
           <View
             style={{
               flexDirection: "row",
@@ -108,43 +110,9 @@ export default function Sonidos() {
               onValueChange={categoria.accion}
             />
           </View>
-          <Texto suave>
-            {t("Volumen")}: {Math.round(p[categoria.volumen] * 100)}%
-          </Texto>
-          <View style={{ flexDirection: "row", gap: 12 }}>
-            {([-1, 1] as const).map((delta) => (
-              <Boton
-                key={delta}
-                titulo={`${delta < 0 ? "−" : "+"} 10%`}
-                accesibilidad={t(
-                  delta < 0
-                    ? "Bajar volumen de {canal}"
-                    : "Subir volumen de {canal}",
-                  { canal: t(categoria.nombre) },
-                )}
-                secundario
-                disabled={
-                  delta < 0
-                    ? p[categoria.volumen] <= 0
-                    : p[categoria.volumen] >= 1
-                }
-                onPress={() =>
-                  cambiar({
-                    [categoria.volumen]: Math.min(
-                      1,
-                      Math.max(
-                        0,
-                        Math.round((p[categoria.volumen] + delta * 0.1) * 10) /
-                          10,
-                      ),
-                    ),
-                  })
-                }
-              />
-            ))}
-          </View>
-        </Tarjeta>
-      ))}
+          <VolumenAudio key={categoria.volumen} canal={t(categoria.nombre)} valor={p[categoria.volumen]} atenuado={p.silencio || !categoria.activo} guardar={valor => cambiar({ [categoria.volumen]: valor })} />
+        </View>
+      ))}</Tarjeta>
       <Tarjeta>
         <Texto>{t("Escuchar una muestra")}</Texto>
         <Texto suave>

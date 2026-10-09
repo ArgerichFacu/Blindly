@@ -35,6 +35,8 @@ const cambios = [],
   rutas = [];
 const jsx = (type, props) => ({ type, props });
 const deps = {
+  "../components/VolumenAudio": { VolumenAudio: "VolumenAudio" },
+  "../lib/TemaContext": { useTema: () => ({tema:{}}) },
   "../lib/capacidadesPlus": cargar("src/lib/capacidadesPlus.ts"),
   "react/jsx-runtime": { jsx, jsxs: jsx, Fragment: "Fragment" },
   react: {
@@ -98,6 +100,12 @@ activo = true;
 assert.equal(elements(board.Botonera({}), "Sonido").length, 8);
 const settings = cargar("src/app/sonidos.tsx", deps).default;
 activo = false;
+assert.equal(elements(settings(), "VolumenAudio").length, 4);
+const volumenPrevio = p.volumenMusica;
+elements(settings(), "VolumenAudio")[0].guardar(0.37);
+assert.equal(p.volumenMusica, 0.37);
+assert.equal(p.musica, audio.AUDIO_INICIAL.musica);
+p.volumenMusica = volumenPrevio;
 assert.equal(
   elements(settings(), "Switch").length,
   5,

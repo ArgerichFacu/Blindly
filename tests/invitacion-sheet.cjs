@@ -11,6 +11,7 @@ const mocks={
  'react-native-safe-area-context':{SafeAreaView:'SafeAreaView'},
  'expo-clipboard':{setStringAsync:async v=>copies.push(v)},
  'react-native-qrcode-svg':{__esModule:true,default:'QRCode'},
+ './Superficie':{Acabado:'Acabado'}, '../lib/visual':{RELIEVE:{},velo:c=>c},
  './Controles':{Boton:'Boton',Texto:'Texto'}, './Icono':{Icono:'Icono'},
  '../lib/ligas':{obtenerInvitacionLiga:async(id,renovar)=>{consultas.push([id,renovar]);return {codigo,vence_en:'2026-12-01T00:00:00Z'};}},
  '../lib/invitaciones':{enlaceInvitacion:c=>`blindly://liga-unirse?codigo=${c}`},
