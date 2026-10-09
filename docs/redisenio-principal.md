@@ -51,3 +51,13 @@ La única dependencia agregada es `expo-clipboard ~57.0.2`, instalada mediante E
 Se consultaron antes de editar las [docs exactas Expo 57](https://docs.expo.dev/versions/v57.0.0/), [UI Router 57](https://docs.expo.dev/versions/v57.0.0/sdk/router/ui/), [JavaScript Tabs](https://docs.expo.dev/router/advanced/tabs/) y [Clipboard 57](https://docs.expo.dev/versions/v57.0.0/sdk/clipboard/). No se introdujeron dependencias directas de React Navigation.
 
 Fin del bloque: no continuar con nuevas funciones, activación de Plus ni publicación automáticamente.
+
+## APK del rediseño — v12
+
+Se compiló desde `543d233` con Expo 57 y las cuatro arquitecturas. Gradle finalizó correctamente en 6 min 20 s. APK y AAB: versión 1.0.0, versionCode 12, package com.blindly.app, target 36. La firma v2 coincide con el certificado original C5B6C355789F93255B188CEF762DB78DE5A1900E286CE3B1EC9475F6C466422F; ZIP alineado a 16 KB. AAB validado con bundletool y jarsigner.
+
+- APK SHA-256: 1CF3CDFB860E5EA4B2A5B0BB6462949DD86F93BD0F9B7E9D865122BC6870E18B.
+- AAB SHA-256: 98AF498A4EEEC23DDBE5811A7F111DF64A773A86941A502BD3DBD690AE2C055F.
+- Entrega: `G:\OneDrive\Documentos\ChatGPT\Blindly\release\Blindly-redisenio-v12.apk` y `.aab`.
+
+Incluye navegación principal, nuevo layout, invitaciones y expo-clipboard. Plus, email SMTP y push siguen sin activarse. Auditoría ELF: 56 bibliotecas, cero fallos PT_LOAD y los mismos 30 avisos RELRO estrictos de v11. No se declara validación ARM64/16 KB ni pruebas físicas del nuevo diseño por el hecho de compilarlo. Se puede actualizar una instalación con la firma original sin desinstalarla.
