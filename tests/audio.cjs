@@ -184,6 +184,10 @@ function player() {
   assert.equal(await prom, false);
   assert.equal(z.plays, 2, "Hook does not add playback to native auto-resume");
   assert.equal(await control.reproducir(z), true);
+  const pausasTrasReproducir = z.pauses;
+  listener("active");
+  assert.equal(z.pauses, pausasTrasReproducir, "Duplicate active keeps manual playback");
+  assert.equal(z.playing, true);
   blur();
   assert.equal(removed, 1);
   assert.equal(await control.reproducir(z), false);

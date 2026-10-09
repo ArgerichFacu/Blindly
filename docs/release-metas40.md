@@ -10,6 +10,23 @@ Tipos, lint, pruebas de juego, identidades, permisos, roles, SQL/RLS, traduccion
 
 ## Android
 
+### Actualización de audio v8
+
+Código de producto `d0e9951f22d30f6d0acc6386e8d87fba61c19581`. La prueba física de v7 detectó que Expo Android reanudaba la música al volver del launcher, aunque la interfaz prometía reproducción manual. El control pausa también al volver a primer plano; la prueba automática reproduce la reanudación nativa y comprueba que un evento `active` repetido no corte una reproducción manual.
+
+Compilación local correcta: 5 minutos 59 segundos, 990 tareas (83 ejecutadas), las mismas cuatro arquitecturas y firma original. Tipos, lint y pruebas de audio aprobados.
+
+| Archivo nuevo | Versión | SHA-256 |
+| --- | --- | --- |
+| `Blindly-metas40-v8.apk` | 1.0.0, código 8 | `9F346A65CF198808A48806B47FD8F8FD1B281EA8BC8001BA128138E8A9D6AD1C` |
+| `Blindly-metas40-v8.aab` | 1.0.0, código 8 | `E198100E47261E73DD30641E004CACA11E2A3C8B0B20F11C49739BACB93102F8` |
+
+APK con firma v2 y certificado original comprobados; AAB validado con bundletool y jarsigner. ZIP alineado para 16 KB. La revisión ELF de v8 mantiene 56 bibliotecas, cero fallos PT_LOAD y 45 avisos del criterio estricto RELRO. El ensayo de ejecución 16 KB descrito más abajo corresponde a **v7**. La build iOS de este informe también corresponde al código anterior; no contiene esta corrección posterior.
+
+Prueba física v8 aprobada para este alcance en Galaxy A32 / Android 13: actualización sin borrar datos, identidad de invitado y preferencias conservadas, arranque frío de 2288 ms y audio manual. Música pausada al salir y aún pausada al regresar; botón «Reproducir música» y nuevo toque funcional. Navegar fuera de sonidos detiene la reproducción; sin crashes registrados del proceso. [Evidencia y límites](qa-metas40.md). No equivale a una partida de tres teléfonos ni a recuperar la cuenta en otro dispositivo.
+
+### Entrega inicial v7
+
 La build remota Android fue rechazada por cupo mensual gratuito agotado; no se creó un binario remoto ni se contrató un plan. EAS reservó `versionCode 7`. Se compilaron localmente APK y AAB universales con ese código y la misma firma existente. [Procedimiento reproducible](compilacion-local.md).
 
 Java 25 falló en la configuración nativa de CMake. El nuevo intento usa Temurin JDK 17 verificado contra el checksum oficial, SDK 36, NDK 27.1 y Gradle de Expo SDK 57. No se alteraron dependencias de producto para ocultar el error.
@@ -45,7 +62,7 @@ No es una IPA instalable en iPhone. La distribución física requiere una firma 
 
 ## Lo que impide declarar publicación completa
 
-- Aceptación con tres Android físicos: partida completa, reconexión, audio en segundo plano, haptics, navegación, recap, iconos y accesibilidad. Un Galaxy A32 con Android 13 y páginas de 4 KB está conectado/autorizado; la prueba documentada arriba se hizo únicamente en el emulador.
+- Completar aceptación con tres Android físicos: partida completa, reconexión, haptics, recap, iconos y accesibilidad. La primera sesión en Galaxy A32 con Android 13 y páginas de 4 KB está registrada en [qa-metas40.md](qa-metas40.md); incluye arranque, Back, vistas nativas y música audible, y encontró el fallo de reanudación corregido en v8.
 - Completar aceptación de funcionalidades y ARM64 en 16 KB, incluyendo el aviso RELRO. Arranque y vistas básicas x86_64 ya comprobados sin compatibilidad.
 - Configurar FCM/APNs y verificar recepción real de notificaciones. El backend está desplegado, pero `EXPO_PUBLIC_PUSH_READY=false` evita ofrecer un servicio no configurado.
 - Productos y claves comerciales de las tiendas, compras/restauración físicas y paywall publicado. `EXPO_PUBLIC_PLUS_READY=false` protege la build de validación; no usa la clave Test Store que provocaba el cierre anterior.
