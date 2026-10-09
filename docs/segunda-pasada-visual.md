@@ -129,3 +129,19 @@ advertencias de comprobaciones estrictas GNU_RELRO. La versión anterior tambié
 tenía 30; esto no sustituye ejecución ARM64/16 KB ni significa que esa prueba haya
 pasado. No se certifica esta build en hardware físico por el hecho de compilarla.
 Plus, email y push conservan los flags de release desactivados.
+
+## Corrección de textos y entrega v14
+
+El nombre de Perfil aumentaba a 26 px pero heredaba una línea de 21 px, recortando
+descendentes. `Texto` ahora calcula una altura proporcional al tamaño final,
+conserva alturas explícitas suficientes y activa padding de fuente Android.
+El wordmark de Home tiene más espacio lateral/vertical y elimina tracking negativo.
+Revisión web a 360×800: `Jugador` mide 26/39 px y se ven completos la g y el punto.
+Tests, typecheck, lint y GitHub CI aprobados; prueba de regresión incluida en npm test.
+Fuente: `656d39b`. No se ejecutó esta build en un celular físico.
+
+APK `Blindly-textos-v14.apk` y AAB `Blindly-textos-v14.aab` en el directorio de entrega.
+VersionCode 14, misma firma; Gradle aprobado en 6m22s. Firma APK, zipalign 16 KB,
+bundletool y jarsigner aprobados. Esto no completa la prueba ARM64/16 KB pendiente.
+APK SHA-256: `21642DFA7333537653565B0583AE89D587E8A94259403E76C335F07047AA72F6`.
+AAB SHA-256: `22406DB0376D892E4699FF90358FC728DA311FCB008FF267B3B355B71E11089B`.
