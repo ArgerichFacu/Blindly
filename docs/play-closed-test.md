@@ -7,7 +7,7 @@ Fuente vigente: [requisitos de pruebas para cuentas personales nuevas](https://s
 ## Preparación en Play Console
 
 1. Crear `com.blindly.app` y completar la configuración básica de la aplicación.
-2. Cargar `Blindly-1.0.0-playstore.aab` primero en **Prueba interna** y revisar el informe previo al lanzamiento.
+2. Cargar el AAB actualizado de [preparación comercial Android](plus-comercial-android.md) primero en **Prueba interna** y revisar el informe previo al lanzamiento. El AAB v15 inicial tiene Plus desactivado; las compras se prueban con la build posterior conectada a Google.
 3. Corregir cualquier bloqueo real antes de reutilizar ese bundle en una **Prueba cerrada**.
 4. Crear una lista de correo o Google Group exclusivo para testers.
 5. Publicar la versión cerrada y compartir el enlace de inscripción de Google Play.

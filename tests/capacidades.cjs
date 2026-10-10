@@ -4,7 +4,7 @@ const {capacidadesPlus}=cargar('src/lib/capacidadesPlus.ts');
 for(const estado of [{activo:false},{activo:true,cargando:true},{activo:true,error:Error('offline')},{activo:undefined}])
   assert.ok(Object.values(capacidadesPlus(estado)).every(v=>v===false),'Incierto no concede capacidades');
 assert.ok(Object.values(capacidadesPlus({activo:true,cargando:false,error:null})).every(Boolean));
-const {tieneEntitlementPlus}=cargar('src/lib/plus.ts',{'react-native':{Platform:{OS:'web'}},'react-native-purchases':{}});
+const {tieneEntitlementPlus}=cargar('src/lib/plus.ts',{'react-native':{Platform:{OS:'web'}},'react-native-purchases':{},'./identidad':cargar('src/lib/identidad.ts')});
 const info=(isActive,expirationDate)=>({entitlements:{active:{blindly_plus:{isActive,expirationDate}}}});
 assert.equal(tieneEntitlementPlus(info(true,null)),true);
 assert.equal(tieneEntitlementPlus(info(true,new Date(Date.now()+60000).toISOString())),true);

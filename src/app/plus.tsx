@@ -1,4 +1,5 @@
 import { View } from "react-native";
+import { useRouter } from "expo-router";
 import { Boton, Etiqueta, Pantalla, Tarjeta, Texto } from "../components/Controles";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
@@ -9,6 +10,7 @@ export default function Plus() {
   const { t, mensajeError } = usePreferencias();
   const { tema } = useTema();
   const plus = usePlus();
+  const router = useRouter();
 
   async function intentar(accion: () => Promise<void>) {
     try {
@@ -105,6 +107,9 @@ export default function Plus() {
       </Tarjeta>
 
       {!!plus.error && <Texto>{mensajeError(plus.error)}</Texto>}
+      {plus.error instanceof Error && plus.error.message === "PLUS_PROTEGER_CUENTA" && (
+        <Boton titulo={t("Proteger mi cuenta")} onPress={() => router.push({ pathname: "/cuenta", params: { volver: "plus" } })} />
+      )}
       {plus.disponible ? (
         <>
           <Boton
@@ -112,12 +117,12 @@ export default function Plus() {
               plus.cargando
                 ? "Cargando…"
                 : plus.activo
-                  ? "Administrar suscripción"
+                  ? plus.gestionable ? "Administrar suscripción" : "Actualizar estado de Plus"
                   : "Ver planes de Blindly Plus",
             )}
             disabled={plus.cargando}
             onPress={() =>
-              void intentar(plus.activo ? plus.gestionar : plus.comprar)
+              void intentar(plus.activo ? plus.gestionable ? plus.gestionar : plus.refrescar : plus.comprar)
             }
           />
           <Boton

@@ -3,6 +3,7 @@ param(
   [Parameter(Mandatory)] [string]$SdkRoot,
   [Parameter(Mandatory)] [string]$JavaHome,
   [Parameter(Mandatory)] [ValidateRange(1,2147483647)] [int]$VersionCode,
+  [switch]$PlayBilling,
   [ValidateSet('arm64-v8a','armeabi-v7a,arm64-v8a','armeabi-v7a,arm64-v8a,x86,x86_64')]
   [string]$Architectures = 'armeabi-v7a,arm64-v8a,x86,x86_64'
 )
@@ -25,6 +26,10 @@ $env:JAVA_HOME = (Resolve-Path -LiteralPath $JavaHome).Path
 $env:ANDROID_HOME = (Resolve-Path -LiteralPath $SdkRoot).Path
 $env:ANDROID_SDK_ROOT = $env:ANDROID_HOME
 $env:EXPO_PUBLIC_PLUS_READY = 'false'
+if ($PlayBilling) {
+  if ($env:EXPO_PUBLIC_REVENUECAT_ANDROID_KEY -notmatch '^goog_.+') { throw 'PlayBilling requiere la clave pública Android goog_ en el entorno. No uses Test Store ni una clave secreta.' }
+  $env:EXPO_PUBLIC_PLUS_READY = 'true'
+}
 $env:EXPO_PUBLIC_PUSH_READY = 'false'
 $env:EXPO_PUBLIC_EMAIL_AUTH_READY = 'false'
 $env:NODE_ENV = 'production'

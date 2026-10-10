@@ -11,13 +11,15 @@ import Purchases, {
   type CustomerInfo,
   type CustomerInfoUpdateListener,
 } from "react-native-purchases";
-import RevenueCatUI from "react-native-purchases-ui";
+import RevenueCatUI, { PAYWALL_RESULT } from "react-native-purchases-ui";
 import { asegurarSesion } from "./sesion";
 import { supabase } from "./supabase";
 import {
   PLUS_DISPONIBLE,
   PLUS_ENTITLEMENT,
   prepararCompras,
+  prepararIdentidadCompra,
+  obtenerOfertaPlus,
   tieneEntitlementPlus,
 } from "./plus";
 import { sincronizarPlusServidor } from "./plusServidor";
@@ -26,6 +28,7 @@ type EstadoPlus = {
   disponible: boolean;
   cargando: boolean;
   activo: boolean;
+  gestionable: boolean;
   vencimiento: string | null;
   error: unknown;
   comprar: () => Promise<void>;
@@ -38,6 +41,7 @@ const ContextoPlus = createContext<EstadoPlus>({
   disponible: false,
   cargando: false,
   activo: false,
+  gestionable: false,
   vencimiento: null,
   error: null,
   comprar: async () => {},
@@ -123,12 +127,18 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  async function ejecutar(operacion: () => Promise<unknown>) {
+  async function ejecutar(operacion: (vigente: () => boolean) => Promise<unknown>) {
+    if (!PLUS_DISPONIBLE) throw new Error("PLUS_NO_CONFIGURADO");
     const turno = ++generacion.current;
     setCargando(true);
     setError(null);
     try {
-      await operacion();
+      const actual = await asegurarSesion();
+      if (turno !== generacion.current || !montado.current) return;
+      await prepararIdentidadCompra(actual);
+      if (turno !== generacion.current || !montado.current) return;
+      usuario.current = actual.id;
+      await operacion(() => turno === generacion.current && montado.current && usuario.current === actual.id);
       if (turno !== generacion.current || !montado.current) return;
       const nueva = await Purchases.getCustomerInfo();
       if (turno !== generacion.current || !montado.current) return;
@@ -146,16 +156,21 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     disponible: PLUS_DISPONIBLE,
     cargando,
     activo: tieneEntitlementPlus(info),
+    gestionable: !!info?.managementURL,
     vencimiento:
       info?.entitlements.active[PLUS_ENTITLEMENT]?.expirationDate ?? null,
     error,
     comprar: () =>
-      ejecutar(() =>
-        RevenueCatUI.presentPaywallIfNeeded({
+      ejecutar(async vigente => {
+        const offering = await obtenerOfertaPlus();
+        if (!vigente()) return;
+        const resultado = await RevenueCatUI.presentPaywallIfNeeded({
+          offering,
           requiredEntitlementIdentifier: PLUS_ENTITLEMENT,
           displayCloseButton: true,
-        }),
-      ),
+        });
+        if (resultado === PAYWALL_RESULT.ERROR) throw new Error("PLUS_ERROR_COMPRA");
+      }),
     restaurar: () => ejecutar(() => Purchases.restorePurchases()),
     gestionar: async () => {
       if (!info?.managementURL) throw new Error("PLUS_SIN_GESTION");

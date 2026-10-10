@@ -33,7 +33,7 @@ La matriz consolidada de evidencia y dependencias externas está en [`final-read
 - [x] Build nativa iOS de simulador regenerada por Xcode y EAS desde el commit `a147e78` ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/b624dd9e-ffd0-4254-bf65-522f8cd316e1)); el paquete `.app`, su Info.plist y su hash fueron validados localmente.
 - [x] APK `development` generado para probar compras simuladas de RevenueCat Test Store ([build EAS](https://expo.dev/accounts/facuargerich/projects/blindly/builds/2d4f84b6-4ea7-41d0-9b2e-aee09d2e6e4b)).
 - [x] RevenueCat Test Store configurado con entitlement `blindly_plus` y la oferta predeterminada: mensual USD 0,99, anual USD 9,99 recomendado y Founder Edition vitalicia USD 24,99 como precio especial de lanzamiento.
-- [x] Enlaces del paywall configurados con las URLs previstas para privacidad y términos; serán navegables cuando se active GitHub Pages.
+- [x] Borrador del paywall con privacidad y términos públicos de Blindly en GitHub, HTTP200 en ES/EN/PT. Pages previsto continúa HTTP404; no usarlo como URL activa.
 - [x] Ícono y gráfico de funciones de Google Play generados y validados en sus dimensiones y formatos requeridos.
 - [x] Permiso de Google Play Billing y `launchMode=singleTop` garantizados por config plugin y prueba de manifiesto.
 - [x] AAB validado con bundletool 1.18.3 y manifiesto compilado inspeccionado: SDK 36, build no depurable, Billing presente y permisos heredados de almacenamiento y superposición ausentes.
@@ -52,7 +52,10 @@ La matriz consolidada de evidencia y dependencias externas está en [`final-read
 ## Preparado y pendiente de un servicio externo
 
 - [ ] Activar GitHub Pages desde `main` y `/docs`, y comprobar que privacidad, términos y eliminación de cuenta respondan públicamente. La configuración está lista y solo falta autorizar la publicación.
-- [ ] Crear una cuenta de distribución completa en Google Play cuando esté disponible la tarifa única de USD 25. No se eligió la distribución limitada gratuita porque admite como máximo 20 dispositivos y Google no permite convertir ese plan en distribución completa.
+- [x] Cuenta personal completa de Google Play creada y pagada. El pago ya no es un bloqueo.
+- [ ] **BLOQUEADA POR VERIFICACIÓN DE IDENTIDAD DE GOOGLE PLAY:** aprobación de documentos, teléfono de contacto y creación de la app (botón deshabilitado). Ver [estado comercial auditado y pasos exactos](plus-comercial-android.md).
+- [x] Configuración RevenueCat Android `appcd50009f1f` creada para `com.blindly.app`; offering/entitlement existentes conservados.
+- [ ] Conceder permisos de cuenta de servicio y cargar JSON privado en RevenueCat; importar productos Google en los tres packages existentes y probar compras desde Play.
 - [ ] Configurar un proveedor SMTP y un dominio remitente.
 - [ ] Aplicar las plantillas de correo y activar `EXPO_PUBLIC_EMAIL_AUTH_READY`.
 - [ ] Instalar el APK Android en dispositivos reales y completar la prueba física.

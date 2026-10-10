@@ -27,6 +27,13 @@
     "production": {
       "environment": "production",
       "autoIncrement": true
+    },
+    "play-testing": {
+      "extends": "production",
+      "environment": "preview",
+      "distribution": "store",
+      "android": { "buildType": "app-bundle" },
+      "env": { "EXPO_PUBLIC_PLUS_READY": "true" }
     }
   },
   "submit": {

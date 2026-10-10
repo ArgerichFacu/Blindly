@@ -1,5 +1,7 @@
 # Blindly Plus
 
+**Estado comercial auditado el 9/10/2026:** Play Console ya está pagada; identidad pendiente y creación de app deshabilitada. Se creó la app Android de RevenueCat para `com.blindly.app`, sin credenciales Google todavía. Existe una versión anterior publicada del paywall y un borrador de tres planes sin publicar. Los precios del borrador son dinámicos; se corrigieron sus enlaces legales. Compra/restore ahora exigen una identidad recuperable. La activación real sigue pendiente. Ver [mapping, AAB, credenciales y pasos tras la aprobación](plus-comercial-android.md); ese informe prevalece sobre las notas históricas de este documento.
+
 Blindly seguirá siendo utilizable sin pagar. La creación y unión a salas, los turnos, las fichas físicas y virtuales y el reparto del pozo forman parte del producto principal.
 
 El paywall `Blindly Plus` tiene un nuevo diseño guardado como borrador en RevenueCat: fondo verde oscuro, tarjetas verdes, acento dorado, ocho beneficios, anual destacado y textos revisados en español, inglés y portugués. El validador del editor no informa problemas. Debe publicarse únicamente tras la confirmación final del propietario. El perfil `development` usa Test Store; las APK `preview` son builds release y mantienen Plus desactivado. Todavía falta validar compra y restauración con una build de desarrollo en hardware real antes de crear los productos comerciales de Google Play.
@@ -38,11 +40,11 @@ Las Edge Functions `eliminar-cuenta` y `sincronizar-plus` usan la clave secreta 
 
 ## Activación
 
-1. Crear la aplicación y el entitlement `blindly_plus` en RevenueCat.
+1. Reutilizar la app Android existente de RevenueCat (`appcd50009f1f`) y el entitlement `blindly_plus`; no crearlos otra vez.
 2. Crear en Google Play Console la suscripción `blindly_plus` con los planes base `monthly` y `annual`, y el producto único no consumible `blindly_plus_founder_lifetime`. Los identificadores no pueden cambiarse ni reutilizarse después de crearlos.
 3. Cargar las claves públicas de plataforma en los entornos EAS y `REVENUECAT_SECRET_KEY` en Supabase.
 4. Importar los productos en RevenueCat, asociarlos al entitlement `blindly_plus` y a los paquetes mensual, anual y vitalicio de la oferta `default`.
-5. Generar una development build; Expo Go no procesa compras reales.
+5. Generar una build `play-testing` con clave Google pública y distribuirla por Prueba interna; Expo Go no procesa compras reales.
 6. Probar compra, renovación, cancelación, reembolso, restauración, eliminación de cuenta y cambio de dispositivo.
 7. Activar `EXPO_PUBLIC_PLUS_READY=true` solo después de completar esas pruebas.
 

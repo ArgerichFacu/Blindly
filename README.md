@@ -4,6 +4,8 @@
 
 # Blindly
 
+Estado comercial Android (9/10/2026): Play Console está **pagada**, con verificación de identidad pendiente. Plus todavía no procesa compras de Google. [Auditoría, mapping RevenueCat, build y pasos exactos de activación](docs/plus-comercial-android.md).
+
 **Tu mesa de poker presencial, conectada.** Blindly acompaña partidas de Texas Hold’em con cartas físicas: organiza la sala, las ciegas, los turnos y las fichas, mientras cada jugador participa desde su celular.
 
 Aplicación desarrollada con Expo, React Native, TypeScript y Supabase. La rama `main` reúne el trabajo de las etapas anteriores y es la referencia para instalar y continuar el proyecto.

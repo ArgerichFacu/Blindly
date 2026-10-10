@@ -71,6 +71,7 @@ export default function Cuenta() {
             },
           })
       : volver === "ligas" ||
+          volver === "plus" ||
           volver === "puntuacion" ||
           volver === "head-to-head"
         ? () => router.replace(`/${volver}`)
@@ -187,7 +188,7 @@ export default function Cuenta() {
                   : "Vinculá tu email para conservar tus puntos e historial al cambiar de celular. Podés seguir jugando como invitado.",
               )}
             </Texto>
-            {plus.activo && (
+            {plus.activo && plus.gestionable && (
               <>
                 <Texto>
                   {t(
@@ -411,6 +412,7 @@ export default function Cuenta() {
                 claveGenerada
                   ? "Guardé mi clave. Continuar"
                   : volver === "puntuacion" ||
+                      volver === "plus" ||
                       volver === "head-to-head" ||
                       volver === "unirse"
                     ? "Continuar con esta cuenta"

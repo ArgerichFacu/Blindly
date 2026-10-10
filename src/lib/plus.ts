@@ -1,4 +1,6 @@
 import { Platform } from "react-native";
+import type { User } from "@supabase/supabase-js";
+import { identidadUsuario } from "./identidad";
 import Purchases, {
   LOG_LEVEL,
   type CustomerInfo,
@@ -19,8 +21,12 @@ const clave =
 // Esta defensa evita que una variable EAS mal configurada vuelva a inutilizar
 // una APK preview o una build enviada a tienda.
 const CLAVE_TEST_STORE = clave?.startsWith("test_") ?? false;
+const CLAVE_TIENDA = !!clave && (
+  (Platform.OS === "android" && clave.startsWith("goog_")) ||
+  (Platform.OS === "ios" && clave.startsWith("appl_"))
+);
 export const PLUS_DISPONIBLE =
-  PLUS_HABILITADO && !!clave && (__DEV__ || !CLAVE_TEST_STORE);
+  PLUS_HABILITADO && (CLAVE_TIENDA || (__DEV__ && CLAVE_TEST_STORE));
 
 let preparando: Promise<CustomerInfo> | null = null;
 let usuarioPreparando: string | null = null;
@@ -65,6 +71,24 @@ export async function prepararCompras(usuarioId: string) {
 export async function tienePlusActivo() {
   if (!PLUS_DISPONIBLE || !(await Purchases.isConfigured())) return false;
   return tieneEntitlementPlus(await Purchases.getCustomerInfo());
+}
+
+// Comprar y restaurar usan la identidad recuperable existente, nunca un UUID
+// nuevo de RevenueCat. Jugar como invitado sigue disponible sin este requisito.
+export async function prepararIdentidadCompra(usuario: User) {
+  if (!identidadUsuario(usuario).recuperable) throw new Error("PLUS_PROTEGER_CUENTA");
+  await prepararCompras(usuario.id);
+}
+
+export async function obtenerOfertaPlus() {
+  const oferta = (await Purchases.getOfferings()).current;
+  // Founder puede retirarse de la venta sin invalidar las otras opciones ni
+  // eliminar el entitlement de sus compradores.
+  const paquetes = ["$rc_monthly", "$rc_annual"];
+  if (!oferta || !paquetes.every(id => oferta.availablePackages.some(p =>
+    p.identifier === id && p.product.price > 0 && !!p.product.priceString
+  )) || oferta.availablePackages.some(p => !p.product.priceString || p.product.price <= 0)) throw new Error("PLUS_OFERTA_INCOMPLETA");
+  return oferta;
 }
 
 export const BENEFICIOS_PLUS = [

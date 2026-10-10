@@ -1146,6 +1146,9 @@ Object.assign(textos, {
 });
 
 Object.assign(errores, {
+  PLUS_PROTEGER_CUENTA: "Protegé o recuperá tu cuenta antes de comprar o restaurar Plus.",
+  PLUS_OFERTA_INCOMPLETA: "No se pudieron cargar los planes de la tienda. Probá de nuevo más tarde.",
+  PLUS_ERROR_COMPRA: "La tienda no pudo completar la compra. Revisá tu conexión y probá de nuevo.",
   PLUS_REQUERIDO: "Blindly Plus es necesario para esta función premium.",
   PLUS_CLUB_REQUERIDO: "El owner necesita Plus verificado para editar títulos del club.",
   TITULO_INVALIDO: "El título debe tener entre 2 y 24 caracteres, sin enlaces ni etiquetas.",
@@ -1162,6 +1165,13 @@ Object.assign(errores, {
   TEMPORADA_NO_EXISTE: "La temporada no está activa o no existe.",
   LIGA_ARCHIVADA: "La liga está archivada.",
   OWNER_REQUERIDO: "El owner no puede quitarse de su propia liga.",
+});
+
+Object.assign(textos, {
+  "Actualizar estado de Plus": ["Refresh Plus status", "Atualizar estado do Plus"],
+  "Protegé o recuperá tu cuenta antes de comprar o restaurar Plus.": ["Protect or recover your account before buying or restoring Plus.", "Proteja ou recupere sua conta antes de comprar ou restaurar o Plus."],
+  "No se pudieron cargar los planes de la tienda. Probá de nuevo más tarde.": ["The store plans could not be loaded. Try again later.", "Não foi possível carregar os planos da loja. Tente novamente mais tarde."],
+  "La tienda no pudo completar la compra. Revisá tu conexión y probá de nuevo.": ["The store could not complete the purchase. Check your connection and try again.", "A loja não conseguiu concluir a compra. Verifique sua conexão e tente novamente."],
 });
 
 export function traducir(

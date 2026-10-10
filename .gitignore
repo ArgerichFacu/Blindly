@@ -16,6 +16,9 @@ expo-env.d.ts
 *.jks
 /credentials.json
 /.credentials/
+*service-account*.json
+*revenuecat-key*.json
+google-play-credentials*.json
 /credentials/
 *.p8
 *.p12
