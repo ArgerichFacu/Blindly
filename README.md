@@ -145,13 +145,13 @@ La administración de clubes no confía en el estado del teléfono: Supabase ver
 
 Los precios de lanzamiento previstos son USD 0,99 mensual, USD 9,99 anual —el plan recomendado— y USD 24,99 por la Founder Edition vitalicia. El precio regular futuro del acceso vitalicio será USD 39,99.
 
-RevenueCat Test Store está activo solamente en `development`, donde la build es depurable y no procesa cobros reales. Los entornos `preview` y `production` no contienen claves de RevenueCat y mantienen Plus desactivado hasta configurar productos comerciales: RevenueCat cierra intencionalmente una build release que use una clave Test Store. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
+RevenueCat Test Store está activo solamente en `development`, donde la build es depurable y no procesa cobros reales. El APK regular `preview` y `production` mantienen Plus desactivado; `preview` contiene ahora la clave pública Google para el perfil `play-testing`: RevenueCat cierra intencionalmente una build release que use una clave Test Store. Detalles: [preparación de Blindly Plus](docs/blindly-plus.md).
 
 ## Android e iOS
 
 `app.json` configura el nombre, los identificadores, permisos e imágenes. El splash nativo usa `assets/images/blindly-logo.png` sobre fondo verde fijo. El menú y las pantallas React usan el logo transparente para adaptarse al tema.
 
-`eas.json` incluye perfiles `development`, `preview`, `ios-simulator` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus usa Test Store solo en development; preview y production permanecen desactivados hasta disponer de productos reales. Android se publicará en Google Play; los iPhone de amigos pueden recibir una IPA privada o una invitación cerrada de TestFlight sin publicar Blindly en App Store. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
+`eas.json` incluye perfiles `development`, `preview`, `play-testing`, `ios-simulator` y `production`, además de la configuración de envío a tiendas. El código está vinculado al proyecto EAS [`@facuargerich/blindly`](https://expo.dev/accounts/facuargerich/projects/blindly), y los tres entornos ya contienen la URL y la clave pública de Supabase. Plus usa Test Store solo en development; preview y production permanecen desactivados hasta disponer de productos reales. Android se publicará en Google Play; los iPhone de amigos pueden recibir una IPA privada o una invitación cerrada de TestFlight sin publicar Blindly en App Store. Seguí los pasos de [preparación nativa](docs/identidad-y-build.md) y la [prueba física de aceptación](docs/prueba-fisica.md).
 
 Los siguientes artefactos son de la release base `a147e78`. No incluyen el desarrollo posterior de las 40 metas; consultar [la entrega actual](docs/release-metas40.md) y su estado de compilación.
 

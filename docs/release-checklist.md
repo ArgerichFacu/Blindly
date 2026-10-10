@@ -47,7 +47,7 @@ La matriz consolidada de evidencia y dependencias externas está en [`final-read
 - [x] Recap privado por participante y tarjeta vertical 1080×1920 lista para el share sheet nativo.
 - [x] Migración 17 aplicada y registrada en Supabase; auditoría remota de 20 condiciones y prueba real con una identidad Free temporal completadas, incluida su eliminación posterior.
 - [x] GitHub conectado a Supabase sobre la rama main.
-- [x] Test Store aislado en EAS `development`; las claves de RevenueCat fueron retiradas de `preview` y nunca estuvieron en `production`.
+- [x] Test Store aislado en EAS `development`. `preview` ahora tiene la clave pública Google para `play-testing`, con Plus desactivado en su APK normal. `production` conserva compras desactivadas.
 
 ## Preparado y pendiente de un servicio externo
 

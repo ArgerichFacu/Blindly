@@ -17,6 +17,7 @@
 | Entitlement | Existe únicamente `blindly_plus` (`entl030c8c5084`). Se conservan seis productos Test Store asociados, incluidos tres legacy que no se ofrecen. Ninguno es un producto Google. |
 | Paywall | Hay una versión publicada anterior de dos planes y **cambios en borrador** de tres planes. No confundir borrador con ausencia de una versión publicada. No se publicó el borrador en esta ejecución. |
 | Compra / restore Play | PENDIENTE DE TEST REAL. Las pruebas de código no validan transacciones de Google. |
+| EAS | HECHO: clave pública SDK Android de esa app en `preview`; `production` conservado. Contador remoto Android alineado a15 (antes7) para que autoIncrement produzca16. |
 
 Proyecto RevenueCat: `f4dd7888`. [Configuración Android](https://app.revenuecat.com/projects/f4dd7888/apps/appcd50009f1f).
 
@@ -79,17 +80,17 @@ No se ejecutaron concesiones de acceso ni cargas de secretos. La nota previa de 
 6. Productos de compra única → Crear/activar `blindly_plus_founder_lifetime`, USD24,99. En RevenueCat importarlo como non-consumable/lifetime.
 7. Completar las credenciales anteriores. RevenueCat → Product catalog → Products → importar los tres productos desde **Blindly (Play Store)**; asociar cada uno a `blindly_plus`.
 8. Offerings → `default` → editar sus tres packages: añadir el producto **Google** equivalente a cada uno, conservando el mapping Test Store. No crear otra oferta ni renombrar IDs. Verificar ausencia de productos huérfanos y `getOfferings().current` con tres planes.
-9. API keys/Apps → Android → copiar la **clave pública SDK `goog_…`**. EAS → environment **preview**, variable `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY`; nunca `test_`, `appl_` ni secret key. Mantener producción desactivada.
+9. Comprobar la **clave pública SDK `goog_…`** de esa app Android, ya configurada en EAS → environment **preview**, variable `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY`; nunca `test_`, `appl_` ni secret key. Mantener producción desactivada. La clave pública puede incluirse en una build, pero no valida transacciones sin las credenciales Google privadas del servidor.
 10. Publicar los cambios del paywall sólo tras comprobar coherencia y recuperación de productos. Construir un AAB nuevo de pruebas con esa clave y Plus habilitado (ver comandos); usar versionCode superior a15.
 11. Play → Pruebas → Prueba interna → Testers: añadir cuentas, guardar y compartir enlace opt-in. Configuración → Pruebas de licencia: añadir las **mismas cuentas Google** como license testers. No guardar emails de testers en el repositorio público.
 12. Lanzar la versión de prueba interna; cada tester se inscribe e instala **desde Play**. Seleccionar exclusivamente instrumentos oficiales de prueba, nunca tarjeta real. Registrar los20 casos de abajo. Producción requiere otra aprobación explícita.
 
 ## Builds y clave pública
 
-`play-testing` extiende production, usa environment preview, distribución store y AAB. Activa la integración únicamente en esa build; no modifica production. Con clave ausente, secreta, de otra plataforma o Test Store en release, el guard impide configurar SDK/compras. `development` conserva Test Store depurable; `preview` APK regular continúa desactivado.
+`play-testing` extiende production, usa environment preview, distribución store y AAB. Activa la integración únicamente en esa build; no modifica production. Con clave ausente, secreta, de otra plataforma o Test Store en release, el guard impide configurar SDK/compras. `development` conserva Test Store depurable; `preview` APK regular continúa desactivado aunque ahora dispone de la clave pública Google. El contador remoto EAS se subió de7 a15 para evitar que la próxima build remota quede por debajo del AAB local; `autoIncrement` generará16. No se lanzó una build EAS ni un submit.
 
 ```powershell
-# Después de cargar la clave pública goog_ en EAS preview:
+# Con productos/credenciales Google listos y la clave pública ya en EAS preview:
 npx eas-cli build --platform android --profile play-testing
 # Alternativa local: definir la clave pública en el entorno del proceso,
 # sin pasar credenciales privadas por argumentos y con versionCode >15:
