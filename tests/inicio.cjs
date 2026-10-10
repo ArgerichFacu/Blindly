@@ -104,6 +104,10 @@ async function main() {
   await reinicio.avanzar();
   assert.equal(reinicio.getSnapshot().datos.paso, 2);
   await reinicio.avanzar();
+  assert.equal(reinicio.getSnapshot().datos.paso, 3);
+  assert.equal(reinicio.getSnapshot().datos.fase, "tutorial");
+  await reinicio.avanzar();
+  assert.equal(leerInicio(JSON.stringify({version:1, eleccion:"invitado", fase:"terminado", paso:2})).fase, "terminado", "Los tutoriales anteriores no se repiten");
   const terminado = crearInicio(db);
   await terminado.cargar();
   assert.equal(

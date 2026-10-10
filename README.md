@@ -19,7 +19,7 @@ Aplicación desarrollada con Expo, React Native, TypeScript y Supabase. La rama 
 - Aprender póker con ejemplos, combinaciones y una herramienta Free para seleccionar cartas y resaltar la mejor mano de cinco.
 - Activar el modo principiante para consultar las reglas y los montos de tu turno, sin recomendaciones de estrategia.
 - Elegir tema verde, rojo o negro e idioma español, inglés o portugués.
-- Controlar música, ambiente, efectos y botonera por separado, con silencio global persistido. [Audio y reacciones](docs/audio.md).
+- Controlar música, ambiente, efectos y botonera por separado, con silencio global persistido. [Audio y reacciones](docs/audio.md). [Dirección Poker Room y tutorial interactivo](docs/direccion-poker-room.md).
 - Activar música de ambiente y consultar tu puntuación e historial personal.
 - Crear clubes Free con cuenta recuperable, temporadas, roles owner/admin/member, historial y ranking compartido.
 - Guardar mesas habituales Plus con jugadores de referencia, fichas, ciegas, duración, tema y liga opcional.

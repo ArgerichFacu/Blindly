@@ -1,4 +1,5 @@
 import { VolumenAudio } from "../components/VolumenAudio";
+import { Icono } from "../components/Icono";
 import { useTema } from "../lib/TemaContext";
 import { capacidadesPlus } from "../lib/capacidadesPlus";
 import { Switch, View } from "react-native";
@@ -78,7 +79,7 @@ export default function Sonidos() {
             accion: () => cambiar({ sonido: !p.sonido }),
           },
           {
-            nombre: "Ambiente de casino",
+            nombre: "Ambiente de poker",
             volumen: "volumenAmbiente",
             activo: p.ambiente === "casino",
             accion: () =>
@@ -87,7 +88,7 @@ export default function Sonidos() {
               }),
           },
           {
-            nombre: "Botonera",
+            nombre: "Reacciones",
             volumen: "volumenBotonera",
             activo: p.botonera,
             accion: () => cambiar({ botonera: !p.botonera }),
@@ -124,7 +125,7 @@ export default function Sonidos() {
         <Botonera />
       </Tarjeta>
       <Tarjeta>
-        <Texto>{t("Personalizar botonera · Plus")}</Texto>
+        <Texto>{t("Personalizar reacciones · Plus")}</Texto>
         <Texto suave>
           {t(
             "Elegí tus sonidos, marcá favoritos y cambiá el orden. Tus ajustes se conservan si vence Plus.",
@@ -143,8 +144,9 @@ export default function Sonidos() {
                     gap: 12,
                   }}
                 >
+                  <Icono nombre={sonido.icono} color={tema.acento}/>
                   <Texto style={{ flex: 1 }}>
-                    {sonido.simbolo} {t(sonido.nombre)}
+                    {t(sonido.nombre)}
                   </Texto>
                   <Switch
                     accessibilityLabel={`${t("Mostrar sonido")}: ${t(sonido.nombre)}`}

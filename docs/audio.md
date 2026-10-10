@@ -1,30 +1,40 @@
-# Audio, ambiente y botonera
+# Audio, ambiente y reacciones
 
-Implementación de metas 7, 8, 9 y 35 de la próxima versión. Los APK/AAB de la release anterior no contienen este bloque: se necesita un nuevo build antes de probarlo en celulares.
+Pasada Poker Room (2026-10-09). Se conserva la arquitectura existente: `expo-audio`, preferencias locales y entitlement de RevenueCat. Las reacciones suenan únicamente en el celular que las reproduce; no envían mensajes ni modifican la partida.
 
-## Uso
+## Controles y permisos
 
-Opciones → Sonidos y ambiente permite silenciar todo y activar/desactivar por separado música, efectos de ronda, ambiente y botonera. Cada canal conserva su volumen (0–100 %, pasos de 10 %), aunque se silencie. Las preferencias se guardan localmente en `preferenciasBlindly`; no viajan a Supabase. Las preferencias anteriores de campana, música, idioma y modo principiante se preservan, incluso si se toca un control antes de terminar la carga inicial.
+Config → Sonidos y ambiente tiene silencio global y cuatro canales independientes: música, efectos de ronda, ambiente y reacciones. Los sliders son continuos de 0 a 100; web permite también teclado. Silenciar no borra volúmenes ni selecciones. Los valores se guardan en `preferenciasBlindly` y se conservan tras reabrir.
 
-La música Lobby Time y el ambiente se inician con un botón. El ambiente está apagado por defecto y combina fichas, cartas y ruido de salón suave. En la mesa, la configuración de música de la sala sigue siendo respetada. La campana señala cambios de nivel; no se repite al cargar una pantalla. La botonera aparece en su propia sección durante una partida, con reacciones locales: suenan en el celular de quien toca el botón, sin mensajes de Realtime ni eco en los otros teléfonos.
+La música Lobby Time y el ambiente arrancan mediante un botón. El ambiente está apagado por defecto. Se respeta la música elegida para la sala y se mantiene la campana de cambio de nivel, sin repetirla al cargar.
 
-Free incluye aplausos, fichas, grillos y campana. Plus agrega bocina, trombón, caja registradora y respeto, además de favoritos, selección de sonidos y orden. Los favoritos aparecen primero; dentro de cada grupo se respeta el orden elegido. El acceso depende exclusivamente de `PlusContext.activo`, el entitlement de RevenueCat existente. Tener compras deshabilitadas no desbloquea estos extras. Al vencer Plus, vuelve la selección Free, pero los ajustes premium se conservan para una futura restauración. No hay carga de MP3 ni grabaciones del micrófono.
+| Pack | Sonidos Free | Sonidos Plus adicionales |
+| --- | --- | --- |
+| Poker Room | Aplausos, Fichas, Campana | Respeto, Carta al paño, Barajar, All-in, Última ficha |
+| Party | Grillos | Bocina, Trombón, Caja registradora |
 
-## Ciclo de vida y recursos
+Los cuatro sonidos Free originales mantienen acceso. Los nuevos son Plus; no se habilitan compras ni cambia el entitlement `blindly_plus`. Plus conserva favoritos, visibilidad y orden. Se respeta el orden/favoritos **dentro de cada pack**. Un orden guardado incorpora los nuevos IDs al final, pero una selección visible guardada no se altera. Al vencer Plus se mantienen los ajustes para restauración y vuelve la selección Free.
 
-`useControlAudio` pausa todos los reproductores al desenfocar, desmontar, silenciar o pasar a segundo plano. Al volver no reanuda automáticamente. Invalida los `seekTo` pendientes para que no aparezcan sonidos después de salir. La botonera mantiene una reacción a la vez y limita los toques a uno cada 350 ms; no acumula una cola. Pausar/finalizar la partida también impide reproducción. Expo libera los reproductores creados con `useAudioPlayer` al desmontar.
+## Diseño sonoro
 
-Se conserva Expo SDK 57 y `expo-audio` 57.0.5. Sesión con `shouldPlayInBackground: false`; no se habilitan servicios de reproducción en fondo ni permisos de grabación. La configuración nativa se mantiene intacta. Referencia: [documentación versionada](https://docs.expo.dev/versions/v57.0.0/sdk/audio/).
+13 WAV originales, PCM mono de 22.050 Hz/16 bits: 12 reacciones de 0,45–1,25 s y un ambiente de 20 s. `node scripts/generar-sonidos.cjs` los reproduce determinísticamente. Los modelos combinan resonancias de fichas, ruido de papel, golpes amortiguados, campana y aplausos sintéticos. No contienen grabaciones humanas ni muestras externas. La música y su atribución CC BY 4.0 permanecen intactas; los WAV se rigen por LICENSE del repositorio.
 
-Los ocho WAV nuevos son síntesis original reproducible con `node scripts/generar-sonidos.cjs`, sin muestras externas. Total aproximado: 1,37 MB. Volúmenes y picos acotados, fundidos en extremos del loop. La atribución CC BY 4.0 de Lobby Time continúa en Créditos y `assets/sounds/LICENSE.md`; los WAV se rigen por LICENSE del repositorio.
+Se elimina la componente DC, se aplican fundidos cortos y compresión suave de transitorios. La normalización usa RMS de ventanas activas de 20 ms con gate relativo −30 dB: Poker Room −19,58 dBFS; Party −21,41 dBFS para suavizar los sonidos tonales. Picos reales de reacciones entre −17,8 y −9,99 dBFS, por debajo del límite −6 dBFS. Esto es una aproximación técnica al nivel percibido, **no una medición LUFS**. `assets/sounds/niveles.json` registra resultados; los tests recalculan los niveles desde los PCM.
+
+El ambiente mezcla room tone tenue con movimientos espaciados de fichas y cartas. No tiene tragamonedas, voz inteligible ni música. Sus extremos descienden suavemente a cero para que el loop no produzca clics; es deliberadamente más silencioso que las reacciones.
+
+## Interacción y ciclo de vida
+
+Grid de dos columnas, iconografía SVG de una misma familia, escala al presionar y borde champagne durante reproducción. All-in y Última ficha usan un pequeño fondo bordó. Vibración breve opcional: Android Keyboard Tap / iOS Light; en web o segundo plano no vibra.
+
+`useControlAudio` pausa al desenfocar, desmontar, silenciar o pasar al fondo. No reanuda automáticamente al regresar. Invalida `seekTo` pendientes y mantiene una reacción a la vez, con límite de un toque cada 350 ms. Partida pausada/finalizada, volumen cero y audio no cargado bloquean reproducción. Los reproductores se liberan al desmontar.
 
 ## Verificación
 
-- `tests/audio.cjs`: compatibilidad de preferencias, normalización, mute, expiración sin borrar datos, reproducción exclusiva, cancelación de operaciones pendientes, AppState/foco y estructura/picos/bordes de los ocho WAV.
-- `tests/audio-ui.cjs`: UI real compilada con dobles de SDK, cuatro sonidos Free/ocho Plus, compras deshabilitadas sin desbloqueo, favoritos, visibilidad, orden y expiración.
-- `tests/principiante.cjs`: persistencia conjunta de idioma, ayuda y audio, incluyendo cambios previos a la hidratación.
-- Suite completa, TypeScript, lint, traducciones ES/EN/PT y exportación de bundles Android/iOS/web.
+- `tests/audio.cjs`: preferencias anteriores, mute, expiración, exclusividad, operaciones pendientes, foco/AppState, PCM, duración, picos, fundidos y niveles activos de los 13 WAV.
+- `tests/audio-ui.cjs`: cuatro Free/doce Plus, favoritos, orden, visibilidad, expiración, presión, estado de carga y bloqueo por mute/pausa.
+- `tests/hapticos.cjs`: opt-in, web, fondo, deduplicación de eventos y motor ausente; toque leve para reacciones/tutorial.
+- `tests/volumen-audio-ui.cjs`: gesto, teclado, accesibilidad, cambios externos y volumen apagado.
+- Web 320×640: grid y categorías visibles, reacción Fichas sin errores de consola; música 30→31, mute bloquea reproducción, recarga conserva ambos valores y restauración a 30/sin mute.
 
-Aceptación física pendiente: reproducir música + ambiente, mover cada volumen, probar mute y fondo/bloqueo de pantalla/cambio de vista durante un sonido, llamada/interrupción de audio, desconectar auriculares y verificar que no se reanuda solo. Evaluar percepción y volumen del ambiente en una mesa real. Para Plus, verificar compras/restauración/expiración con configuración comercial y dispositivos reales; los dobles no sustituyen esa prueba.
-
-Validación web del bloque (2026-10-08): reproducción manual del ambiente, mute detiene el loop y desactiva música/reacciones, persistencia después de recargar, desmutear no reinicia sonidos, reacción Free reproducible y sin overflow horizontal a 360 px. Captura local de QA: `release/sonidos-movil.jpg` (ignorada por Git).
+La aceptación auditiva subjetiva en parlantes/auriculares de un celular y esta nueva vibración leve requieren prueba física de este build. Las pruebas anteriores de música y mesa no certifican estos WAV nuevos. No se añadieron dependencias ni servicios de reproducción en segundo plano.

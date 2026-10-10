@@ -1,5 +1,5 @@
 import { Acabado, Superficie } from "./Superficie";
-import { RELIEVE, velo } from "../lib/visual";
+import { RELIEVE, SALON, velo } from "../lib/visual";
 import { useVolver } from "../lib/useVolver";
 import { useState, type ReactNode, type RefObject } from "react";
 import {
@@ -26,12 +26,14 @@ export function Texto({
   style,
   selectable = false,
   numberOfLines,
+  accessibilityLiveRegion,
 }: {
   children: ReactNode;
   suave?: boolean;
   style?: StyleProp<TextStyle>;
   selectable?: boolean;
   numberOfLines?: number;
+  accessibilityLiveRegion?: "none" | "polite" | "assertive";
 }) {
   const { tema } = useTema();
   const personalizado = StyleSheet.flatten(style);
@@ -44,6 +46,7 @@ export function Texto({
     <Text
       selectable={selectable}
       numberOfLines={numberOfLines}
+      accessibilityLiveRegion={accessibilityLiveRegion}
       style={[
         estilos.texto,
         { color: suave ? tema.textoSuave : tema.textoFuerte },
@@ -84,9 +87,9 @@ export function Boton({
         estilos.boton,
         {
           backgroundColor: secundario ? tema.fondoTarjeta : tema.acento,
-          borderColor: secundario ? tema.borde : "#F4D996",
+          borderColor: secundario ? tema.borde : SALON.oroLuz,
           borderBottomWidth: 3,
-          borderBottomColor: secundario ? tema.fondo : "#A88842",
+          borderBottomColor: secundario ? tema.fondo : SALON.oroSombra,
           transform: [{ scale: pressed ? 0.985 : 1 }],
           ...(!disabled && (secundario ? RELIEVE.bajo : RELIEVE.panel)),
           opacity: disabled ? 0.42 : pressed ? 0.76 : 1,

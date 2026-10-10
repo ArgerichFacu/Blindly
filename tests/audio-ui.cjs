@@ -35,6 +35,10 @@ const cambios = [],
   rutas = [];
 const jsx = (type, props) => ({ type, props });
 const deps = {
+  "./Icono": { Icono: "Icono" },
+  "../components/Icono": { Icono: "Icono" },
+  "../lib/visual": cargar("src/lib/visual.ts"),
+  "../lib/hapticos": { vibrarToque: async () => {} },
   "../components/VolumenAudio": { VolumenAudio: "VolumenAudio" },
   "../lib/TemaContext": { useTema: () => ({tema:{}}) },
   "../lib/capacidadesPlus": cargar("src/lib/capacidadesPlus.ts"),
@@ -97,7 +101,7 @@ for (disponible of [false, true]) {
   );
 }
 activo = true;
-assert.equal(elements(board.Botonera({}), "Sonido").length, 8);
+assert.equal(elements(board.Botonera({}), "Sonido").length, 12);
 const settings = cargar("src/app/sonidos.tsx", deps).default;
 activo = false;
 assert.equal(elements(settings(), "VolumenAudio").length, 4);
@@ -117,7 +121,7 @@ elements(settings(), "Boton")
 assert.equal(rutas.pop(), "/plus");
 activo = true;
 const tree = settings();
-assert.equal(elements(tree, "Switch").length, 13);
+assert.equal(elements(tree, "Switch").length, 17);
 elements(tree, "Boton")
   .find((b) => b.titulo === "Añadir a favoritos")
   .onPress();
@@ -141,3 +145,34 @@ assert.equal(
 console.log(
   "Audio UI: Free/Plus gating, disabled commerce, favorites, visibility, order and expiry rendering OK",
 );
+// Ejercitar el botón real, incluidos estados disabled/pressed/playing.
+let plays = 0, taps = 0;
+const player = {}, status = { isLoaded: true, playing: false };
+deps["expo-audio"] = { useAudioPlayer: () => player, useAudioPlayerStatus: () => status };
+deps["react-native"].Pressable = "Pressable";
+deps["../lib/hapticos"] = { vibrarToque: async () => taps++ };
+const mounted = cargar("src/components/Botonera.tsx", deps);
+function tipo(n) {
+  if (Array.isArray(n)) return n.map(tipo).find(Boolean);
+  if (!n || typeof n !== "object") return null;
+  return n.type?.name === "Sonido" ? n.type : tipo(n.props?.children);
+}
+activo = true;
+const Sonido = tipo(mounted.Botonera({}));
+const props = { sonido: bot.SONIDOS[1], volumen: .5, permitido: true, ultimoRef: { current: 0 }, avisar: () => {}, control: { reproducir: async () => plays++ } };
+const reaction = () => elements(Sonido(props), "Pressable")[0];
+const button = reaction();
+assert.equal(button.disabled, false);
+assert.equal(button.style({ pressed: true }).transform[0].scale, .97);
+button.onPress(); button.onPress();
+assert.equal(plays, 1, "Toques rápidos no acumulan sonidos");
+assert.equal(taps, 1, "Una vibración discreta por reacción aceptada");
+props.volumen = 0;
+assert.equal(reaction().disabled, true);
+reaction().onPress(); assert.equal(plays, 1, "Mute bloquea también el handler");
+props.volumen = .5; props.permitido = false;
+reaction().onPress(); assert.equal(plays, 1);
+props.permitido = true; status.isLoaded = false;
+assert.equal(reaction().disabled, true);
+reaction().onPress(); assert.equal(plays, 1);
+console.log("Reacciones UI: presión, carga, mute, partida pausada y límite de ráfagas OK");

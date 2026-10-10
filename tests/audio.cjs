@@ -45,8 +45,8 @@ const config = botonera.normalizarBotonera({
   botoneraFavoritos: ["respeto", "nada"],
   botoneraVisibles: ["caja", "respeto"],
 });
-assert.equal(config.botoneraOrden.length, 8);
-assert.equal(new Set(config.botoneraOrden).size, 8);
+assert.equal(config.botoneraOrden.length, 12);
+assert.equal(new Set(config.botoneraOrden).size, 12);
 assert.deepEqual(
   json(botonera.sonidosDisponibles(config, true).map((s) => s.id)),
   ["respeto", "caja"],
@@ -206,7 +206,7 @@ function player() {
   // Local WAV files: valid PCM, bounded amplitude, fades at loop edges, no missing assets.
   for (const id of [
     "ambiente-casino",
-    ...botonera.SONIDOS.filter((s) => s.id !== "campana").map((s) => s.id),
+    ...botonera.SONIDOS.map((s) => s.id),
   ]) {
     const buf = fs.readFileSync(`assets/sounds/${id}.wav`);
     assert.equal(buf.toString("ascii", 0, 4), "RIFF");
@@ -217,7 +217,7 @@ function player() {
     assert.equal(buf.readUInt16LE(34), 16);
     assert.equal(buf.readUInt32LE(40), buf.length - 44);
     const duration = (buf.length - 44) / 44100;
-    assert.ok(duration >= 1 && duration <= 20);
+    assert.ok((id === "ambiente-casino" ? duration === 20 : duration >= .3 && duration <= 1.5));
     let peak = 0,
       energy = 0;
     for (let i = 44; i < buf.length; i += 2) {
@@ -225,13 +225,26 @@ function player() {
       peak = Math.max(peak, Math.abs(v));
       energy += v * v;
     }
-    assert.ok(peak > 100 && peak < 30000);
+    assert.ok(peak > 100 && peak <= 16384);
     assert.ok(energy > 0);
     assert.equal(buf.readInt16LE(44), 0);
     assert.ok(Math.abs(buf.readInt16LE(buf.length - 2)) < 100);
+    if (id !== "ambiente-casino") {
+      const ventanas = [];
+      for (let start = 44; start < buf.length; start += 882) {
+        const end = Math.min(start + 882, buf.length);
+        let e = 0;
+        for (let i = start; i < end; i += 2) e += (buf.readInt16LE(i) / 32767) ** 2;
+        ventanas.push(e / ((end - start) / 2));
+      }
+      const activas = ventanas.filter(e => e > Math.max(...ventanas) * .001);
+      const db = 10 * Math.log10(activas.reduce((a, v) => a + v, 0) / activas.length);
+      const pack = botonera.SONIDOS.find(s => s.id === id).pack;
+      assert.ok(Math.abs(db - (pack === "Party" ? -21.41 : -19.58)) < .2, `${id}: nivel activo equilibrado (${db})`);
+    }
   }
   console.log(
-    "Audio: legacy preferences, mute, expiry, exclusive playback, delayed operations, focus/background and 8 local assets OK",
+    "Audio: legacy preferences, mute, expiry, exclusive playback, delayed operations, focus/background and 13 local assets OK",
   );
 })().catch((e) => {
   console.error(e);

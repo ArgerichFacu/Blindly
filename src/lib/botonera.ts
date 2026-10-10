@@ -1,12 +1,16 @@
 export const SONIDOS = [
-  { id: "aplausos", nombre: "Aplausos", simbolo: "👏", plus: false },
-  { id: "fichas", nombre: "Fichas", simbolo: "🪙", plus: false },
-  { id: "grillos", nombre: "Grillos", simbolo: "🦗", plus: false },
-  { id: "campana", nombre: "Campana", simbolo: "🔔", plus: false },
-  { id: "bocina", nombre: "Bocina", simbolo: "📣", plus: true },
-  { id: "trombon", nombre: "Trombón", simbolo: "🎺", plus: true },
-  { id: "caja", nombre: "Caja registradora", simbolo: "💰", plus: true },
-  { id: "respeto", nombre: "Respeto", simbolo: "✨", plus: true },
+ { id: "aplausos", nombre: "Aplausos", simbolo: "👏", plus: false, pack: "Poker Room", icono: "aplauso" },
+ { id: "fichas", nombre: "Fichas", simbolo: "🪙", plus: false, pack: "Poker Room", icono: "fichas" },
+ { id: "grillos", nombre: "Grillos", simbolo: "🦗", plus: false, pack: "Party", icono: "party" },
+ { id: "campana", nombre: "Campana", simbolo: "🔔", plus: false, pack: "Poker Room", icono: "campana" },
+ { id: "bocina", nombre: "Bocina", simbolo: "📣", plus: true, pack: "Party", icono: "party" },
+ { id: "trombon", nombre: "Trombón", simbolo: "🎺", plus: true, pack: "Party", icono: "party" },
+ { id: "caja", nombre: "Caja registradora", simbolo: "💰", plus: true, pack: "Party", icono: "party" },
+ { id: "respeto", nombre: "Respeto", simbolo: "✨", plus: true, pack: "Poker Room", icono: "fichas" },
+ { id: "carta", nombre: "Carta al paño", simbolo: "", plus: true, pack: "Poker Room", icono: "cartas" },
+ { id: "barajar", nombre: "Barajar", simbolo: "", plus: true, pack: "Poker Room", icono: "barajar" },
+ { id: "allin", nombre: "All-in", simbolo: "", plus: true, pack: "Poker Room", icono: "impacto" },
+ { id: "bust", nombre: "Última ficha", simbolo: "", plus: true, pack: "Poker Room", icono: "fichas" },
 ] as const;
 export type SonidoId = (typeof SONIDOS)[number]["id"];
 export type ConfigBotonera = {

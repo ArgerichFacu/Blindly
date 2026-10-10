@@ -1,0 +1,67 @@
+{
+  "fichas": {
+    "segundos": 0.8500226757369614,
+    "picoDbFS": -9.99,
+    "rmsActivoDbFS": -19.58
+  },
+  "carta": {
+    "segundos": 0.4500226757369615,
+    "picoDbFS": -10.79,
+    "rmsActivoDbFS": -19.58
+  },
+  "barajar": {
+    "segundos": 0.9500226757369614,
+    "picoDbFS": -12.1,
+    "rmsActivoDbFS": -19.58
+  },
+  "campana": {
+    "segundos": 1.1499773242630384,
+    "picoDbFS": -11.22,
+    "rmsActivoDbFS": -19.58
+  },
+  "aplausos": {
+    "segundos": 1.2500226757369615,
+    "picoDbFS": -10.93,
+    "rmsActivoDbFS": -19.58
+  },
+  "respeto": {
+    "segundos": 0.6500226757369615,
+    "picoDbFS": -10.32,
+    "rmsActivoDbFS": -19.58
+  },
+  "allin": {
+    "segundos": 0.9,
+    "picoDbFS": -10.97,
+    "rmsActivoDbFS": -19.58
+  },
+  "bust": {
+    "segundos": 0.5500226757369614,
+    "picoDbFS": -11.85,
+    "rmsActivoDbFS": -19.58
+  },
+  "grillos": {
+    "segundos": 1.1499773242630384,
+    "picoDbFS": -16.34,
+    "rmsActivoDbFS": -21.41
+  },
+  "bocina": {
+    "segundos": 0.8,
+    "picoDbFS": -16.04,
+    "rmsActivoDbFS": -21.41
+  },
+  "trombon": {
+    "segundos": 1.1499773242630384,
+    "picoDbFS": -17.8,
+    "rmsActivoDbFS": -21.41
+  },
+  "caja": {
+    "segundos": 0.8500226757369614,
+    "picoDbFS": -12.51,
+    "rmsActivoDbFS": -21.41
+  },
+  "ambiente-casino": {
+    "segundos": 20,
+    "picoDbFS": -23.1,
+    "rmsActivoDbFS": -47.73
+  }
+}

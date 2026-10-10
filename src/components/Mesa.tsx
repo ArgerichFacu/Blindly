@@ -1,4 +1,5 @@
 import { PantallaCarga } from "./PantallaCarga";
+import { SALON } from "../lib/visual";
 import { useRangosMesa } from "../lib/puntuacion";
 import { useRouter, useFocusEffect, type Href } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -536,8 +537,8 @@ export function Mesa({ codigo }: { codigo: string }) {
               {roles[j.id] ?? ""}
               {j.id === sala.turno_id ? " ◀ " + t("En turno") : ""}
               {j.retirado ? " · " + t("Retirado") : ""}
-              {!j.eliminado_en && j.fichas === 0 && virtual ? " · All-in" : ""}
             </Texto>
+            {!j.eliminado_en && j.fichas === 0 && virtual && <View style={{ alignSelf: "flex-start", backgroundColor: SALON.bordo, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4 }}><Texto style={{ color: SALON.bordoTexto, fontSize: 12, fontWeight: "800" }}>{t("All-in")}</Texto></View>}
             <Texto suave style={{ fontSize: 12 }}>
               {rangos[j.id] === undefined
                 ? t("Rango no disponible")

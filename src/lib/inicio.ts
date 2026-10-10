@@ -4,7 +4,7 @@ export type DatosInicio = {
   version: 1;
   eleccion: EleccionInicio | null;
   fase: "bienvenida" | "tutorial" | "terminado";
-  paso: 0 | 1 | 2;
+  paso: 0 | 1 | 2 | 3;
 };
 type AlmacenInicio = {
   getItem: (clave: string) => Promise<string | null>;
@@ -21,7 +21,7 @@ export function leerInicio(texto: string | null): DatosInicio {
     const d = texto ? JSON.parse(texto) : null;
     if (
       d?.version === 1 &&
-      [0, 1, 2].includes(d.paso) &&
+      [0, 1, 2, 3].includes(d.paso) &&
       ((d.fase === "bienvenida" && d.eleccion === null && d.paso === 0) ||
         (["tutorial", "terminado"].includes(d.fase) &&
           ["invitado", "cuenta"].includes(d.eleccion)))
@@ -99,14 +99,14 @@ export function crearInicio(almacen: AlmacenInicio) {
       guardar((d) =>
         d.fase !== "tutorial"
           ? d
-          : d.paso === 2
+          : d.paso === 3
             ? { ...d, fase: "terminado" }
-            : { ...d, paso: (d.paso + 1) as 1 | 2 },
+            : { ...d, paso: (d.paso + 1) as 1 | 2 | 3 },
       ),
     retroceder: () =>
       guardar((d) =>
         d.fase === "tutorial" && d.paso > 0
-          ? { ...d, paso: (d.paso - 1) as 0 | 1 }
+          ? { ...d, paso: (d.paso - 1) as 0 | 1 | 2 }
           : d,
       ),
     terminar: () =>
