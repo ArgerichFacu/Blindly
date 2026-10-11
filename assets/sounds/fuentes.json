@@ -1,0 +1,177 @@
+{
+  "aplausos": {
+    "autor": "Sclolex",
+    "titulo": "small_applause.wav",
+    "licencia": "CC0-1.0",
+    "url": "https://freesound.org/people/Sclolex/sounds/261617/",
+    "archivo": "aplausos.mp3",
+    "inicio": 2,
+    "duracion": 1.15,
+    "pack": "Poker Room",
+    "sha256Fuente": "0d067da7bdc92861284ab780e793afcb2ef95d6c50b3a3eb8b533c93ca17ef26"
+  },
+  "grillos": {
+    "autor": "felix.blume",
+    "titulo": "Cricket in the desert (close recording)",
+    "licencia": "CC0-1.0",
+    "url": "https://freesound.org/people/felix.blume/sounds/166176/",
+    "archivo": "grillos.mp3",
+    "inicio": 2,
+    "duracion": 1.1,
+    "pack": "Party",
+    "sha256Fuente": "c5ad4b81f69f68632093d560255a3118fb6ba680d5ff797705ef6b4e54b9df70"
+  },
+  "bocina": {
+    "autor": "goose278",
+    "titulo": "air horn close and loud.WAV",
+    "licencia": "CC0-1.0",
+    "url": "https://freesound.org/people/goose278/sounds/174819/",
+    "archivo": "bocina.mp3",
+    "inicio": 0,
+    "duracion": 0.75,
+    "pack": "Party",
+    "sha256Fuente": "bf23b4cb1185e56952f5c6f54b40cbda7470c13c2b5f052418cb1e2f34e6a602"
+  },
+  "trombon": {
+    "autor": "kirbydx",
+    "titulo": "wah wah sad trombone.wav",
+    "licencia": "CC0-1.0",
+    "url": "https://freesound.org/people/kirbydx/sounds/175409/",
+    "archivo": "trombon.mp3",
+    "inicio": 0,
+    "duracion": 1.45,
+    "pack": "Party",
+    "tempo": [
+      2,
+      1.85
+    ],
+    "sha256Fuente": "de4a029a0537dbecaf49b4936b0969919f5b7b54083d3859d584b5c4cc7dee3d"
+  },
+  "pato": {
+    "autor": "OwennewO",
+    "titulo": "Duck Quack",
+    "licencia": "CC0-1.0",
+    "url": "https://freesound.org/people/OwennewO/sounds/719111/",
+    "archivo": "pato.mp3",
+    "inicio": 0,
+    "duracion": 0.8,
+    "pack": "Party",
+    "sha256Fuente": "2ad55dd838c0975197c847053d3cd1a82b7444f70733b1bad1172342ce8edb3c"
+  },
+  "bateria": {
+    "autor": "DJczyszy",
+    "titulo": "Ba Dum Tss! (classic edition)",
+    "licencia": "CC0-1.0",
+    "url": "https://freesound.org/people/DJczyszy/sounds/431811/",
+    "archivo": "bateria.mp3",
+    "inicio": 0,
+    "duracion": 1.4,
+    "pack": "Party",
+    "tempo": [
+      1.35
+    ],
+    "sha256Fuente": "911e88c8202c359053b5165dacf305859b87cfcd1fa5dea5fd2b8a3d59c5f0d7"
+  },
+  "fichas": {
+    "autor": "Kenney",
+    "titulo": "Casino Audio: chips-handle-1",
+    "licencia": "CC0-1.0",
+    "url": "https://kenney.nl/assets/casino-audio",
+    "archivo": "casino/Audio/chips-handle-1.ogg",
+    "duracion": 0.9,
+    "pack": "Poker Room",
+    "sha256Fuente": "a2c495237fb0dc0dc96ccc2c9840572edd226e6459398ecb631c6c9f9e5408f0"
+  },
+  "carta": {
+    "autor": "Kenney",
+    "titulo": "Casino Audio: card-place-1",
+    "licencia": "CC0-1.0",
+    "url": "https://kenney.nl/assets/casino-audio",
+    "archivo": "casino/Audio/card-place-1.ogg",
+    "duracion": 0.8,
+    "pack": "Poker Room",
+    "sha256Fuente": "d8f26c33a665dcbdcc6f632f6050bc9dd548feb0d4942d4547615926d3926810"
+  },
+  "barajar": {
+    "autor": "Kenney",
+    "titulo": "Casino Audio: card-shuffle",
+    "licencia": "CC0-1.0",
+    "url": "https://kenney.nl/assets/casino-audio",
+    "archivo": "casino/Audio/card-shuffle.ogg",
+    "duracion": 1.2,
+    "pack": "Poker Room",
+    "sha256Fuente": "96c84883a30845ede723a4cf2e8369e9837e7dd4e0d4eb0212b0a7ed21b0f544"
+  },
+  "allin": {
+    "autor": "Kenney",
+    "titulo": "Casino Audio: chips-collide-1",
+    "licencia": "CC0-1.0",
+    "url": "https://kenney.nl/assets/casino-audio",
+    "archivo": "casino/Audio/chips-collide-1.ogg",
+    "duracion": 0.7,
+    "pack": "Poker Room",
+    "sha256Fuente": "f41b3d106360fc68ebc061a211d4265b4cb5fa1fbe86e4d57d3673510e2c3784"
+  },
+  "bust": {
+    "autor": "Kenney",
+    "titulo": "Casino Audio: chip-lay-1",
+    "licencia": "CC0-1.0",
+    "url": "https://kenney.nl/assets/casino-audio",
+    "archivo": "casino/Audio/chip-lay-1.ogg",
+    "duracion": 0.6,
+    "pack": "Poker Room",
+    "sha256Fuente": "4b2111252ccb64eed67f171e061053849cfbb29873536c03948646f244a3905c"
+  },
+  "dealer": {
+    "autor": "Kenney",
+    "titulo": "Impact Sounds: impactWood_light_000",
+    "licencia": "CC0-1.0",
+    "url": "https://kenney.nl/assets/impact-sounds",
+    "archivo": "impact/Audio/impactWood_light_000.ogg",
+    "duracion": 0.4,
+    "pack": "Poker Room",
+    "sha256Fuente": "eb45e35b4bed784d3f120de4afec4b0d6ac09d9e143cce8cfcb7d739e1b1f3c3"
+  },
+  "campana": {
+    "autor": "TRP",
+    "titulo": "220516 desk bell rings",
+    "licencia": "CC0-1.0",
+    "url": "https://freesound.org/people/TRP/sounds/717564/",
+    "archivo": "campana.mp3",
+    "duracion": 1.1,
+    "pack": "Poker Room",
+    "sha256Fuente": "0ec696a8161e80132256613ab75626a82a6b0f3bf1b015832538a4a8c2ff1a58"
+  },
+  "sorpresa": {
+    "autor": "deleted_user_2104797 (Adam_N)",
+    "titulo": "Crowd shock.wav",
+    "licencia": "CC0-1.0",
+    "url": "https://freesound.org/people/deleted_user_2104797/sounds/324898/",
+    "archivo": "sorpresa.mp3",
+    "duracion": 1.0,
+    "pack": "Poker Room",
+    "sha256Fuente": "4423fa8f2aea3f9f928147acba68f6b63e9bdc8116b9d9455559cb84f49b692f"
+  },
+  "risa": {
+    "autor": "amoyssiadis",
+    "titulo": "short female laugh chuckle giggle",
+    "licencia": "CC0-1.0",
+    "url": "https://freesound.org/people/amoyssiadis/sounds/397673/",
+    "archivo": "risa.mp3",
+    "duracion": 1.1,
+    "pack": "Party",
+    "sha256Fuente": "f845008bc44220317a738d4afe5aac30aafb7c67896e04168fcb90fc6b34c825"
+  },
+  "respeto": {
+    "autor": "Kenney",
+    "titulo": "Impact Sounds: impactWood_medium_000 (dos golpes)",
+    "licencia": "CC0-1.0",
+    "url": "https://kenney.nl/assets/impact-sounds",
+    "archivo": "impact/Audio/impactWood_medium_000.ogg",
+    "duracion": 0.18,
+    "repeticiones": 2,
+    "intervalo": 0.22,
+    "pack": "Poker Room",
+    "sha256Fuente": "1723a9fd25103ed41af06054814e84e65f4a772bac86ab2dc927da93d9592ff5"
+  }
+}

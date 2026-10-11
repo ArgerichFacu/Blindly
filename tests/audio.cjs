@@ -45,15 +45,15 @@ const config = botonera.normalizarBotonera({
   botoneraFavoritos: ["respeto", "nada"],
   botoneraVisibles: ["caja", "respeto"],
 });
-assert.equal(config.botoneraOrden.length, 12);
-assert.equal(new Set(config.botoneraOrden).size, 12);
+assert.equal(config.botoneraOrden.length, 18);
+assert.equal(new Set(config.botoneraOrden).size, 18);
 assert.deepEqual(
   json(botonera.sonidosDisponibles(config, true).map((s) => s.id)),
   ["respeto", "caja"],
 );
 assert.deepEqual(
   json(botonera.sonidosDisponibles(config, false).map((s) => s.id)),
-  ["aplausos", "fichas", "grillos", "campana"],
+  ["aplausos", "fichas", "grillos", "campana", "barajar"],
 );
 const snapshot = JSON.stringify(config);
 botonera.sonidosDisponibles(config, false);
@@ -230,6 +230,8 @@ function player() {
     assert.equal(buf.readInt16LE(44), 0);
     assert.ok(Math.abs(buf.readInt16LE(buf.length - 2)) < 100);
     if (id !== "ambiente-casino") {
+      const onset = [...Array(Math.min(1103, (buf.length - 44) / 2)).keys()].some(i => Math.abs(buf.readInt16LE(44 + i * 2)) > 100);
+      assert.ok(onset, `${id}: inicio audible en menos de 50 ms`);
       const ventanas = [];
       for (let start = 44; start < buf.length; start += 882) {
         const end = Math.min(start + 882, buf.length);
@@ -240,11 +242,19 @@ function player() {
       const activas = ventanas.filter(e => e > Math.max(...ventanas) * .001);
       const db = 10 * Math.log10(activas.reduce((a, v) => a + v, 0) / activas.length);
       const pack = botonera.SONIDOS.find(s => s.id === id).pack;
-      assert.ok(Math.abs(db - (pack === "Party" ? -21.41 : -19.58)) < .2, `${id}: nivel activo equilibrado (${db})`);
+      const fuentes = JSON.parse(fs.readFileSync('assets/sounds/fuentes.json', 'utf8'));
+      if (fuentes[id]) {
+        assert.equal(fuentes[id].licencia, 'CC0-1.0');
+        assert.match(fuentes[id].sha256Fuente, /^[a-f0-9]{64}$/);
+        assert.match(fuentes[id].url, /^https:\/\/(freesound.org|kenney.nl)\//);
+        assert.ok(Math.abs(db - (pack === "Party" ? -21.41 : -19.58)) < .25, `${id}: grabación audible y sin exceso de nivel (${db})`);
+      } else {
+        assert.ok(Math.abs(db - (pack === "Party" ? -21.41 : -19.58)) < .2, `${id}: nivel activo equilibrado (${db})`);
+      }
     }
   }
   console.log(
-    "Audio: legacy preferences, mute, expiry, exclusive playback, delayed operations, focus/background and 13 local assets OK",
+    "Audio: legacy preferences, mute, expiry, exclusive playback, focus/background and 19 local assets with CC0 provenance OK",
   );
 })().catch((e) => {
   console.error(e);

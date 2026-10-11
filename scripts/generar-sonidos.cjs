@@ -1,6 +1,10 @@
-// Síntesis original determinista; sin grabaciones ni muestras de terceros.
+// Síntesis original determinista y master PCM compartido con el importador CC0.
 const fs = require('node:fs'), path = require('node:path');
-const SR = 22050, carpeta = path.join(__dirname, '../assets/sounds'), informe = {};
+const SR = 22050, carpeta = path.join(__dirname, '../assets/sounds');
+const nivelesPath = path.join(carpeta, 'niveles.json');
+const informe = fs.existsSync(nivelesPath) ? JSON.parse(fs.readFileSync(nivelesPath, 'utf8')) : {};
+const fuentesPath = path.join(carpeta, 'fuentes.json');
+const naturales = fs.existsSync(fuentesPath) ? JSON.parse(fs.readFileSync(fuentesPath, 'utf8')) : {};
 let semilla = 20261009;
 const ruido = () => { semilla = (semilla * 1664525 + 1013904223) >>> 0; return semilla / 2147483648 - 1; };
 const seno = (f, t) => Math.sin(2 * Math.PI * f * t);
@@ -22,7 +26,9 @@ function golpe(d, t, fuerza = 1) {
   let filtro = 0;
   sumar(d, t, .24, s => { filtro = .7 * filtro + .3 * ruido(); return fuerza * (filtro + .4 * seno(150, s)) * Math.exp(-s * 28); });
 }
-function escribir(nombre, d, objetivo = .105, limite = .5) {
+function escribir(nombre, d, objetivo = .105, limite = .5, natural = false) {
+  // Las grabaciones importadas no se reemplazan por la síntesis histórica.
+  if (!natural && naturales[nombre]) return;
   const media = d.reduce((a, v) => a + v, 0) / d.length;
   let pico = 0;
   for (let i = 0; i < d.length; i++) {
@@ -58,6 +64,7 @@ function escribir(nombre, d, objetivo = .105, limite = .5) {
   fs.writeFileSync(path.join(carpeta, nombre + '.wav'), b);
   informe[nombre] = { segundos: d.length / SR, picoDbFS: +(20 * Math.log10(pico * ganancia)).toFixed(2), rmsActivoDbFS: +(20 * Math.log10(rms * ganancia)).toFixed(2) };
 }
+if (require.main === module) {
 const fichas = pista(.85);
 for (let i = 0; i < 6; i++) ficha(fichas, .035 + i * .095, .7 + i * .05, 1 + i * .018);
 escribir('fichas', fichas);
@@ -75,10 +82,14 @@ const grillos = pista(1.15); for (let i = 0; i < 5; i++) sumar(grillos, .04 + i 
 const bocina = pista(.8); sumar(bocina, .02, .65, s => (seno(330, s) + .5 * seno(440, s) + .15 * seno(660, s)) * Math.min(1, s * 30, (.65 - s) * 12)); escribir('bocina', bocina, .085);
 const trombon = pista(1.15); sumar(trombon, .02, 1, s => (Math.sin(2 * Math.PI * (360 * s - 55 * s * s)) + .2 * Math.sin(4 * Math.PI * (360 * s - 55 * s * s))) * Math.min(1, s * 20, (1 - s) * 8)); escribir('trombon', trombon, .085);
 const caja = pista(.85); golpe(caja, .02, .6); sumar(caja, .2, .6, s => (seno(1200, s) + .25 * seno(1967, s)) * Math.exp(-s * 10)); escribir('caja', caja, .085);
+const buzzer = pista(.4); sumar(buzzer, 0, .4, s => (seno(180, s) + .25 * seno(360, s)) * Math.min(1, s * 100, (.4 - s) * 20)); escribir('buzzer', buzzer, .085);
 // Room tone y actividad espaciada, costura de loop con fade suave.
 const ambiente = pista(20); let cama = 0;
 for (let i = 0; i < ambiente.length; i++) { cama = .99 * cama + .01 * ruido(); ambiente[i] = cama * .2 * Math.min(1, i / (SR * .5), (ambiente.length - 1 - i) / (SR * .5)); }
 for (let i = 0; i < 8; i++) { const t = .9 + i * 2.25; ficha(ambiente, t, .08, .88 + i * .01); if (i % 2 === 0) papel(ambiente, t + .55, .22, .035); }
-escribir('ambiente-casino', ambiente, .015, .07);
+// El ambiente ya aprobado queda intacto; esta pasada sólo cambia reacciones.
+if (!fs.existsSync(path.join(carpeta, 'ambiente-casino.wav'))) escribir('ambiente-casino', ambiente, .015, .07);
 fs.writeFileSync(path.join(carpeta, 'niveles.json'), JSON.stringify(informe, null, 2) + '\n');
-console.log('13 WAV originales, PCM mono 22050 Hz. Reacciones 0,45–1,25 s; picos ≤ −6 dBFS.');
+console.log('Síntesis original actualizada; las grabaciones CC0 y el ambiente se conservan.');
+}
+module.exports = { escribir, informe, SR };

@@ -44,11 +44,11 @@ const deps = {
   "../lib/capacidadesPlus": cargar("src/lib/capacidadesPlus.ts"),
   "react/jsx-runtime": { jsx, jsxs: jsx, Fragment: "Fragment" },
   react: {
-    useState: (v) => [v, () => {}],
+    useState: (v) => [typeof v === "function" ? v() : v, () => {}],
     useRef: (v) => ({ current: v }),
     useEffect: () => {},
   },
-  "react-native": { View: "View", Switch: "Switch" },
+  "react-native": { Animated: { Value: class { stopAnimation() {} setValue() {} }, View: "AnimatedView", timing: () => ({ start() {} }) }, View: "View", Switch: "Switch", Pressable: "Pressable", useWindowDimensions: () => ({fontScale: 1}) },
   "expo-router": { useRouter: () => ({ push: (r) => rutas.push(r) }) },
   "expo-audio": { useAudioPlayer: () => {}, useAudioPlayerStatus: () => {} },
   "../lib/Preferencias": {
@@ -92,7 +92,7 @@ for (disponible of [false, true]) {
   activo = false;
   assert.equal(
     elements(board.Botonera({}), "Sonido").length,
-    4,
+    5,
     "Unavailable RevenueCat does not unlock Plus",
   );
   assert.equal(
@@ -101,7 +101,7 @@ for (disponible of [false, true]) {
   );
 }
 activo = true;
-assert.equal(elements(board.Botonera({}), "Sonido").length, 12);
+assert.equal(elements(board.Botonera({}), "Sonido").length, 18);
 const settings = cargar("src/app/sonidos.tsx", deps).default;
 activo = false;
 assert.equal(elements(settings(), "VolumenAudio").length, 4);
@@ -121,7 +121,7 @@ elements(settings(), "Boton")
 assert.equal(rutas.pop(), "/plus");
 activo = true;
 const tree = settings();
-assert.equal(elements(tree, "Switch").length, 17);
+assert.equal(elements(tree, "Switch").length, 23);
 elements(tree, "Boton")
   .find((b) => b.titulo === "Añadir a favoritos")
   .onPress();
@@ -147,6 +147,12 @@ console.log(
 );
 // Ejercitar el botón real, incluidos estados disabled/pressed/playing.
 let plays = 0, taps = 0;
+let pulses = 0;
+deps["react-native"].Animated.timing = (_, options) => {
+  assert.equal(options.duration, 200);
+  assert.equal(options.useNativeDriver, true);
+  return { start: () => pulses++ };
+};
 const player = {}, status = { isLoaded: true, playing: false };
 deps["expo-audio"] = { useAudioPlayer: () => player, useAudioPlayerStatus: () => status };
 deps["react-native"].Pressable = "Pressable";
@@ -167,6 +173,7 @@ assert.equal(button.style({ pressed: true }).transform[0].scale, .97);
 button.onPress(); button.onPress();
 assert.equal(plays, 1, "Toques rápidos no acumulan sonidos");
 assert.equal(taps, 1, "Una vibración discreta por reacción aceptada");
+assert.equal(pulses, 1, "Audio, haptic y pulso comparten el toque aceptado");
 props.volumen = 0;
 assert.equal(reaction().disabled, true);
 reaction().onPress(); assert.equal(plays, 1, "Mute bloquea también el handler");
@@ -175,4 +182,26 @@ reaction().onPress(); assert.equal(plays, 1);
 props.permitido = true; status.isLoaded = false;
 assert.equal(reaction().disabled, true);
 reaction().onPress(); assert.equal(plays, 1);
+status.isLoaded = true;
+for (const sonido of bot.SONIDOS) {
+  const row = elements(Sonido({ ...props, sonido, ultimoRef: { current: 0 } }), "Pressable")[0];
+  assert.equal(row.accessibilityLabel, sonido.nombre + (sonido.plus ? " · Plus" : ""));
+  row.onPress();
+}
+assert.equal(plays, 19, "Cada una de las 18 reacciones usa el reproductor existente");
+let stateIndex = 0;
+p = { ...p, ...bot.BOTONERA_INICIAL };
+deps.react.useState = v => {
+  const i = stateIndex++;
+  return [i === 1 ? 420 : i === 2 ? { "Poker Room": true } : v, () => {}];
+};
+const responsive = cargar("src/components/Botonera.tsx", deps);
+let collapsed = responsive.Botonera({});
+assert.equal(elements(collapsed, "Sonido").length, 18, "Plegar categorías conserva los players precargados");
+assert.equal(elements(collapsed, "View").some(v => v.style?.display === "none"), true);
+assert.equal(elements(collapsed, "Sonido")[0].ancho, (420 - 16) / 3);
+stateIndex = 0;
+deps["react-native"].useWindowDimensions = () => ({ fontScale: 1.5 });
+collapsed = responsive.Botonera({});
+assert.equal(elements(collapsed, "Sonido")[0].ancho, (420 - 8) / 2, "Texto grande conserva dos columnas");
 console.log("Reacciones UI: presión, carga, mute, partida pausada y límite de ráfagas OK");

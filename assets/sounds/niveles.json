@@ -1,57 +1,57 @@
 {
   "fichas": {
-    "segundos": 0.8500226757369614,
-    "picoDbFS": -9.99,
+    "segundos": 0.5712471655328798,
+    "picoDbFS": -9.05,
     "rmsActivoDbFS": -19.58
   },
   "carta": {
-    "segundos": 0.4500226757369615,
-    "picoDbFS": -10.79,
+    "segundos": 0.5615419501133787,
+    "picoDbFS": -9.85,
     "rmsActivoDbFS": -19.58
   },
   "barajar": {
-    "segundos": 0.9500226757369614,
-    "picoDbFS": -12.1,
+    "segundos": 1.2,
+    "picoDbFS": -7.75,
     "rmsActivoDbFS": -19.58
   },
   "campana": {
-    "segundos": 1.1499773242630384,
-    "picoDbFS": -11.22,
+    "segundos": 1.1,
+    "picoDbFS": -8.02,
     "rmsActivoDbFS": -19.58
   },
   "aplausos": {
-    "segundos": 1.2500226757369615,
-    "picoDbFS": -10.93,
+    "segundos": 1.1500226757369614,
+    "picoDbFS": -10.41,
     "rmsActivoDbFS": -19.58
   },
   "respeto": {
-    "segundos": 0.6500226757369615,
-    "picoDbFS": -10.32,
+    "segundos": 0.4,
+    "picoDbFS": -9.17,
     "rmsActivoDbFS": -19.58
   },
   "allin": {
-    "segundos": 0.9,
-    "picoDbFS": -10.97,
+    "segundos": 0.34997732426303857,
+    "picoDbFS": -8.62,
     "rmsActivoDbFS": -19.58
   },
   "bust": {
-    "segundos": 0.5500226757369614,
-    "picoDbFS": -11.85,
+    "segundos": 0.34997732426303857,
+    "picoDbFS": -7.16,
     "rmsActivoDbFS": -19.58
   },
   "grillos": {
-    "segundos": 1.1499773242630384,
-    "picoDbFS": -16.34,
+    "segundos": 1.1,
+    "picoDbFS": -12.16,
     "rmsActivoDbFS": -21.41
   },
   "bocina": {
-    "segundos": 0.8,
-    "picoDbFS": -16.04,
+    "segundos": 0.7500226757369615,
+    "picoDbFS": -11.69,
     "rmsActivoDbFS": -21.41
   },
   "trombon": {
-    "segundos": 1.1499773242630384,
-    "picoDbFS": -17.8,
+    "segundos": 1.3486167800453515,
+    "picoDbFS": -11.72,
     "rmsActivoDbFS": -21.41
   },
   "caja": {
@@ -63,5 +63,35 @@
     "segundos": 20,
     "picoDbFS": -23.1,
     "rmsActivoDbFS": -47.73
+  },
+  "pato": {
+    "segundos": 0.3873922902494331,
+    "picoDbFS": -10.38,
+    "rmsActivoDbFS": -21.41
+  },
+  "bateria": {
+    "segundos": 1.4,
+    "picoDbFS": -8.81,
+    "rmsActivoDbFS": -21.41
+  },
+  "buzzer": {
+    "segundos": 0.4,
+    "picoDbFS": -17.66,
+    "rmsActivoDbFS": -21.41
+  },
+  "dealer": {
+    "segundos": 0.34997732426303857,
+    "picoDbFS": -11.68,
+    "rmsActivoDbFS": -19.58
+  },
+  "sorpresa": {
+    "segundos": 1,
+    "picoDbFS": -10.21,
+    "rmsActivoDbFS": -19.58
+  },
+  "risa": {
+    "segundos": 0.8253061224489796,
+    "picoDbFS": -12.6,
+    "rmsActivoDbFS": -21.41
   }
 }
