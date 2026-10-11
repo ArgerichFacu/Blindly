@@ -35,6 +35,6 @@ Tutorial usa reducción de movimiento del SO, controles accesibles, zonas tácti
 
 Revisado en navegador integrado a 360×800 y 320×640: Home, Perfil sin recorte de “Jugador”, Ligas vacías, Config, reacciones y cuatro pasos del tutorial. Igualada habilita siguiente y conserva fichas; salida devuelve a Config; mute deshabilita música/ambiente/reacciones; recarga mantiene volumen 31 y mute, luego restaurados a 30 y desmuteado. La cuenta de QA no tiene una liga activa: MVP/temporadas/sheet con datos se verifican mediante sus pruebas y revisión de componentes, no se presenta como una nueva prueba de producción.
 
-Capturas locales: `C:/Users/facun/Downloads/Blindly-poker-room/` (home, cartas, igualada, perfil, reacciones). No se suben datos privados de la cuenta ni capturas al repositorio.
+Capturas locales: `G:/Blindly/evidencias/Blindly-poker-room/` (home, cartas, igualada, perfil, reacciones). No se suben datos privados de la cuenta ni capturas al repositorio.
 
 Esta pasada queda en el código fuente. Los APK/AAB v14 ya entregados no incorporan estos cambios: un build posterior debe incluir este commit. No se activa Plus ni se publica en tiendas en este bloque.

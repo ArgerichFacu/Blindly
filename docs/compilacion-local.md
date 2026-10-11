@@ -6,7 +6,7 @@ La compilación local usa Expo SDK 57, Gradle de su plantilla, Android SDK 36 y 
 
 ## Preparación
 
-1. Instalar JDK 17 y herramientas oficiales de Android. Esta PC usa Temurin en `C:\Users\facun\Documents\Codex\java17-blindly\jdk-17.0.20.1+1` y SDK en `C:\Users\facun\Documents\Codex\android-sdk-blindly`. El primer intento con Java 25 falló al configurar CMake en dependencias nativas; no se cambió código de la app para ocultar ese fallo.
+1. Instalar JDK 17 y herramientas oficiales de Android. Desde el 11 de octubre esta PC usa Temurin en `G:\Blindly\herramientas\java17\jdk-17.0.20.1+1` y SDK en `G:\Blindly\herramientas\android-sdk`. El repositorio actual está en `G:\Blindly\proyecto`. El primer intento con Java 25 falló al configurar CMake en dependencias nativas; no se cambió código de la app para ocultar ese fallo.
 2. Instalar platform-tools, plataforma android-36, build-tools 36.0.0, NDK 27.1.12297006 y CMake 3.22.1. Con command-line tools 23, `sdkmanager` deriva al nuevo Android CLI; su compatibilidad acepta rutas con `/`, como `platforms/android-36`, no el formato antiguo con `;`.
 3. Recuperar la firma con `npx eas-cli credentials -p android`, elegir preview y **credentials.json → Download credentials from EAS to credentials.json**. No crear otra firma ni mostrar las contraseñas. `credentials.json` y `credentials/` están excluidos de Git.
 4. Confirmar el próximo versionCode antes de publicar. La compilación local no actualiza automáticamente la versión remota de EAS. No reutilizar un código ya cargado en Play.
@@ -14,11 +14,14 @@ La compilación local usa Expo SDK 57, Gradle de su plantilla, Android SDK 36 y 
 ## Comando
 
 ```powershell
+. .\scripts\entorno-local.ps1
 .\scripts\build-android-local.ps1 `
-  -SdkRoot C:\Users\facun\Documents\Codex\android-sdk-blindly `
-  -JavaHome 'C:\Users\facun\Documents\Codex\java17-blindly\jdk-17.0.20.1+1' `
-  -VersionCode 7
+  -SdkRoot $env:ANDROID_HOME `
+  -JavaHome $env:JAVA_HOME `
+  -VersionCode 16
 ```
+
+El ejemplo usa 16 como siguiente código después de la preparación comercial v15; comprobar siempre EAS y Play antes de compilar. Los párrafos sobre v7 más abajo documentan la compilación histórica. `entorno-local.ps1` configura SDK, Java, emuladores, cachés Gradle/npm y temporales dentro de la carpeta raíz de trabajo (en esta PC `G:\Blindly`). No cambia las flags comerciales ni carga claves de compra. También se puede abrir `G:\Blindly\abrir-blindly.cmd`. Después de trasladar un proyecto, descartar los directorios generados de CMake `.cxx` antes de recompilar: contienen rutas absolutas de la ubicación anterior.
 
 El script comprueba el SDK, firma y exclusión de credenciales; genera Android sin eliminar el directorio existente, conserva package.json, inserta firma leyendo el archivo privado local e invoca `assembleRelease` y `bundleRelease` con dos workers. La APK y AAB quedan en `release/Blindly-metas40-v7.apk` y `.aab` **sólo si Gradle finaliza correctamente**. Exportar JavaScript no genera estos binarios.
 

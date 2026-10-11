@@ -122,8 +122,8 @@ Build local terminada: versión1.0.0, `versionCode15`, package `com.blindly.app`
 
 Entrega fuera de OneDrive:
 
-- `C:\Users\facun\Downloads\Blindly-plus-preparacion-v15.aab`, SHA256 `3CB8EEBD0EF17B751B013C538E3F395D48A4AEA11F1FA8C21C04B434DC85652A`.
-- `C:\Users\facun\Downloads\Blindly-plus-preparacion-v15.apk`, SHA256 `52F60EE7AD79D10FE3EE0344CC0D9B3ED07A318E2D4DCFB284240F6040E8402A`.
+- `G:\Blindly\entregas\Blindly-plus-preparacion-v15.aab`, SHA256 `3CB8EEBD0EF17B751B013C538E3F395D48A4AEA11F1FA8C21C04B434DC85652A`.
+- `G:\Blindly\entregas\Blindly-plus-preparacion-v15.apk`, SHA256 `52F60EE7AD79D10FE3EE0344CC0D9B3ED07A318E2D4DCFB284240F6040E8402A`.
 
 La APK de preparación puede probar Free; el AAB de preparación sirve para el primer upload. **Ninguno confirma compras**: después de conectar productos/clave hace falta generar otra build y ejecutar QA desde el track.
 

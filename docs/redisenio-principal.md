@@ -1,6 +1,6 @@
 # Rediseño principal e invitaciones de ligas
 
-Bloque del 9 de octubre de 2026. Repositorio de trabajo: `C:\Users\facun\Documents\Codex\Blindly-release`, rama `main`. La base anterior es `f1bb62e`. No activa Plus ni publica la aplicación.
+Bloque del 9 de octubre de 2026. Repositorio de trabajo actual desde el 11 de octubre: `G:\Blindly\proyecto`, rama `main`. La base anterior es `f1bb62e`. No activa Plus ni publica la aplicación.
 
 ## Informe de entrega
 
