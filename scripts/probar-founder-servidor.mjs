@@ -18,6 +18,14 @@ try{
  assert.equal(Date.parse(s.expires_at)-Date.parse(s.started_at),72*3600000);
  for(const item of results)assert.equal(item.started_at,s.started_at);
  const refresh=await sb.auth.refreshSession();assert.equal(refresh.data.user?.id,creado);assert.equal((await rpc('estado_founder_trial')).started_at,s.started_at);
+ const recovery=await sb.functions.invoke('crear-recuperacion',{method:'POST'});
+ if(recovery.error||typeof recovery.data?.clave!=='string')throw Error('QA legacy no pudo protegerse');
+ const parts=recovery.data.clave.split(':');assert.equal(parts[1],creado);
+ const protectedLogin=await sb.auth.signInWithPassword({email:`${creado}@recovery.blindly.invalid`,password:parts[2]});
+ assert.equal(protectedLogin.data.user?.id,creado);assert.equal((await rpc('estado_founder_trial')).started_at,s.started_at);
+ assert.deepEqual(await rpc('mi_head_to_head'),[],'Lectura premium STABLE sin escritura en transacción READ ONLY');
+ const config={fichas:{tipo:'virtuales',stack:5000},modo:{id:'regular',niveles:[{smallBlind:25,bigBlind:50,minutos:15}]},musica:true};
+ assert.ok(await rpc('guardar_mesa_habitual',{p_id:null,p_nombre:'QA Founder descartable',p_jugadores:['Uno','Dos'],p_configuracion:config,p_tema:'verde',p_temporada:null}));
  s=await rpc('registrar_interes_plus',{p_plan:'annual'});assert.equal(s.interest_plan,'annual');
  s=await rpc('registrar_waitlist_plus');assert.equal(s.waitlist,true);assert.equal(s.contactable,false);
  assert.equal((await rpc('registrar_waitlist_plus')).waitlist,true);

@@ -12,6 +12,8 @@ La prueba empieza únicamente al confirmar **PROBAR PLUS GRATIS · 3 DÍAS → E
 
 `supabase/migrations/20261012220833_founder_trial_lanzamiento.sql` aplicada en el proyecto Blindly. La versión local coincide con la registrada por Supabase MCP; el archivo se creó inicialmente con CLI y se ajustó al timestamp confirmado por el servidor.
 
+`20261012221902_founder_guard_lecturas.sql` conserva el guard y evita registrar la métrica opcional en transacciones de solo lectura. Las RPC `STABLE` siguen funcionando sin cambiar su volatilidad ni distribuir instrumentación entre pantallas. [PostgREST: transacciones de solo lectura](https://postgrest.org/en/stable/references/transactions.html).
+
 | Tabla privada | Finalidad |
 | --- | --- |
 | `plus_lanzamiento` | Una fila: `founder_trial_enabled`, `real_payments_enabled`, fecha de modificación. |
@@ -100,7 +102,7 @@ select count(*) as activas from private.plus_founder_trials
 where started_at<=now() and expires_at>now();
 ```
 
-La primera fecha de interés se conserva; la preferencia es la última elección. `conversion_expired_interest_pct` cuenta el primer interés ocurrido después de vencer. Un interés previo no se convierte artificialmente en uno posterior. `uso_plus_validado` registra el primer guard premium exitoso durante trial; no cuenta usos exclusivamente locales como escuchar audio y no es una medición de todas las acciones Plus. Datos eliminados con la cuenta dejan de formar parte de las métricas; no se retienen identidades borradas.
+La primera fecha de interés se conserva; la preferencia es la última elección. `conversion_expired_interest_pct` cuenta el primer interés ocurrido después de vencer. Un interés previo no se convierte artificialmente en uno posterior. `uso_plus_validado` registra el primer guard premium exitoso durante trial en una transacción que admite escritura; no cuenta consultas de solo lectura ni usos exclusivamente locales como escuchar audio y no es una medición de todas las acciones Plus. Datos eliminados con la cuenta dejan de formar parte de las métricas; no se retienen identidades borradas.
 
 ## Transición futura — no ejecutada
 
@@ -122,7 +124,7 @@ Trial OFF impide nuevas pruebas y deshabilita el acceso derivado de trials exist
 - `npm test`: suite completa existente aprobada, incluidas Auth, clubes, SQL/RLS, permisos, compras, reviewer y Demo. Los mocks Auth de pruebas SQL agregan las columnas reales de email necesarias; no se quitaron aserciones.
 - `npm run test:founder`: SQL con todas las migraciones, helper/context y UI. 72 horas, PK/idempotencia concurrente, vencimiento exacto, prohibición de reinicio, conservación de mesas, RLS, borrado cascade, tipos de identidad, tres fases, métricas, doble toque, UUID tardío, reloj adulterado y caché offline.
 - `npm run typecheck` y `npm run lint`: aprobados.
-- `node scripts/probar-founder-servidor.mjs --ejecutar`: SDK Supabase real con invitado descartable; 72 horas exactas, tres activaciones concurrentes con mismo inicio, refresh de identidad, interés anual, waitlist sin contacto, rechazo de parámetros inválidos, sin acceso a tablas privadas y sin sesión. Elimina exclusivamente la cuenta que acaba de crear; no imprime tokens ni credenciales.
+- `node scripts/probar-founder-servidor.mjs --ejecutar`: SDK Supabase real con invitado descartable; 72 horas exactas, tres activaciones concurrentes con mismo inicio, refresh de identidad, protección legacy conservando UUID/plazo, lectura premium `STABLE`, guard de mesa guardada, interés anual, waitlist sin contacto, rechazo de parámetros inválidos, sin acceso a tablas privadas y sin sesión. Elimina exclusivamente la cuenta que acaba de crear; no imprime tokens ni credenciales.
 - Verificación visual web real: pantalla previa, confirmación y cancelar, beneficio y precios informativos; captura en `G:\Blindly\entregas\qa-founder\confirmacion.png`. Activación real cubierta por el script aislado, sin consumir trial de la identidad del navegador.
 - Security Advisor: tablas privadas sin políticas son deliberadas (RLS + grants revocados + RPC propia); las seis RPC definer autenticadas se auditaron por `auth.uid`, search_path y grants. No se ocultaron avisos previos de anonymous Auth, extensión pública o protección de contraseñas. [Criterio oficial de RLS sin políticas](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy).
 - La prueba temporal se simula en PGlite para no esperar 72 horas. Tipos email/Google/legacy y expiración se cubren en SQL; no se repitió vinculación de Google ni envío de correo real, ya validados en el bloque Auth anterior.
@@ -131,7 +133,7 @@ Trial OFF impide nuevas pruebas y deshabilita el acceso derivado de trials exist
 ## Informe de cierre — 30 puntos
 
 1. Baseline: main limpio `d57e21d`; Auth verde.
-2. Migración: `20261012220833`, aplicada y versionada.
+2. Migraciones: `20261012220833` y `20261012221902`, aplicadas y versionadas.
 3. Tablas: tres privadas, sin PII adicional.
 4. RPC: seis, autenticadas y limitadas a identidad propia.
 5. Flags: Trial ON, Payments OFF.

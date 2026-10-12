@@ -33,6 +33,10 @@ const start=async()=> (await q('select iniciar_prueba_founder() s'))[0].s;
  assert.equal((await start()).started_at,expiredStart);assert.equal((await q('select mis_mesas_habituales() s'))[0].s[0].id,mesa);assert.equal((await q('select mis_mesas_habituales() s'))[0].s[0].plus_activo,false);
  await assert.rejects(()=>q('select crear_sala_desde_mesa($1)',[mesa]),/PLUS_REQUERIDO/);
  for(const n of [2,3,4]){await own(n);assert.equal((await start()).active,true);assert.equal((await state()).contactable,n===2);}
+ await own(2);await db.exec('begin read only');
+ assert.deepEqual((await q('select mi_head_to_head() s'))[0].s,[],'STABLE premium reads must work in PostgREST read-only mode');
+ await db.exec('rollback');await db.exec('reset role');
+ assert.equal((await q('select first_plus_feature_used_at from private.plus_founder_funnel where user_id=$1',[uid(2)])).length,0,'Read-only requests do not write optional metrics');
  await db.exec('reset role');await q('insert into private.accesos_revision_play(user_id,activo) values($1,true)',[uid(2)]);await own(2);assert.equal((await state()).access_source,'PLAY_REVIEW');
  await db.exec('reset role');await q("insert into public.accesos_plus(user_id,activo,entorno) values($1,true,'production')",[uid(3)]);await own(3);assert.equal((await state()).access_source,'REVENUECAT_PAID');
  await db.exec('reset role');await q('update private.plus_lanzamiento set founder_trial_enabled=false,real_payments_enabled=true');await own(4);assert.equal((await state()).active,false);assert.equal((await state()).real_payments_enabled,true);

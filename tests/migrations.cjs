@@ -45,6 +45,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261008174543_borrado_eventos_identidad.sql",
     "20261012041133_play_review_access.sql",
     "20261012220833_founder_trial_lanzamiento.sql",
+    "20261012221902_founder_guard_lecturas.sql",
   ]);
 
   const baseSources = fs
