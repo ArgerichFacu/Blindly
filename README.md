@@ -10,7 +10,7 @@ Release Android 1.0.0: **Blindly creada en Google Play**, paquete `com.blindly.s
 
 Aplicación desarrollada con Expo, React Native, TypeScript y Supabase. La rama `main` reúne el trabajo de las etapas anteriores y es la referencia para instalar y continuar el proyecto.
 
-Lanzamiento Plus: **Founder Trial voluntario de 72 horas, una vez por UUID**, sin tarjeta ni cobros. Pagos comerciales apagados desde Supabase, con lista de espera y preferencias de plan. [Configuración, métricas y QA](docs/founder-trial.md). Esta implementación requiere una nueva compilación; la entrega Android Auth v28 no contiene la nueva pantalla.
+Lanzamiento Plus: **Founder Trial voluntario de 72 horas, una vez por UUID**, sin tarjeta ni cobros. Pagos comerciales apagados desde Supabase, con lista de espera y preferencias de plan. [Configuración, métricas y QA](docs/founder-trial.md). Disponible en la prueba interna Android **v29**; [archivos y validación de la entrega](docs/founder-entrega.md). La entrega Auth v28 conserva la pantalla anterior.
 
 En la PC de desarrollo, el proyecto actual está en `G:\Blindly\proyecto`; herramientas, emuladores, entregas y cachés están en `G:\Blindly`. Abrir `G:\Blindly\abrir-blindly.cmd` o cargar `. .\scripts\entorno-local.ps1` antes de trabajar. Ver [compilación local](docs/compilacion-local.md).
 

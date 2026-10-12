@@ -4,7 +4,7 @@ Implementación del 12 de octubre de 2026. Proyecto real: `G:\Blindly\proyecto`,
 
 ## Estado de lanzamiento
 
-**Trial ON / Payments OFF.** Founder Trial es una prueba gratuita de 72 horas; Founder Lifetime es el futuro producto pago de acceso vitalicio. No son la misma promoción. La v28 instalada desde Google Play contiene el bloque Auth anterior: para distribuir esta pantalla hace falta generar y validar una nueva compilación Android. Este bloque no publica una versión ni habilita pagos.
+**Trial ON / Payments OFF.** Founder Trial es una prueba gratuita de 72 horas; Founder Lifetime es el futuro producto pago de acceso vitalicio. No son la misma promoción. El bloque de implementación no activó pagos ni publicó una versión. En la entrega posterior se compiló y validó **v29**, publicada en la prueba interna el 12 de octubre a las 19:41 ART. La v28 conserva el bloque Auth anterior. [Validación de la entrega Android](founder-entrega.md).
 
 La prueba empieza únicamente al confirmar **PROBAR PLUS GRATIS · 3 DÍAS → Empezar prueba**. Instalar, iniciar sesión, consultar estado o abrir Plus no la inicia. Ahora no cancela sin consumirla. El servidor fija `started_at=now()` y `expires_at=started_at+interval '72 hours'`. La PK del UUID y `ON CONFLICT DO NOTHING` hacen que reintentos y activaciones concurrentes devuelvan el mismo plazo. El vencimiento es exclusivo: en `expires_at` ya no hay acceso. Una prueba vencida nunca reinicia.
 
@@ -128,7 +128,7 @@ Trial OFF impide nuevas pruebas y deshabilita el acceso derivado de trials exist
 - Verificación visual web real: pantalla previa, confirmación y cancelar, beneficio y precios informativos; captura en `G:\Blindly\entregas\qa-founder\confirmacion.png`. Activación real cubierta por el script aislado, sin consumir trial de la identidad del navegador.
 - Security Advisor: tablas privadas sin políticas son deliberadas (RLS + grants revocados + RPC propia); las seis RPC definer autenticadas se auditaron por `auth.uid`, search_path y grants. No se ocultaron avisos previos de anonymous Auth, extensión pública o protección de contraseñas. [Criterio oficial de RLS sin políticas](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy).
 - La prueba temporal se simula en PGlite para no esperar 72 horas. Tipos email/Google/legacy y expiración se cubren en SQL; no se repitió vinculación de Google ni envío de correo real, ya validados en el bloque Auth anterior.
-- Falta recompilar y validar esta nueva UI en Android antes de distribuirla. No se certifica ese test nativo mediante una prueba web ni se sustituye la v28 publicada.
+- Entrega posterior v29: compilación firmada, UI Android en emulador, confirmación/cancelación, activación real y persistencia al reiniciar aprobadas. Disponible en prueba interna; actualización desde Play en A32 y aceptación ARM64/16 KB siguen pendientes. Ver `founder-entrega.md`.
 
 ## Informe de cierre — 30 puntos
 
@@ -161,4 +161,4 @@ Trial OFF impide nuevas pruebas y deshabilita el acceso derivado de trials exist
 27. TypeScript: aprobado.
 28. ESLint: aprobado.
 29. CI: el workflow `Verificar Blindly` ejecuta los nuevos tests en main; el resultado del push se informa al entregar.
-30. Riesgos: nueva compilación/QA Android pendiente; invitado con nuevo UUID puede repetir; no campaña automática; medición de uso solo servidor.
+30. Riesgos: instalación de v29 desde Play en A32 y aceptación ARM64/16 KB pendientes; invitado con nuevo UUID puede repetir; no campaña automática; medición de uso solo servidor.
