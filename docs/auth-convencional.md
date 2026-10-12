@@ -1,6 +1,6 @@
 # Auth convencional — candidato Android v28
 
-Estado al 12/10/2026: **email/password, reset y Google comprobados contra Supabase real mediante SDK oficial**. SMTP Gmail, Google OAuth y marca están guardados; callbacks exactos configurados. Login email/password, errores, persistencia, logout y Plus comprobados en emulador Android. Retornos Google/email en Android físico y conservación de progreso real durante conversión todavía pendientes. **v28 publicada y disponible para testers internos a las 14:27 ART**, reemplazando v22 en ese canal. No presentar el candidato como release final.
+Estado al 12/10/2026: **cerrada la validación Android pendiente de Google/correo, cambio de password, cancelación y corte de red**. Email/password, reset y Google comprobados contra Supabase real mediante SDK oficial. SMTP Gmail, Google OAuth y marca guardados; callbacks exactos configurados. Login, errores, persistencia, logout y Plus comprobados en emulador. A32 v28: retornos Google/correo, Google con proceso cerrado, cancelación OAuth y cambio de password desde UI pasan. No equivale al cierre de publicación: conservar los límites de QA y pendientes externos que se detallan abajo. **v28 disponible para testers internos desde las 14:27 ART**, reemplazando v22 en ese canal. Ver [entrega y alcance del cierre](auth-entrega.md).
 
 ## Funcionamiento e identidad
 
@@ -65,31 +65,33 @@ Comandos: `npm run test:auth`, `npm test`, `npm run typecheck`, `npm run lint`, 
 | Invitado→Google | Real SDK/navegador: linkIdentity, misma identidad permanente. A32 v28: el dueño completó Google y volvió a Mi cuenta; Google conectado y cuenta permanente confirmados en UI y Supabase. No se registró el UUID previo del teléfono: la igualdad antes/después sólo está demostrada en QA SDK. |
 | UUID antes/después | Real conservado en email, legacy→email, Google y reset; FK/RPC auditadas. |
 | Persistencia al cerrar/abrir | Real SDK y emulador v25 x86_64: force-stop/abrir conserva reviewer y Plus sin reingresar password. A32 v28: force-stop/abrir y Config→Mi cuenta conserva el correo de administración y Google conectado sin repetir login. |
-| Logout | Real SDK y UI del emulador v25: vuelve a invitado sin eliminar reviewer. |
+| Logout | Real SDK, emulador y A32 v28: vuelve a invitado; la cuenta protegida sigue existiendo y el login Google posterior restaura su UUID original. |
 | Login posterior | Real signInWithPassword y UI Android del reviewer; UUID original. |
 | Password incorrecta | Real SDK y emulador v27: error traducido, sesión conservada y mensaje visible automáticamente sin desplazamiento manual. |
 | Email existente | Real: email_exists, invitado conservado y reviewer intacto. |
-| Reset | Real SDK: enlace PKCE → password nueva válida/anterior rechazada, mismo UUID. A32 v28: solicitud desde la APK, correo abierto por el dueño en ese celular y regreso al formulario Nueva contraseña. Cancelar vuelve a Mi cuenta con el mismo email y Google conectado. No se cambió la contraseña durante la prueba física. |
-| Google existente | Real: vuelve a A; no fusiona invitado C. |
+| Reset | Real SDK: enlace PKCE → password nueva válida/anterior rechazada, mismo UUID. A32 v28: correo→Nueva contraseña y Cancelar conservan cuenta Google. Prueba separada con cuenta descartable autenticada: se abrió la ruta existente cuenta?accion=password y el dueño guardó desde UI; aviso Contraseña actualizada, login nuevo válido/anterior rechazado y UUID original confirmados. La cuenta QA se eliminó después. |
+| Google existente | Real SDK: vuelve a A; no fusiona invitado C. A32: login existente restaura la identidad original; cerrando el proceso durante OAuth, el callback inicia la app y abre Mi cuenta. |
 | Google ocupado | Real: identity_already_exists; no reemplaza invitado. |
 | Cambio de cuenta | Guardas reales ejecutadas con Auth/consultas simulados. |
 | Legacy con key | Real: crear/proteger y recuperar identidad QA; suites también pasan. |
 | Legacy→email | Real: helper, OTP, password y login conservan UUID. Android/reenvíos pendientes. |
 | Legacy→Google | Conservación por linkIdentity auditada; QA real pendiente. |
-| Puntos | Suite SQL existente pasa; conversión con puntos reales pendiente. |
-| Historial | Suite SQL existente pasa; conversión real pendiente. |
-| Clubes | Suite SQL existente y navegación pasan; conversión real pendiente. |
-| Roles/ownership | Guardas/FK auditadas, regresiones SQL pasan; conversión real pendiente. |
+| Puntos | Conversión legacy→email mediante Auth SDK real, con puntuación fixture en transacción revertida: RPC bajo authenticated conserva puntos y UUID. |
+| Historial | Misma prueba transaccional: mi_puntuacion conserva su historial y capacidad Plus antes/después. |
+| Clubes | Misma prueba: mis_ligas/detalle_liga y SELECT sujeto a RLS conservan liga/temporada propias antes/después. |
+| Roles/ownership | Misma prueba: owner/miembro admin conservados en detalle_liga. Guardas/FK y regresiones también pasan. No equivale a aceptar todas las acciones sociales desde UI. |
 | Plus por UUID | Reviewer real: login normal, grant/RPC true y PLUS ACTIVO visible en emulador v25–v28. v28 conserva sesión tras actualización y abre Mi cuenta desde arriba. Regresiones RevenueCat pasan; SDK comercial apagado. |
 | Eliminación | Real: Edge eliminó identidades QA anónimas, email, legacy→email y Google; otras modalidades físicas pendientes. |
-| Red | Fallos y restauración de pendiente simulados; pérdida de red física pendiente. |
+| Red | Emulador Android: bloqueo temporal de red sólo para Blindly durante linkIdentity; error traducido y visible, cuenta/Plus conservados. Se restauró la red y Reintentar eliminó el error sin cambiar identidad. No se modificó la red del A32. |
 | Doble toque | Servicio/UI/callback simulados: una operación. |
 | ES/EN/PT | 977 textos / 82 errores validados. |
 | TypeScript | Pasó. |
 | Tests | Suite completa previa pasó; servicio ahora 37 casos, UI y Edge pasan. |
 | Android/iOS bundles | Exportación pasó; no equivale a build/QA iOS físico. |
 
-Pruebas negativas reales: helper rechazó invitado sin emitir credenciales; reset tardío devolvió flow_state_expired (traducido como enlace vencido); una autorización Google tardía produjo bad_oauth_state. Solicitudes nuevas pasaron. No reutilizar enlaces consumidos. Las pruebas SDK/backend no sustituyen la aceptación del navegador del sistema, AsyncStorage y deep links dentro de Android.
+Pruebas negativas reales: helper rechazó invitado sin emitir credenciales; reset tardío devolvió flow_state_expired (traducido como enlace vencido); una autorización Google tardía produjo bad_oauth_state. Solicitudes nuevas pasaron. A32: linkIdentity abrió el navegador del sistema; se canceló con Atrás, se rechazó guardar credenciales en Samsung Pass y volvió a la misma cuenta QA con Email verificado. Evidencias auth-cierre-google-cancelado2.xml y auth-v28-red-error.xml/auth-v28-red-recuperada.xml. No reutilizar enlaces consumidos. Las pruebas SDK/backend no sustituyen la aceptación del navegador del sistema, AsyncStorage y deep links dentro de Android.
+
+Preservación con progreso: se creó una identidad legacy descartable y se coordinó su conversión oficial mediante SDK con una transacción SQL. Sólo esa transacción veía los fixtures de liga, temporada, miembro admin, puntuación y grant Plus temporal. Bajo rol authenticated y claims del UUID QA, mi_puntuacion (excluyendo rango global), mis_ligas, detalle_liga y SELECT con RLS se compararon antes/después de que Auth confirmara el email real. Las aserciones pasaron; rollback retiró todos los fixtures sin que fueran visibles a otros clientes. La identidad se eliminó por su propia Edge Function; se confirmó cero residuos. Evidencia local auth-progreso-transaccion.sql y auth-progreso-resultado.json. No se insertaron resultados ficticios en los rankings publicados ni se simularon compras RevenueCat.
 
 ## Google Play Reviewer
 
@@ -108,7 +110,7 @@ Compilación local Android completada desde c70b13a, paquete com.blindly.studio,
 - apksigner y bundletool validate pasan; zipalign -P 16 pasa. Auditoría del AAB: 58 bibliotecas de 64 bits, cero fallos PT_LOAD; 30 finales RELRO no cumplen la comprobación estricta adicional, sin solapamientos escribibles. Esto no demuestra ejecución física ARM64 en 16 KB; sigue pendiente y no se declara compatibilidad completa.
 - El dueño cargó el AAB v28; Play lo aceptó y se publicó en prueba interna el 12/10/2026 a las 14:27 ART, con estado «Disponible para testers internos». Único aviso: falta archivo de desofuscación. Evidencia auth-play-v28-publicada.png. No contiene una clave SMTP ni secretos OAuth. La actualización/aceptación del A32 se registra aparte.
 
-Instalación A32: rechazó la actualización local con INSTALL_FAILED_UPDATE_INCOMPATIBLE porque v22 estaba firmada por Google Play, distinta del certificado local. El dueño actualizó desde Play y ADB confirmó versión 1.0.0/28 instalada; la pantalla de acceso arranca. No se desinstaló ni borró almacenamiento. Google regresó a Mi cuenta, UI y Auth confirman el proveedor conectado; force-stop/abrir conservó el acceso. Recuperación por correo solicitada desde la APK: el dueño abrió el correo en el A32 y el enlace volvió al formulario Nueva contraseña; Cancelar conservó Mi cuenta/Google. Evidencias auth-v28-a32-google.png, auth-v28-a32-google-persist-cuenta.xml, auth-v28-a32-email-formulario.png y auth-v28-a32-email-cancelar.xml. Google con app cerrada, cancelación de OAuth, cambio de password desde UI y pérdida de red siguen pendientes. Las variantes ARM anteriores no arrancaban en el emulador x86 por SoLoader; v28 incluye x86 y arranca. Esto no es aceptación ARM64/16 KB y no se atribuye a un fallo de Auth.
+Instalación A32: rechazó la actualización local con INSTALL_FAILED_UPDATE_INCOMPATIBLE porque v22 estaba firmada por Google Play, distinta del certificado local. El dueño actualizó desde Play y ADB confirmó versión 1.0.0/28 instalada. No se desinstaló ni borró almacenamiento. Google y correo volvieron a Blindly, persistencia tras force-stop y cancelación OAuth pasaron. Con cuenta QA descartable, el dueño guardó una password nueva desde UI; SDK real confirmó login nuevo, rechazo de la anterior y UUID conservado. Se eliminó la QA mediante su propia función autenticada, se retiraron credenciales privadas y Auth confirmó cero cuentas con ese alias. Luego se restauró la cuenta Google del A32 y se verificó el UUID original. Se cerró el proceso de Blindly durante un nuevo OAuth: Google abrió la app sola en Mi cuenta. Evidencias auth-cierre-password-ok.png, auth-cierre-password-resultado.json y auth-cierre-google-cold-ok.png/xml, además de las anteriores. Corte de red real probado en emulador; esto no es aceptación ARM64/16 KB. Las variantes ARM anteriores no arrancaban en emulador x86 por SoLoader; v28 incluye x86 y arranca.
 
 Implementación vigente: c70b13a (demo), [CI exitoso](https://github.com/ArgerichFacu/Blindly/actions/runs/38281722034) y [Pages exitoso](https://github.com/ArgerichFacu/Blindly/actions/runs/38281721366). Evidencia local: G:/Blindly/evidencias/auth-google-qa-real.png, auth-google-marca-guardada.png, auth-v28-emulador-plus.png y auth-v28-elf-aab.json. Las credenciales nunca se incluyen en capturas de documentación pública.
 

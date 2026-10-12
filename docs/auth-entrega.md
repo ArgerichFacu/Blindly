@@ -1,0 +1,16 @@
+# Entrega de autenticación Android — v28
+
+12/10/2026. Cerradas las validaciones Android pendientes enumeradas durante esta sesión. Esto no declara la aplicación publicada en producción ni todas las combinaciones de la matriz ejecutadas físicamente.
+
+1. **Acceso:** Google, email/password e invitado rápido implementados; Mi cuenta, recuperación, logout y eliminación conservan ES/EN/PT.
+2. **Identidad/progreso:** invitado→email, legacy→email, Google y reset conservaron UUID en SDK real. Una conversión legacy→email coordinada con fixtures transaccionales conservó puntos, historial, clubes, rol/ownership y grant Plus bajo RPC/RLS; se revirtió todo sin publicar los resultados ficticios. El A32 restauró la misma identidad Google al volver a iniciar sesión; no hubo fusión de cuentas.
+3. **Prueba física:** A32 con v28 instalada desde Play. Google/correo vuelven a la app, cerrar/reabrir conserva acceso y Google termina aun cerrando el proceso durante OAuth.
+4. **Pruebas negativas:** cancelar Google vuelve a la identidad QA. Red bloqueada sólo para Blindly en emulador produjo error traducido; restablecerla y Reintentar conservó cuenta/Plus. No se cambió la red del A32.
+5. **Password:** el dueño guardó una clave nueva desde la UI de una cuenta descartable autenticada. Supabase confirmó que la nueva funciona, la anterior falla y el UUID permanece. El retorno de correo al formulario se comprobó por separado; no presentar ambos pasos como un único reset físico completo.
+6. **Reviewer:** Google Play Reviewer, administracionblindly+playreview@gmail.com; email confirmado, password estable y Plus permanente verificados. Credencial e instrucciones inglesas en G:/Blindly/privado/Google-Play-Review-email-instructions.txt, fuera de Git. Usar versionCode 28 o posterior. Revocación documentada en google-play-review.md.
+7. **Supabase/Google:** SMTP y OAuth configurados y probados. Confirm email, Secure email change, nonce checks, UUID/RLS y RevenueCat conservados; no se cambiaron productos ni permisos de jugadores.
+8. **Validación técnica:** CI de la implementación c70b13a pasó tests, TypeScript, lint y bundles; Doctor 21/21 y verificación Expo pasaron. APK/AAB v28 firmados y validados. Alineación PT_LOAD pasa; aceptación física ARM64/16 KB sigue pendiente.
+9. **Entrega:** APK G:/Blindly/entregas/Blindly-1.0.0-auth-v28.apk y AAB del mismo nombre/extensión .aab. v28 disponible para testers internos; no se publicó producción. No fue necesario compilar otra versión para estas pruebas.
+10. **Limpieza/límites:** cuentas QA eliminadas por su propia función autenticada; cero usuarios/ligas/puntuaciones residuales confirmados, contraseñas temporales retiradas y cuenta Google original restaurada en A32. Antes de publicar: resolver Site URL localhost:3000, validar entrega SMTP/volumen y acceso Google externo. Legacy→Google se auditó y cubrió en suites, pero no se ejecutó con una nueva identidad Google real. iOS físico está fuera de esta aceptación Android.
+
+Evidencia local en G:/Blindly/evidencias: auth-cierre-password-ok.png, auth-cierre-password-resultado.json, auth-cierre-google-cold-ok.png/xml, auth-cierre-google-cancelado2.xml y auth-v28-red-error.xml/auth-v28-red-recuperada.xml. Los IDs y contraseñas del reviewer no se versionan.
