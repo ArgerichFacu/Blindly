@@ -107,3 +107,9 @@ Compilación local Android completada, paquete com.blindly.studio, versión 1.0.
 - No se subieron a Google Play ni se instaló esta nueva autenticación sobre la identidad del A32. No contienen una clave SMTP ni secretos OAuth. EAS remoto sigue con su contador previo: sincronizarlo antes de publicar o generar una release posterior.
 
 Preparación SMTP: formulario Gmail completo salvo password, host smtp.gmail.com/587, remitente y usuario del buzón de administración, intervalo conservado 60 s. Guardado delegado al dueño; no se afirma envío operativo. Supabase advierte posible impacto en entrega por proveedor personal. Gmail se prepara para QA; la entrega de producción requiere validación y un proveedor adecuado al volumen. Ninguna credencial SMTP se guarda en archivos o logs.
+
+## Continuidad de configuración externa
+
+Proyecto Google Cloud Blindly creado y seleccionado: blindly-511407, bajo la cuenta del dueño. La página Google Auth Platform está en Información de la app, paso 1 de 4; consentimiento y cliente Web todavía pendientes. No se habilitó facturación. SMTP Gmail continúa como formulario preparado: la contraseña y Save changes los completa el dueño personalmente. No conservar credenciales compartidas en chat dentro del repositorio.
+
+Código del candidato: commit a4f2a80 (demo), main remoto actualizado. GitHub Actions Verificar Blindly run 38218747650 y Pages run 38218746582 finalizaron correctamente. La aprobación de tests no significa que Google/SMTP estén operativos.
