@@ -4,7 +4,7 @@ Nombre: **Google Play Reviewer**. Email aprobado: **administracionblindly+playre
 
 Credencial e instrucciones completas fuera de Git: G:/Blindly/privado/google-play-reviewer-email.json y Google-Play-Review-email-instructions.txt. No copiarlas a README, issues públicos o capturas compartidas. La identidad legacy descartada no se reutilizó ni eliminó.
 
-**La v22 interna no tiene email/password. Actualizarla con el candidato validado v24 o posterior antes de enviar estas instrucciones a review.** La QA Android se registra en [auth-convencional.md](auth-convencional.md).
+**La v22 interna no tiene email/password. Actualizarla con el candidato validado v28 antes de enviar estas instrucciones a review.** La QA Android se registra en [auth-convencional.md](auth-convencional.md).
 
 ## Permiso Plus
 
@@ -23,7 +23,7 @@ Contenido de la aplicación → Acceso a la aplicación → Todas o algunas func
 
 ## Instructions for reviewers
 
-1. Install Blindly versionCode 24 or later and open the app.
+1. Install Blindly versionCode 28 or later and open the app.
 2. On the welcome screen, tap "Create account / Sign in". If you have continued as a guest, open Profile / Options > "My account".
 3. Enter the email and password supplied in App access, then tap "Sign in". Use these credentials only in Blindly; they are not Gmail credentials.
 4. If prompted, tap "Continue with this account" and complete or skip the tutorial.
@@ -48,6 +48,6 @@ Para eliminarla completamente, usar "Eliminar mi cuenta" en esa identidad. Ejecu
 
 ## Evidencia
 
-Reviewer nuevo: correo verificado, password estable, login SDK y UI de emulador Android v25 sin OTP, UUID conservado, mi_acceso_revision_play=true y tiene_plus=true. PLUS ACTIVO visible y persistencia tras cierre comprobada en emulador; A32 pendiente. Suites existentes cubren aislamiento, revocación, vencimiento, bloqueo y carreras de PlusContext; no sustituyen pruebas de compras reales.
+Reviewer nuevo: correo verificado, password estable, login SDK y UI de emulador Android sin OTP, UUID conservado, mi_acceso_revision_play=true y tiene_plus=true. PLUS ACTIVO visible en v28, persistencia tras cierre y actualización comprobada en emulador; A32 pendiente de actualización desde Play. Suites existentes cubren aislamiento, revocación, vencimiento, bloqueo y carreras de PlusContext; no sustituyen pruebas de compras reales.
 
 La tabla privada deniega escrituras cliente por diseño. SECURITY DEFINER de la RPC es intencional y sólo devuelve el permiso de auth.uid(). Otros avisos preexistentes no se modifican ni ocultan. [Referencia del linter](https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable).
