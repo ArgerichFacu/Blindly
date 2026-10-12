@@ -4,7 +4,7 @@ Nombre: **Google Play Reviewer**. Email aprobado: **administracionblindly+playre
 
 Credencial e instrucciones completas fuera de Git: G:/Blindly/privado/google-play-reviewer-email.json y Google-Play-Review-email-instructions.txt. No copiarlas a README, issues públicos o capturas compartidas. La identidad legacy descartada no se reutilizó ni eliminó.
 
-**La v22 interna no tiene email/password. Actualizarla con el candidato validado v28 antes de enviar estas instrucciones a review.** La QA Android se registra en [auth-convencional.md](auth-convencional.md).
+**v28 publicada y disponible para testers internos; incluye email/password. Actualizar desde Play antes de usar estas instrucciones.** La QA Android se registra en [auth-convencional.md](auth-convencional.md); aceptación física todavía pendiente.
 
 ## Permiso Plus
 

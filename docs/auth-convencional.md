@@ -1,6 +1,6 @@
 # Auth convencional — candidato Android v28
 
-Estado al 12/10/2026: **email/password, reset y Google comprobados contra Supabase real mediante SDK oficial**. SMTP Gmail, Google OAuth y marca están guardados; callbacks exactos configurados. Login email/password, errores, persistencia, logout y Plus comprobados en emulador Android. Retornos Google/email en Android físico y conservación de progreso real durante conversión todavía pendientes. La prueba interna publicada v22 no fue reemplazada; el borrador v28 está preparado y pendiente de cargar el AAB. No presentar el candidato como release final.
+Estado al 12/10/2026: **email/password, reset y Google comprobados contra Supabase real mediante SDK oficial**. SMTP Gmail, Google OAuth y marca están guardados; callbacks exactos configurados. Login email/password, errores, persistencia, logout y Plus comprobados en emulador Android. Retornos Google/email en Android físico y conservación de progreso real durante conversión todavía pendientes. **v28 publicada y disponible para testers internos a las 14:27 ART**, reemplazando v22 en ese canal. No presentar el candidato como release final.
 
 ## Funcionamiento e identidad
 
@@ -106,7 +106,7 @@ Compilación local Android completada desde c70b13a, paquete com.blindly.studio,
 - APK: G:/Blindly/entregas/Blindly-1.0.0-auth-v28.apk. SHA256 832465260B52816ADF7A988C79BF1DFC5651A950F34A27170C83292CDD45FA49.
 - AAB: G:/Blindly/entregas/Blindly-1.0.0-auth-v28.aab. SHA256 8E859C6585DAE821C2ECD12A571E0ECAD857AB1368016E59A340FA45616A5B1F.
 - apksigner y bundletool validate pasan; zipalign -P 16 pasa. Auditoría del AAB: 58 bibliotecas de 64 bits, cero fallos PT_LOAD; 30 finales RELRO no cumplen la comprobación estricta adicional, sin solapamientos escribibles. Esto no demuestra ejecución física ARM64 en 16 KB; sigue pendiente y no se declara compatibilidad completa.
-- El dueño cargó el AAB v28 en el borrador de prueba interna; Play está procesándolo. Todavía no se distribuyó. No contiene una clave SMTP ni secretos OAuth. La instalación/aceptación del A32 se registra aparte.
+- El dueño cargó el AAB v28; Play lo aceptó y se publicó en prueba interna el 12/10/2026 a las 14:27 ART, con estado «Disponible para testers internos». Único aviso: falta archivo de desofuscación. Evidencia auth-play-v28-publicada.png. No contiene una clave SMTP ni secretos OAuth. La actualización/aceptación del A32 se registra aparte.
 
 Instalación A32: rechazó la actualización local con INSTALL_FAILED_UPDATE_INCOMPATIBLE. Tiene v22 firmada por Google Play, distinta del certificado local. No se desinstaló ni borró su sesión. Para preservar datos, distribuir el AAB validado por el canal interno y actualizar desde Play. Las variantes ARM anteriores no arrancaban en el emulador x86 por SoLoader; v28 incluye x86 y arranca. Esto no es aceptación ARM64/16 KB y no se atribuye a un fallo de Auth.
 
