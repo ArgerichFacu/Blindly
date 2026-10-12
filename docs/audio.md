@@ -59,4 +59,4 @@ La campana de cambio de ronda permanece fuera del catálogo: TRP, “220516 desk
 
 ## Ajustes tras escucha del A32 — v22
 
-El usuario rechazó Rimshot y Cuac de v21. Ambos se reemplazan; su nueva calidad percibida está pendiente de aprobación humana. El resto del pack no cambia. Cada botón incorpora un corazón independiente de 44 dp para añadir/quitar favoritos sin disparar audio, incluso silenciado. Corazón relleno y estado accesible seleccionado identifican favoritos. Se elimina la lista duplicada de botones grandes para favoritos; los controles de orden/visibilidad sólo aparecen en Plus. Se mantienen dos columnas y cuatro recientes.
+El usuario rechazó Rimshot y Cuac de v21. Ambos se reemplazan; el usuario aprobó Redoble y Cuac en el A32 instalado con v22. El resto del pack no cambia. Cada botón incorpora un corazón independiente de 44 dp para añadir/quitar favoritos sin disparar audio, incluso silenciado. Corazón relleno y estado accesible seleccionado identifican favoritos. Se elimina la lista duplicada de botones grandes para favoritos; los controles de orden/visibilidad sólo aparecen en Plus. Se mantienen dos columnas y cuatro recientes.
