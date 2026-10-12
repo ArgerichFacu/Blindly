@@ -48,6 +48,6 @@ Para eliminarla completamente, usar "Eliminar mi cuenta" en esa identidad. Ejecu
 
 ## Evidencia
 
-Reviewer nuevo: correo verificado, password estable, login SDK real sin OTP, UUID conservado, mi_acceso_revision_play=true y tiene_plus=true. La visualización Android todavía requiere aceptación. Suites existentes cubren aislamiento, revocación, vencimiento, bloqueo y carreras de PlusContext; no sustituyen pruebas de compras reales.
+Reviewer nuevo: correo verificado, password estable, login SDK y UI de emulador Android v25 sin OTP, UUID conservado, mi_acceso_revision_play=true y tiene_plus=true. PLUS ACTIVO visible y persistencia tras cierre comprobada en emulador; A32 pendiente. Suites existentes cubren aislamiento, revocación, vencimiento, bloqueo y carreras de PlusContext; no sustituyen pruebas de compras reales.
 
 La tabla privada deniega escrituras cliente por diseño. SECURITY DEFINER de la RPC es intencional y sólo devuelve el permiso de auth.uid(). Otros avisos preexistentes no se modifican ni ocultan. [Referencia del linter](https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable).

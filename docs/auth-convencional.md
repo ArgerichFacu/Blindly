@@ -48,7 +48,9 @@ Proyecto Google Cloud Blindly, blindly-511407, configurado por el dueño sin act
 
 El SDK real y navegador comprobaron invitado→Google con mismo UUID, login Google existente a ese UUID y rechazo de Google ocupado con `identity_already_exists`, conservando el invitado. Consentimiento autorizado personalmente por el dueño. Las tres identidades QA se eliminaron y Auth confirma cero cuentas QA Google restantes.
 
-Audiencia verificada: Usuarios externos, estado **Prueba**, cero usuarios de prueba configurados; **Publicar app deshabilitado** hasta completar marca. El acceso probado con el buzón del dueño no demuestra acceso de terceros. Pendiente Google Auth Platform → Información de la marca: completar los campos solicitados con el sitio real https://argerichfacu.github.io/Blindly/, privacidad /privacy.html, términos /terms.html y correo de soporte de administración; verificar dominios si Google lo exige. Después revisar Público y publicación personalmente. No ampliar scopes más allá de openid/email/profile. No se activó facturación ni se aceptaron nuevos acuerdos automáticamente. También quedan cancelación, invitado con progreso, legacy→Google y retornos dentro de Android con app abierta/cerrada.
+Audiencia verificada: Usuarios externos, estado **Prueba**, cero usuarios de prueba configurados; **Publicar app deshabilitado** hasta completar marca. Google documenta una excepción para openid/email/profile: esos accesos no requieren estar en la lista de testers ni vencen a los siete días, incluso en Prueba. Por eso Prueba por sí sola no demuestra un bloqueo del login básico. [Fuente oficial](https://support.google.com/cloud/answer/15549945). El acceso de una persona externa sigue sin probarse aquí.
+
+Marca preparada, pendiente de guardar con autorización: sitio https://argerichfacu.github.io/Blindly/, privacidad /privacy.html, términos /terms.html y dominio argerichfacu.github.io; dominio Supabase conservado. Google sólo ofreció el correo del dueño como asistencia; administración permanece como contacto del desarrollador. No se amplían scopes, no se activa facturación ni se aceptan acuerdos automáticamente. Revisar publicación/verificación de marca si Google lo exige. También quedan cancelación, invitado con progreso, legacy→Google y retornos dentro de Android con app abierta/cerrada.
 
 Este flujo no usa SDK nativo de Google: no requiere un cliente Android ni SHA de Google para el navegador OAuth. Paquete Android sigue `com.blindly.studio`; iOS `com.blindly.app`, scheme `blindly`. Una futura implementación nativa de Google tendría requisitos propios y no está incluida.
 
@@ -62,9 +64,9 @@ Comandos: `npm run test:auth`, `npm test`, `npm run typecheck`, `npm run lint`, 
 | Invitado→email | Real: entrega SMTP, OTP, password y login; mismo UUID. UI simulada pasa. |
 | Invitado→Google | Real SDK/navegador: linkIdentity, misma identidad permanente. Android pendiente. |
 | UUID antes/después | Real conservado en email, legacy→email, Google y reset; FK/RPC auditadas. |
-| Persistencia al cerrar/abrir | Real: reinstanciar SDK con mismo storage conserva sesión. Arranque frío Android pendiente. |
-| Logout | Real SDK local sin borrar servidor; flujo UI/invitado nuevo simulado. |
-| Login posterior | Real signInWithPassword restaura UUID original. |
+| Persistencia al cerrar/abrir | Real SDK y emulador v25 x86_64: force-stop/abrir conserva reviewer y Plus sin reingresar password. A32 pendiente. |
+| Logout | Real SDK y UI del emulador v25: vuelve a invitado sin eliminar reviewer. |
+| Login posterior | Real signInWithPassword y UI Android del reviewer; UUID original. |
 | Password incorrecta | Real: invalid_credentials y sesión conservada; traducción simulada. |
 | Email existente | Real: email_exists, invitado conservado y reviewer intacto. |
 | Reset | Real: enlace PKCE → password nueva válida/anterior rechazada, mismo UUID. Deep link resuelto por SDK QA; apertura Android pendiente. |
@@ -78,7 +80,7 @@ Comandos: `npm run test:auth`, `npm test`, `npm run typecheck`, `npm run lint`, 
 | Historial | Suite SQL existente pasa; conversión real pendiente. |
 | Clubes | Suite SQL existente y navegación pasan; conversión real pendiente. |
 | Roles/ownership | Guardas/FK auditadas, regresiones SQL pasan; conversión real pendiente. |
-| Plus por UUID | Reviewer nuevo real: login normal, grant permanente y RPC propia true. Regresiones RevenueCat pasan; SDK comercial apagado. |
+| Plus por UUID | Reviewer real: login normal, grant/RPC true y PLUS ACTIVO visible en emulador v25. Regresiones RevenueCat pasan; SDK comercial apagado. |
 | Eliminación | Real: Edge eliminó identidades QA anónimas, email, legacy→email y Google; otras modalidades físicas pendientes. |
 | Red | Fallos y restauración de pendiente simulados; pérdida de red física pendiente. |
 | Doble toque | Servicio/UI/callback simulados: una operación. |
@@ -109,3 +111,7 @@ Compilación local Android completada, paquete com.blindly.studio, versión 1.0.
 Instalación A32: rechazó la actualización local con INSTALL_FAILED_UPDATE_INCOMPATIBLE. Tiene v22 firmada por Google Play, distinta del certificado local. No se desinstaló ni borró su sesión. Para preservar datos, subir el AAB validado al canal interno y actualizar desde Play. El emulador x86 necesita la variante QA con x86; la APK ARM instala pero SoLoader no encuentra la biblioteca x86 de React Native. Esto no es aceptación ARM64/16 KB y no se atribuye a un fallo de Auth.
 
 Base de implementación: a4f2a80 (demo), CI y Pages anteriores exitosos. La evidencia nueva incluye G:/Blindly/evidencias/auth-google-qa-real.png y auth-v25-elf-apk.json/auth-v25-elf-aab.json. Las credenciales nunca se incluyen en capturas de documentación pública.
+
+QA nativa v25: variante x86_64 instalada en emulador Android 36/16 KB; login email/password del reviewer, Plus visible, persistencia tras force-stop y logout pasaron. Evidencia auth-v25-emulador-plus.png, persist.xml y logout.xml fuera de Git. No demuestra ARM64/16 KB ni deep links Google/email en el A32.
+
+CI de 6282326 falló antes de tests por seis parches nuevos recomendados de Expo 57. Se aplicaron expo 57.0.28, @expo/ui 57.0.23, dev-client 57.0.20, router 57.0.26, sharing 57.0.23 y splash-screen 57.0.10. Expo install --check y Doctor 21/21 pasan; TypeScript, lint, suite completa y bundles también. Candidato v26 en compilación; v25 no incluye estos parches.
