@@ -34,7 +34,6 @@ if ($PlayBilling) {
   $env:EXPO_PUBLIC_PLUS_READY = 'true'
 }
 $env:EXPO_PUBLIC_PUSH_READY = 'false'
-$env:EXPO_PUBLIC_EMAIL_AUTH_READY = 'false'
 $env:NODE_ENV = 'production'
 # Prebuild puede cambiar scripts de npm. Se preserva exactamente package.json.
 $packagePath = Join-Path $repo 'package.json'

@@ -2174,3 +2174,257 @@ Object.assign(textos, {
     "Transforme o resultado final em um cartão pronto para suas redes.",
   ],
 });
+
+// Auth convencional: mensajes propios, nunca errores internos crudos.
+Object.assign(textos, {
+  "Acceso": [
+    "Sign in",
+    "Acesso"
+  ],
+  "Tu mesa de poker, conectada.": [
+    "Your poker table, connected.",
+    "Sua mesa de poker, conectada."
+  ],
+  "Continuar con Google": [
+    "Continue with Google",
+    "Continuar com Google"
+  ],
+  "Ya tengo una cuenta Google": [
+    "I already have a Google account",
+    "Já tenho uma conta Google"
+  ],
+  "Crear cuenta / Iniciar sesión": [
+    "Create account / Sign in",
+    "Criar conta / Entrar"
+  ],
+  "Jugar como invitado": [
+    "Play as guest",
+    "Jogar como convidado"
+  ],
+  "Entrá con Google o email, o jugá como invitado sin registrarte.": [
+    "Sign in with Google or email, or play as a guest without signing up.",
+    "Entre com Google ou email, ou jogue como convidado sem cadastro."
+  ],
+  "Guardar mi progreso": [
+    "Save my progress",
+    "Salvar meu progresso"
+  ],
+  "Contraseña": [
+    "Password",
+    "Senha"
+  ],
+  "Confirmar contraseña": [
+    "Confirm password",
+    "Confirmar senha"
+  ],
+  "Iniciar sesión": [
+    "Sign in",
+    "Entrar"
+  ],
+  "Crear cuenta": [
+    "Create account",
+    "Criar conta"
+  ],
+  "Crear cuenta con email": [
+    "Create account with email",
+    "Criar conta com email"
+  ],
+  "¿Olvidaste tu contraseña?": [
+    "Forgot your password?",
+    "Esqueceu sua senha?"
+  ],
+  "¿No tenés cuenta?": [
+    "No account yet?",
+    "Ainda não tem conta?"
+  ],
+  "Tu identidad, puntos y clubes se conservan. Verificá tu email para protegerlos.": [
+    "Your identity, points and clubs are preserved. Verify your email to protect them.",
+    "Sua identidade, pontos e clubes são preservados. Verifique seu email para protegê-los."
+  ],
+  "Al vincular email y contraseña, la clave anterior dejará de servir. Conservás tu identidad y tus datos.": [
+    "Linking email and password replaces the old recovery key. Your identity and data are preserved.",
+    "Vincular email e senha substitui a chave antiga. Sua identidade e seus dados são preservados."
+  ],
+  "Usá al menos 8 caracteres. Nunca compartas tu contraseña.": [
+    "Use at least 8 characters. Never share your password.",
+    "Use pelo menos 8 caracteres. Nunca compartilhe sua senha."
+  ],
+  "Verificá tu email": [
+    "Verify your email",
+    "Verifique seu email"
+  ],
+  "Ingresá el código del correo o abrí el enlace en este mismo dispositivo. Luego guardá tu contraseña.": [
+    "Enter the email code or open the link on this same device. Then save your password.",
+    "Digite o código do email ou abra o link neste mesmo dispositivo. Depois salve sua senha."
+  ],
+  "Verificar y guardar contraseña": [
+    "Verify and save password",
+    "Verificar e salvar senha"
+  ],
+  "Restablecer contraseña": [
+    "Reset password",
+    "Redefinir senha"
+  ],
+  "Enviar enlace de recuperación": [
+    "Send recovery link",
+    "Enviar link de recuperação"
+  ],
+  "Si existe una cuenta con ese email, recibirás un enlace de recuperación. Abrilo en este mismo dispositivo.": [
+    "If an account uses this email, you will receive a recovery link. Open it on this same device.",
+    "Se houver uma conta com esse email, você receberá um link de recuperação. Abra-o neste mesmo dispositivo."
+  ],
+  "Nueva contraseña": [
+    "New password",
+    "Nova senha"
+  ],
+  "Guardar contraseña": [
+    "Save password",
+    "Salvar senha"
+  ],
+  "Contraseña actualizada.": [
+    "Password updated.",
+    "Senha atualizada."
+  ],
+  "Google conectado": [
+    "Google connected",
+    "Google conectado"
+  ],
+  "Cuenta legacy protegida": [
+    "Legacy account protected",
+    "Conta antiga protegida"
+  ],
+  "Email verificado": [
+    "Email verified",
+    "Email verificado"
+  ],
+  "Podés añadir Google o email a tu identidad existente.": [
+    "You can add Google or email to your existing identity.",
+    "Você pode adicionar Google ou email à sua identidade existente."
+  ],
+  "Seguridad": [
+    "Security",
+    "Segurança"
+  ],
+  "Métodos de acceso": [
+    "Sign-in methods",
+    "Métodos de acesso"
+  ],
+  "Cambiar contraseña": [
+    "Change password",
+    "Alterar senha"
+  ],
+  "Cerrar sesión": [
+    "Sign out",
+    "Sair da conta"
+  ],
+  "Opciones avanzadas · clave de recuperación": [
+    "Advanced options · recovery key",
+    "Opções avançadas · chave de recuperação"
+  ],
+  "Clave de recuperación · legacy": [
+    "Recovery key · legacy",
+    "Chave de recuperação · antiga"
+  ],
+  "Para cuentas creadas con la versión anterior. No necesitás una clave para usar Google o email.": [
+    "For accounts created with the previous version. Google and email do not require a recovery key.",
+    "Para contas criadas na versão anterior. Google e email não exigem chave de recuperação."
+  ],
+  "Estás jugando como invitado. Guardá tu progreso cuando quieras.": [
+    "You are playing as a guest. Save your progress whenever you want.",
+    "Você está jogando como convidado. Salve seu progresso quando quiser."
+  ],
+  "Zona peligrosa": [
+    "Danger zone",
+    "Zona de perigo"
+  ],
+  "Comprobando tu acceso…": [
+    "Checking your sign-in…",
+    "Verificando seu acesso…"
+  ],
+  "Volver a mi cuenta": [
+    "Back to my account",
+    "Voltar à minha conta"
+  ],
+  "o": [
+    "or",
+    "ou"
+  ],
+  "Usá una contraseña de al menos 8 caracteres y respetá los requisitos indicados.": [
+    "Use a password with at least 8 characters and meet the stated requirements.",
+    "Use uma senha com pelo menos 8 caracteres e respeite os requisitos indicados."
+  ],
+  "Las contraseñas no coinciden.": [
+    "Passwords do not match.",
+    "As senhas não coincidem."
+  ],
+  "El email o la contraseña no son correctos.": [
+    "The email or password is incorrect.",
+    "O email ou a senha está incorreto."
+  ],
+  "Verificá tu email antes de continuar.": [
+    "Verify your email before continuing.",
+    "Verifique seu email antes de continuar."
+  ],
+  "Ese email ya tiene una cuenta. Iniciá sesión sin fusionar tus datos.": [
+    "This email already has an account. Sign in without merging your data.",
+    "Este email já tem uma conta. Entre sem mesclar seus dados."
+  ],
+  "Ese Google ya está vinculado a otra cuenta. Usá la opción de iniciar sesión en tu cuenta existente.": [
+    "This Google account is linked to another account. Use the option to sign in to your existing account.",
+    "Este Google já está vinculado a outra conta. Use a opção de entrar na sua conta existente."
+  ],
+  "El acceso con Google todavía necesita configuración. Podés jugar como invitado.": [
+    "Google sign-in still needs configuration. You can play as a guest.",
+    "O acesso com Google ainda precisa de configuração. Você pode jogar como convidado."
+  ],
+  "La vinculación de cuentas todavía no está habilitada. Podés seguir como invitado.": [
+    "Account linking is not enabled yet. You can continue as a guest.",
+    "A vinculação de contas ainda não está habilitada. Você pode continuar como convidado."
+  ],
+  "El envío de correos todavía no está habilitado para esta dirección.": [
+    "Email sending is not enabled for this address yet.",
+    "O envio de emails ainda não está habilitado para este endereço."
+  ],
+  "Demasiados intentos. Esperá unos minutos y probá de nuevo.": [
+    "Too many attempts. Wait a few minutes and try again.",
+    "Muitas tentativas. Espere alguns minutos e tente novamente."
+  ],
+  "El enlace o código venció. Solicitá uno nuevo desde este dispositivo.": [
+    "The link or code expired. Request a new one from this device.",
+    "O link ou código expirou. Solicite outro neste dispositivo."
+  ],
+  "Volvé a iniciar sesión o pedí un enlace de recuperación para cambiar tu contraseña.": [
+    "Sign in again or request a recovery link to change your password.",
+    "Entre novamente ou solicite um link de recuperação para alterar sua senha."
+  ],
+  "No se pudo completar el acceso. Revisá tu conexión y probá de nuevo.": [
+    "Sign-in could not be completed. Check your connection and try again.",
+    "Não foi possível concluir o acesso. Verifique sua conexão e tente novamente."
+  ],
+  "Ya hay una operación de acceso en curso.": [
+    "A sign-in operation is already in progress.",
+    "Já há uma operação de acesso em andamento."
+  ],
+  "Ingresá un nombre de hasta 30 caracteres.": [
+    "Enter a name with up to 30 characters.",
+    "Digite um nome com até 30 caracteres."
+  ]
+});
+Object.assign(errores, {
+  "AUTH_PASSWORD_CORTA": "Usá una contraseña de al menos 8 caracteres y respetá los requisitos indicados.",
+  "AUTH_PASSWORD_DISTINTA": "Las contraseñas no coinciden.",
+  "AUTH_CREDENCIALES": "El email o la contraseña no son correctos.",
+  "AUTH_EMAIL_NO_CONFIRMADO": "Verificá tu email antes de continuar.",
+  "AUTH_EMAIL_OCUPADO": "Ese email ya tiene una cuenta. Iniciá sesión sin fusionar tus datos.",
+  "AUTH_GOOGLE_OCUPADO": "Ese Google ya está vinculado a otra cuenta. Usá la opción de iniciar sesión en tu cuenta existente.",
+  "AUTH_GOOGLE_NO_CONFIGURADO": "El acceso con Google todavía necesita configuración. Podés jugar como invitado.",
+  "AUTH_LINKING_NO_CONFIGURADO": "La vinculación de cuentas todavía no está habilitada. Podés seguir como invitado.",
+  "AUTH_CORREO_NO_CONFIGURADO": "El envío de correos todavía no está habilitado para esta dirección.",
+  "AUTH_RATE_LIMIT": "Demasiados intentos. Esperá unos minutos y probá de nuevo.",
+  "AUTH_LINK_VENCIDO": "El enlace o código venció. Solicitá uno nuevo desde este dispositivo.",
+  "AUTH_REAUTENTICAR": "Volvé a iniciar sesión o pedí un enlace de recuperación para cambiar tu contraseña.",
+  "AUTH_NO_COMPLETADO": "No se pudo completar el acceso. Revisá tu conexión y probá de nuevo.",
+  "AUTH_OCUPADO": "Ya hay una operación de acceso en curso.",
+  "AUTH_NOMBRE_INVALIDO": "Ingresá un nombre de hasta 30 caracteres."
+});
+Object.assign(textos, { "Nombre": ["Name", "Nome"], "Free": ["Free", "Free"] });

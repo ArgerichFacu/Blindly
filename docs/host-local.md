@@ -26,7 +26,7 @@ npm ci
 Copy-Item .env.example .env
 ```
 
-Completá .env con EXPO_PUBLIC_SUPABASE_URL y EXPO_PUBLIC_SUPABASE_KEY del mismo proyecto Supabase que usa esta PC. Podés copiar tu .env de manera privada entre tus equipos. No está incluido en GitHub. Nunca uses una clave service_role en la app. Mantené EXPO_PUBLIC_EMAIL_AUTH_READY=false mientras no haya SMTP configurado.
+Completá .env con EXPO_PUBLIC_SUPABASE_URL y EXPO_PUBLIC_SUPABASE_KEY del mismo proyecto Supabase que usa esta PC. Podés copiar tu .env de manera privada entre tus equipos. No está incluido en GitHub. Nunca uses una clave service_role en la app. La bandera EMAIL_AUTH_READY quedó obsoleta: ver auth-convencional.md para SMTP, Google y callbacks antes de probar esos accesos.
 
 ```powershell
 npm run typecheck

@@ -56,7 +56,7 @@ export function Introduccion() {
           </Texto>
           <Texto suave>
             {t(
-              "Jugá ahora como invitado o protegé tu identidad para llevar tu historia a otro celular.",
+              "Entrá con Google o email, o jugá como invitado sin registrarte.",
             )}
           </Texto>
           {inicio.error && (
@@ -64,19 +64,12 @@ export function Introduccion() {
               {t("No se pudo guardar tu progreso. Probá otra vez.")}
             </Texto>
           )}
-          <Boton
-            titulo={t("Continuar como invitado")}
-            disabled={inicio.ocupado}
-            onPress={() => void inicio.elegir("invitado")}
-          />
-          <Boton
-            titulo={t("Crear o recuperar cuenta")}
-            secundario
-            disabled={inicio.ocupado}
-            onPress={() =>
-              router.push({ pathname: "/cuenta", params: { inicio: "1" } })
-            }
-          />
+          <Boton titulo={t("Continuar con Google")} disabled={inicio.ocupado}
+            onPress={() => router.push({ pathname: "/cuenta", params: { inicio: "1", accion: "google" } })}/>
+          <Boton titulo={t("Crear cuenta / Iniciar sesión")} secundario disabled={inicio.ocupado}
+            onPress={() => router.push({ pathname: "/cuenta", params: { inicio: "1" } })}/>
+          <Boton titulo={t("Jugar como invitado")} secundario disabled={inicio.ocupado}
+            onPress={() => void inicio.elegir("invitado")}/>
           <Texto suave>
             {t(
               "Podés proteger tu cuenta más adelante desde Opciones → Mi cuenta.",

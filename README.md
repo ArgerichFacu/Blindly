@@ -74,7 +74,6 @@ En macOS o Linux, reemplazá el último comando por `cp .env.example .env`. Comp
 ```dotenv
 EXPO_PUBLIC_SUPABASE_URL=https://TU-PROYECTO.supabase.co
 EXPO_PUBLIC_SUPABASE_KEY=TU_CLAVE_PUBLICA
-EXPO_PUBLIC_EMAIL_AUTH_READY=false
 ```
 
 Las variables `EXPO_PUBLIC_*` forman parte del cliente. Usá exclusivamente una clave pública de Supabase, nunca `service_role`, contraseñas ni secretos. El archivo `.env` está excluido de Git; podés transferirlo de forma privada entre tus equipos.
@@ -106,11 +105,9 @@ npm ci
 
 ## Identidad y recuperación
 
-Podés entrar como invitado sin registrar un correo. Desde **Mi cuenta** podés generar una clave privada para recuperar el mismo UUID, puntos, historial y compras en otro dispositivo. La clave se muestra una sola vez y puede rotarse; Blindly solo conserva su hash seguro dentro de Supabase Auth.
+El nuevo candidato incluye Google, email/contraseña y acceso rápido como invitado. Proteger un invitado usa su mismo UUID; el login de una cuenta existente no fusiona datos. Logout conserva datos servidor y la eliminación autenticada bloquea partidas activas. Las claves BLINDLY1 anteriores siguen disponibles en **Opciones avanzadas**.
 
-La recuperación por clave ya funciona sin un proveedor externo. La interfaz también incluye vinculación por código de correo para conservar el UUID y la puntuación cuando se configure SMTP. Los cambios de identidad no fusionan cuentas y tienen controles para evitar reemplazar un invitado con partidas puntuadas, compras o una partida activa. Desde **Mi cuenta** también se puede eliminar la identidad, la puntuación y el historial; una Edge Function autenticada impide hacerlo mientras exista una partida activa.
-
-**La recuperación por correo todavía está deshabilitada por defecto**, pero ya no bloquea la identidad recuperable porque la clave privada cubre ese caso. Falta configurar un proveedor SMTP, aplicar las plantillas y verificar el envío. Solo después debe habilitarse `EXPO_PUBLIC_EMAIL_AUTH_READY=true`.
+**La activación del auth convencional está pendiente**: faltan SMTP y Google OAuth en Supabase; los callbacks nativo/local ya están configurados, además de las pruebas reales de vinculación/recuperación. No se activa con `EXPO_PUBLIC_EMAIL_AUTH_READY`; esa bandera quedó obsoleta. La prueba interna v22 sigue publicada sin reemplazo. Ver [estado, configuración exacta y matriz QA](docs/auth-convencional.md).
 
 Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md). La [política de privacidad](PRIVACY.md), los [términos de uso](TERMS.md) y las [instrucciones de eliminación](ACCOUNT_DELETION.md) están versionados en el repositorio. Sus páginas web están preparadas en `docs/` y quedarán públicas cuando se active GitHub Pages desde `main` y `/docs`.
 

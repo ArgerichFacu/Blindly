@@ -1,5 +1,8 @@
 # Identidad exclusiva para Google Play Review
 
+> Esta identidad legacy fue descartada por el dueño para la revisión nueva. No reutilizar su clave. Nueva identidad email/password pendiente: ver [auth-convencional.md](auth-convencional.md).
+
+
 Cuenta: **Google Play Reviewer**. Se crea mediante la autenticación anónima y Edge Function crear-recuperacion existentes, protegiendo el mismo UUID con email interno y contraseña aleatoria. No cambia sesion.ts, cuenta.tsx ni el flujo de autenticación general. La credencial estable está fuera del repositorio, en G:/Blindly/privado/google-play-reviewer.json y Google-Play-Review-instrucciones.txt. Nunca copiarla a Git, al README ni a un issue público.
 
 ## Permiso Plus

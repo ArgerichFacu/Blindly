@@ -1,478 +1,139 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import type { User } from "@supabase/supabase-js";
-import {
-  Pantalla,
-  Texto,
-  Tarjeta,
-  Campo,
-  Boton,
-} from "../components/Controles";
-import {
-  asegurarSesion,
-  solicitarCodigo,
-  confirmarCodigo,
-  crearClaveRecuperacion,
-  recuperarConClave,
-  cuentaConClave,
-  eliminarCuenta,
-  type SolicitudCuenta,
-} from "../lib/sesion";
+import { View } from "react-native";
+import { Pantalla, Texto, Tarjeta, Campo, Boton, Etiqueta } from "../components/Controles";
+import { LogoBlindly } from "../components/LogoBlindly";
+import { asegurarSesion, crearClaveRecuperacion, recuperarConClave, cuentaConClave, eliminarCuenta } from "../lib/sesion";
+import { registrarEmail, confirmarEmailPassword, entrarEmail, cerrarSesion, solicitarReset, guardarPassword, continuarGoogle, validarPassword, leerPendiente } from "../lib/autenticacion";
+import { supabase } from "../lib/supabase";
 import { usePreferencias } from "../lib/Preferencias";
 import { usePlus } from "../lib/PlusContext";
 import { useInicio } from "../lib/InicioContext";
-import { identidadUsuario } from "../lib/identidad";
-const correoListo = process.env.EXPO_PUBLIC_EMAIL_AUTH_READY === "true";
+type Modo = "login" | "registro" | "verificar" | "reset" | "password" | "cuenta" | "legacy";
 export default function Cuenta() {
-  const { t, mensajeError } = usePreferencias(),
-    router = useRouter(),
-    plus = usePlus();
-  const {
-    inicio: origen,
-    volver,
-    liga,
-    codigo: codigoClub,
-    nombre: nombreMesa,
-    seccion,
-    temporada,
-  } = useLocalSearchParams<{
-    inicio?: string;
-    volver?: string;
-    liga?: string;
-    codigo?: string;
-    nombre?: string;
-    seccion?: string;
-    temporada?: string;
-  }>();
-  const inicio = useInicio();
+  const { t, mensajeError } = usePreferencias(), router = useRouter(), plus = usePlus(), inicio = useInicio();
+  const { inicio: origen, volver, liga, codigo: codigoClub, nombre: nombreMesa, seccion, temporada, accion } = useLocalSearchParams<{ inicio?: string; volver?: string; liga?: string; codigo?: string; nombre?: string; seccion?: string; temporada?: string; accion?: string }>();
   const desdeInicio = origen === "1";
-  const [usuario, setUsuario] = useState<User | null>(null),
-    [email, setEmail] = useState(""),
-    [codigo, setCodigo] = useState(""),
-    [clave, setClave] = useState(""),
-    [claveGenerada, setClaveGenerada] = useState(""),
-    [mostrarRecuperacion, setMostrarRecuperacion] = useState(false),
-    [solicitud, setSolicitud] = useState<SolicitudCuenta | null>(null),
-    [recuperar, setRecuperar] = useState(false),
-    [ocupado, setOcupado] = useState(false),
-    [error, setError] = useState<unknown>(null),
-    [revision, setRevision] = useState(0),
-    [confirmarBorrado, setConfirmarBorrado] = useState(false);
-  const cerrojo = useRef(false);
-  const identidad = usuario ? identidadUsuario(usuario) : null;
-  const regresar =
-    volver === "unirse" && codigoClub && /^[A-Z2-9]{5}$/.test(codigoClub)
-      ? () =>
-          router.replace({
-            pathname: "/unirse",
-            params: {
-              codigo: codigoClub,
-              nombre: nombreMesa?.slice(0, 30) ?? "",
-            },
-          })
-      : volver === "ligas" ||
-          volver === "plus" ||
-          volver === "puntuacion" ||
-          volver === "head-to-head"
-        ? () => router.replace(`/${volver}`)
-        : volver === "liga-nueva"
-          ? () => router.replace("/liga-nueva")
-          : volver === "liga-unirse" &&
-              codigoClub &&
-              /^[A-F0-9]{20}$/.test(codigoClub)
-            ? () =>
-                router.replace({
-                  pathname: "/liga-unirse",
-                  params: { codigo: codigoClub },
-                })
-            : volver === "liga" && liga
-              ? () =>
-                  router.replace({ pathname: "/liga", params: { id: liga, seccion, temporada } })
-              : null;
-  useFocusEffect(
-    useCallback(() => {
-      let activo = true;
-      void asegurarSesion()
-        .then((u) => {
-          if (activo) setUsuario(u);
-        })
-        .catch((e) => {
-          if (activo) setError(e);
-        });
-      return () => {
-        activo = false;
-      };
-      // `revision` es un contador intencional para reintentar la carga en foco.
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [revision]),
-  );
-  async function ejecutar(fn: () => Promise<void>) {
+  const contextoAuth = useMemo(() => ({ inicio: origen, volver, liga, codigo: codigoClub, nombre: nombreMesa, seccion, temporada }), [origen, volver, liga, codigoClub, nombreMesa, seccion, temporada]);
+  const [usuario, setUsuario] = useState<User | null>(null), [modo, setModo] = useState<Modo>(accion === "password" ? "password" : "login"),
+    [email, setEmail] = useState(""), [nombre, setNombre] = useState(""), [password, setPassword] = useState(""), [confirmacion, setConfirmacion] = useState(""),
+    [codigo, setCodigo] = useState(""), [clave, setClave] = useState(""), [claveGenerada, setClaveGenerada] = useState(""),
+    [ocupado, setOcupado] = useState(false), [error, setError] = useState<unknown>(null), [aviso, setAviso] = useState(""),
+    [seguridad, setSeguridad] = useState(false), [confirmarBorrado, setConfirmarBorrado] = useState(false), [revision, setRevision] = useState(0);
+  const cerrojo = useRef(false), vivo = useRef(true), ultimoUsuario = useRef<string | null>(null), googleInicial = useRef(false);
+  const plusActual = useRef(plus);
+  useEffect(() => { plusActual.current = plus; }, [plus]);
+  const googleConectado = usuario?.identities?.some(i => i.provider === "google") ?? false;
+  const regresar = () => {
+    if (volver === "unirse" && codigoClub && /^[A-Z2-9]{5}$/.test(codigoClub)) router.replace({ pathname: "/unirse", params: { codigo: codigoClub, nombre: nombreMesa?.slice(0,30) ?? "" } });
+    else if (volver === "liga" && liga) router.replace({ pathname: "/liga", params: { id: liga, seccion, temporada } });
+    else if (volver === "liga-unirse" && codigoClub && /^[A-F0-9]{20}$/.test(codigoClub)) router.replace({ pathname: "/liga-unirse", params: { codigo: codigoClub } });
+    else if (volver && ["ligas","puntuacion","plus","head-to-head","liga-nueva"].includes(volver)) router.replace(`/${volver}` as "/ligas");
+    else router.replace("/");
+  };
+  useEffect(() => {
+    vivo.current = true;
+    const { data } = supabase.auth.onAuthStateChange((_evento, sesion) => {
+      if (vivo.current) {
+        const id = sesion?.user.id ?? null;
+        if (ultimoUsuario.current !== id) { setPassword(""); setConfirmacion(""); }
+        ultimoUsuario.current = id; setUsuario(sesion?.user ?? null);
+      }
+    });
+    return () => { vivo.current = false; data.subscription.unsubscribe(); };
+  }, []);
+  const ejecutar = useCallback(async (fn: () => Promise<void>) => {
     if (cerrojo.current) return;
-    cerrojo.current = true;
-    setOcupado(true);
-    setError(null);
-    try {
-      await fn();
-    } catch (e) {
-      setError(e);
-    } finally {
-      cerrojo.current = false;
-      setOcupado(false);
-    }
-  }
-  return (
-    <Pantalla titulo={t("Mi cuenta")}>
-      {desdeInicio && (
-        <Tarjeta>
-          <Texto>
-            {t(
-              "Protegé tu identidad con una clave privada o recuperá tu cuenta existente. Después seguimos con la guía rápida.",
-            )}
-          </Texto>
+    cerrojo.current = true; setOcupado(true); setError(null); setAviso("");
+    try { await fn(); } catch (e) { if (vivo.current) setError(e); }
+    finally { cerrojo.current = false; if (vivo.current) setOcupado(false); }
+  }, []);
+  const listo = useCallback(async (u: User) => {
+    if (!vivo.current) return;
+    setUsuario(u); setModo("cuenta"); setPassword(""); setConfirmacion(""); setCodigo(""); setClave("");
+    await plusActual.current.refrescar();
+  }, []);
+  useFocusEffect(useCallback(() => {
+    let activo = true;
+    void asegurarSesion().then(async u => {
+      if (!activo) return;
+      ultimoUsuario.current = u.id; setUsuario(u); setNombre(String(u.user_metadata?.display_name ?? u.user_metadata?.full_name ?? ""));
+      const pendiente = await leerPendiente();
+      if (!activo) return;
+      if (accion === "password") setModo("password");
+      else if (pendiente?.tipo === "email-link" && pendiente.usuario === u.id) { setEmail(pendiente.email ?? ""); setModo("verificar"); }
+      else setModo(u.is_anonymous ? "login" : "cuenta");
+      if (!u.is_anonymous && !cuentaConClave(u)) setEmail(u.email ?? "");
+      if (accion === "google" && !googleInicial.current) {
+        googleInicial.current = true;
+        await ejecutar(async () => { const nueva = await continuarGoogle(true, contextoAuth); if(nueva) await listo(nueva); });
+      }
+    }).catch(e => { if (activo) setError(e); });
+    return () => { activo = false; };
+    // revision fuerza una recarga explícita con Reintentar; no es un dato auth.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [revision, accion, contextoAuth, ejecutar, listo]));
+  function cambiarModo(nuevo: Modo) { setModo(nuevo); setError(null); setAviso(""); setPassword(""); setConfirmacion(""); setCodigo(""); }
+  const campoEmail = <Campo etiqueta={t("Email")} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} autoComplete="email" textContentType="emailAddress" editable={!ocupado}/>;
+  const camposPassword = <><Campo etiqueta={t("Contraseña")} value={password} onChangeText={setPassword} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete={modo === "login" ? "current-password" : "new-password"} editable={!ocupado}/>{modo !== "login" && <Campo etiqueta={t("Confirmar contraseña")} value={confirmacion} onChangeText={setConfirmacion} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete="new-password" editable={!ocupado}/>}</>;
+  const google = (vincular = true) => void ejecutar(async () => { const u = await continuarGoogle(vincular, contextoAuth); if (u) await listo(u); });
+  return <Pantalla titulo={t(usuario && !usuario.is_anonymous && modo === "cuenta" ? "Mi cuenta" : "Acceso")} subtitulo={t("Tu mesa de poker, conectada.")}>
+    {!!error && <Tarjeta><Texto accessibilityLiveRegion="assertive">{mensajeError(error)}</Texto><Boton titulo={t("Reintentar")} secundario disabled={ocupado} onPress={() => { setError(null); setRevision(v=>v+1); }}/></Tarjeta>}
+    {!!aviso && <Tarjeta><Texto accessibilityLiveRegion="polite">{t(aviso)}</Texto></Tarjeta>}
+    {!usuario ? <Texto>{t("Cargando…")}</Texto> : <>
+      {modo === "login" && <Tarjeta>
+        <View style={{ alignItems: "center", gap: 12 }}><LogoBlindly ancho={180}/><Etiqueta>{t("POKER ENTRE AMIGOS")}</Etiqueta></View>
+        <Boton titulo={t("Continuar con Google")} disabled={ocupado} onPress={() => google(true)}/>
+        <Boton titulo={t("Ya tengo una cuenta Google")} secundario compacto disabled={ocupado} onPress={() => google(false)}/>
+        <Texto suave style={{ textAlign: "center" }}>{t("o")}</Texto>{campoEmail}{camposPassword}
+        <Boton titulo={t(ocupado ? "Cargando…" : "Iniciar sesión")} disabled={ocupado || !email || !password} onPress={() => void ejecutar(async()=>listo(await entrarEmail(email,password)))}/>
+        <Boton titulo={t("¿Olvidaste tu contraseña?")} secundario compacto disabled={ocupado} onPress={()=>cambiarModo("reset")}/>
+        <Texto suave>{t("¿No tenés cuenta?")}</Texto><Boton titulo={t("Crear cuenta")} secundario disabled={ocupado} onPress={()=>cambiarModo("registro")}/>
+      </Tarjeta>}
+      {modo === "registro" && <Tarjeta>
+        <Texto style={{ fontSize:22,fontWeight:"700" }}>{t("Guardar mi progreso")}</Texto>
+        <Texto suave>{t("Tu identidad, puntos y clubes se conservan. Verificá tu email para protegerlos.")}</Texto>
+        {cuentaConClave(usuario) && <Texto>{t("Al vincular email y contraseña, la clave anterior dejará de servir. Conservás tu identidad y tus datos.")}</Texto>}
+        <Campo etiqueta={t("Nombre")} value={nombre} onChangeText={setNombre} maxLength={30} autoComplete="name" editable={!ocupado}/>{campoEmail}{camposPassword}
+        <Texto suave>{t("Usá al menos 8 caracteres. Nunca compartas tu contraseña.")}</Texto>
+        <Boton titulo={t(ocupado ? "Cargando…" : "Crear cuenta")} disabled={ocupado || !email || !nombre || !password || !confirmacion} onPress={()=>void ejecutar(async()=>{ validarPassword(password,confirmacion); const r=await registrarEmail(email,nombre,contextoAuth); setEmail(r.email); setModo("verificar"); })}/>
+        <Boton titulo={t("Cancelar")} secundario disabled={ocupado} onPress={()=>cambiarModo(usuario.is_anonymous?"login":"cuenta")}/>
+      </Tarjeta>}
+      {modo === "verificar" && <Tarjeta>
+        <Texto style={{fontWeight:"700"}}>{t("Verificá tu email")}</Texto><Texto suave>{email}</Texto>
+        <Texto>{t("Ingresá el código del correo o abrí el enlace en este mismo dispositivo. Luego guardá tu contraseña.")}</Texto>
+        <Campo etiqueta={t("Código de verificación")} value={codigo} onChangeText={setCodigo} keyboardType="number-pad" autoComplete="one-time-code" maxLength={8} editable={!ocupado}/>{camposPassword}
+        <Boton titulo={t("Verificar y guardar contraseña")} disabled={ocupado || !codigo || !password || !confirmacion} onPress={()=>void ejecutar(async()=>listo(await confirmarEmailPassword(email,codigo,password,confirmacion)))}/>
+      </Tarjeta>}
+      {modo === "reset" && <Tarjeta><Texto>{t("Restablecer contraseña")}</Texto>{campoEmail}<Boton titulo={t("Enviar enlace de recuperación")} disabled={ocupado||!email} onPress={()=>void ejecutar(async()=>{ await solicitarReset(email,contextoAuth); setAviso("Si existe una cuenta con ese email, recibirás un enlace de recuperación. Abrilo en este mismo dispositivo."); })}/><Boton titulo={t("Volver")} secundario disabled={ocupado} onPress={()=>cambiarModo(usuario.is_anonymous?"login":"cuenta")}/></Tarjeta>}
+      {modo === "password" && <Tarjeta><Texto>{t("Nueva contraseña")}</Texto>{camposPassword}<Boton titulo={t("Guardar contraseña")} disabled={ocupado||!password||!confirmacion} onPress={()=>void ejecutar(async()=>{await listo(await guardarPassword(password,confirmacion));setAviso("Contraseña actualizada.");})}/><Boton titulo={t("Cancelar")} secundario disabled={ocupado} onPress={()=>cambiarModo("cuenta")}/></Tarjeta>}
+      {modo === "cuenta" && <>
+        <Tarjeta><Texto style={{fontSize:24,fontWeight:"700"}}>{usuario.user_metadata?.display_name || usuario.user_metadata?.full_name || t("Jugador")}</Texto>
+          {!cuentaConClave(usuario) && <Texto suave>{usuario.email}</Texto>}
+          <Etiqueta activa>{t(googleConectado ? "Google conectado" : cuentaConClave(usuario) ? "Cuenta legacy protegida" : "Email verificado")}</Etiqueta>
+          <Texto>{t(plus.activo?"PLUS ACTIVO":"Free")}</Texto>
+          {plus.gestionable && <Boton titulo={t("Administrar suscripción")} secundario disabled={ocupado} onPress={()=>void ejecutar(plus.gestionar)}/>}
+          {cuentaConClave(usuario) && <><Texto suave>{t("Podés añadir Google o email a tu identidad existente.")}</Texto><Boton titulo={t("Crear cuenta con email")} secundario disabled={ocupado} onPress={()=>cambiarModo("registro")}/></>}
         </Tarjeta>
-      )}
-      {!correoListo && (
-        <Tarjeta>
-          <Texto>
-            {t(
-              "El correo está en preparación. La clave de recuperación ya está disponible.",
-            )}
-          </Texto>
+        <Tarjeta><Texto style={{fontWeight:"700"}}>{t("Seguridad")}</Texto>
+          <Boton titulo={t("Métodos de acceso")} secundario disabled={ocupado} onPress={()=>setSeguridad(v=>!v)}/>
+          {seguridad && <>{!googleConectado && <Boton titulo={t("Continuar con Google")} disabled={ocupado} onPress={()=>google(true)}/>}
+            {!cuentaConClave(usuario) && <Boton titulo={t("Cambiar contraseña")} secundario disabled={ocupado} onPress={()=>cambiarModo("reset")}/>}</>}
+          <Boton titulo={t("Opciones avanzadas · clave de recuperación")} secundario compacto disabled={ocupado} onPress={()=>cambiarModo("legacy")}/>
+          <Boton titulo={t("Cerrar sesión")} secundario disabled={ocupado} onPress={()=>void ejecutar(async()=>{ const u=await cerrarSesion(); setUsuario(u);setModo("login");setSeguridad(false); })}/>
         </Tarjeta>
-      )}
-      {!!error && (
-        <Tarjeta>
-          <Texto>{mensajeError(error)}</Texto>
-          <Boton
-            titulo={t("Reintentar")}
-            disabled={ocupado}
-            onPress={() => {
-              setError(null);
-              setRevision((n) => n + 1);
-            }}
-          />
-        </Tarjeta>
-      )}
-      {!usuario ? (
-        <Texto>{t("Cargando…")}</Texto>
-      ) : (
-        <>
-          <Tarjeta>
-            <Texto>
-              {t(
-                identidad?.invitado
-                  ? "Jugás como invitado"
-                  : cuentaConClave(usuario)
-                    ? "Cuenta protegida con clave"
-                    : identidad?.recuperable
-                      ? "Cuenta recuperable"
-                      : "Protección pendiente",
-              )}
-            </Texto>
-            <Texto suave>{t("ID de tu identidad")}</Texto>
-            <Texto selectable style={{ fontSize: 12 }}>
-              {usuario.id}
-            </Texto>
-            <Texto suave>
-              {t(
-                "Este ID conserva tus puntos y tu lugar en las ligas aunque cambies tu nombre.",
-              )}
-            </Texto>
-            {!usuario.is_anonymous && !cuentaConClave(usuario) && (
-              <Texto>{usuario.email}</Texto>
-            )}
-            <Texto suave>
-              {t(
-                cuentaConClave(usuario)
-                  ? "Tu identidad ya se puede recuperar con la clave privada. También podrás agregar un email cuando el correo esté habilitado."
-                  : "Vinculá tu email para conservar tus puntos e historial al cambiar de celular. Podés seguir jugando como invitado.",
-              )}
-            </Texto>
-            {plus.activo && plus.gestionable && (
-              <>
-                <Texto>
-                  {t(
-                    "Eliminar tu cuenta no cancela tu suscripción de Apple o Google. Administrala antes de borrar la cuenta.",
-                  )}
-                </Texto>
-                <Boton
-                  secundario
-                  titulo={t("Administrar suscripción")}
-                  disabled={ocupado}
-                  onPress={() => void ejecutar(plus.gestionar)}
-                />
-              </>
-            )}
-          </Tarjeta>
-          {(usuario.is_anonymous || cuentaConClave(usuario)) && (
-            <Tarjeta>
-              <Texto style={{ fontWeight: "700" }}>
-                {t(
-                  cuentaConClave(usuario)
-                    ? "Tu cuenta tiene una clave de recuperación"
-                    : "Protección sin correo",
-                )}
-              </Texto>
-              <Texto suave>
-                {t(
-                  "Guardá una clave privada para recuperar este mismo usuario, sus puntos, historial y compras en otro celular.",
-                )}
-              </Texto>
-              {!!claveGenerada && (
-                <>
-                  <Texto selectable style={{ fontWeight: "700" }}>
-                    {claveGenerada}
-                  </Texto>
-                  <Texto>
-                    {t(
-                      "Guardala ahora en un lugar seguro. Blindly no puede mostrarla de nuevo; crear otra reemplaza la anterior.",
-                    )}
-                  </Texto>
-                </>
-              )}
-              <Boton
-                titulo={t(
-                  cuentaConClave(usuario)
-                    ? "Crear una clave nueva"
-                    : "Crear clave de recuperación",
-                )}
-                disabled={ocupado}
-                onPress={() =>
-                  void ejecutar(async () => {
-                    const resultado = await crearClaveRecuperacion(
-                      setClaveGenerada,
-                    );
-                    setUsuario(resultado.usuario);
-                    setClaveGenerada(resultado.clave);
-                  })
-                }
-              />
-              {usuario.is_anonymous && (
-                <Boton
-                  secundario
-                  titulo={t("Ya tengo una clave")}
-                  disabled={ocupado}
-                  onPress={() => setMostrarRecuperacion((valor) => !valor)}
-                />
-              )}
-              {mostrarRecuperacion && usuario.is_anonymous && (
-                <>
-                  <Campo
-                    etiqueta={t("Clave de recuperación")}
-                    value={clave}
-                    onChangeText={setClave}
-                    autoCapitalize="none"
-                    secureTextEntry
-                    autoCorrect={false}
-                    editable={!ocupado}
-                  />
-                  <Boton
-                    titulo={t("Recuperar mi cuenta")}
-                    disabled={ocupado || !clave.trim()}
-                    onPress={() =>
-                      void ejecutar(async () => {
-                        const recuperado = await recuperarConClave(clave);
-                        setUsuario(recuperado);
-                        setClave("");
-                        setMostrarRecuperacion(false);
-                        if (!desdeInicio && !regresar)
-                          router.replace("/cuenta");
-                      })
-                    }
-                  />
-                </>
-              )}
-            </Tarjeta>
-          )}
-          {(usuario.is_anonymous || cuentaConClave(usuario) || recuperar) && (
-            <Tarjeta>
-              {!solicitud ? (
-                <>
-                  <Texto>
-                    {t(
-                      recuperar
-                        ? "Recuperar mi cuenta"
-                        : cuentaConClave(usuario)
-                          ? "Agregar un email"
-                          : "Proteger este invitado",
-                    )}
-                  </Texto>
-                  {recuperar && (
-                    <Texto>
-                      {t(
-                        "Al confirmar, entrarás a la cuenta del correo. Los puntos del invitado actual no se trasladan. Si tiene puntos, vinculalo antes a otro correo. No cambies de cuenta durante una partida.",
-                      )}
-                    </Texto>
-                  )}
-                  <Campo
-                    etiqueta={t("Email")}
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    editable={!ocupado}
-                  />
-                  <Boton
-                    titulo={t("Enviar código")}
-                    disabled={ocupado || !email.trim() || !correoListo}
-                    onPress={() =>
-                      void ejecutar(async () => {
-                        setSolicitud(await solicitarCodigo(email, recuperar));
-                      })
-                    }
-                  />
-                  <Boton
-                    secundario
-                    titulo={t(
-                      recuperar
-                        ? "Proteger este invitado"
-                        : "Ya tengo una cuenta",
-                    )}
-                    disabled={ocupado}
-                    onPress={() => {
-                      setRecuperar(!recuperar);
-                      setError(null);
-                    }}
-                  />
-                </>
-              ) : (
-                <>
-                  <Texto>{t("Ingresá el código enviado a tu email.")}</Texto>
-                  <Texto>{solicitud.email}</Texto>
-                  <Campo
-                    etiqueta={t("Código de verificación")}
-                    value={codigo}
-                    onChangeText={setCodigo}
-                    keyboardType="number-pad"
-                    autoComplete="one-time-code"
-                    maxLength={10}
-                    editable={!ocupado}
-                  />
-                  <Boton
-                    titulo={t("Confirmar código")}
-                    disabled={ocupado || !/^\d{6,10}$/.test(codigo.trim())}
-                    onPress={() =>
-                      void ejecutar(async () => {
-                        const u = await confirmarCodigo(solicitud, codigo);
-                        setUsuario(u);
-                        setSolicitud(null);
-                        setCodigo("");
-                        setRecuperar(false);
-                        if (!desdeInicio && !regresar)
-                          router.replace("/cuenta");
-                      })
-                    }
-                  />
-                  <Boton
-                    secundario
-                    titulo={t("Volver a ingresar email")}
-                    disabled={ocupado}
-                    onPress={() => {
-                      setSolicitud(null);
-                      setCodigo("");
-                    }}
-                  />
-                </>
-              )}
-            </Tarjeta>
-          )}
-          {!usuario.is_anonymous && !cuentaConClave(usuario) && (
-            <Texto suave>
-              {t(
-                "En otro celular, elegí Ya tengo una cuenta e ingresá este mismo correo.",
-              )}
-            </Texto>
-          )}
-          {desdeInicio && !usuario.is_anonymous && (
-            <Tarjeta>
-              {inicio.error && (
-                <Texto>
-                  {t("No se pudo guardar tu progreso. Probá otra vez.")}
-                </Texto>
-              )}
-              <Boton
-                titulo={t(
-                  claveGenerada
-                    ? "Guardé mi clave. Continuar"
-                    : "Continuar con esta cuenta",
-                )}
-                disabled={ocupado || inicio.ocupado}
-                onPress={() =>
-                  void ejecutar(async () => {
-                    if (await inicio.elegir("cuenta")) router.dismissTo("/");
-                  })
-                }
-              />
-            </Tarjeta>
-          )}
-          {!desdeInicio && regresar && identidad?.recuperable && (
-            <Boton
-              titulo={t(
-                claveGenerada
-                  ? "Guardé mi clave. Continuar"
-                  : volver === "puntuacion" ||
-                      volver === "plus" ||
-                      volver === "head-to-head" ||
-                      volver === "unirse"
-                    ? "Continuar con esta cuenta"
-                    : "Volver a mi club",
-              )}
-              disabled={ocupado}
-              onPress={regresar}
-            />
-          )}
-          <Tarjeta style={{ borderColor: "#B91C1C" }}>
-            <Texto style={{ fontWeight: "700" }}>
-              {t("Eliminar mi cuenta")}
-            </Texto>
-            <Texto suave>
-              {t(
-                "Elimina tu identidad, tus puntos y tu historial. No se puede deshacer.",
-              )}
-            </Texto>
-            {confirmarBorrado ? (
-              <>
-                <Texto>
-                  {t(
-                    "Confirmá solo si querés borrar definitivamente todos tus datos de Blindly.",
-                  )}
-                </Texto>
-                <Boton
-                  titulo={t("Eliminar definitivamente")}
-                  disabled={ocupado}
-                  onPress={() =>
-                    void ejecutar(async () => {
-                      await eliminarCuenta();
-                      setUsuario(null);
-                      router.replace("/");
-                    })
-                  }
-                />
-                <Boton
-                  secundario
-                  titulo={t("Cancelar")}
-                  disabled={ocupado}
-                  onPress={() => setConfirmarBorrado(false)}
-                />
-              </>
-            ) : (
-              <Boton
-                secundario
-                titulo={t("Eliminar mi cuenta")}
-                disabled={ocupado}
-                onPress={() => setConfirmarBorrado(true)}
-              />
-            )}
-          </Tarjeta>
-          <Boton
-            secundario
-            titulo={t("Volver al inicio")}
-            disabled={ocupado}
-            onPress={() => router.replace("/")}
-          />
-        </>
-      )}
-    </Pantalla>
-  );
+      </>}
+      {modo === "legacy" && <Tarjeta><Texto style={{fontWeight:"700"}}>{t("Clave de recuperación · legacy")}</Texto><Texto suave>{t("Para cuentas creadas con la versión anterior. No necesitás una clave para usar Google o email.")}</Texto>
+        {usuario.is_anonymous && <><Campo etiqueta={t("Clave de recuperación")} value={clave} onChangeText={setClave} secureTextEntry autoCapitalize="none" autoCorrect={false} editable={!ocupado}/><Boton titulo={t("Recuperar mi cuenta")} disabled={ocupado||!clave} onPress={()=>void ejecutar(async()=>listo(await recuperarConClave(clave)))}/></>}
+        {(cuentaConClave(usuario) || usuario.is_anonymous) && <><Texto selectable style={{fontSize:12}}>{usuario.id}</Texto><Boton titulo={t("Crear una clave nueva")} secundario disabled={ocupado} onPress={()=>void ejecutar(async()=>{const r=await crearClaveRecuperacion(setClaveGenerada);await listo(r.usuario);setModo("legacy");setClaveGenerada(r.clave);})}/>{!!claveGenerada && <><Texto selectable>{claveGenerada}</Texto><Texto>{t("Guardala ahora en un lugar seguro. Blindly no puede mostrarla de nuevo; crear otra reemplaza la anterior.")}</Texto></>}</>}
+        <Boton titulo={t("Volver")} secundario disabled={ocupado} onPress={()=>cambiarModo(usuario.is_anonymous?"login":"cuenta")}/>
+      </Tarjeta>}
+      {usuario.is_anonymous && modo === "login" && <><Tarjeta><Texto suave>{t("Estás jugando como invitado. Guardá tu progreso cuando quieras.")}</Texto><Boton titulo={t("Jugar como invitado")} secundario disabled={ocupado} onPress={()=>void ejecutar(async()=>{ if (desdeInicio) { if(await inicio.elegir("invitado"))router.dismissTo("/"); } else regresar(); })}/></Tarjeta><Boton titulo={t("Opciones avanzadas · clave de recuperación")} secundario compacto disabled={ocupado} onPress={()=>cambiarModo("legacy")}/></>}
+      {!usuario.is_anonymous && desdeInicio && <Boton titulo={t("Continuar con esta cuenta")} disabled={ocupado||inicio.ocupado} onPress={()=>void ejecutar(async()=>{ if(await inicio.elegir("cuenta"))router.dismissTo("/"); })}/>}
+      {!usuario.is_anonymous && !desdeInicio && <Boton titulo={t(volver?"Continuar con esta cuenta":"Volver al inicio")} secundario disabled={ocupado} onPress={regresar}/>}
+      {(modo === "cuenta" || modo === "legacy" || (usuario.is_anonymous && modo === "login")) && <Tarjeta style={{borderColor:"#B91C1C"}}><Texto style={{fontWeight:"700"}}>{t("Zona peligrosa")}</Texto><Texto suave>{t("Elimina tu identidad, tus puntos y tu historial. No se puede deshacer.")}</Texto><Texto suave>{t("Eliminar tu cuenta no cancela tu suscripción de Apple o Google. Administrala antes de borrar la cuenta.")}</Texto>
+        {confirmarBorrado ? <><Boton titulo={t("Eliminar definitivamente")} disabled={ocupado} onPress={()=>void ejecutar(async()=>{await eliminarCuenta();setUsuario(null);router.replace("/");})}/><Boton titulo={t("Cancelar")} secundario disabled={ocupado} onPress={()=>setConfirmarBorrado(false)}/></> : <Boton titulo={t("Eliminar mi cuenta")} secundario disabled={ocupado} onPress={()=>setConfirmarBorrado(true)}/>}</Tarjeta>}
+    </>}
+  </Pantalla>;
 }

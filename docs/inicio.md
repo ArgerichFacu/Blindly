@@ -1,5 +1,8 @@
 # Bienvenida y guía rápida
 
+> Documento de la etapa anterior. Para auth/cuenta/onboarding actuales, ver [auth-convencional.md](auth-convencional.md); los pasos de correo OTP y la bandera EMAIL_AUTH_READY aquí descritos ya no representan el candidato nuevo.
+
+
 ## Comportamiento
 
 La primera apertura del menú muestra «Tu mesa. Tu liga. Tus rivalidades.». Ofrece **Continuar como invitado** y **Crear o recuperar cuenta**. Jugar casualmente no requiere registrarse. El invitado puede proteger después su misma identidad desde Opciones → Mi cuenta mediante el flujo ya existente.

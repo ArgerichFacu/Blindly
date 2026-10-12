@@ -26,7 +26,7 @@ export function ProtegerCuenta({
   if (!necesitaCuenta(error)) return null;
   return (
     <Boton
-      titulo={t("Proteger mi cuenta")}
+      titulo={t("Guardar mi progreso")}
       onPress={() =>
         router.push({
           pathname: "/cuenta",

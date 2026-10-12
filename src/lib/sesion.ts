@@ -42,7 +42,7 @@ async function codigoFuncion(error: unknown, fallback: string) {
     : null;
   return respuesta?.code ?? fallback;
 }
-async function validarCambioCuenta(usuario: User) {
+export async function validarCambioCuenta(usuario: User) {
   // Sólo consulta presencia de datos propios. El historial/social requiere
   // cuenta protegida, pero la recuperación debe conservar también datos legacy.
   const [propios, plusActivo] = await Promise.all([
@@ -58,9 +58,11 @@ async function validarCambioCuenta(usuario: User) {
     .in("sala.estado", ["jugando", "pausado"])
     .limit(1);
   if (partidas.error) throw partidas.error;
+  const anfitrion = await supabase.from("salas").select("id").eq("host_id", usuario.id).in("estado", ["jugando", "pausado"]).limit(1);
+  if (anfitrion.error) throw anfitrion.error;
   if (
     (usuario.is_anonymous && propios.data) ||
-    partidas.data?.length ||
+    partidas.data?.length || anfitrion.data?.length ||
     plusActivo
   )
     throw new Error("PROTEGER_INVITADO");

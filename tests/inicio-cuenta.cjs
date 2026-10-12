@@ -1,320 +1,50 @@
-// Ejercita los handlers reales de Cuenta con auth/storage controlados, sin red.
-const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const vm = require("node:vm");
-const ts = require("typescript");
-const source = ts.transpileModule(
-  fs.readFileSync("src/app/cuenta.tsx", "utf8"),
-  {
-    compilerOptions: {
-      module: ts.ModuleKind.CommonJS,
-      jsx: ts.JsxEmit.ReactJSX,
-    },
-  },
-).outputText;
-const flush = () => new Promise((res) => setImmediate(res));
-const identidad = {};
-vm.runInNewContext(
-  ts.transpileModule(fs.readFileSync("src/lib/identidad.ts", "utf8"), {
-    compilerOptions: { module: ts.ModuleKind.CommonJS },
-  }).outputText,
-  { exports: identidad },
-);
-function escenario(origen = "1", volver, liga, codigo, nombre) {
-  let indice = 0,
-    efecto,
-    usuario = { id: "uuid-original", is_anonymous: true },
-    persistir = true;
-  const estados = [],
-    refs = [],
-    llamadas = [];
-  const controles = Object.fromEntries(
-    ["Pantalla", "Texto", "Tarjeta", "Campo", "Boton"].map((key) => [key, key]),
-  );
-  const inicio = {
-    ocupado: false,
-    error: false,
-    elegir: async (valor) => {
-      llamadas.push(["elegir", valor]);
-      return persistir;
-    },
+// Handlers reales de Cuenta, Auth controlado. Complementa auth-convencional.cjs.
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),ts=require('typescript');
+const compile=path=>ts.transpileModule(fs.readFileSync(path,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX}}).outputText;
+const source=compile('src/app/cuenta.tsx'),identidad={};vm.runInNewContext(compile('src/lib/identidad.ts'),{exports:identidad});
+const flush=()=>new Promise(resolve=>setImmediate(resolve));
+function escenario(params={inicio:'1'}) {
+  let indice=0,foco,user={id:'uuid-A',is_anonymous:true,user_metadata:{}},persistir=true;
+  const estados=[],refs=[],efectos=[],montajes=[],listeners=[],llamadas=[];
+  const jsx=(type,props)=>({type,props});
+  const controls=Object.fromEntries(['Pantalla','Texto','Tarjeta','Campo','Boton','Etiqueta'].map(n=>[n,n]));
+  const inicio={ocupado:false,elegir:async valor=>{llamadas.push(['elegir',valor]);return persistir}};
+  const authApi={
+    validarPassword:(p,c)=>{if(p.length<8||p!==c)throw new Error('password')},leerPendiente:async()=>null,
+    registrarEmail:async(email,nombre,ctx)=>{llamadas.push(['registrar',email,nombre,ctx]);user={...user,new_email:email};for(const cb of listeners)cb('USER_UPDATED',{user});return {usuario:user.id,email}},
+    confirmarEmailPassword:async(email,...args)=>{llamadas.push(['verificar',email,...args]);user={...user,is_anonymous:false,email,email_confirmed_at:'yes'};return user},
+    entrarEmail:async(email,pwd)=>{llamadas.push(['login',email,pwd]);user={id:'uuid-B',is_anonymous:false,email,user_metadata:{display_name:'Reviewer'}};return user},
+    continuarGoogle:async(link,ctx)=>{llamadas.push(['google',link,ctx]);return null},
+    solicitarReset:async(email,ctx)=>llamadas.push(['reset',email,ctx]),guardarPassword:async()=>user,
+    cerrarSesion:async()=>{llamadas.push(['logout']);user={id:'new-guest',is_anonymous:true};return user},
   };
-  const jsx = (type, props) => ({ type, props });
-  const mocks = {
-    "react/jsx-runtime": { jsx, jsxs: jsx, Fragment: "Fragment" },
-    react: {
-      useState: (valor) => {
-        const i = indice++;
-        if (!(i in estados)) estados[i] = valor;
-        return [
-          estados[i],
-          (v) => {
-            estados[i] = typeof v === "function" ? v(estados[i]) : v;
-          },
-        ];
-      },
-      useRef: (valor) => {
-        const i = indice++;
-        return (refs[i] ??= { current: valor });
-      },
-      useCallback: (fn) => fn,
-    },
-    "expo-router": {
-      useFocusEffect: (fn) => {
-        efecto = fn;
-      },
-      useLocalSearchParams: () => ({ inicio: origen, volver, liga, codigo, nombre }),
-      useRouter: () => ({
-        replace: (ruta) => llamadas.push(["replace", ruta]),
-        dismissTo: (ruta) => llamadas.push(["dismissTo", ruta]),
-      }),
-    },
-    "../components/Controles": controles,
-    "../lib/Preferencias": {
-      usePreferencias: () => ({ t: (key) => key, mensajeError: () => "error" }),
-    },
-    "../lib/PlusContext": { usePlus: () => ({ activo: false }) },
-    "../lib/InicioContext": { useInicio: () => inicio },
-    "../lib/identidad": identidad,
-    "../lib/sesion": {
-      asegurarSesion: async () => usuario,
-      cuentaConClave: (u) => !!u?.email?.endsWith("@recovery.blindly.invalid"),
-      crearClaveRecuperacion: async () => {
-        usuario = {
-          id: "uuid-original",
-          is_anonymous: false,
-          email: "uuid-original@recovery.blindly.invalid",
-        };
-        return { usuario, clave: "CLAVE-DE-PRUEBA" };
-      },
-      recuperarConClave: async () => ({
-        id: "uuid-recuperado",
-        is_anonymous: false,
-        email: "uuid-recuperado@recovery.blindly.invalid",
-      }),
-    },
+  const mocks={
+    'react/jsx-runtime':{jsx,jsxs:jsx,Fragment:'Fragment'},
+    react:{useState:initial=>{const i=indice++;if(!(i in estados))estados[i]=initial;return [estados[i],v=>estados[i]=typeof v==='function'?v(estados[i]):v]},useRef:initial=>refs[indice++]??= {current:initial},useCallback:fn=>fn,useMemo:fn=>fn(),useEffect:(fn,deps)=>{const i=indice++;if(!efectos[i]){efectos[i]=deps;montajes.push(fn)}}},
+    'react-native':{View:'View'},
+    'expo-router':{useFocusEffect:fn=>{foco=fn},useLocalSearchParams:()=>params,useRouter:()=>({replace:route=>llamadas.push(['replace',route]),dismissTo:route=>llamadas.push(['dismissTo',route])})},
+    '../components/Controles':controls,'../components/LogoBlindly':{LogoBlindly:'Logo'},
+    '../lib/Preferencias':{usePreferencias:()=>({t:key=>key,mensajeError:()=> 'error localizado'})},
+    '../lib/PlusContext':{usePlus:()=>({activo:false,refrescar:async()=>{},gestionable:false})},
+    '../lib/InicioContext':{useInicio:()=>inicio},'../lib/identidad':identidad,
+    '../lib/supabase':{supabase:{auth:{onAuthStateChange:cb=>{listeners.push(cb);return {data:{subscription:{unsubscribe(){}}}}}}}},
+    '../lib/autenticacion':authApi,
+    '../lib/sesion':{asegurarSesion:async()=>user,cuentaConClave:u=>!!u?.email?.endsWith('@recovery.blindly.invalid'),crearClaveRecuperacion:async mostrar=>{user={id:'uuid-A',is_anonymous:false,email:'uuid-A@recovery.blindly.invalid'};mostrar('KEY-TEST');return {usuario:user,clave:'KEY-TEST'}},recuperarConClave:async()=>user={id:'uuid-legacy',is_anonymous:false,email:'uuid-legacy@recovery.blindly.invalid'},eliminarCuenta:async()=>llamadas.push(['delete'])},
   };
-  const exports = {};
-  vm.runInNewContext(source, {
-    exports,
-    process: { env: { EXPO_PUBLIC_EMAIL_AUTH_READY: "false" } },
-    require: (name) => {
-      assert.ok(Object.hasOwn(mocks, name), `Import no esperado: ${name}`);
-      return mocks[name];
-    },
-  });
-  function render() {
-    indice = 0;
-    return exports.default();
-  }
-  function elementos(nodo, tipo, out = []) {
-    if (Array.isArray(nodo)) nodo.forEach((n) => elementos(n, tipo, out));
-    else if (nodo && typeof nodo === "object") {
-      if (nodo.type === tipo) out.push(nodo.props);
-      elementos(nodo.props?.children, tipo, out);
-    }
-    return out;
-  }
-  const botones = () => elementos(render(), "Boton");
-  return {
-    llamadas,
-    inicio,
-    render,
-    botones,
-    elementos,
-    cargar: async () => {
-      render();
-      efecto();
-      await flush();
-    },
-    set persistir(v) {
-      persistir = v;
-    },
-  };
+  const api={};vm.runInNewContext(source,{exports:api,require:name=>{assert.ok(mocks[name],`Import ${name}`);return mocks[name]}});
+  const render=()=>{indice=0;return api.default()};
+  function elementos(nodo,tipo,out=[]){if(Array.isArray(nodo))nodo.forEach(n=>elementos(n,tipo,out));else if(nodo&&typeof nodo==='object'){if(nodo.type===tipo)out.push(nodo.props);elementos(nodo.props?.children,tipo,out)}return out}
+  const botones=()=>elementos(render(),'Boton'),campo=nombre=>elementos(render(),'Campo').find(c=>c.etiqueta===nombre);
+  return {llamadas,authApi,render,elementos,botones,campo,cargar:async()=>{render();montajes.splice(0).forEach(fn=>fn());foco();await flush()},click:async titulo=>{const b=botones().find(b=>b.titulo===titulo);assert.ok(b,`Botón ${titulo}`);b.onPress();await flush()},set persistir(v){persistir=v},set user(v){user=v}};
 }
-async function main() {
-  const cuenta = escenario();
-  await cuenta.cargar();
-  assert.ok(
-    cuenta
-      .elementos(cuenta.render(), "Texto")
-      .some((e) => e.children === "uuid-original"),
-    "Muestra el UUID propio sin cambiarlo",
-  );
-  assert.ok(
-    !cuenta.botones().some((b) => b.titulo === "Continuar con esta cuenta"),
-    "No considera persistente al anónimo",
-  );
-  cuenta
-    .botones()
-    .find((b) => b.titulo === "Crear clave de recuperación")
-    .onPress();
-  await flush();
-  const continuar = cuenta
-    .botones()
-    .find((b) => b.titulo === "Guardé mi clave. Continuar");
-  assert.ok(continuar);
-  assert.deepEqual(
-    cuenta.llamadas,
-    [],
-    "Crear clave no navega ni guarda elección antes de leerla",
-  );
-  assert.ok(
-    cuenta
-      .elementos(cuenta.render(), "Texto")
-      .some((e) => e.children === "CLAVE-DE-PRUEBA"),
-  );
-  cuenta.persistir = false;
-  continuar.onPress();
-  await flush();
-  assert.deepEqual(
-    cuenta.llamadas,
-    [["elegir", "cuenta"]],
-    "No abandona pantalla si falla guardado",
-  );
-  cuenta.persistir = true;
-  cuenta
-    .botones()
-    .find((b) => b.titulo === "Guardé mi clave. Continuar")
-    .onPress();
-  await flush();
-  assert.deepEqual(
-    cuenta.llamadas.at(-1),
-    ["dismissTo", "/"],
-    "Vuelve al inicio que mostrará tutorial",
-  );
-
-  const recuperar = escenario();
-  await recuperar.cargar();
-  recuperar
-    .botones()
-    .find((b) => b.titulo === "Ya tengo una clave")
-    .onPress();
-  const campoClave = recuperar
-    .elementos(recuperar.render(), "Campo")
-    .find((c) => c.etiqueta === "Clave de recuperación");
-  assert.equal(campoClave.autoCapitalize, "none");
-  assert.equal(campoClave.secureTextEntry, true);
-  recuperar
-    .elementos(recuperar.render(), "Campo")
-    .find((c) => c.etiqueta === "Clave de recuperación")
-    .onChangeText("CLAVE-DE-PRUEBA");
-  recuperar
-    .botones()
-    .find((b) => b.titulo === "Recuperar mi cuenta")
-    .onPress();
-  await flush();
-  assert.deepEqual(
-    recuperar.llamadas,
-    [],
-    "Recuperar no pierde contexto de onboarding mediante replace",
-  );
-  recuperar
-    .botones()
-    .find((b) => b.titulo === "Continuar con esta cuenta")
-    .onPress();
-  await flush();
-  assert.deepEqual(recuperar.llamadas, [
-    ["elegir", "cuenta"],
-    ["dismissTo", "/"],
-  ]);
-
-  const normal = escenario(undefined);
-  await normal.cargar();
-  // La función usa un default: origen distinto indica apertura común.
-  const comun = escenario("0");
-  await comun.cargar();
-  comun
-    .botones()
-    .find((b) => b.titulo === "Crear clave de recuperación")
-    .onPress();
-  await flush();
-  assert.ok(
-    !comun.botones().some((b) => b.titulo === "Guardé mi clave. Continuar"),
-  );
-  assert.deepEqual(
-    comun.llamadas,
-    [],
-    "Proteger una cuenta existente no reinicia introducción",
-  );
-  const nuevoClub = escenario("0", "liga-nueva");
-  await nuevoClub.cargar();
-  assert.ok(!nuevoClub.botones().some((b) => b.titulo === "Volver a mi club"));
-  nuevoClub
-    .botones()
-    .find((b) => b.titulo === "Crear clave de recuperación")
-    .onPress();
-  await flush();
-  assert.deepEqual(
-    nuevoClub.llamadas,
-    [],
-    "Mantiene visible la clave antes de regresar",
-  );
-  nuevoClub
-    .botones()
-    .find((b) => b.titulo === "Guardé mi clave. Continuar")
-    .onPress();
-  assert.deepEqual(nuevoClub.llamadas, [["replace", "/liga-nueva"]]);
-
-  const clubExistente = escenario("0", "liga", "club-prueba");
-  await clubExistente.cargar();
-  clubExistente
-    .botones()
-    .find((b) => b.titulo === "Ya tengo una clave")
-    .onPress();
-  clubExistente
-    .elementos(clubExistente.render(), "Campo")
-    .find((c) => c.etiqueta === "Clave de recuperación")
-    .onChangeText("CLAVE-DE-PRUEBA");
-  clubExistente
-    .botones()
-    .find((b) => b.titulo === "Recuperar mi cuenta")
-    .onPress();
-  await flush();
-  assert.deepEqual(
-    clubExistente.llamadas,
-    [],
-    "Recuperación conserva el club de origen",
-  );
-  clubExistente
-    .botones()
-    .find((b) => b.titulo === "Volver a mi club")
-    .onPress();
-  assert.equal(clubExistente.llamadas[0][1].pathname, "/liga");
-  assert.equal(clubExistente.llamadas[0][1].params.id, "club-prueba");
-  const invitacion = escenario(
-    "0",
-    "liga-unirse",
-    undefined,
-    "0123456789ABCDEF0123",
-  );
-  await invitacion.cargar();
-  invitacion
-    .botones()
-    .find((b) => b.titulo === "Crear clave de recuperación")
-    .onPress();
-  await flush();
-  invitacion
-    .botones()
-    .find((b) => b.titulo === "Guardé mi clave. Continuar")
-    .onPress();
-  assert.equal(invitacion.llamadas[0][1].pathname, "/liga-unirse");
-  assert.equal(invitacion.llamadas[0][1].params.codigo, "0123456789ABCDEF0123");
-  for(const destino of ["ligas","puntuacion","head-to-head","unirse"]) {
-    const acceso=escenario("0",destino,undefined,"ABCDE","Nico");
-    await acceso.cargar();
-    acceso.botones().find(b=>b.titulo==="Crear clave de recuperación").onPress();
-    await flush();
-    acceso.botones().find(b=>b.titulo==="Guardé mi clave. Continuar").onPress();
-    const ruta=acceso.llamadas[0][1];
-    if(destino==="unirse") {assert.equal(ruta.pathname,"/unirse");assert.equal(ruta.params.codigo,"ABCDE");assert.equal(ruta.params.nombre,"Nico");}
-    else assert.equal(ruta,`/${destino}`);
-  }
-  console.log(
-    "OK: invitado, vinculación con UUID, clave visible, recuperación y contexto de inicio.",
-  );
-}
-main().catch((e) => {
-  console.error(e);
-  process.exitCode = 1;
-});
+(async()=>{
+  const invitado=escenario();await invitado.cargar();assert.ok(invitado.botones().some(b=>b.titulo==='Continuar con Google'));assert.ok(!invitado.elementos(invitado.render(),'Texto').some(t=>t.children==='uuid-A'),'UUID técnico fuera de acceso principal');
+  invitado.persistir=false;await invitado.click('Jugar como invitado');assert.equal(invitado.llamadas.at(-1)[0],'elegir');invitado.persistir=true;await invitado.click('Jugar como invitado');assert.deepEqual(invitado.llamadas.at(-1),['dismissTo','/']);
+  const registro=escenario();await registro.cargar();await registro.click('Crear cuenta');registro.campo('Nombre').onChangeText('Nico');registro.campo('Email').onChangeText('nico@example.com');registro.campo('Contraseña').onChangeText('password-A');registro.campo('Confirmar contraseña').onChangeText('password-A');assert.equal(registro.campo('Email').autoCapitalize,'none');assert.equal(registro.campo('Contraseña').secureTextEntry,true);await registro.click('Crear cuenta');assert.equal(registro.campo('Contraseña').value,'password-A','USER_UPDATED mismo UUID conserva password hasta verificar');assert.equal(registro.campo('Código de verificación').maxLength,8);registro.campo('Código de verificación').onChangeText('12345678');await registro.click('Verificar y guardar contraseña');assert.equal(registro.llamadas[0][0],'registrar');assert.equal(registro.llamadas[1][0],'verificar');assert.ok(!registro.llamadas.some(x=>x[0]==='replace'));await registro.click('Continuar con esta cuenta');assert.deepEqual(registro.llamadas.slice(-2),[['elegir','cuenta'],['dismissTo','/']]);
+  const legacy=escenario();await legacy.cargar();await legacy.click('Opciones avanzadas · clave de recuperación');assert.equal(legacy.campo('Clave de recuperación').secureTextEntry,true);legacy.campo('Clave de recuperación').onChangeText('KEY');await legacy.click('Recuperar mi cuenta');await legacy.click('Continuar con esta cuenta');assert.deepEqual(legacy.llamadas.slice(-2),[['elegir','cuenta'],['dismissTo','/']]);
+  const clave=escenario({inicio:'0'});await clave.cargar();await clave.click('Opciones avanzadas · clave de recuperación');await clave.click('Crear una clave nueva');assert.ok(clave.elementos(clave.render(),'Texto').some(t=>t.children==='KEY-TEST'));assert.equal(clave.llamadas.length,0);
+  for(const volver of ['ligas','puntuacion','plus','head-to-head','liga-nueva','unirse','liga','liga-unirse']){const params={inicio:'0',volver,liga:'club',codigo:volver==='liga-unirse'?'0123456789ABCDEF0123':'ABCDE',nombre:'Nico',seccion:'ranking',temporada:'season'};const c=escenario(params);await c.cargar();c.campo('Email').onChangeText('a@example.com');c.campo('Contraseña').onChangeText('password');await c.click('Iniciar sesión');await c.click('Continuar con esta cuenta');const route=c.llamadas.at(-1)[1];if(['liga','unirse','liga-unirse'].includes(volver)){assert.equal(route.pathname,`/${volver}`);if(volver==='liga'){assert.equal(route.params.id,'club');assert.equal(route.params.temporada,'season')}else assert.equal(route.params.codigo,params.codigo)}else assert.equal(route,`/${volver}`)}
+  const doble=escenario();await doble.cargar();doble.campo('Email').onChangeText('a@example.com');doble.campo('Contraseña').onChangeText('password');let finish,count=0;doble.authApi.entrarEmail=()=>{count++;return new Promise(resolve=>finish=()=>resolve({id:'uuid-B',is_anonymous:false}))};const b=doble.botones().find(b=>b.titulo==='Iniciar sesión');b.onPress();b.onPress();assert.equal(count,1);finish();await flush();
+  const google=escenario({inicio:'1',accion:'google'});await google.cargar();assert.equal(google.llamadas.length,1);assert.equal(google.llamadas[0][0],'google');assert.equal(google.llamadas[0][1],true);assert.equal(google.llamadas[0][2].inicio,'1');await google.cargar();assert.equal(google.llamadas.length,1,'Foco no repite Google automáticamente');
+  console.log('OK: acceso convencional, invitado, registro/verificación, legacy avanzado, contexto, tutorial y doble toque en UI.');
+})().catch(e=>{console.error(e);process.exitCode=1});

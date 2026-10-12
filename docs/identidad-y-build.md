@@ -1,5 +1,8 @@
 # Identidad recuperable y prueba nativa
 
+> Documento de la etapa anterior. Para auth/cuenta/onboarding actuales, ver [auth-convencional.md](auth-convencional.md); los pasos de correo OTP y la bandera EMAIL_AUTH_READY aquí descritos ya no representan el candidato nuevo.
+
+
 ## Identidad
 
 Mi cuenta está en Opciones y Mi puntuación. **Crear clave de recuperación** convierte el invitado en una credencial de Supabase Auth sin cambiar su UUID. La Edge Function autenticada genera un secreto aleatorio, configura un alias interno y una contraseña confirmada mediante la API administrativa, y devuelve la clave una sola vez. En otro celular, la app separa el UUID y el secreto y usa `signInWithPassword`. La contraseña solo queda almacenada como hash en Supabase Auth. Rotar la clave invalida la anterior.

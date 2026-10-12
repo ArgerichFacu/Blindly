@@ -1,7 +1,8 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useFocusEffect } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { asegurarSesion } from "./sesion";
+import { supabase } from "./supabase";
 import { identidadUsuario } from "./identidad";
 import { misLigas, detalleLiga, type ResumenLiga, type DetalleLiga } from "./ligas";
 import { elegirLigaHome } from "./seleccionLiga";
@@ -16,6 +17,16 @@ export function useClubes(soloHome = false) {
         elegida: string | null;
     } | null>(null);
     const [error, setError] = useState<unknown>(null), [revision, setRevision] = useState(0);
+    const ultimaIdentidad = useRef<string | null>(null);
+    useEffect(() => {
+      const { data } = supabase.auth.onAuthStateChange((evento, sesion) => {
+        const id = sesion?.user.id ?? null;
+        if (id !== ultimaIdentidad.current || evento === "USER_UPDATED") {
+          ultimaIdentidad.current = id; setDatos(null); setError(null); setRevision(v => v + 1);
+        }
+      });
+      return () => data.subscription.unsubscribe();
+    }, []);
     useFocusEffect(useCallback(() => {
         void revision;
         let activo = true;
