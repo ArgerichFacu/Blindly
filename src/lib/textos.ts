@@ -1,6 +1,11 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "PLUS DEMO": ["PLUS DEMO", "PLUS DEMO"],
+  "Probá los sonidos y temas de Plus.": ["Try Plus sounds and themes.", "Experimente os sons e temas do Plus."],
+  "Los sonidos y la personalización se desbloquean en este dispositivo. Las funciones online requieren una cuenta con Plus verificado.": ["Sounds and personalization are unlocked on this device. Online features require an account with verified Plus access.", "Os sons e a personalização estão liberados neste dispositivo. Os recursos online exigem uma conta com Plus verificado."],
+  "Versión de prueba, sin compras ni suscripciones.": ["Test version, without purchases or subscriptions.", "Versão de teste, sem compras ou assinaturas."],
+  "Probar todos los sonidos": ["Try all sounds", "Experimentar todos os sons"],
   "Vos": ["You", "Você"],
   "Retirarme": ["Fold", "Desistir"],
   "Las cartas siguen en la mesa.": ["The cards stay on the table.","As cartas continuam na mesa."],

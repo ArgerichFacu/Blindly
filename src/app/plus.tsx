@@ -41,7 +41,7 @@ export default function Plus() {
             backgroundColor: tema.acento + "18",
           }}
         />
-        <Etiqueta activa>{t(plus.activo ? "PLUS ACTIVO" : "PLUS")}</Etiqueta>
+        <Etiqueta activa>{t(plus.demostracion ? "PLUS DEMO" : plus.activo ? "PLUS ACTIVO" : "PLUS")}</Etiqueta>
         <Texto
           style={{
             fontSize: 30,
@@ -50,11 +50,13 @@ export default function Plus() {
             letterSpacing: -0.8,
           }}
         >
-          {t(plus.activo ? "Tu mesa ya es Plus." : "Tu mesa, a tu manera.")}
+          {t(plus.demostracion ? "Probá los sonidos y temas de Plus." : plus.activo ? "Tu mesa ya es Plus." : "Tu mesa, a tu manera.")}
         </Texto>
         <Texto suave style={{ fontSize: 14, lineHeight: 22 }}>
           {t(
-            plus.activo
+            plus.demostracion
+              ? "Los sonidos y la personalización se desbloquean en este dispositivo. Las funciones online requieren una cuenta con Plus verificado."
+              : plus.activo
               ? "Las funciones Plus están habilitadas para esta cuenta."
               : "Blindly Plus amplía la personalización y el análisis sin quitar funciones esenciales de la versión gratuita.",
           )}
@@ -110,7 +112,12 @@ export default function Plus() {
       {plus.error instanceof Error && plus.error.message === "PLUS_PROTEGER_CUENTA" && (
         <Boton titulo={t("Proteger mi cuenta")} onPress={() => router.push({ pathname: "/cuenta", params: { volver: "plus" } })} />
       )}
-      {plus.disponible ? (
+      {plus.demostracion ? (
+        <Tarjeta>
+          <Texto suave>{t("Versión de prueba, sin compras ni suscripciones.")}</Texto>
+          <Boton titulo={t("Probar todos los sonidos")} onPress={() => router.push("/sonidos")} />
+        </Tarjeta>
+      ) : plus.disponible ? (
         <>
           <Boton
             titulo={t(

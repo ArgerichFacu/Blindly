@@ -23,8 +23,10 @@ import {
   tieneEntitlementPlus,
 } from "./plus";
 import { sincronizarPlusServidor } from "./plusServidor";
+import { PLUS_DEMO } from "./plusDemo";
 
 type EstadoPlus = {
+  demostracion?: boolean;
   disponible: boolean;
   cargando: boolean;
   activo: boolean;
@@ -52,12 +54,12 @@ const ContextoPlus = createContext<EstadoPlus>({
 
 export function PlusProvider({ children }: { children: ReactNode }) {
   const [info, setInfo] = useState<CustomerInfo | null>(null);
-  const [cargando, setCargando] = useState(PLUS_DISPONIBLE);
+  const [cargando, setCargando] = useState(PLUS_DISPONIBLE && !PLUS_DEMO);
   const [error, setError] = useState<unknown>(null);
   const generacion = useRef(0), usuario = useRef<string | null>(null), montado = useRef(true);
 
   async function cargar(usuarioId?: string) {
-    if (!PLUS_DISPONIBLE) {
+    if (PLUS_DEMO || !PLUS_DISPONIBLE) {
       setCargando(false);
       return;
     }
@@ -84,7 +86,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     montado.current = true;
     let vivo = true;
     let listener: CustomerInfoUpdateListener | null = null;
-    if (!PLUS_DISPONIBLE) return;
+    if (PLUS_DEMO || !PLUS_DISPONIBLE) return;
     listener = (nueva) => {
       // Volver a consultar con el UUID actual evita usar un evento de otra
       // identidad durante logIn/logOut o restauración de compras.
@@ -128,7 +130,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function ejecutar(operacion: (vigente: () => boolean) => Promise<unknown>) {
-    if (!PLUS_DISPONIBLE) throw new Error("PLUS_NO_CONFIGURADO");
+    if (PLUS_DEMO || !PLUS_DISPONIBLE) throw new Error("PLUS_NO_CONFIGURADO");
     const turno = ++generacion.current;
     setCargando(true);
     setError(null);
@@ -153,9 +155,10 @@ export function PlusProvider({ children }: { children: ReactNode }) {
   }
 
   const valor: EstadoPlus = {
-    disponible: PLUS_DISPONIBLE,
+    demostracion: PLUS_DEMO,
+    disponible: PLUS_DISPONIBLE && !PLUS_DEMO,
     cargando,
-    activo: tieneEntitlementPlus(info),
+    activo: PLUS_DEMO || tieneEntitlementPlus(info),
     gestionable: !!info?.managementURL,
     vencimiento:
       info?.entitlements.active[PLUS_ENTITLEMENT]?.expirationDate ?? null,

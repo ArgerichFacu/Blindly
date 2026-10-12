@@ -4,6 +4,10 @@
     "appVersionSource": "remote"
   },
   "build": {
+    "plus-demo": {
+      "extends": "preview",
+      "env": { "BLINDLY_BUILD_VARIANT": "plus-demo", "EXPO_PUBLIC_PLUS_READY": "false" }
+    },
     "development": {
       "developmentClient": true,
       "distribution": "internal",
