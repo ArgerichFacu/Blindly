@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import type { User } from "@supabase/supabase-js";
-import { View } from "react-native";
+import { View, type ScrollView } from "react-native";
 import { Pantalla, Texto, Tarjeta, Campo, Boton, Etiqueta } from "../components/Controles";
 import { LogoBlindly } from "../components/LogoBlindly";
 import { asegurarSesion, crearClaveRecuperacion, recuperarConClave, cuentaConClave, eliminarCuenta } from "../lib/sesion";
@@ -22,6 +22,10 @@ export default function Cuenta() {
     [ocupado, setOcupado] = useState(false), [error, setError] = useState<unknown>(null), [aviso, setAviso] = useState(""),
     [seguridad, setSeguridad] = useState(false), [confirmarBorrado, setConfirmarBorrado] = useState(false), [revision, setRevision] = useState(0);
   const cerrojo = useRef(false), vivo = useRef(true), ultimoUsuario = useRef<string | null>(null), googleInicial = useRef(false);
+  const scroll = useRef<ScrollView | null>(null);
+  useEffect(() => {
+    if (error || aviso) scroll.current?.scrollTo({ y: 0, animated: true });
+  }, [error, aviso]);
   const plusActual = useRef(plus);
   useEffect(() => { plusActual.current = plus; }, [plus]);
   const googleConectado = usuario?.identities?.some(i => i.provider === "google") ?? false;
@@ -78,7 +82,7 @@ export default function Cuenta() {
   const campoEmail = <Campo etiqueta={t("Email")} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} autoComplete="email" textContentType="emailAddress" editable={!ocupado}/>;
   const camposPassword = <><Campo etiqueta={t("Contraseña")} value={password} onChangeText={setPassword} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete={modo === "login" ? "current-password" : "new-password"} editable={!ocupado}/>{modo !== "login" && <Campo etiqueta={t("Confirmar contraseña")} value={confirmacion} onChangeText={setConfirmacion} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete="new-password" editable={!ocupado}/>}</>;
   const google = (vincular = true) => void ejecutar(async () => { const u = await continuarGoogle(vincular, contextoAuth); if (u) await listo(u); });
-  return <Pantalla titulo={t(usuario && !usuario.is_anonymous && modo === "cuenta" ? "Mi cuenta" : "Acceso")} subtitulo={t("Tu mesa de poker, conectada.")}>
+  return <Pantalla scrollRef={scroll} titulo={t(usuario && !usuario.is_anonymous && modo === "cuenta" ? "Mi cuenta" : "Acceso")} subtitulo={t("Tu mesa de poker, conectada.")}>
     {!!error && <Tarjeta><Texto accessibilityLiveRegion="assertive">{mensajeError(error)}</Texto><Boton titulo={t("Reintentar")} secundario disabled={ocupado} onPress={() => { setError(null); setRevision(v=>v+1); }}/></Tarjeta>}
     {!!aviso && <Tarjeta><Texto accessibilityLiveRegion="polite">{t(aviso)}</Texto></Tarjeta>}
     {!usuario ? <Texto>{t("Cargando…")}</Texto> : <>
