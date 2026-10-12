@@ -107,7 +107,7 @@ npm ci
 
 El nuevo candidato incluye Google, email/contraseña y acceso rápido como invitado. Proteger un invitado usa su mismo UUID; el login de una cuenta existente no fusiona datos. Logout conserva datos servidor y la eliminación autenticada bloquea partidas activas. Las claves BLINDLY1 anteriores siguen disponibles en **Opciones avanzadas**.
 
-**La activación del auth convencional está pendiente**: faltan SMTP y Google OAuth en Supabase; los callbacks nativo/local ya están configurados, además de las pruebas reales de vinculación/recuperación. No se activa con `EXPO_PUBLIC_EMAIL_AUTH_READY`; esa bandera quedó obsoleta. La prueba interna v22 sigue publicada sin reemplazo. Ver [estado, configuración exacta y matriz QA](docs/auth-convencional.md).
+**Email/password, reset y Google pasaron QA contra Supabase real**: SMTP Gmail, cliente Google Web y callbacks nativo/local configurados. Invitado y legacy conservaron UUID al protegerse; Google ocupado fue rechazado. La aceptación dentro de Android, el acceso Google de terceros y la entrega de correo a volumen de producción siguen pendientes. No se activa con `EXPO_PUBLIC_EMAIL_AUTH_READY`; esa bandera quedó obsoleta. Candidato v25 preparado; la prueba interna v22 sigue sin reemplazo. Ver [estado, configuración exacta y matriz QA](docs/auth-convencional.md).
 
 Detalles: [identidad recuperable y build nativa](docs/identidad-y-build.md). La [política de privacidad](PRIVACY.md), los [términos de uso](TERMS.md) y las [instrucciones de eliminación](ACCOUNT_DELETION.md) están versionados en el repositorio. Sus páginas web están preparadas en `docs/` y quedarán públicas cuando se active GitHub Pages desde `main` y `/docs`.
 
@@ -211,7 +211,7 @@ La navegación principal reúne Inicio, Ligas, Perfil y Config. Inicio prioriza 
 
 La release base fue cerrada en `f953239`. `main` incluye la implementación de las 40 metas y sus pruebas; el avance está en [evolución incremental](docs/evolucion.md) y los binarios nuevos en [release-metas40.md](docs/release-metas40.md). Los enlaces EAS anteriores conservan el código de `a147e78`.
 
-- Configurar SMTP, aplicar las plantillas y probar la vinculación y recuperación de una identidad con puntos.
+- Completar aceptación Android del auth convencional y probar conversión con progreso, Google de terceros y correo a volumen de producción; SMTP/plantillas y QA de SDK real ya pasan.
 - Instalar el APK correspondiente a las 40 metas una vez aprobado y completar la [matriz de aceptación](docs/qa-metas40.md).
 - Validar el splash en arranque en frío, la pausa de música al pasar a segundo plano y la reconexión después de bloquear el teléfono o perder la red.
 - Completar una partida con varios celulares y verificar apuestas, reparto de pozos y cierre del torneo.

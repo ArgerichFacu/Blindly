@@ -34,6 +34,7 @@ export function errorAuth(error: unknown): Error {
     over_request_rate_limit: "AUTH_RATE_LIMIT", over_email_send_rate_limit: "AUTH_RATE_LIMIT",
     email_address_not_authorized: "AUTH_CORREO_NO_CONFIGURADO", weak_password: "AUTH_PASSWORD_CORTA",
     otp_expired: "AUTH_LINK_VENCIDO", reauthentication_needed: "AUTH_REAUTENTICAR",
+    flow_state_expired: "AUTH_LINK_VENCIDO", flow_state_not_found: "AUTH_LINK_VENCIDO",
   };
   if (conocidos[code]) return new Error(conocidos[code]);
   if (error instanceof Error && /^(AUTH_|SESION_|PROTEGER_|EMAIL_|CUENTA_|PARTIDA_)/.test(error.message)) return error;

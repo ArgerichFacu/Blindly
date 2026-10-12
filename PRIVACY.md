@@ -1,6 +1,6 @@
 # Política de privacidad de Blindly
 
-**Última actualización: 1 de octubre de 2026**
+**Última actualización: 12 de octubre de 2026**
 
 Blindly organiza partidas presenciales de poker entre amigos. No procesa apuestas con dinero real, premios ni transferencias entre jugadores.
 
@@ -9,6 +9,8 @@ Blindly organiza partidas presenciales de poker entre amigos. No procesa apuesta
 Blindly crea un identificador de cuenta para permitir la sincronización. Guarda el nombre elegido por el jugador, las salas a las que pertenece, la configuración y las acciones de la mesa, los stacks, la puntuación, el rango y el historial de partidas. El correo electrónico es opcional y solo se guarda cuando el usuario decide proteger o recuperar su cuenta. Si usa una clave de recuperación, la clave completa se muestra una sola vez: Supabase Auth conserva una contraseña derivada de forma segura y un alias técnico interno, no una copia legible de la clave.
 
 La cámara se usa únicamente para leer el código QR de una sala. Blindly no almacena ni transmite fotografías. El tema, el idioma y los volúmenes se guardan localmente en el dispositivo.
+
+Podés usar email y contraseña o vincular Google a tu identidad. Supabase Auth verifica el correo y almacena la contraseña de forma segura; Blindly no guarda una copia legible. Si elegís Google, recibimos el identificador de Google, el correo, el nombre y la referencia a la imagen de perfil que Google proporciona con tu autorización. No solicitamos acceso a tu buzón, contactos ni archivos de Google. Los mensajes de verificación y restablecimiento se envían mediante el proveedor SMTP configurado, actualmente Gmail, que procesa destinatario y contenido para entregarlos.
 
 ## Finalidad y proveedores
 
@@ -25,3 +27,5 @@ El usuario puede jugar sin facilitar un correo, vincular uno para recuperar su i
 ## Contacto
 
 Para consultas de privacidad o soporte, abrí una solicitud en el [repositorio oficial de Blindly](https://github.com/ArgerichFacu/Blindly/issues). No publiques códigos de acceso, contraseñas ni otra información sensible.
+
+También podés escribir a administracionblindly@gmail.com para consultas privadas, sin enviar contraseñas ni claves de recuperación.

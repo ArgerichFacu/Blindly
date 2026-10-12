@@ -47,3 +47,5 @@ Fuentes: https://supabase.com/docs/guides/auth/auth-anonymous ; https://supabase
 Dashboard: manual linking/anónimo/Confirm email/Secure email change activos; Google desactivado, SMTP propio desactivado, sin Redirect URLs, Site URL localhost:3000. OTP 8 dígitos/3600 s. No se alteraron estas protecciones. Nuevo estado y QA: auth-convencional.md.
 
 El dueño autorizó añadir sólo blindly://auth-callback y http://localhost:8090/auth-callback. Ambos guardados y verificados en dashboard; evidencia G:/Blindly/evidencias/auth-redirects-configurados.png. Site URL sigue sin cambios; SMTP/Google pendientes.
+
+Actualización posterior, 12/10/2026: SMTP Gmail guardado por el dueño y entrega/confirmación/reset reales comprobados. Google habilitado con cliente Web de blindly-511407; vínculo de invitado, login existente y rechazo de identidad ocupada pasaron contra Supabase real. Se conservaron Confirm email, Secure email change y nonce checks. Nuevo reviewer email/password con Plus permanente comprobado; credencial fuera de Git. La información anterior documenta la auditoría inicial; el estado vigente y sus límites están en auth-convencional.md.

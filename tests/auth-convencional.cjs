@@ -33,6 +33,7 @@ function escenario() {
 }
 const casos=[];
 function caso(nombre,fn){casos.push([nombre,fn])}
+caso('estado PKCE vencido muestra enlace vencido',async()=>{const {api}=escenario();assert.equal(api.errorAuth({code:'flow_state_expired'}).message,'AUTH_LINK_VENCIDO');assert.equal(api.errorAuth({code:'flow_state_not_found'}).message,'AUTH_LINK_VENCIDO')});
 caso('email normalizado y dominio interno reservado',async()=>{const {api}=escenario();assert.equal(api.emailValido('  A@EXAMPLE.COM '),'a@example.com');assert.throws(()=>api.emailValido('A@recovery.blindly.invalid'),/EMAIL_INVALIDO/);assert.throws(()=>api.emailValido('bad'),/EMAIL_INVALIDO/)});
 caso('password corta y confirmación distinta',async()=>{const {api}=escenario();assert.throws(()=>api.validarPassword('123','123'),/AUTH_PASSWORD_CORTA/);assert.throws(()=>api.validarPassword('12345678','other'),/AUTH_PASSWORD_DISTINTA/)});
 caso('registrar conserva A y nunca crea usuario/password prematuro',async()=>{const {api,estado}=escenario();estado.datos=true;const r=await api.registrarEmail('a@example.com','Nico');assert.equal(r.usuario,'uuid-A');assert.equal(estado.llamadas.filter(x=>x[0]==='update').length,1);assert.ok(!estado.llamadas.some(x=>x==='anon'||x[0]==='login'));assert.ok(!JSON.stringify(estado.llamadas).includes('password'));assert.equal((await api.leerPendiente()).email,'a@example.com')});
