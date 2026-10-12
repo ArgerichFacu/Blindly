@@ -43,6 +43,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261008172425_historial_club_acotado.sql",
     "20261008173230_realtime_identidad_club.sql",
     "20261008174543_borrado_eventos_identidad.sql",
+    "20261012041133_play_review_access.sql",
   ]);
 
   const baseSources = fs
@@ -86,7 +87,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
   );
 
   await db.exec(
-    "create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key, is_anonymous boolean not null default false); create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;",
+    "create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key, is_anonymous boolean not null default false,banned_until timestamptz); create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;",
   );
 
   for (const file of migrationFiles) {
@@ -164,6 +165,25 @@ const read = (file) => fs.readFileSync(file, "utf8");
   ).rows[0].definition;
   assert.match(stackDefinition, /SOLO_DEALER/);
   assert.match(stackDefinition, /j\.id is distinct from s\.dealer_id/i);
+
+  // Grant de revisión independiente de compras; identidad y revocación reales.
+  const review = "11111111-1111-4111-8111-111111111111";
+  await db.query("insert into auth.users(id) values($1)", [review]);
+  await db.query("insert into private.accesos_revision_play(user_id) values($1)", [review]);
+  const allowed = async () => (await db.query("select private.tiene_plus($1) as activo", [review])).rows[0].activo;
+  assert.equal(await allowed(), true);
+  await db.query("update private.accesos_revision_play set activo=false where user_id=$1", [review]);
+  assert.equal(await allowed(), false);
+  await db.query("update private.accesos_revision_play set activo=true,vence_en=now()-interval '1 hour' where user_id=$1", [review]);
+  assert.equal(await allowed(), false);
+  await db.query("update private.accesos_revision_play set vence_en=null where user_id=$1", [review]);
+  await db.query("update auth.users set banned_until=now()+interval '1 hour' where id=$1", [review]);
+  assert.equal(await allowed(), false);
+  await db.query("update auth.users set banned_until=null,is_anonymous=true where id=$1", [review]);
+  assert.equal(await allowed(), false);
+  assert.equal((await db.query("select has_table_privilege('authenticated','private.accesos_revision_play','INSERT') as permiso")).rows[0].permiso, false);
+  await db.query("delete from auth.users where id=$1", [review]);
+  assert.equal((await db.query("select count(*)::int as n from private.accesos_revision_play")).rows[0].n, 0);
 
   console.log(
     "OK: historial Supabase completo, reproducible, stacks protegidos y montos de igualada validados.",

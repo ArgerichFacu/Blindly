@@ -30,7 +30,7 @@ vm.runInNewContext(compilar('src/lib/PlusContext.tsx'),{exports:ctx, setTimeout:
   'react-native':{AppState:{addEventListener:()=>({remove(){}})},Linking:{openURL:async()=>{}}},
   'react-native-purchases':{__esModule:true,default:purchases},
   'react-native-purchases-ui':{__esModule:true,default:{presentPaywallIfNeeded:async options=>{pagos++;presentada=options;return resultado;}},PAYWALL_RESULT:{ERROR:'ERROR'}},
-  './sesion':{asegurarSesion:async()=>user},'./supabase':{supabase:{auth:{onAuthStateChange:fn=>{authChanged=fn;return {data:{subscription:{unsubscribe(){}}}};}}}},
+  './sesion':{asegurarSesion:async()=>user},'./supabase':{supabase:{rpc:async()=>({data:false,error:null}),auth:{onAuthStateChange:fn=>{authChanged=fn;return {data:{subscription:{unsubscribe(){}}}};}}}},
   './plus':plus,'./plusDemo':{PLUS_DEMO:false},'./plusServidor':{sincronizarPlusServidor:async()=>{sincronizaciones++;}}
  }[n])});
 function render(){cursor=0;return ctx.PlusProvider({children:null}).value;}

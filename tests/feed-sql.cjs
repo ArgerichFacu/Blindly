@@ -3,7 +3,7 @@ const db=new PGlite(),uid=n=>`60000000-0000-4000-8000-${String(n).padStart(12,'0
 const q=async(sql,args=[])=> (await db.query(sql,args)).rows;
 async function como(n){await db.exec('reset role');await q("select set_config('request.jwt.claim.sub',$1,false)",[uid(n)]);await db.exec('set role authenticated');}
 (async()=>{
- await db.exec("create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key,is_anonymous boolean not null default false); create function auth.uid() returns uuid language sql as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;");
+ await db.exec("create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key,is_anonymous boolean not null default false,banned_until timestamptz); create function auth.uid() returns uuid language sql as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;");
  for(const file of fs.readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')).sort())await db.exec(fs.readFileSync(`supabase/migrations/${file}`,'utf8'));
  for(let n=1;n<=4;n++)await q('insert into auth.users values($1,$2)',[uid(n),n===4]);
  await como(1);const {liga_id:club,temporada_id:season}=(await q("select crear_liga('Feed','Octubre','Facu') v"))[0].v;

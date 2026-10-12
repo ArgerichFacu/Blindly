@@ -55,11 +55,12 @@ const ContextoPlus = createContext<EstadoPlus>({
 export function PlusProvider({ children }: { children: ReactNode }) {
   const [info, setInfo] = useState<CustomerInfo | null>(null);
   const [cargando, setCargando] = useState(PLUS_DISPONIBLE && !PLUS_DEMO);
+  const [revisionPlay, setRevisionPlay] = useState(false);
   const [error, setError] = useState<unknown>(null);
   const generacion = useRef(0), usuario = useRef<string | null>(null), montado = useRef(true);
 
   async function cargar(usuarioId?: string) {
-    if (PLUS_DEMO || !PLUS_DISPONIBLE) {
+    if (PLUS_DEMO) {
       setCargando(false);
       return;
     }
@@ -69,14 +70,20 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     try {
       const id = usuarioId ?? (await asegurarSesion()).id;
       if (turno !== generacion.current || !montado.current) return;
-      if (usuario.current !== id) setInfo(null);
+      if (usuario.current !== id) { setInfo(null); setRevisionPlay(false); }
       usuario.current = id;
+      // Sólo el servidor concede revisión; metadata editable nunca desbloquea Plus.
+      const revision = await supabase.rpc("mi_acceso_revision_play");
+      if (turno !== generacion.current || !montado.current) return;
+      const autorizada = !revision.error && revision.data === true;
+      setRevisionPlay(autorizada);
+      if (autorizada || !PLUS_DISPONIBLE) { setInfo(null); return; }
       const nuevaInfo = await prepararCompras(id);
       if (turno !== generacion.current || !montado.current) return;
       setInfo(nuevaInfo);
       await sincronizarPlusServidor();
     } catch (e) {
-      if (turno === generacion.current && montado.current) { setInfo(null); setError(e); }
+      if (turno === generacion.current && montado.current) { setInfo(null); setRevisionPlay(false); setError(e); }
     } finally {
       if (turno === generacion.current && montado.current) setCargando(false);
     }
@@ -86,7 +93,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     montado.current = true;
     let vivo = true;
     let listener: CustomerInfoUpdateListener | null = null;
-    if (PLUS_DEMO || !PLUS_DISPONIBLE) return;
+    if (PLUS_DEMO) return;
     listener = (nueva) => {
       // Volver a consultar con el UUID actual evita usar un evento de otra
       // identidad durante logIn/logOut o restauración de compras.
@@ -99,7 +106,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
         });
       }).catch(e => { if (vivo && turno === generacion.current) setError(e); });
     };
-    Purchases.addCustomerInfoUpdateListener(listener);
+    if (PLUS_DISPONIBLE) Purchases.addCustomerInfoUpdateListener(listener);
     const inicio = setTimeout(() => {
       if (vivo) void cargar();
     }, 0);
@@ -111,10 +118,10 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     } = supabase.auth.onAuthStateChange((_evento, sesion) => {
       if (!sesion?.user.id) {
         generacion.current++; usuario.current = null;
-        setInfo(null);
+        setInfo(null); setRevisionPlay(false);
         return;
       }
-      if (usuario.current !== sesion.user.id) { generacion.current++; setInfo(null); }
+      if (usuario.current !== sesion.user.id) { generacion.current++; setInfo(null); setRevisionPlay(false); }
       setTimeout(() => {
         if (vivo) void cargar(sesion.user.id);
       }, 0);
@@ -125,7 +132,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
       estado.remove();
       clearTimeout(inicio);
       subscription.unsubscribe();
-      if (listener) Purchases.removeCustomerInfoUpdateListener(listener);
+      if (listener && PLUS_DISPONIBLE) Purchases.removeCustomerInfoUpdateListener(listener);
     };
   }, []);
 
@@ -158,7 +165,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     demostracion: PLUS_DEMO,
     disponible: PLUS_DISPONIBLE && !PLUS_DEMO,
     cargando,
-    activo: PLUS_DEMO || tieneEntitlementPlus(info),
+    activo: PLUS_DEMO || revisionPlay || tieneEntitlementPlus(info),
     gestionable: !!info?.managementURL,
     vencimiento:
       info?.entitlements.active[PLUS_ENTITLEMENT]?.expirationDate ?? null,
