@@ -24,8 +24,8 @@ export default function Cuenta() {
   const cerrojo = useRef(false), vivo = useRef(true), ultimoUsuario = useRef<string | null>(null), googleInicial = useRef(false);
   const scroll = useRef<ScrollView | null>(null);
   useEffect(() => {
-    if (error || aviso) scroll.current?.scrollTo({ y: 0, animated: true });
-  }, [error, aviso]);
+    scroll.current?.scrollTo({ y: 0, animated: true });
+  }, [modo, error, aviso]);
   const plusActual = useRef(plus);
   useEffect(() => { plusActual.current = plus; }, [plus]);
   const googleConectado = usuario?.identities?.some(i => i.provider === "google") ?? false;

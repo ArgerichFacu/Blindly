@@ -89,6 +89,11 @@ try {
       await limpiar();break;
     }
     if(!/^codigo:\d{6,8}$/.test(line.trim())){console.log('Comando inválido.');continue}
+    if(legacy){
+      const factor=await sb.functions.invoke('confirmar-correo-interno',{body:{email}});
+      if(factor.error || factor.data?.code!=='OK')throw new Error('QA legacy: segunda confirmación interna rechazada');
+      console.log('REAL: helper repetido antes del OTP, igual que el cliente de Blindly.');
+    }
     const verify=await sb.auth.verifyOtp({email,token:line.trim().slice(7),type:'email_change'});
     if(verify.error){console.log(`Código rechazado: ${verify.error.code??'sin código'}`);continue}
     assert.equal(verify.data.user?.id,esperado??creado);
