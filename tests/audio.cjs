@@ -41,21 +41,28 @@ assert.equal(audio.volumenAudio(p, "efectos"), 0);
 assert.equal(audio.volumenAudio({ ...p, ambiente: "casino" }, "ambiente"), 0.3);
 assert.equal(audio.volumenAudio(p, "musica"), 0.7);
 const config = botonera.normalizarBotonera({
-  botoneraOrden: ["caja", "caja", "url"],
-  botoneraFavoritos: ["respeto", "nada"],
-  botoneraVisibles: ["caja", "respeto"],
+  botoneraOrden: ["fichas", "fichas", "url"],
+  botoneraFavoritos: ["risa", "nada"],
+  botoneraVisibles: ["fichas", "risa"],
 });
-assert.equal(config.botoneraOrden.length, 18);
-assert.equal(new Set(config.botoneraOrden).size, 18);
+assert.equal(config.botoneraOrden.length, 12);
+assert.equal(new Set(config.botoneraOrden).size, 12);
 assert.deepEqual(
   json(botonera.sonidosDisponibles(config, true).map((s) => s.id)),
-  ["respeto", "caja"],
+  ["fichas", "risa"],
 );
 assert.deepEqual(
   json(botonera.sonidosDisponibles(config, false).map((s) => s.id)),
-  ["aplausos", "fichas", "grillos", "campana", "barajar"],
+  json(botonera.SONIDOS.map(s => s.id)),
 );
 const snapshot = JSON.stringify(config);
+assert.deepEqual(json(botonera.registrarReciente(["fichas", "carta", "risa"], "carta")), ["carta", "fichas", "risa"]);
+assert.equal(botonera.registrarReciente(botonera.SONIDOS.map(s => s.id), "risa").length, 4);
+assert.equal(botonera.normalizarBotonera({ botoneraRecientes: botonera.SONIDOS.map(s => s.id) }).botoneraRecientes.length, 4, "Migra recientes antiguos al límite de cuatro");
+assert.deepEqual(json(botonera.normalizarBotonera({ botoneraRecientes: ["caja", "risa", "risa", "url"] }).botoneraRecientes), ["risa"]);
+assert.deepEqual(json(botonera.buscarSonidos("  trombon ", s => s)), ["trombon"]);
+assert.deepEqual(json(botonera.buscarSonidos(" chips ", s => s === "Fichas" ? "Chips" : s)), ["fichas"]);
+assert.equal(botonera.buscarSonidos("missing", s => s).length, 0);
 botonera.sonidosDisponibles(config, false);
 assert.equal(
   JSON.stringify(config),
@@ -217,7 +224,7 @@ function player() {
     assert.equal(buf.readUInt16LE(34), 16);
     assert.equal(buf.readUInt32LE(40), buf.length - 44);
     const duration = (buf.length - 44) / 44100;
-    assert.ok((id === "ambiente-casino" ? duration === 20 : duration >= .3 && duration <= 1.5));
+    assert.ok((id === "ambiente-casino" ? duration === 20 : duration >= .3 && duration <= 5));
     let peak = 0,
       energy = 0;
     for (let i = 44; i < buf.length; i += 2) {
@@ -225,7 +232,7 @@ function player() {
       peak = Math.max(peak, Math.abs(v));
       energy += v * v;
     }
-    assert.ok(peak > 100 && peak <= 16384);
+    assert.ok(peak > 100 && peak <= 23200);
     assert.ok(energy > 0);
     assert.equal(buf.readInt16LE(44), 0);
     assert.ok(Math.abs(buf.readInt16LE(buf.length - 2)) < 100);
@@ -241,20 +248,18 @@ function player() {
       }
       const activas = ventanas.filter(e => e > Math.max(...ventanas) * .001);
       const db = 10 * Math.log10(activas.reduce((a, v) => a + v, 0) / activas.length);
-      const pack = botonera.SONIDOS.find(s => s.id === id).pack;
       const fuentes = JSON.parse(fs.readFileSync('assets/sounds/fuentes.json', 'utf8'));
-      if (fuentes[id]) {
-        assert.equal(fuentes[id].licencia, 'CC0-1.0');
-        assert.match(fuentes[id].sha256Fuente, /^[a-f0-9]{64}$/);
-        assert.match(fuentes[id].url, /^https:\/\/(freesound.org|kenney.nl)\//);
-        assert.ok(Math.abs(db - (pack === "Party" ? -21.41 : -19.58)) < .25, `${id}: grabación audible y sin exceso de nivel (${db})`);
-      } else {
-        assert.ok(Math.abs(db - (pack === "Party" ? -21.41 : -19.58)) < .2, `${id}: nivel activo equilibrado (${db})`);
-      }
+      const niveles = JSON.parse(fs.readFileSync('assets/sounds/niveles.json', 'utf8'));
+      assert.equal(fuentes[id].licencia, 'CC0-1.0');
+      assert.match(fuentes[id].sha256Fuente, /^[a-f0-9]{64}$/);
+      assert.match(fuentes[id].url, /^https:\/\/(freesound.org|kenney.nl)\//);
+      assert.equal(require('node:crypto').createHash('sha256').update(buf).digest('hex'), niveles[id].sha256Final);
+      assert.ok(Math.abs(duration - niveles[id].segundos) < .001);
+      assert.ok(db > -42 && db < -10, `${id}: nivel activo fuera de rango ${db}`);
     }
   }
   console.log(
-    "Audio: legacy preferences, mute, expiry, exclusive playback, focus/background and 19 local assets with CC0 provenance OK",
+    "Audio: legacy preferences, mute, expiry, exclusive playback, focus/background and 13 local assets with CC0 provenance OK",
   );
 })().catch((e) => {
   console.error(e);

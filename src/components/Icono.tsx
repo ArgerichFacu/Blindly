@@ -1,6 +1,7 @@
 import Svg, { Path } from "react-native-svg";
-export type NombreIcono = "inicio" | "ligas" | "perfil" | "config" | "flecha" | "sumar" | "compartir" | "libro" | "plus" | "escudo" | "fichas" | "cartas" | "barajar" | "campana" | "aplauso" | "impacto" | "party" | "mesa" | "sorpresa" | "risa" | "bocina" | "trombon" | "bateria" | "pato" | "grillo" | "altavoz";
+export type NombreIcono = "corazon" | "inicio" | "ligas" | "perfil" | "config" | "flecha" | "sumar" | "compartir" | "libro" | "plus" | "escudo" | "fichas" | "cartas" | "barajar" | "campana" | "aplauso" | "impacto" | "party" | "mesa" | "sorpresa" | "risa" | "bocina" | "trombon" | "bateria" | "pato" | "grillo" | "altavoz";
 const trazos: Record<NombreIcono, string> = {
+    corazon: "M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z",
     mesa: "M3 12h18 M5 12v9 M19 12v9 M12 2v5 M8 5l4 4 4-4",
     sorpresa: "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0 M8 8v1 M16 8v1 M14 15a2 3 0 1 1-4 0 2 3 0 0 1 4 0",
     risa: "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0 M6 9l2-2 2 2 M14 9l2-2 2 2 M7 13h10a5 5 0 0 1-10 0z",
@@ -27,10 +28,11 @@ const trazos: Record<NombreIcono, string> = {
     libro: "M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1v15",
     plus: "M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z",
 };
-export function Icono({ nombre, color, size = 22 }: {
+export function Icono({ nombre, color, size = 22, relleno = false }: {
     nombre: NombreIcono;
     color: string;
     size?: number;
+    relleno?: boolean;
 }) {
-    return <Svg width={size} height={size} viewBox="0 0 24 24" aria-hidden={true}><Path d={trazos[nombre]} stroke={color} strokeWidth={1.65} strokeLinecap="round" strokeLinejoin="round" fill="none"/></Svg>;
+    return <Svg width={size} height={size} viewBox="0 0 24 24" aria-hidden={true}><Path d={trazos[nombre]} stroke={color} strokeWidth={1.65} strokeLinecap="round" strokeLinejoin="round" fill={relleno ? color : "none"}/></Svg>;
 }

@@ -7,14 +7,14 @@ function load(file, deps = {}, env = {}) {
 }
 const base = JSON.parse(fs.readFileSync('app.json', 'utf8')).expo;
 const config = env => load('app.config.ts', {}, env).default({ config: base });
-assert.equal(config({}).android.package, 'com.blindly.app');
+assert.equal(config({}).android.package, 'com.blindly.studio');
 assert.equal(config({}).extra.plusDemo, false);
 const demo = config({ BLINDLY_BUILD_VARIANT: 'plus-demo' });
 assert.equal(demo.android.package, 'com.blindly.app.plusdemo');
 assert.equal(demo.name, 'Blindly Plus Demo');
 assert.equal(demo.scheme, 'blindly-plus-demo');
 assert.equal(demo.extra.eas.projectId, base.extra.eas.projectId);
-assert.equal(base.android.package, 'com.blindly.app', 'No muta la configuración normal');
+assert.equal(base.android.package, 'com.blindly.studio', 'No muta la configuración normal');
 for (const env of [{ EXPO_PUBLIC_PLUS_READY: 'true' }, { EAS_BUILD_PROFILE: 'production' }, { EAS_BUILD_PROFILE: 'play-testing' }]) {
   assert.throws(() => config({ BLINDLY_BUILD_VARIANT: 'plus-demo', ...env }), /Plus Demo/);
 }
@@ -47,6 +47,6 @@ const provider = load('src/lib/PlusContext.tsx', {
   assert.equal(calls, 0, 'No crea compras, claims ni accesos Plus en el servidor');
   const cap = load('src/lib/capacidadesPlus.ts').capacidadesPlus(state);
   const catalog = load('src/lib/botonera.ts');
-  assert.equal(catalog.sonidosDisponibles(catalog.BOTONERA_INICIAL, cap.botonera).length, 18);
-  console.log('Plus Demo: paquete separado, perfiles de tienda bloqueados, 18 sonidos, sin SDK/compras ni grants de servidor OK');
+  assert.equal(catalog.sonidosDisponibles(catalog.BOTONERA_INICIAL, cap.botonera).length, 12);
+  console.log('Plus Demo: paquete separado, perfiles de tienda bloqueados, 12 sonidos oficiales, sin SDK/compras ni grants de servidor OK');
 })().catch(e => { console.error(e); process.exitCode = 1; });

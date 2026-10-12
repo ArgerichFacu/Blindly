@@ -4,7 +4,7 @@
 
 # Blindly
 
-Estado comercial Android (9/10/2026): Play Console está **pagada**, con verificación de identidad pendiente. Plus todavía no procesa compras de Google. [Auditoría, mapping RevenueCat, build y pasos exactos de activación](docs/plus-comercial-android.md).
+Release Android 1.0.0: **Blindly creada en Google Play**, paquete `com.blindly.studio`. Pack oficial de 12 grabaciones CC0, sonidos/favoritos Free, búsqueda y recientes. Compras Google todavía desactivadas. [Estado final, QA, artefactos y pendientes](docs/release-final.md). No se agregan nuevas features antes del primer lanzamiento; las ideas nuevas pasan al backlog posterior.
 
 **Tu mesa de poker presencial, conectada.** Blindly acompaña partidas de Texas Hold’em con cartas físicas: organiza la sala, las ciegas, los turnos y las fichas, mientras cada jugador participa desde su celular.
 

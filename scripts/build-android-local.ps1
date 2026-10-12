@@ -75,6 +75,16 @@ $gradle = $gradle.Replace("signingConfig signingConfigs.debug`r`n            def
 if ($gradle -notmatch 'signingConfig signingConfigs.release') { throw 'La plantilla de firma cambió: revisar antes de compilar.' }
 [IO.File]::WriteAllText($gradlePath,$gradle)
 
+# React Native conserva el namespace en la caché de autolinking entre variantes.
+# Invalidar sólo estos productos generados permite cambiar paquete sin limpiar
+# las dependencias nativas ya compiladas.
+$androidRoot = [IO.Path]::GetFullPath((Join-Path $repo 'android'))
+foreach ($relative in @('build/generated/autolinking', 'app/build/generated/autolinking')) {
+  $generated = [IO.Path]::GetFullPath((Join-Path $androidRoot $relative))
+  if (-not $generated.StartsWith($androidRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Ruta de caché fuera de Android.' }
+  if (Test-Path -LiteralPath $generated) { Remove-Item -LiteralPath $generated -Recurse -Force }
+}
+
 Push-Location (Join-Path $repo 'android')
 try {
   [string[]]$tasks = if ($PlusDemo) { @('app:assembleRelease') } else { @('app:assembleRelease', 'app:bundleRelease') }

@@ -1,6 +1,6 @@
 import { SesionNativa } from "../components/SesionNativa";
 import { Stack } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Platform, View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { TemaProvider } from "../lib/TemaContext";
@@ -15,7 +15,7 @@ if (Platform.OS !== "web")
 export default function RootLayout() {
   const [lista, setLista] = useState(false);
   const alCargar = useCallback(() => setLista(true), []);
-  const alMostrar = useCallback(() => {
+  useEffect(() => {
     if (lista && Platform.OS !== "web")
       void SplashScreen.hideAsync().catch(() => {});
   }, [lista]);
@@ -26,7 +26,7 @@ export default function RootLayout() {
           <InicioProvider>
             <SesionNativa />
             {lista ? (
-              <View style={{ flex: 1 }} onLayout={alMostrar}>
+              <View style={{ flex: 1 }}>
                 <AvisosNativos />
                 <Stack
                   screenOptions={{

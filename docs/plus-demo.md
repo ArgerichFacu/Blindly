@@ -4,7 +4,9 @@ Variante de prueba instalada como **Blindly Plus Demo**, paquete
 `com.blindly.app.plusdemo`. Se instala junto a Blindly: tiene sus propios datos
 y sesión, y no reemplaza la cuenta ni la instalación habitual.
 
-Permite explorar los 18 sonidos de mesa, temas y personalización de Plus.
+La APK histórica v17 permite explorar los 18 sonidos de aquella entrega. El código
+actual de release tiene 12 sonidos oficiales Free; Demo continúa sirviendo para
+probar temas, orden y visibilidad premium, sin compras.
 La pantalla Plus identifica la demostración y no ofrece compras ni suscripciones.
 Los textos están disponibles en español, inglés y portugués.
 

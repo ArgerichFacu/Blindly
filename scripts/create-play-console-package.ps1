@@ -91,7 +91,7 @@ Blindly 1.0.0 - paquete para Google Play Console
 
 Bundle comprobado (aceptacion fisica pendiente):
   bundle/Blindly-1.0.0-playstore.aab
-  package: com.blindly.app
+  package: com.blindly.studio
   versionName: 1.0.0
   versionCode: $VersionCode
   SHA-256: $actualAabSha256

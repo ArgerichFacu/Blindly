@@ -1,6 +1,14 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Redoble": ["Drum roll", "Rufar"],
+  "Buscar sonidos": ["Search sounds", "Buscar sons"],
+  "Recientes": ["Recent", "Recentes"],
+  "Favoritos": ["Favorites", "Favoritos"],
+  "Todos los sonidos": ["All sounds", "Todos os sons"],
+  "No hay sonidos con ese nombre.": ["No sounds match that name.", "Nenhum som corresponde a esse nome."],
+  "Favoritos y personalización": ["Favorites and personalization", "Favoritos e personalização"],
+  "Los sonidos oficiales y favoritos son gratis. Plus permite cambiar el orden y ocultar sonidos.": ["Official sounds and favorites are free. Plus lets you reorder and hide sounds.", "Os sons oficiais e favoritos são gratuitos. Plus permite reordenar e ocultar sons."],
   "PLUS DEMO": ["PLUS DEMO", "PLUS DEMO"],
   "Probá los sonidos y temas de Plus.": ["Try Plus sounds and themes.", "Experimente os sons e temas do Plus."],
   "Los sonidos y la personalización se desbloquean en este dispositivo. Las funciones online requieren una cuenta con Plus verificado.": ["Sounds and personalization are unlocked on this device. Online features require an account with verified Plus access.", "Os sons e a personalização estão liberados neste dispositivo. Os recursos online exigem uma conta com Plus verificado."],

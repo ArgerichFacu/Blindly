@@ -65,24 +65,6 @@ function escribir(nombre, d, objetivo = .105, limite = .5, natural = false) {
   informe[nombre] = { segundos: d.length / SR, picoDbFS: +(20 * Math.log10(pico * ganancia)).toFixed(2), rmsActivoDbFS: +(20 * Math.log10(rms * ganancia)).toFixed(2) };
 }
 if (require.main === module) {
-const fichas = pista(.85);
-for (let i = 0; i < 6; i++) ficha(fichas, .035 + i * .095, .7 + i * .05, 1 + i * .018);
-escribir('fichas', fichas);
-const carta = pista(.45); papel(carta, .035, .19, 1); golpe(carta, .23, .3); escribir('carta', carta);
-const barajar = pista(.95); for (let i = 0; i < 10; i++) papel(barajar, .03 + i * .065, .09, .65); escribir('barajar', barajar);
-const campana = pista(1.15);
-sumar(campana, .02, 1.1, s => (seno(880, s) + .3 * seno(1471, s) + .12 * seno(2347, s)) * Math.exp(-s * 7)); escribir('campana', campana);
-const aplausos = pista(1.25);
-for (let i = 0; i < 20; i++) sumar(aplausos, .02 + i * .047, .13, s => ruido() * Math.exp(-s * 45) * (.5 + .2 * seno(160, s)));
-escribir('aplausos', aplausos);
-const respeto = pista(.65); golpe(respeto, .04, .8); golpe(respeto, .23, .65); escribir('respeto', respeto);
-const allin = pista(.9); golpe(allin, .05, 1); for (let i = 0; i < 5; i++) ficha(allin, .12 + i * .08, .6, .85 + i * .018); escribir('allin', allin);
-const bust = pista(.55); golpe(bust, .04, .7); ficha(bust, .16, .25, .8); escribir('bust', bust);
-const grillos = pista(1.15); for (let i = 0; i < 5; i++) sumar(grillos, .04 + i * .19, .075, s => seno(3100, s) * Math.sin(Math.PI * s / .075)); escribir('grillos', grillos, .085);
-const bocina = pista(.8); sumar(bocina, .02, .65, s => (seno(330, s) + .5 * seno(440, s) + .15 * seno(660, s)) * Math.min(1, s * 30, (.65 - s) * 12)); escribir('bocina', bocina, .085);
-const trombon = pista(1.15); sumar(trombon, .02, 1, s => (Math.sin(2 * Math.PI * (360 * s - 55 * s * s)) + .2 * Math.sin(4 * Math.PI * (360 * s - 55 * s * s))) * Math.min(1, s * 20, (1 - s) * 8)); escribir('trombon', trombon, .085);
-const caja = pista(.85); golpe(caja, .02, .6); sumar(caja, .2, .6, s => (seno(1200, s) + .25 * seno(1967, s)) * Math.exp(-s * 10)); escribir('caja', caja, .085);
-const buzzer = pista(.4); sumar(buzzer, 0, .4, s => (seno(180, s) + .25 * seno(360, s)) * Math.min(1, s * 100, (.4 - s) * 20)); escribir('buzzer', buzzer, .085);
 // Room tone y actividad espaciada, costura de loop con fade suave.
 const ambiente = pista(20); let cama = 0;
 for (let i = 0; i < ambiente.length; i++) { cama = .99 * cama + .01 * ruido(); ambiente[i] = cama * .2 * Math.min(1, i / (SR * .5), (ambiente.length - 1 - i) / (SR * .5)); }
@@ -90,6 +72,6 @@ for (let i = 0; i < 8; i++) { const t = .9 + i * 2.25; ficha(ambiente, t, .08, .
 // El ambiente ya aprobado queda intacto; esta pasada sólo cambia reacciones.
 if (!fs.existsSync(path.join(carpeta, 'ambiente-casino.wav'))) escribir('ambiente-casino', ambiente, .015, .07);
 fs.writeFileSync(path.join(carpeta, 'niveles.json'), JSON.stringify(informe, null, 2) + '\n');
-console.log('Síntesis original actualizada; las grabaciones CC0 y el ambiente se conservan.');
+console.log('Ambiente conservado; los sonidos oficiales se editan con master-sonidos.py.');
 }
 module.exports = { escribir, informe, SR };

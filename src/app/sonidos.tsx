@@ -18,7 +18,7 @@ export default function Sonidos() {
     clave: "botoneraVisibles" | "botoneraFavoritos",
     id: SonidoId,
   ) {
-    if (!capacidadesPlus(plus).premium) {
+    if (clave !== "botoneraFavoritos" && !capacidadesPlus(plus).premium) {
       router.push("/plus");
       return;
     }
@@ -124,14 +124,14 @@ export default function Sonidos() {
         <AudioMesa indice={0} corriendo musica />
         <Botonera />
       </Tarjeta>
-      <Tarjeta>
-        <Texto>{t("Personalizar reacciones · Plus")}</Texto>
+      {capacidadesPlus(plus).premium && <Tarjeta>
+        <Texto>{t("Favoritos y personalización")}</Texto>
         <Texto suave>
           {t(
-            "Elegí tus sonidos, marcá favoritos y cambiá el orden. Tus ajustes se conservan si vence Plus.",
+            "Los sonidos oficiales y favoritos son gratis. Plus permite cambiar el orden y ocultar sonidos.",
           )}
         </Texto>
-        {capacidadesPlus(plus).premium ? (
+        {(
           p.botoneraOrden.map((id, i) => {
             const sonido = SONIDOS.find((s) => s.id === id)!;
             return (
@@ -148,38 +148,23 @@ export default function Sonidos() {
                   <Texto style={{ flex: 1 }}>
                     {t(sonido.nombre)}
                   </Texto>
-                  <Switch
+                  {capacidadesPlus(plus).premium && <Switch
                     accessibilityLabel={`${t("Mostrar sonido")}: ${t(sonido.nombre)}`}
                     value={p.botoneraVisibles.includes(id)}
                     onValueChange={() => alternarLista("botoneraVisibles", id)}
-                  />
+                  />}
                 </View>
-                <Boton
-                  titulo={t(
-                    p.botoneraFavoritos.includes(id)
-                      ? "Quitar de favoritos"
-                      : "Añadir a favoritos",
-                  )}
-                  secundario
-                  onPress={() => alternarLista("botoneraFavoritos", id)}
-                />
-                <Boton
+                {capacidadesPlus(plus).premium && <Boton
                   titulo={t("Mover hacia arriba")}
                   secundario
                   disabled={i === 0}
                   onPress={() => subir(id)}
-                />
+                />}
               </View>
             );
           })
-        ) : (
-          <Boton
-            titulo={t("Conocer Blindly Plus")}
-            secundario
-            onPress={() => router.push("/plus")}
-          />
         )}
-      </Tarjeta>
+      </Tarjeta>}
     </Pantalla>
   );
 }

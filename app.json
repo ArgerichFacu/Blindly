@@ -21,7 +21,7 @@
         "monochromeImage": "./assets/images/blindly-icon-monochrome-v2.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.blindly.app",
+      "package": "com.blindly.studio",
       "permissions": [
         "android.permission.MODIFY_AUDIO_SETTINGS",
         "android.permission.CAMERA",

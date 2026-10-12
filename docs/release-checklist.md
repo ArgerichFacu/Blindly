@@ -1,5 +1,7 @@
 # Lista de lanzamiento de Blindly
 
+**Estado vigente:** [release Android 1.0.0](release-final.md), paquete `com.blindly.studio`. Los artefactos y bloqueos de cuentas que siguen abajo son históricos y no describen la entrega actual.
+
 Estado auditado el 4 de octubre de 2026. Esta lista separa lo validado por código de las comprobaciones que requieren cuentas comerciales o dispositivos físicos.
 
 La matriz consolidada de evidencia y dependencias externas está en [`final-readiness.md`](final-readiness.md).

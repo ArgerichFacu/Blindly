@@ -65,7 +65,7 @@ const deps = {
   "../lib/audio": audio,
   "../lib/botonera": bot,
   "../lib/useControlAudio": { useControlAudio: () => ({ detener: () => {} }) },
-  "./Controles": { Boton: "Boton", Texto: "Texto" },
+  "./Controles": { Boton: "Boton", Campo: "Campo", Texto: "Texto" },
   "../components/Controles": {
     Boton: "Boton",
     Texto: "Texto",
@@ -92,8 +92,8 @@ for (disponible of [false, true]) {
   activo = false;
   assert.equal(
     elements(board.Botonera({}), "Sonido").length,
-    5,
-    "Unavailable RevenueCat does not unlock Plus",
+    12,
+    "Catálogo oficial Free sin RevenueCat",
   );
   assert.equal(
     elements(board.Botonera({}), "Sonido").some((s) => s.sonido.plus),
@@ -101,7 +101,7 @@ for (disponible of [false, true]) {
   );
 }
 activo = true;
-assert.equal(elements(board.Botonera({}), "Sonido").length, 18);
+assert.equal(elements(board.Botonera({}), "Sonido").length, 12);
 const settings = cargar("src/app/sonidos.tsx", deps).default;
 activo = false;
 assert.equal(elements(settings(), "VolumenAudio").length, 4);
@@ -115,25 +115,18 @@ assert.equal(
   5,
   "Free does not get premium configuration",
 );
-elements(settings(), "Boton")
-  .find((b) => b.titulo === "Conocer Blindly Plus")
-  .onPress();
-assert.equal(rutas.pop(), "/plus");
+assert.equal(elements(settings(), "Boton").some(b => b.titulo === "Añadir a favoritos"), false, "Sin lista repetida de favoritos");
 activo = true;
 const tree = settings();
-assert.equal(elements(tree, "Switch").length, 23);
-elements(tree, "Boton")
-  .find((b) => b.titulo === "Añadir a favoritos")
-  .onPress();
-assert.equal(p.botoneraFavoritos[0], "aplausos");
+assert.equal(elements(tree, "Switch").length, 17);
 elements(tree, "Switch")
   .find((s) => s.accessibilityLabel === "Mostrar sonido: Aplausos")
   .onValueChange();
 assert.equal(p.botoneraVisibles.includes("aplausos"), false);
 elements(tree, "Boton")
-  .filter((b) => b.titulo === "Mover hacia arriba")[1]
+  .filter((b) => b.titulo === "Mover hacia arriba")[3]
   .onPress();
-assert.equal(p.botoneraOrden[0], "fichas");
+assert.equal(p.botoneraOrden[2], "aplausos");
 const saved = JSON.stringify(p);
 activo = false;
 assert.equal(elements(settings(), "Switch").length, 5);
@@ -167,6 +160,21 @@ activo = true;
 const Sonido = tipo(mounted.Botonera({}));
 const props = { sonido: bot.SONIDOS[1], volumen: .5, permitido: true, ultimoRef: { current: 0 }, avisar: () => {}, control: { reproducir: async () => plays++ } };
 const reaction = () => elements(Sonido(props), "Pressable")[0];
+const heart = () => elements(Sonido(props), "Pressable")[1];
+assert.equal(heart().accessibilityState.selected, false);
+heart().onPress();
+assert.equal(p.botoneraFavoritos.includes(props.sonido.id), true);
+assert.equal(plays, 0, "El corazón no reproduce audio");
+assert.equal(heart().accessibilityState.selected, true);
+props.volumen = 0;
+heart().onPress();
+assert.equal(p.botoneraFavoritos.includes(props.sonido.id), false, "Favoritos disponibles con mute");
+props.volumen = .5;
+activo = false;
+heart().onPress();
+assert.equal(p.botoneraFavoritos.includes(props.sonido.id), true, "Favoritos gratis");
+heart().onPress();
+activo = true;
 const button = reaction();
 assert.equal(button.disabled, false);
 assert.equal(button.style({ pressed: true }).transform[0].scale, .97);
@@ -188,20 +196,20 @@ for (const sonido of bot.SONIDOS) {
   assert.equal(row.accessibilityLabel, sonido.nombre + (sonido.plus ? " · Plus" : ""));
   row.onPress();
 }
-assert.equal(plays, 19, "Cada una de las 18 reacciones usa el reproductor existente");
+assert.equal(plays, 13, "Cada una de las 12 reacciones usa el reproductor existente");
 let stateIndex = 0;
 p = { ...p, ...bot.BOTONERA_INICIAL };
 deps.react.useState = v => {
   const i = stateIndex++;
-  return [i === 1 ? 420 : i === 2 ? { "Poker Room": true } : v, () => {}];
+  return [i === 1 ? "fichas" : v, () => {}];
 };
 const responsive = cargar("src/components/Botonera.tsx", deps);
 let collapsed = responsive.Botonera({});
-assert.equal(elements(collapsed, "Sonido").length, 18, "Plegar categorías conserva los players precargados");
+assert.equal(elements(collapsed, "Sonido").length, 12, "La búsqueda conserva los players precargados");
 assert.equal(elements(collapsed, "View").some(v => v.style?.display === "none"), true);
-assert.equal(elements(collapsed, "Sonido")[0].ancho, (420 - 16) / 3);
+assert.equal(elements(Sonido(props), "View")[0].style.width, "48%", "Dos columnas con ancho relativo al grid real");
 stateIndex = 0;
 deps["react-native"].useWindowDimensions = () => ({ fontScale: 1.5 });
 collapsed = responsive.Botonera({});
-assert.equal(elements(collapsed, "Sonido")[0].ancho, (420 - 8) / 2, "Texto grande conserva dos columnas");
+assert.equal(elements(Sonido(props), "View")[0].style.width, "48%", "Texto grande conserva dos columnas");
 console.log("Reacciones UI: presión, carga, mute, partida pausada y límite de ráfagas OK");

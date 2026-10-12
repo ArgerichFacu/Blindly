@@ -1,97 +1,98 @@
 {
   "fichas": {
-    "segundos": 0.5712471655328798,
-    "picoDbFS": -9.05,
-    "rmsActivoDbFS": -19.58
-  },
-  "carta": {
-    "segundos": 0.5615419501133787,
-    "picoDbFS": -9.85,
-    "rmsActivoDbFS": -19.58
+    "segundos": 1.9,
+    "picoDbFS": -4.15,
+    "loudnessK": -23.0,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": 11.58,
+    "sha256Final": "acd131196abf6e6875e28223b723d22c3034226da3ddf157900893c8e4638b50"
   },
   "barajar": {
-    "segundos": 1.2,
-    "picoDbFS": -7.75,
-    "rmsActivoDbFS": -19.58
+    "segundos": 1.8,
+    "picoDbFS": -3.0,
+    "loudnessK": -23.69,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": 7.36,
+    "sha256Final": "a87d203576a5bc6aab2287ee97082a43e163876c70292addf3b706abc5cbf7e2"
   },
-  "campana": {
-    "segundos": 1.1,
-    "picoDbFS": -8.02,
-    "rmsActivoDbFS": -19.58
+  "carta": {
+    "segundos": 0.5565532879818594,
+    "picoDbFS": -3.0,
+    "loudnessK": -24.81,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": 7.42,
+    "sha256Final": "3f0c39e250b8a37ea163007ae4daeefa336fe4d9431efe2e42741a77e54357b6"
   },
   "aplausos": {
-    "segundos": 1.1500226757369614,
-    "picoDbFS": -10.41,
-    "rmsActivoDbFS": -19.58
-  },
-  "respeto": {
-    "segundos": 0.4,
-    "picoDbFS": -9.17,
-    "rmsActivoDbFS": -19.58
-  },
-  "allin": {
-    "segundos": 0.34997732426303857,
-    "picoDbFS": -8.62,
-    "rmsActivoDbFS": -19.58
-  },
-  "bust": {
-    "segundos": 0.34997732426303857,
-    "picoDbFS": -7.16,
-    "rmsActivoDbFS": -19.58
-  },
-  "grillos": {
-    "segundos": 1.1,
-    "picoDbFS": -12.16,
-    "rmsActivoDbFS": -21.41
-  },
-  "bocina": {
-    "segundos": 0.7500226757369615,
-    "picoDbFS": -11.69,
-    "rmsActivoDbFS": -21.41
-  },
-  "trombon": {
-    "segundos": 1.3486167800453515,
-    "picoDbFS": -11.72,
-    "rmsActivoDbFS": -21.41
-  },
-  "caja": {
-    "segundos": 0.8500226757369614,
-    "picoDbFS": -12.51,
-    "rmsActivoDbFS": -21.41
-  },
-  "ambiente-casino": {
-    "segundos": 20,
-    "picoDbFS": -23.1,
-    "rmsActivoDbFS": -47.73
-  },
-  "pato": {
-    "segundos": 0.3873922902494331,
-    "picoDbFS": -10.38,
-    "rmsActivoDbFS": -21.41
-  },
-  "bateria": {
-    "segundos": 1.4,
-    "picoDbFS": -8.81,
-    "rmsActivoDbFS": -21.41
-  },
-  "buzzer": {
-    "segundos": 0.4,
-    "picoDbFS": -17.66,
-    "rmsActivoDbFS": -21.41
-  },
-  "dealer": {
-    "segundos": 0.34997732426303857,
-    "picoDbFS": -11.68,
-    "rmsActivoDbFS": -19.58
+    "segundos": 3.0,
+    "picoDbFS": -10.86,
+    "loudnessK": -23.0,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": 0.67,
+    "sha256Final": "7f6af4876102eb9a5338618537a6ead99c0144314e34f856be4f3e6001bdd87f"
   },
   "sorpresa": {
-    "segundos": 1,
-    "picoDbFS": -10.21,
-    "rmsActivoDbFS": -19.58
+    "segundos": 1.7,
+    "picoDbFS": -10.95,
+    "loudnessK": -23.0,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": 4.21,
+    "sha256Final": "f68263980fad8390e337b43fb25102e2bb009b0b45d93f4d31e4a810019876bf"
+  },
+  "bocina": {
+    "segundos": 1.6,
+    "picoDbFS": -15.28,
+    "loudnessK": -23.0,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": -4.63,
+    "sha256Final": "9f378dafbcd45d2fdc37f97cce58f5fb5da13f74c34adf3c47cdaf7d697afa77"
+  },
+  "grillos": {
+    "segundos": 3.0,
+    "picoDbFS": -6.92,
+    "loudnessK": -23.0,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": 9.78,
+    "sha256Final": "37f379b7b31f55b5e04ba74b3fa5a714b3828b29994e6ff0225c8dd8f0bbc043"
+  },
+  "trombon": {
+    "segundos": 4.950022675736961,
+    "picoDbFS": -11.6,
+    "loudnessK": -23.0,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": 0.39,
+    "sha256Final": "00207c6d1c1724aa9f3a4b4ee5c1307a7a63fb3867f22726ed2b1acf35f2c4d4"
+  },
+  "bateria": {
+    "segundos": 4.732244897959184,
+    "picoDbFS": -7.18,
+    "loudnessK": -23.0,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": 3.92,
+    "sha256Final": "717078896a14e05777bd6cfb002fc41e0daad551fdb73b73b4e981380f334bb8"
   },
   "risa": {
-    "segundos": 0.8253061224489796,
-    "picoDbFS": -12.6,
-    "rmsActivoDbFS": -21.41
+    "segundos": 2.651700680272109,
+    "picoDbFS": -11.89,
+    "loudnessK": -23.0,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": 3.65,
+    "sha256Final": "3b32498cef7d10145907b1085b86a0181c8eef97a21fb1bf5edc32e04d61549a"
+  },
+  "buzzer": {
+    "segundos": 1.1,
+    "picoDbFS": -9.89,
+    "loudnessK": -23.0,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": 11.31,
+    "sha256Final": "ba3f05e2485a113bd036753a0ea3431cdb6ad9aa9b740731c3ee4aa35dbc89f1"
+  },
+  "pato": {
+    "segundos": 1.04,
+    "picoDbFS": -8.59,
+    "loudnessK": -23.0,
+    "ventanaSegundos": 0.4,
+    "gananciaDb": 23.47,
+    "sha256Final": "70d7d24035e40b031b4f682863ddebd7dab3703dc097417509461fb912921074"
   }
 }

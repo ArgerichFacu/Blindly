@@ -1,5 +1,7 @@
 # Activación comercial Android — 9 de octubre de 2026
 
+**Actualización de release:** la app ya existe en Play Console con `com.blindly.studio`, autorizado por el titular tras comprobar que `com.blindly.app` pertenece a otra app. RevenueCat conserva la configuración Android del paquete anterior y los tres planes del offering son Test Store. La sesión actual muestra “You don't have permission to add app configurations”. Hace falta configurar el paquete nuevo con un usuario autorizado, vincular credenciales Google y productos reales antes de habilitar compras. No reutilizar la clave del paquete anterior ni una clave Test Store para activar producción. Estado/artefactos actuales: [release final](release-final.md). El resto de este documento conserva la auditoría histórica.
+
 **Preparación técnica realizada; activación comercial NO confirmada.** No se publicó producción, no se hicieron compras y no se cobraron importes. La cuenta de Play Console está creada y pagada. El pago ya no es un bloqueo.
 
 ## Estado observado y bloqueos

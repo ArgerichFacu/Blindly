@@ -1,78 +1,62 @@
-# Reacciones de mesa: Poker Room / Party
+# Pack oficial de release — Android
 
-Pasada del 2026-10-11. Se mejora la botonera existente sin cambiar la arquitectura: expo-audio, preferencias locales, controlador exclusivo y capacidades de Plus. Las reacciones suenan en el dispositivo que las dispara; no alteran apuestas ni envían eventos a otros jugadores. No se habilitan compras ni carga de audios personalizados.
+La botonera conserva expo-audio, control exclusivo, haptics y preferencias existentes. El catálogo se reduce de 18 a 12 sonidos oficiales, todos Free. No se incorpora ninguna dependencia móvil ni se modifican permisos o binarios nativos.
 
-## Inventario y acceso
+## Catálogo y licencias
 
-Se encontraron 12 reacciones sintéticas: Aplausos, Fichas, Grillos, Campana, Bocina, Trombón, Caja registradora, Respeto, Carta al paño, Barajar, All-in y Última ficha. Se reemplazaron once por muestras CC0: todas salvo Caja registradora. Se incorporaron seis: Cuac, Ba dum tss, Toque del dealer, Sorpresa, Risa y Buzzer. Total: 18 reacciones.
+| Sonido / archivo | Duración | Fuente original | Licencia | Nivel K / pico (dB) |
+| --- | ---: | --- | --- | ---: |
+| Fichas · `fichas.wav` | 1.90 s | [AnikadeBeer_231312: Throwing poker chips on a wooden table SFX](https://freesound.org/people/AnikadeBeer_231312/sounds/707910/) | CC0-1.0 | -23.00 / -4.15 |
+| Barajar · `barajar.wav` | 1.80 s | [Kenney: Casino Audio: card-shuffle](https://kenney.nl/assets/casino-audio) | CC0-1.0 | -23.69 / -3.00 |
+| Carta al paño · `carta.wav` | 0.56 s | [Kenney: Casino Audio: card-place-1](https://kenney.nl/assets/casino-audio) | CC0-1.0 | -24.81 / -3.00 |
+| Aplausos · `aplausos.wav` | 3.00 s | [Sclolex: small_applause.wav](https://freesound.org/people/Sclolex/sounds/261617/) | CC0-1.0 | -23.00 / -10.86 |
+| Sorpresa · `sorpresa.wav` | 1.70 s | [deleted_user_2104797 (Adam_N): Crowd shock.wav](https://freesound.org/people/deleted_user_2104797/sounds/324898/) | CC0-1.0 | -23.00 / -10.95 |
+| Bocina · `bocina.wav` | 1.60 s | [goose278: air horn close and loud.WAV](https://freesound.org/people/goose278/sounds/174819/) | CC0-1.0 | -23.00 / -15.28 |
+| Grillos · `grillos.wav` | 3.00 s | [felix.blume: Cricket in the desert (close recording)](https://freesound.org/people/felix.blume/sounds/166176/) | CC0-1.0 | -23.00 / -6.92 |
+| Trombón · `trombon.wav` | 4.95 s | [kirbydx: wah wah sad trombone.wav](https://freesound.org/people/kirbydx/sounds/175409/) | CC0-1.0 | -23.00 / -11.60 |
+| Redoble · `bateria.wav` | 4.73 s | [bigjoedrummer: buzz roll.wav](https://freesound.org/people/bigjoedrummer/sounds/77305/) | CC0-1.0 | -23.00 / -7.18 |
+| Risa · `risa.wav` | 2.65 s | [deleted_user_2104797: Crowd laugh.wav](https://freesound.org/people/deleted_user_2104797/sounds/324894/) | CC0-1.0 | -23.00 / -11.89 |
+| Buzzer · `buzzer.wav` | 1.10 s | [scarfield: door_buzzzzer.aif](https://freesound.org/people/scarfield/sounds/52004/) | CC0-1.0 | -23.00 / -9.89 |
+| Cuac · `pato.wav` | 1.04 s | [gibarroule: Duck Quack](https://freesound.org/people/gibarroule/sounds/365133/) | CC0-1.0 | -23.00 / -8.59 |
 
-Free mantiene sus cuatro sonidos anteriores y suma Barajar. Plus permite el catálogo completo, favoritos, orden y visibilidad, sin modificar RevenueCat ni el entitlement blindly_plus. Un orden guardado incorpora los nuevos IDs al final; una selección visible guardada se respeta. Quien ya personalizó Plus puede mostrar los nuevos sonidos desde Config → Sonidos y ambiente. Al expirar Plus los ajustes se conservan y reaparecen los cinco Free.
+CC0 permite distribución comercial sin atribución obligatoria; se mantienen los autores y enlaces. Freesound se obtuvo de previews HQ MP3, no se presenta como lossless. Las cartas Kenney proceden de Casino Audio y su licencia incluida. `fuentes.json` registra hashes originales, URL, corte y atribución; `niveles.json` registra duración y SHA-256 de cada WAV. No hay assets de Discord, películas, juegos ni memes extraídos.
 
-## Poker Room
+## Cambios respecto de v16/v17
 
-| Reacción | Acceso | Duración | Fuente y licencia |
-| --- | --- | --- | --- |
-| Fichas | Free + Plus | 0.57 s | [Kenney: Casino Audio: chips-handle-1](https://kenney.nl/assets/casino-audio) · CC0-1.0 |
-| Barajar | Free + Plus | 1.20 s | [Kenney: Casino Audio: card-shuffle](https://kenney.nl/assets/casino-audio) · CC0-1.0 |
-| Carta al paño | Plus | 0.56 s | [Kenney: Casino Audio: card-place-1](https://kenney.nl/assets/casino-audio) · CC0-1.0 |
-| Aplausos | Free + Plus | 1.15 s | [Sclolex: small_applause.wav](https://freesound.org/people/Sclolex/sounds/261617/) · CC0-1.0 |
-| Campana | Free + Plus | 1.10 s | [TRP: 220516 desk bell rings](https://freesound.org/people/TRP/sounds/717564/) · CC0-1.0 |
-| Sorpresa | Plus | 1.00 s | [deleted_user_2104797 (Adam_N): Crowd shock.wav](https://freesound.org/people/deleted_user_2104797/sounds/324898/) · CC0-1.0 |
-| Toque del dealer | Plus | 0.35 s | [Kenney: Impact Sounds: impactWood_light_000](https://kenney.nl/assets/impact-sounds) · CC0-1.0 |
-| All-in | Plus | 0.35 s | [Kenney: Casino Audio: chips-collide-1](https://kenney.nl/assets/casino-audio) · CC0-1.0 |
-| Respeto | Plus | 0.40 s | [Kenney: Impact Sounds, dos golpes de madera](https://kenney.nl/assets/impact-sounds) · CC0-1.0 |
-| Última ficha | Plus | 0.35 s | [Kenney: Casino Audio: chip-lay-1](https://kenney.nl/assets/casino-audio) · CC0-1.0 |
+- Fichas: grabación de varias fichas lanzadas sobre mesa de madera, sustituyendo chips-handle de Kenney. No se afirma que el material de la mesa sea paño.
+- Risa: pequeña audiencia humana, sustituyendo una risa individual breve.
+- Buzzer: zumbador físico de puerta grabado, sustituyendo síntesis propia. Su adecuación como reacción de error requiere escucha.
+- Batería: en v22 se reemplaza el rimshot rechazado por un redoble acústico de caja que termina en rimshot (bigjoedrummer, micrófono SONY/iRiver H340). Se presenta como Redoble; no como ba-dum-tss completo.
+- Bocina: corte comienza en 2,5 s, donde está el airhorn; la versión anterior recortaba principalmente el ruido previo.
+- Trombón: frase a velocidad original, hasta 4,95 s; se elimina la aceleración 3,7×.
+- Aplausos/grillos/sorpresa/barajar: cortes más largos; carta mantiene carácter breve. Cuac v22 usa una nueva grabación de pato real con micrófono Sennheiser/H4N Zoom, normalizada desde un nivel original muy bajo.
+- Se retiran del catálogo Campana, Caja registradora, Respeto, All-in, Última ficha y Toque del dealer. Campana permanece como aviso de ronda fuera de la botonera.
 
-## Party
+## Producción
 
-| Reacción | Acceso | Duración | Fuente y licencia |
-| --- | --- | --- | --- |
-| Grillos | Free + Plus | 1.10 s | [felix.blume: Cricket in the desert (close recording)](https://freesound.org/people/felix.blume/sounds/166176/) · CC0-1.0 |
-| Bocina | Plus | 0.75 s | [goose278: air horn close and loud.WAV](https://freesound.org/people/goose278/sounds/174819/) · CC0-1.0 |
-| Trombón | Plus | 1.35 s | [kirbydx: wah wah sad trombone.wav](https://freesound.org/people/kirbydx/sounds/175409/) · CC0-1.0 |
-| Ba dum tss | Plus | 1.40 s | [DJczyszy: Ba Dum Tss! (classic edition)](https://freesound.org/people/DJczyszy/sounds/431811/) · CC0-1.0 |
-| Risa | Plus | 0.83 s | [amoyssiadis: short female laugh chuckle giggle](https://freesound.org/people/amoyssiadis/sounds/397673/) · CC0-1.0 |
-| Cuac | Plus | 0.39 s | [OwennewO: Duck Quack](https://freesound.org/people/OwennewO/sounds/719111/) · CC0-1.0 |
-| Buzzer | Plus | 0.40 s | Síntesis original de Blindly · MIT del repositorio |
-| Caja registradora | Plus | 0.85 s | Síntesis original de Blindly · MIT del repositorio |
+PCM WAV mono 22.050 Hz/16 bits; máximo 5 s. Trimming inicial, eliminación de DC y fades 3/25 ms. Compresión moderada 3:1, umbral 0,08, ataque 0,5 ms y release 50 ms; sin cambio de tempo, pitch ni síntesis. Normalización K ponderada con objetivo −23 LUFS y techo de pico muestral −3 dBFS. Los transitorios de cartas limitan su ganancia; se muestran mediciones reales, no un nivel ficticio idéntico.
 
-## Producción, normalización y licencias
+La medición usa pyloudnorm con ventana 400 ms; para clips de menos de 400 ms usa 200 ms y es una aproximación para clips breves, no una certificación EBU estándar. La consistencia percibida, ruido y calidad deben aprobarse escuchando todos los sonidos en el teléfono. No se afirma que esa escucha haya ocurrido sólo por pasar tests.
 
-Las muestras de Freesound proceden de las vistas previas HQ MP3 publicadas por los autores; no se presentan como fuentes lossless. Kenney se importó desde los OGG de sus paquetes oficiales Casino Audio 1.1 e Impact Sounds 1.0. Todas las páginas individuales y ambas licencias Kenney indican CC0, compatible con redistribución comercial. Se incluyen las licencias Kenney en assets/sounds/LICENCIA-Kenney-*.txt. No se usaron archivos de Discord, videojuegos ni memes de origen desconocido.
-
-assets/sounds/fuentes.json registra autor, título, URL, licencia, archivo original usado, SHA-256 y parámetros de edición de cada grabación. Las dos reacciones originales (Caja registradora y Buzzer) se generan en scripts/generar-sonidos.cjs y se distribuyen bajo LICENSE (MIT). El ambiente sintético y la atribución de la música Lobby Time permanecen intactos.
-
-Edición: inicio silencioso eliminado, corte de reacción, filtrado 65–9500 Hz, eliminación de DC y fundidos de 3 ms/25 ms. Trombón conserva la frase acelerándola sin cambiar tono (atempo 2 × 1,85); Ba dum tss usa atempo 1,35 y una cola corta. Se aplica compresión suave de transitorios y normalización por RMS de ventanas activas de 20 ms, gate relativo −30 dB: Poker Room −19,58 dBFS; Party −21,41 dBFS para mantener la bocina controlada. Es una aproximación al nivel percibido, no una certificación LUFS. Los tests recalculan niveles y picos desde los PCM; niveles.json conserva las mediciones.
-
-Formato final: WAV PCM mono, 22.050 Hz, 16 bits. Las 18 reacciones pesan aproximadamente 0,62 MB; incluyendo el ambiente de 20 s, los 19 WAV suman 1,50 MB decimales. Picos de reacciones inferiores a −6 dBFS. Todas tienen señal audible en los primeros 50 ms, duración 0,35–1,40 s y extremos fundidos.
-
-Reproducción de assets (herramientas de edición fuera de la app):
+Reproducción de assets (herramientas offline fuera de la app):
 
 ```powershell
-node scripts/generar-sonidos.cjs
-node scripts/importar-sonidos-naturales.cjs <ffmpeg-7.1.exe> <carpeta-de-fuentes>
+$env:PYTHONPATH = 'G:/Blindly/herramientas/audio-python'
+python scripts/master-sonidos.py <ffmpeg-7.1.exe> <carpeta-fuentes>
 ```
 
-El generador conserva grabaciones CC0 y el ambiente existente. El importador exige que los hashes de las fuentes coincidan; FFmpeg es una herramienta offline, no una dependencia móvil. Las fuentes originales se guardan fuera de Git y sólo se versionan WAV finales y procedencia.
+Dependencias de edición: numpy, scipy y pyloudnorm instalados en G:/Blindly/herramientas/audio-python. No se incluyen en Android. El importador anterior se retira para impedir la regeneración con aceleración histórica; generar-sonidos.cjs sólo conserva el ambiente existente.
 
-## Interacción y ciclo de vida
+## Uso y QA
 
-Botones horizontales, SVG del sistema visual, nombre legible y label accesible (incluye Plus cuando corresponde). Dos columnas en móvil o con texto grande; tres si el área útil alcanza 390 px y fontScale ≤ 1,2. Poker Room y Party se pueden plegar. Se conserva el orden y favoritos dentro de cada pack.
+Buscador por nombre traducido (ignora mayúsculas/tildes), Recientes (4 IDs únicos, último uso primero), Favoritos y Todos los sonidos. Preferencias persistidas; favoritos Free, orden/visibilidad Plus. Se descartan IDs retirados al cargar sin borrar preferencias de otros canales. No se implementa carga/grabación de sonidos de liga en este bloque: 3/usuario y 10/liga no se presentan como funcionales ni testeados.
 
-Al presionar: escala 0,97; un toque aceptado dispara pulso champagne de 200 ms, audio y haptic discreto opcional en el mismo handler. Se respeta la preferencia hapticos: Android Keyboard Tap / iOS Light; web, fondo y dispositivos sin motor no fallan. La animación usa React Native Animated y se cancela al desmontar.
+Grid fijo de 2 columnas, ancho relativo al contenedor real para evitar que el redondeo del cálculo en Android envíe cada botón a una fila. Los reproductores de Todos los sonidos permanecen montados al buscar; no se crea un player en el handler. Preload downloadFirst, isLoaded y seekTo(0) existentes. No hay medición tap-audio física en milisegundos. Cooldown global 350 ms; una reacción reemplaza la anterior, sin cola. Blur, fondo, mute, canal apagado y pausa detienen/bloquean reproducción. No hay reproducción automática al volver.
 
-Los players locales se preparan al montar con useAudioPlayer (downloadFirst, actualización de estado 100 ms), no al tocar. Las categorías plegadas conservan sus players; al salir se liberan mediante el hook existente. Los botones esperan isLoaded. No se promete una latencia física medida: seekTo(0) sigue protegido frente a navegación y cambios de estado.
+Tests cubren cada asset, hashes, duración, PCM, onset, fades, picos, preferencias antiguas, recencia/deduplicación, búsqueda traducida, acceso Free/Plus, expiración, mute, exclusividad, seek pendiente, taps rápidos, foreground y sliders. Estado de hardware, escucha, publicación y artefactos: [release final](release-final.md).
 
-Una sola reacción a la vez; el nuevo toque reemplaza la anterior. Cooldown global de 350 ms, sin cola. Volumen cero, silencio global, canal apagado, partida pausada/finalizada o audio no cargado bloquean el handler. La música, efectos y ambiente mantienen canales separados y sliders 0–100. El controlador pausa en blur/unmount/background y bloquea reanudación automática al volver.
+La campana de cambio de ronda permanece fuera del catálogo: TRP, “220516 desk bell rings”, CC0-1.0; fuente y hash en `fuentes-avisos.json`. Ambiente original y música Lobby Time mantienen su atribución previa.
 
-## Verificación y límites
+## Ajustes tras escucha del A32 — v22
 
-- tests/audio.cjs: compatibilidad de preferencias, Free/Plus/expiración, volumen, exclusividad, seek pendiente, foco y AppState; formato PCM, cada asset, duración, comienzo audible, fundidos, picos y nivel activo.
-- tests/audio-ui.cjs: permisos, favoritos/orden/visibilidad, cinco Free y 18 con Plus, cada reacción, haptic/pulso del mismo toque, ráfagas, estados disabled y layout responsive; plegar conserva los players.
-- tests/hapticos.cjs y tests/volumen-audio-ui.cjs: configuración, motor ausente, sliders, teclado, sincronización y mute.
-- npm test, npm run typecheck y npm run lint aprobados. React Compiler transforma Botonera en aproximadamente 0,5 s.
-- Web 360×760: cinco Free, SVG y texto sin cortes; tocar Fichas/Grillos sin errores de consola; mute bloquea Fichas; slider Reacciones 50→51→50; plegar/abrir Poker Room funciona. Se restauran los valores originales. Captura local en G:/Blindly/evidencias/botonera/web-360.png.
-- Android x86_64: assembleDebug aprobado; instalación separada com.blindly.app.audioqa aprobada en AVD Android 16, conservando com.blindly.app y sus datos. Metro inicialmente quedó sin responder; se recuperó limpiando caché. La ejecución de reacciones en Android no se da por aprobada: la reconexión por ADB fue rechazada por la revisión automática, sin motivo específico. No hay dispositivo físico conectado.
-- iOS: no hay Mac/simulador/iPhone disponible en este entorno Windows. La exportación de bundles se comprueba adicionalmente en CI.
-
-No se agregan dependencias de la app, código nativo, permisos, librerías .so ni servicios. Esta pasada no cambia la alineación de páginas de 16 KB; tampoco certifica el pendiente anterior ARM64/16 KB en hardware real. La exportación iOS no equivale a prueba en iPhone. La escucha subjetiva y vibración en celular real requieren el nuevo build.
+El usuario rechazó Rimshot y Cuac de v21. Ambos se reemplazan; su nueva calidad percibida está pendiente de aprobación humana. El resto del pack no cambia. Cada botón incorpora un corazón independiente de 44 dp para añadir/quitar favoritos sin disparar audio, incluso silenciado. Corazón relleno y estado accesible seleccionado identifican favoritos. Se elimina la lista duplicada de botones grandes para favoritos; los controles de orden/visibilidad sólo aparecen en Plus. Se mantienen dos columnas y cuatro recientes.
