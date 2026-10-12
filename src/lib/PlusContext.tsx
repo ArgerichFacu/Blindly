@@ -34,7 +34,7 @@ const ContextoPlus = createContext<EstadoPlus>({
 export function PlusProvider({ children }: { children: ReactNode }) {
   const [info, setInfo] = useState<CustomerInfo | null>(null);
   const [cargando, setCargando] = useState(!PLUS_DEMO), [revisionPlay, setRevisionPlay] = useState(false);
-  const [remoto, setRemoto] = useState<EstadoFounder | null>(null), [, setPulso] = useState(0);
+  const [remoto, setRemoto] = useState<EstadoFounder | null>(null), [instante, setInstante] = useState(0);
   const [error, setError] = useState<unknown>(null);
   const [cacheVisible, setCacheVisible] = useState<CacheFounder | null>(null);
   const [identidad, setIdentidad] = useState<string | null>(null);
@@ -51,7 +51,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
   }
   function limpiar() { cache.current = null; setCacheVisible(null); setIdentidad(null); setRemoto(null); setInfo(null); setRevisionPlay(false); }
   function adoptar(estado: EstadoFounder, id: string) {
-    cache.current = cacheFounder(estado, id); setCacheVisible(cache.current); setIdentidad(id); setRemoto(estado); setRevisionPlay(estado.access_source === "PLAY_REVIEW");
+    cache.current = cacheFounder(estado, id); setInstante(ahoraMonotono()); setCacheVisible(cache.current); setIdentidad(id); setRemoto(estado); setRevisionPlay(estado.access_source === "PLAY_REVIEW");
   }
   function quitarListener() {
     if (listener.current) { Purchases.removeCustomerInfoUpdateListener(listener.current); listener.current = null; }
@@ -88,6 +88,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
       setInfo(nuevaInfo); escucharCompras(); await sincronizarPlusServidor();
     } catch (e) {
       if (turno === generacion.current && montado.current) {
+        setInstante(ahoraMonotono());
         setInfo(null); setRevisionPlay(false); setError(e);
         // Sólo el trial ya comprobado admite caché breve, dentro de su plazo.
         if (cache.current?.estado.access_source !== "FOUNDER_TRIAL") { cache.current = null; setCacheVisible(null); setRemoto(null); }
@@ -123,7 +124,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     const c = cache.current, ahora = ahoraMonotono();
     const demora = Math.max(1, Math.min(c.recibido + CACHE_FOUNDER_MS - ahora,
       remoto.active ? c.limiteTrial - ahora : CACHE_FOUNDER_MS));
-    const timer = setTimeout(() => setPulso(v => v + 1), demora);
+    const timer = setTimeout(() => setInstante(ahoraMonotono()), demora);
     return () => clearTimeout(timer);
   }, [remoto]);
   async function operacionFounder(accion: () => Promise<EstadoFounder>) {
@@ -164,7 +165,8 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     } catch (e) { if (turno === generacion.current && montado.current) { setInfo(null); setError(e); } throw e; }
     finally { terminarOperacion(turno); }
   }
-  const estado = PLUS_DEMO ? null : estadoFounderVigente(cacheVisible, identidad);
+  // El tiempo es un input explícito del render, también para React Compiler.
+  const estado = PLUS_DEMO ? null : estadoFounderVigente(cacheVisible, identidad, instante);
   const comercialDisponible = !PLUS_DEMO && PLUS_DISPONIBLE && estado?.real_payments_enabled === true;
   const revision = revisionPlay && estado?.access_source === "PLAY_REVIEW";
   const pagado = estado?.access_source === "REVENUECAT_PAID" || (comercialDisponible && tieneEntitlementPlus(info));
