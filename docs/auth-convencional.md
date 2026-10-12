@@ -62,9 +62,9 @@ Comandos: `npm run test:auth`, `npm test`, `npm run typecheck`, `npm run lint`, 
 |---|---|
 | Invitado nuevo | Real: creado y eliminado en Supabase; RPC propia sin datos. |
 | Invitado→email | Real: entrega SMTP, OTP, password y login; mismo UUID. UI simulada pasa. |
-| Invitado→Google | Real SDK/navegador: linkIdentity, misma identidad permanente. Android pendiente. |
+| Invitado→Google | Real SDK/navegador: linkIdentity, misma identidad permanente. A32 v28: el dueño completó Google y volvió a Mi cuenta; Google conectado y cuenta permanente confirmados en UI y Supabase. No se registró el UUID previo del teléfono: la igualdad antes/después sólo está demostrada en QA SDK. |
 | UUID antes/después | Real conservado en email, legacy→email, Google y reset; FK/RPC auditadas. |
-| Persistencia al cerrar/abrir | Real SDK y emulador v25 x86_64: force-stop/abrir conserva reviewer y Plus sin reingresar password. A32 pendiente. |
+| Persistencia al cerrar/abrir | Real SDK y emulador v25 x86_64: force-stop/abrir conserva reviewer y Plus sin reingresar password. A32 v28: force-stop/abrir y Config→Mi cuenta conserva el correo de administración y Google conectado sin repetir login. |
 | Logout | Real SDK y UI del emulador v25: vuelve a invitado sin eliminar reviewer. |
 | Login posterior | Real signInWithPassword y UI Android del reviewer; UUID original. |
 | Password incorrecta | Real SDK y emulador v27: error traducido, sesión conservada y mensaje visible automáticamente sin desplazamiento manual. |
@@ -108,7 +108,7 @@ Compilación local Android completada desde c70b13a, paquete com.blindly.studio,
 - apksigner y bundletool validate pasan; zipalign -P 16 pasa. Auditoría del AAB: 58 bibliotecas de 64 bits, cero fallos PT_LOAD; 30 finales RELRO no cumplen la comprobación estricta adicional, sin solapamientos escribibles. Esto no demuestra ejecución física ARM64 en 16 KB; sigue pendiente y no se declara compatibilidad completa.
 - El dueño cargó el AAB v28; Play lo aceptó y se publicó en prueba interna el 12/10/2026 a las 14:27 ART, con estado «Disponible para testers internos». Único aviso: falta archivo de desofuscación. Evidencia auth-play-v28-publicada.png. No contiene una clave SMTP ni secretos OAuth. La actualización/aceptación del A32 se registra aparte.
 
-Instalación A32: rechazó la actualización local con INSTALL_FAILED_UPDATE_INCOMPATIBLE porque v22 estaba firmada por Google Play, distinta del certificado local. El dueño actualizó desde Play y ADB confirmó versión 1.0.0/28 instalada; la pantalla de acceso arranca. No se desinstaló ni borró almacenamiento. El regreso de Google/correo en el dispositivo sigue pendiente. Las variantes ARM anteriores no arrancaban en el emulador x86 por SoLoader; v28 incluye x86 y arranca. Esto no es aceptación ARM64/16 KB y no se atribuye a un fallo de Auth.
+Instalación A32: rechazó la actualización local con INSTALL_FAILED_UPDATE_INCOMPATIBLE porque v22 estaba firmada por Google Play, distinta del certificado local. El dueño actualizó desde Play y ADB confirmó versión 1.0.0/28 instalada; la pantalla de acceso arranca. No se desinstaló ni borró almacenamiento. Google regresó a Mi cuenta, UI y Auth confirman el proveedor conectado; force-stop/abrir conservó el acceso. Evidencias auth-v28-a32-google.png y auth-v28-a32-google-persist-cuenta.xml. Retornos por correo, Google con app cerrada, cancelación y red siguen pendientes. Las variantes ARM anteriores no arrancaban en el emulador x86 por SoLoader; v28 incluye x86 y arranca. Esto no es aceptación ARM64/16 KB y no se atribuye a un fallo de Auth.
 
 Implementación vigente: c70b13a (demo), [CI exitoso](https://github.com/ArgerichFacu/Blindly/actions/runs/38281722034) y [Pages exitoso](https://github.com/ArgerichFacu/Blindly/actions/runs/38281721366). Evidencia local: G:/Blindly/evidencias/auth-google-qa-real.png, auth-google-marca-guardada.png, auth-v28-emulador-plus.png y auth-v28-elf-aab.json. Las credenciales nunca se incluyen en capturas de documentación pública.
 
