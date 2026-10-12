@@ -2428,3 +2428,163 @@ Object.assign(errores, {
   "AUTH_NOMBRE_INVALIDO": "Ingresá un nombre de hasta 30 caracteres."
 });
 Object.assign(textos, { "Nombre": ["Name", "Nome"], "Free": ["Free", "Free"] });
+Object.assign(textos, { "Mensual": ["Monthly", "Mensal"], "Anual": ["Annual", "Anual"] });
+Object.assign(textos, {
+  "Listo. Te avisaremos cuando Blindly Plus esté disponible.": ["Done. We'll let you know when Blindly Plus becomes available.", "Pronto. Avisaremos quando Blindly Plus estiver disponível."],
+  "Listo. Guardamos tu interés.": ["Done. We saved your interest.", "Pronto. Registramos seu interesse."],
+  "Protegé tu cuenta cuando quieras para poder recibir novedades.": ["Protect your account whenever you want to receive updates.", "Proteja sua conta quando quiser para receber novidades."]
+});
+
+Object.assign(textos, {
+  "FOUNDER TRIAL ACTIVO": [
+    "FOUNDER TRIAL ACTIVE",
+    "FOUNDER TRIAL ATIVO"
+  ],
+  "FOUNDER TRIAL": [
+    "FOUNDER TRIAL",
+    "FOUNDER TRIAL"
+  ],
+  "PRÓXIMAMENTE": [
+    "COMING SOON",
+    "EM BREVE"
+  ],
+  "Estás probando Blindly Plus.": [
+    "You're trying Blindly Plus.",
+    "Você está experimentando Blindly Plus."
+  ],
+  "Probá Blindly Plus durante 3 días.": [
+    "Try Blindly Plus for 3 days.",
+    "Experimente Blindly Plus por 3 dias."
+  ],
+  "Te quedan {dias} días y {horas} h.": [
+    "You have {dias} days and {horas} h left.",
+    "Restam {dias} dias e {horas} h."
+  ],
+  "La prueba termina automáticamente. No hay suscripción ni cobro al finalizar.": [
+    "The trial ends automatically. There is no subscription or charge when it ends.",
+    "A experiência termina automaticamente. Não há assinatura nem cobrança ao terminar."
+  ],
+  "Las funciones Plus están habilitadas para esta cuenta.": [
+    "Plus features are enabled for this account.",
+    "Os recursos Plus estão habilitados para esta conta."
+  ],
+  "Sin tarjeta. Sin compras. Sin suscripción.": [
+    "No card. No purchases. No subscription.",
+    "Sem cartão. Sem compras. Sem assinatura."
+  ],
+  "Las funciones Plus se desbloquean durante 72 horas desde que activás la prueba. Plus será pago más adelante.": [
+    "Plus features unlock for 72 hours from activation. Plus will be paid later.",
+    "Os recursos Plus ficam disponíveis por 72 horas após a ativação. Plus será pago no futuro."
+  ],
+  "Tu Prueba Founder terminó.": [
+    "Your Founder Trial has ended.",
+    "Seu Founder Trial terminou."
+  ],
+  "Gracias por probar Plus antes del lanzamiento. Tus datos se conservan.": [
+    "Thanks for trying Plus before launch. Your data is kept.",
+    "Obrigado por experimentar Plus antes do lançamento. Seus dados são preservados."
+  ],
+  "Por ahora no hay pagos disponibles. Podés guardar tu interés para el lanzamiento.": [
+    "Payments are not available yet. You can save your interest for launch.",
+    "Os pagamentos ainda não estão disponíveis. Você pode registrar seu interesse para o lançamento."
+  ],
+  "PRUEBA FOUNDER": [
+    "FOUNDER TRIAL",
+    "FOUNDER TRIAL"
+  ],
+  "Vas a desbloquear Blindly Plus durante 72 horas.": [
+    "You'll unlock Blindly Plus for 72 hours.",
+    "Você vai desbloquear Blindly Plus por 72 horas."
+  ],
+  "La prueba comienza ahora y solo puede activarse una vez en esta cuenta. No se realizará ningún cobro.": [
+    "The trial starts now and can only be activated once on this account. There will be no charge.",
+    "A experiência começa agora e só pode ser ativada uma vez nesta conta. Não haverá cobrança."
+  ],
+  "Ahora no": [
+    "Not now",
+    "Agora não"
+  ],
+  "Empezar prueba": [
+    "Start trial",
+    "Começar experiência"
+  ],
+  "PROBAR PLUS GRATIS · 3 DÍAS": [
+    "TRY PLUS FREE · 3 DAYS",
+    "EXPERIMENTAR PLUS GRÁTIS · 3 DIAS"
+  ],
+  "Explorar funciones Plus": [
+    "Explore Plus features",
+    "Explorar recursos Plus"
+  ],
+  "Precio previsto": [
+    "Planned price",
+    "Preço previsto"
+  ],
+  "Precios previstos para cuando Plus esté disponible comercialmente.": [
+    "Planned prices for when Plus becomes commercially available.",
+    "Preços previstos para quando Plus estiver disponível comercialmente."
+  ],
+  "Founder Lifetime": [
+    "Founder Lifetime",
+    "Founder Lifetime"
+  ],
+  "Founder Trial es la prueba gratuita. Founder Lifetime será un producto pago de acceso vitalicio.": [
+    "Founder Trial is the free trial. Founder Lifetime will be a paid product with lifetime access.",
+    "Founder Trial é a experiência gratuita. Founder Lifetime será um produto pago com acesso vitalício."
+  ],
+  "Quiero Plus": [
+    "I want Plus",
+    "Quero Plus"
+  ],
+  "¿Qué plan elegirías?": [
+    "Which plan would you choose?",
+    "Qual plano você escolheria?"
+  ],
+  "Anual · Recomendado": [
+    "Annual · Recommended",
+    "Anual · Recomendado"
+  ],
+  "Guardar interés": [
+    "Save interest",
+    "Registrar interesse"
+  ],
+  "Interés guardado.": [
+    "Interest saved.",
+    "Interesse registrado."
+  ],
+  "Ya estás en la lista de espera": [
+    "You're on the waitlist",
+    "Você está na lista de espera"
+  ],
+  "Anotarme a la lista de espera": [
+    "Join the waitlist",
+    "Entrar na lista de espera"
+  ],
+  "El estado de Plus no está disponible. Revisá tu conexión y probá de nuevo.": [
+    "Plus status is unavailable. Check your connection and try again.",
+    "O status Plus está indisponível. Verifique sua conexão e tente novamente."
+  ],
+  "Necesitás conexión para activar tu prueba.": [
+    "You need a connection to activate your trial.",
+    "Você precisa de conexão para ativar sua experiência."
+  ],
+  "Los pagos todavía no están disponibles.": [
+    "Payments are not available yet.",
+    "Os pagamentos ainda não estão disponíveis."
+  ],
+  "Elegí un plan válido.": [
+    "Choose a valid plan.",
+    "Escolha um plano válido."
+  ],
+  "Ya hay una operación de Plus en curso.": [
+    "A Plus operation is already in progress.",
+    "Já há uma operação Plus em andamento."
+  ]
+});
+Object.assign(errores, {
+  "PLUS_LANZAMIENTO_NO_DISPONIBLE": "El estado de Plus no está disponible. Revisá tu conexión y probá de nuevo.",
+  "PLUS_PRUEBA_CONEXION": "Necesitás conexión para activar tu prueba.",
+  "PLUS_PAGOS_NO_DISPONIBLES": "Los pagos todavía no están disponibles.",
+  "PLUS_PLAN_INVALIDO": "Elegí un plan válido.",
+  "PLUS_OPERACION_EN_CURSO": "Ya hay una operación de Plus en curso."
+});

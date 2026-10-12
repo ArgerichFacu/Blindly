@@ -33,6 +33,7 @@ const provider = load('src/lib/PlusContext.tsx', {
   'react-native-purchases': { __esModule: true, default: new Proxy({}, { get: () => forbidden }) },
   'react-native-purchases-ui': { __esModule: true, default: {}, PAYWALL_RESULT: {} },
   './plusDemo': { PLUS_DEMO: true }, './plus': { PLUS_DISPONIBLE: true, tieneEntitlementPlus: () => false },
+  './founderPlus': new Proxy({}, {get: () => forbidden}),
   './plusServidor': { sincronizarPlusServidor: forbidden }, './sesion': { asegurarSesion: forbidden },
   './supabase': { supabase: { auth: { onAuthStateChange: forbidden } } },
 });

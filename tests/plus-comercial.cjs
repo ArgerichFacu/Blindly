@@ -24,14 +24,16 @@ const react = {
  useEffect:fn=>{const i=cursor++;if(!(i in hooks)){hooks[i]=true;fn();}}
 };
 const ctx = {};
-vm.runInNewContext(compilar('src/lib/PlusContext.tsx'),{exports:ctx, setTimeout:()=>0,clearTimeout:()=>{},
+const {estado,helper}=require('./founder-fixture.cjs');
+const founder=helper(async name=>({data:name==='estado_lanzamiento_plus'?{real_payments_enabled:true}:estado({real_payments_enabled:true}),error:null}));
+vm.runInNewContext(compilar('src/lib/PlusContext.tsx'),{exports:ctx, setTimeout:()=>0,clearTimeout:()=>{},setInterval:()=>0,clearInterval:()=>{},
  require:n=>({
   react, 'react/jsx-runtime':{jsx:(_type,props)=>props},
   'react-native':{AppState:{addEventListener:()=>({remove(){}})},Linking:{openURL:async()=>{}}},
   'react-native-purchases':{__esModule:true,default:purchases},
   'react-native-purchases-ui':{__esModule:true,default:{presentPaywallIfNeeded:async options=>{pagos++;presentada=options;return resultado;}},PAYWALL_RESULT:{ERROR:'ERROR'}},
   './sesion':{asegurarSesion:async()=>user},'./supabase':{supabase:{rpc:async()=>({data:false,error:null}),auth:{onAuthStateChange:fn=>{authChanged=fn;return {data:{subscription:{unsubscribe(){}}}};}}}},
-  './plus':plus,'./plusDemo':{PLUS_DEMO:false},'./plusServidor':{sincronizarPlusServidor:async()=>{sincronizaciones++;}}
+  './plus':plus,'./plusDemo':{PLUS_DEMO:false},'./founderPlus':founder,'./plusServidor':{sincronizarPlusServidor:async()=>{sincronizaciones++;}}
  }[n])});
 function render(){cursor=0;return ctx.PlusProvider({children:null}).value;}
 const protegido = id => ({id,is_anonymous:false,email:`${id}@recovery.blindly.invalid`});
