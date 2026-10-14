@@ -46,6 +46,8 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261012041133_play_review_access.sql",
     "20261012220833_founder_trial_lanzamiento.sql",
     "20261012221902_founder_guard_lecturas.sql",
+    "20261014074959_nombre_visible_perfil.sql",
+    "20261014075731_nombre_visible_unicode.sql",
   ]);
 
   const baseSources = fs
@@ -89,7 +91,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
   );
 
   await db.exec(
-    "create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key, is_anonymous boolean not null default false,banned_until timestamptz,email text,email_confirmed_at timestamptz); create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;",
+    "create role anon; create role authenticated; create role service_role; create schema auth; create table auth.users(id uuid primary key, is_anonymous boolean not null default false,banned_until timestamptz,email text,email_confirmed_at timestamptz,raw_user_meta_data jsonb default '{}'::jsonb); create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated; create publication supabase_realtime;",
   );
 
   for (const file of migrationFiles) {

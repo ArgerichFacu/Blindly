@@ -71,6 +71,7 @@ function escenario({
       ["Boton", "Campo", "Pantalla", "Tarjeta", "Texto"].map((x) => [x, x]),
     ),
     "../lib/hapticos": { vibrarMomento: async () => {} },
+    "../lib/useNombreInicial": { useNombreInicial: () => mocks.react.useState("") },
     "../lib/useIdentidad": {
       useIdentidad: () => ({
         cargando: false,

@@ -23,6 +23,7 @@ import {
 import { vibrarMomento } from "../lib/hapticos";
 import { useIdentidad } from "../lib/useIdentidad";
 import { usePreferencias } from "../lib/Preferencias";
+import { useNombreInicial } from "../lib/useNombreInicial";
 
 export default function UnirseClub() {
   const { codigo: inicial } = useLocalSearchParams<{ codigo?: string }>();
@@ -32,7 +33,7 @@ export default function UnirseClub() {
   const [codigo, setCodigo] = useState(
     typeof inicial === "string" ? (codigoInvitacion(inicial) ?? "") : "",
   );
-  const [nombre, setNombre] = useState(""),
+  const [nombre, setNombre] = useNombreInicial(),
     [vista, setVista] = useState<InvitacionLiga | null>(null);
   const [error, setError] = useState(""),
     [ocupado, setOcupado] = useState(false),

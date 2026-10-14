@@ -10,6 +10,8 @@ Release Android 1.0.0: **Blindly creada en Google Play**, paquete `com.blindly.s
 
 Aplicación desarrollada con Expo, React Native, TypeScript y Supabase. La rama `main` reúne el trabajo de las etapas anteriores y es la referencia para instalar y continuar el proyecto.
 
+**Feature freeze 1.0:** nombre visible gratuito editable desde Perfil, sincronizado con ligas activas sin reescribir históricos, e Inicio con ambientación Poker Room original. [Informe de los dos ajustes, pruebas y límites de entrega](docs/cierre-1.0-perfil-home.md). Los cambios están en el código candidato; la entrega interna v29 requiere un nuevo binario para incorporarlos. Desde aquí sólo QA, release y correcciones; ideas nuevas para 2.0.
+
 Lanzamiento Plus: **Founder Trial voluntario de 72 horas, una vez por UUID**, sin tarjeta ni cobros. Pagos comerciales apagados desde Supabase, con lista de espera y preferencias de plan. [Configuración, métricas y QA](docs/founder-trial.md). Disponible en la prueba interna Android **v29**; [archivos y validación de la entrega](docs/founder-entrega.md). La entrega Auth v28 conserva la pantalla anterior.
 
 En la PC de desarrollo, el proyecto actual está en `G:\Blindly\proyecto`; herramientas, emuladores, entregas y cachés están en `G:\Blindly`. Abrir `G:\Blindly\abrir-blindly.cmd` o cargar `. .\scripts\entorno-local.ps1` antes de trabajar. Ver [compilación local](docs/compilacion-local.md).

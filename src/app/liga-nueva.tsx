@@ -11,6 +11,7 @@ import { crearLiga } from "../lib/ligas";
 import { useIdentidad } from "../lib/useIdentidad";
 import { usePreferencias } from "../lib/Preferencias";
 import { vibrarMomento } from "../lib/hapticos";
+import { useNombreInicial } from "../lib/useNombreInicial";
 
 export default function LigaNueva() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function LigaNueva() {
   const enviando = useRef(false);
   const [nombre, setNombre] = useState("");
   const [temporada, setTemporada] = useState("");
-  const [jugador, setJugador] = useState("");
+  const [jugador, setJugador] = useNombreInicial();
   const [ocupado, setOcupado] = useState(false);
   const [error, setError] = useState("");
 

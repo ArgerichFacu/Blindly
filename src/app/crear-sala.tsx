@@ -6,6 +6,7 @@ import { crearSala, type Sala } from "../lib/salas";
 import { unirseASala } from "../lib/jugadores";
 import { NIVELES_REGULAR } from "../lib/niveles";
 import { crearSalaDesdeMesa } from "../lib/mesasHabituales";
+import { useNombreInicial } from "../lib/useNombreInicial";
 export default function CrearSala() {
   const router = useRouter(),
     { t, mensajeError } = usePreferencias();
@@ -16,7 +17,7 @@ export default function CrearSala() {
     mesa?: string;
     mesaNombre?: string;
   }>();
-  const [nombre, setNombre] = useState(""),
+  const [nombre, setNombre] = useNombreInicial(),
     [ocupado, setOcupado] = useState(false),
     [error, setError] = useState("");
   const creada = useRef<Sala | null>(null),

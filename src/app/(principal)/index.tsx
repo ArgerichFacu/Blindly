@@ -11,6 +11,7 @@ import { usePlus } from "../../lib/PlusContext";
 import { Superficie, Acabado } from "../../components/Superficie";
 import { RELIEVE, velo } from "../../lib/visual";
 import { EntradaSuave } from "../../components/EntradaSuave";
+import { AmbienteHome } from "../../components/AmbienteHome";
 export default function Menu() {
     const router = useRouter(), { t } = usePreferencias(), { tema } = useTema(), plus = usePlus();
     const clubes = useClubes(true), liga = clubes.datos?.ligas.find(l => l.id === clubes.datos?.elegida);
@@ -19,7 +20,7 @@ export default function Menu() {
       <Texto style={{ fontSize: 32, lineHeight: 48, fontWeight: "900", letterSpacing: 0, paddingRight: 10, paddingVertical: 2, color: tema.acento }}>blindly.</Texto>
       {!plus.activo && <Pressable accessibilityRole="button" accessibilityLabel={t("Blindly Plus")} onPress={() => router.push("/plus")} style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 6, borderWidth: 1, borderColor: velo(tema.acento, "55"), backgroundColor: tema.fondoTarjeta, ...RELIEVE.bajo, borderRadius: 30, paddingHorizontal: 13, paddingVertical: 10, opacity: pressed ? .7 : 1 })}><Acabado /><Icono nombre="plus" color={tema.acento} size={15}/><Texto style={{ fontSize: 11, fontWeight: "800", letterSpacing: 1, color: tema.acento }}>PLUS</Texto></Pressable>}
     </View>
-    <EntradaSuave><Superficie variante="hero" style={{ gap: 20, marginTop: 6 }}><View style={{ paddingTop: 4, paddingBottom: 8, gap: 12 }}>
+    <EntradaSuave><Superficie variante="hero" style={{ gap: 20, marginTop: 6 }}><AmbienteHome /><View style={{ paddingTop: 4, paddingBottom: 8, gap: 12 }}>
       <Texto suave style={{ fontSize: 10, letterSpacing: 2 }}>{t("POKER ENTRE AMIGOS")}</Texto>
       <Texto style={{ fontSize: 34, lineHeight: 41, fontWeight: "800", letterSpacing: -1 }}>{t("La mesa está lista.\nFaltan ustedes.")}</Texto>
       <Texto suave style={{ fontSize: 14, lineHeight: 22 }}>{t("Una noche. Tu grupo. Que empiece la partida.")}</Texto>

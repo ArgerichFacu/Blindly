@@ -14,6 +14,7 @@ function escenario(activo, conLiga) {
     "../../components/ResumenClub": { ResumenClub: "ResumenClub" },
     "../../components/FilaOpcion": { FilaOpcion: "FilaOpcion" },
     "../../components/EntradaSuave": { EntradaSuave: "EntradaSuave" },
+    "../../components/AmbienteHome": { AmbienteHome: "AmbienteHome" },
     "../../lib/useClubes": { useClubes: () => ({ datos: { usuario: "yo", ligas: conLiga ? [liga] : [], elegida: conLiga ? "club" : null, detalles: { club: detalle } }, error: null }) },
     "../../lib/TemaContext": { useTema: () => ({ tema: {} }) },
     "../../lib/Preferencias": { usePreferencias: () => ({ t: k => k }) },

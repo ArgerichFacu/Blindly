@@ -5,11 +5,12 @@ import { View } from "react-native";
 import { Pantalla, Boton, Texto, Campo } from "../components/Controles";
 import { usePreferencias } from "../lib/Preferencias";
 import { unirseASala } from "../lib/jugadores";
+import { useNombreInicial } from "../lib/useNombreInicial";
 export default function Unirse() {
   const router = useRouter(),
     { t, mensajeError } = usePreferencias();
   const params = useLocalSearchParams<{ codigo?: string; nombre?: string }>();
-  const [nombre, setNombre] = useState(
+  const [nombre, setNombre] = useNombreInicial(
       typeof params.nombre === "string" ? params.nombre.slice(0, 30) : "",
     ),
     [codigo, setCodigo] = useState(

@@ -1,6 +1,16 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Editar nombre": ["Edit name", "Editar nome"],
+  "Nombre visible": ["Display name", "Nome visível"],
+  "Guardar nombre": ["Save name", "Salvar nome"],
+  "Nombre actualizado.": ["Name updated.", "Nome atualizado."],
+  "Así te verán en Blindly. No tiene que ser único.": ["This is how you appear in Blindly. It does not need to be unique.", "É assim que você aparece no Blindly. Não precisa ser único."],
+  "Entre 1 y 30 caracteres, sin saltos de línea.": ["Between 1 and 30 characters, with no line breaks.", "Entre 1 e 30 caracteres, sem quebras de linha."],
+  "Free": ["Free", "Free"],
+  "Founder Trial": ["Founder Trial", "Founder Trial"],
+  "Tu sesión cambió. Volvé a intentarlo.": ["Your session changed. Please try again.", "Sua sessão mudou. Tente novamente."],
+  "Ingresá un nombre de 1 a 30 caracteres, sin saltos de línea ni caracteres de control.": ["Enter a name with 1 to 30 characters, with no line breaks or control characters.", "Digite um nome de 1 a 30 caracteres, sem quebras de linha nem caracteres de controle."],
   "Redoble": ["Drum roll", "Rufar"],
   "Buscar sonidos": ["Search sounds", "Buscar sons"],
   "Recientes": ["Recent", "Recentes"],
@@ -2587,4 +2597,8 @@ Object.assign(errores, {
   "PLUS_PAGOS_NO_DISPONIBLES": "Los pagos todavía no están disponibles.",
   "PLUS_PLAN_INVALIDO": "Elegí un plan válido.",
   "PLUS_OPERACION_EN_CURSO": "Ya hay una operación de Plus en curso."
+});
+Object.assign(errores, {
+  NOMBRE_VISIBLE_INVALIDO: "Ingresá un nombre de 1 a 30 caracteres, sin saltos de línea ni caracteres de control.",
+  NOMBRE_VISIBLE_NO_COINCIDE: "Tu sesión cambió. Volvé a intentarlo."
 });
