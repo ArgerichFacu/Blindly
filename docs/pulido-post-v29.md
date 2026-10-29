@@ -20,6 +20,7 @@
 - src/app/(principal)/_layout.tsx, opciones.tsx, perfil.tsx.
 - src/components/Controles.tsx, OpcionesApp.tsx, Mesa.tsx, MesaAsientos.tsx, PanelApuesta.tsx.
 - src/lib/autenticacion.ts, PlusContext.tsx, TemaContext.tsx, Preferencias.tsx, useClubes.ts, useSala.ts.
+- src/lib/textos.ts: aviso de partida activa válido también al cerrar sesión, en ES/EN/PT.
 
 No migraciones ni campos nuevos en Supabase; no se modifica el UUID ni se cambia el sistema de acceso. Native APK de QA únicamente x86_64, firmada con certificado de depuración para el emulador y sin compras: no instalar en A32 ni subirla a Play.
 
@@ -43,6 +44,26 @@ Emulador Android SDK 36, con app compilada: inicio→Config→Atrás y mesa de Q
 
 Capturas y logs en G:/Blindly/entregas/qa-pulido y pulido-tests-final.log / pulido-bundles.log. Los primeros intentos con cliente de desarrollo requirieron limpiar caché y cerrar su menú. La evidencia final usa también una APK de QA sin depender del servidor. En una mesa con reloj corriendo, uiautomator puede no obtener idle: para esos casos se verifican capturas de pantalla y no se reutiliza un XML antiguo como prueba del estado actual.
 
-Pendiente antes de la AAB publicable: repetir Google/browser callback, logout/re-login y accesibilidad con el A32 físico autorizado por USB, y revisar visualmente arranques fríos en cada tema en el dispositivo final. En esta sesión el A32 figura unauthorized; no se instala ni se borra nada en él. La prueba ARM64/16 KB e iOS físico de etapas anteriores siguen fuera de esta aceptación. La revisión visual humana de tamaños extremos y transiciones no se sustituye por tests unitarios.
+La primera tanda quedó limitada al emulador porque el A32 figuraba unauthorized. La continuación física del 29/10 se documenta debajo. La prueba ARM64/16 KB e iOS físico de etapas anteriores siguen fuera de esta aceptación. La revisión visual humana de tamaños extremos y transiciones no se sustituye por tests unitarios.
 
 No hay nueva AAB. Este bloque entrega correcciones y QA; no implica producción publicada ni certificación de todas las combinaciones de dispositivo/idioma.
+
+## Continuación física: Samsung A32
+
+SM-A325M, Android 13, gestos, 1080×2400. La v29 instalada desde Play usa una firma diferente de la firma local de subida: se prepara una APK ARM64 con applicationId temporal com.blindly.studio.qa y etiqueta Blindly QA. Sólo cambian esos identificadores nativos generados e ignorados por Git; mismo código de aplicación y mismos permisos normales de Supabase. No se desinstala ni se actualiza com.blindly.studio, ni se borra su sesión. No se habilitan compras ni se genera una AAB.
+
+Comprobaciones físicas:
+
+- Invitado, inicio y Config→Atrás; perfil Free tras usar otra identidad.
+- Google ya autorizado: selección de administración, callback a QA mediante «Sólo una vez», Mi cuenta; logout al formulario vacío sin error.
+- Reviewer por email/password: Email verificado y Plus activo. Su partida existente sigue protegida; no se altera. El guard revela un aviso que hablaba de eliminar la cuenta también al cerrar sesión: se corrige su texto común en los tres idiomas, conservando el código y la protección.
+- Nombre QA_A32 guardado en un invitado descartable y conservado al actualizar/reabrir QA. No se renombra ninguna cuenta real.
+- Acceso en español con fuente 200%, Mi cuenta en inglés al 150% y portugués al 200%, controles multilínea y scroll; fuente original 110% registrada para restaurar.
+- Temas Rojo/Negro/Verde seleccionados mediante Plus del Reviewer, cierres y arranques; capturas y grabaciones locales. La observación no es una certificación de cada frame/dispositivo.
+- Mesa descartable NRLVQ: vuelta desde Opciones por evento KEYCODE_BACK, flecha visual y gesto lateral conserva la misma mesa/stack. Capturas back-comparacion.png. Una igualada del host descartable prepara el turno del A32; ninguna acción se ejecuta sobre partidas de usuarios reales.
+
+La observación al 200% descubre el reloj partido entre líneas: nivel/ciegas ahora usan wrapping de tarjetas con ancho mínimo proporcional a fontScale y limitado al ancho disponible. El reloj conserva tamaño accesible; no se reduce ni se desactiva el escalado. La APK final se recompila e instala sobre QA: mesa200-reloj-final.png confirma reloj 03:26 y ciegas 25 / 50 completos al 200%, con Retirarse/Pasar/Subir accesibles. aviso-partida-activa-final.png confirma el nuevo mensaje en el Reviewer y su Plus preservado.
+
+Limpieza completada: sala NRLVQ y su host eliminados mediante sus permisos normales; invitado QA_A32 eliminado desde su propia interfaz. La copia QA se desinstala, se restaura font_scale=1.1 y stay_on_while_plugged_in=0, y se abre la aplicación original. com.blindly.studio sigue en v29 con la misma fecha de instalación/actualización de Play. Los XML temporales se eliminan; no se borran datos ni cuentas reales. npm test, typecheck y lint vuelven a pasar después de ambos ajustes; compilación ARM64 final correcta. No se genera AAB.
+
+Evidencias: G:/Blindly/entregas/qa-pulido/a32. Logs locales a32-final-typecheck.log, a32-final-lint.log, a32-final-tests.log y pulido-a32-qa-niveles-build.log en G:/Blindly/cache. XML y credenciales de prueba no se incorporan al repositorio ni al informe.

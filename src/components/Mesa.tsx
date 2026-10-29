@@ -3,7 +3,7 @@ import { SALON } from "../lib/visual";
 import { useRangosMesa } from "../lib/puntuacion";
 import { useRouter, useFocusEffect, type Href } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Modal, ScrollView, View, StyleSheet } from "react-native";
+import { Modal, ScrollView, View, StyleSheet, useWindowDimensions } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import {
@@ -38,6 +38,8 @@ import {
 } from "../lib/mesa";
 
 export function Mesa({ codigo }: { codigo: string }) {
+  const { width, fontScale } = useWindowDimensions();
+  const anchoMinimoNivel = Math.min(width - 40, Math.ceil(150 * fontScale));
   const router = useRouter(),
     { t, mensajeError, preferencias } = usePreferencias(),
     { tema } = useTema();
@@ -421,8 +423,8 @@ export function Mesa({ codigo }: { codigo: string }) {
         </>
       ) : (
         <>
-          <View style={{ flexDirection: "row", gap: 10 }}>
-            <Tarjeta style={{ flex: 1, gap: 4, padding: 14 }}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+            <Tarjeta style={{ flex: 1, minWidth: anchoMinimoNivel, gap: 4, padding: 14 }}>
               <Texto suave style={{ fontSize: 10, letterSpacing: 1 }}>
                 {estado.terminado
                   ? t("Fin de niveles")
@@ -443,7 +445,7 @@ export function Mesa({ codigo }: { codigo: string }) {
                 {tiempo}
               </Texto>
             </Tarjeta>
-            <Tarjeta style={{ flex: 1, gap: 4, padding: 14 }}>
+            <Tarjeta style={{ flex: 1, minWidth: anchoMinimoNivel, gap: 4, padding: 14 }}>
               <Texto suave style={{ fontSize: 10, letterSpacing: 1 }}>
                 {t("Ciegas")}
               </Texto>

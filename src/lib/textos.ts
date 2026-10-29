@@ -1908,9 +1908,9 @@ Object.assign(textos, {
       "Confirme apenas se quiser excluir definitivamente todos os seus dados do Blindly.",
     ],
   "Eliminar definitivamente": ["Delete permanently", "Excluir definitivamente"],
-  "Terminá o abandoná la partida activa antes de eliminar tu cuenta.": [
-    "Finish or leave the active game before deleting your account.",
-    "Termine ou saia da partida ativa antes de excluir sua conta.",
+  "Para continuar, terminá o abandoná tu partida activa.": [
+    "To continue, finish or leave your active game.",
+    "Para continuar, termine ou saia da sua partida ativa.",
   ],
   "No se pudo eliminar la cuenta. Probá de nuevo.": [
     "The account could not be deleted. Please try again.",
@@ -1932,7 +1932,7 @@ Object.assign(textos, {
 });
 Object.assign(errores, {
   PARTIDA_ACTIVA_CUENTA:
-    "Terminá o abandoná la partida activa antes de eliminar tu cuenta.",
+    "Para continuar, terminá o abandoná tu partida activa.",
   CUENTA_NO_ELIMINADA: "No se pudo eliminar la cuenta. Probá de nuevo.",
   PLUS_NO_CONFIGURADO:
     "Blindly Plus todavía no está disponible en este dispositivo.",
