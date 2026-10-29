@@ -18,10 +18,12 @@ export function useClubes(soloHome = false) {
     } | null>(null);
     const [error, setError] = useState<unknown>(null), [revision, setRevision] = useState(0);
     const ultimaIdentidad = useRef<string | null>(null);
+    const epoca = useRef(0);
     useEffect(() => {
       const { data } = supabase.auth.onAuthStateChange((evento, sesion) => {
         const id = sesion?.user.id ?? null;
         if (id !== ultimaIdentidad.current || evento === "USER_UPDATED") {
+          epoca.current++;
           ultimaIdentidad.current = id; setDatos(null); setError(null); setRevision(v => v + 1);
         }
       });
@@ -30,11 +32,13 @@ export function useClubes(soloHome = false) {
     useFocusEffect(useCallback(() => {
         void revision;
         let activo = true;
+        const turno = epoca.current;
+        const vigente = () => activo && turno === epoca.current;
         setError(null);
         void (async () => {
             const usuario = await asegurarSesion(), protegida = identidadUsuario(usuario).recuperable;
             // Nunca mostrar datos de otro usuario después de recuperar una cuenta.
-            if (activo)
+            if (vigente())
                 setDatos(anterior => anterior?.usuario === usuario.id ? anterior : null);
             const ligas = protegida ? await misLigas() : [];
             const ultima = await AsyncStorage.getItem(claveUltimaLiga(usuario.id));
@@ -44,13 +48,13 @@ export function useClubes(soloHome = false) {
             const detalles: Record<string, DetalleLiga> = {};
             resultados.forEach((r, i) => { if (r.status === "fulfilled")
                 detalles[solicitadas[i].id] = r.value; });
-            if (activo) {
+            if (vigente()) {
                 setDatos({ usuario: usuario.id, protegida, ligas, detalles, elegida: elegida?.id ?? null });
                 const fallo = resultados.find(r => r.status === "rejected");
                 if (fallo?.status === "rejected")
                     setError(fallo.reason);
             }
-        })().catch(e => { if (activo)
+        })().catch(e => { if (vigente())
             setError(e); });
         return () => { activo = false; };
     }, [revision, soloHome]));

@@ -1,0 +1,10 @@
+const fs=require('node:fs'),vm=require('node:vm'),ts=require('typescript'),assert=require('node:assert/strict');
+let states=[],refs=[],i=0,r=0,mounted=false,auth;
+const react={useState:v=>{const n=i++;if(!(n in states))states[n]=v;return[states[n],x=>states[n]=typeof x==='function'?x(states[n]):x]},useRef:v=>refs[r++]??(refs[r-1]={current:v}),useCallback:f=>f,useEffect:f=>{if(!mounted)f()}};
+const api={},deps={react,'expo-router':{useFocusEffect(){}},'react-native':{AppState:{}},'./jugadores':{},'./salas':{},'./sesion':{},'./tiempoServidor':{},'./supabase':{supabase:{auth:{onAuthStateChange:fn=>{auth=fn;return{data:{subscription:{unsubscribe(){}}}}}}}}};
+vm.runInNewContext(ts.transpileModule(fs.readFileSync('src/lib/useSala.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText,{exports:api,require:k=>deps[k]});
+const render=()=>{i=r=0;const h=api.useSala('ABCDE');mounted=true;return h};
+render();auth('SIGNED_IN',{user:{id:'one'}});let h=render();h.aplicar({id:'old',revision:1});assert.equal(render().sala.id,'old');const late=h.aplicar;
+auth('SIGNED_IN',{user:{id:'two'}});assert.equal(render().sala,null);assert.equal(render().sesionReemplazada,true,'A stale table cannot prevent authorized session reset');late({id:'old',revision:2});assert.equal(render().sala,null,'Old action response cannot repopulate the table');
+render().aplicar({id:'new',revision:1});assert.equal(render().sala.id,'new');auth('SIGNED_OUT',null);assert.equal(render().sala,null);assert.equal(render().usuario,'');assert.equal(render().jugadores.length,0);
+console.log('Mesa/identidad: cambio de UUID, logout, vaciado de datos y respuesta de acción anterior descartada OK');

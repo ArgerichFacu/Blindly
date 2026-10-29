@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View } from "react-native";
+import { View, useWindowDimensions } from "react-native";
 import { Boton, Campo, Texto } from "./Controles";
 import { usePreferencias } from "../lib/Preferencias";
 import { AyudaTurno } from "./AyudaTurno";
@@ -27,6 +27,8 @@ export function PanelApuesta({
   actuar: (tipo: string) => void;
 }) {
   const { t, preferencias } = usePreferencias();
+  const { fontScale } = useWindowDimensions();
+  const amplia = fontScale > 1.3;
   const [editor, setEditor] = useState<"igualar" | "subir" | null>(null);
   const max = stack + aporte,
     min = actual + minima,
@@ -111,12 +113,12 @@ export function PanelApuesta({
           />
         </>
       )}
-      <View style={{ flexDirection: "row", gap: 8 }}>
+      <View style={{ flexDirection: "row", flexWrap: amplia ? "wrap" : "nowrap", gap: 8 }}>
         <Boton
           titulo={t("Retirarse")}
           compacto
           secundario
-          style={{ flex: 1 }}
+          style={amplia ? { flexGrow: 1, flexBasis: "45%" } : { flex: 1 }}
           disabled={ocupado}
           onPress={() => actuar("retirarse")}
         />
@@ -127,7 +129,7 @@ export function PanelApuesta({
               : t("Pasar")
           }
           compacto
-          style={{ flex: 1.25 }}
+          style={amplia ? { flexGrow: 1, flexBasis: "45%" } : { flex: 1.25 }}
           disabled={ocupado}
           onPress={() => {
             if (!faltan) return actuar("pasar");
@@ -140,7 +142,7 @@ export function PanelApuesta({
             titulo={t(actual === 0 ? "Apostar" : "Subir")}
             compacto
             secundario
-            style={{ flex: 1 }}
+            style={amplia ? { flexGrow: 1, flexBasis: "100%" } : { flex: 1 }}
             disabled={ocupado || !puedeSubir || max <= actual}
             onPress={() => {
               cambiar(String(Math.min(min, max)));

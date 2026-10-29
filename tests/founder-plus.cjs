@@ -45,6 +45,7 @@ const render=()=>{cursor=0;return out.PlusProvider({children:null}).value};
  user={id:'new-guest',is_anonymous:true};changed('SIGNED_IN',{user});assert.equal(render().activo,false);const finish=pending;pending=null;finish({data:raw});await activating;assert.equal(render().activo,false,'Old UUID response rejected');
  remote=estado();await render().refrescar();assert.equal(render().identidad,'new-guest');assert.equal(render().trialDisponible,true);
  appChanged('background');assert.equal(render().lanzamientoDisponible,false,'Background discards cache to avoid suspended-clock extension');
+ user={id:'old',is_anonymous:false};changed('SIGNED_IN',{user});changed('SIGNED_OUT',null);user={id:'fresh',is_anonymous:true};changed('SIGNED_IN',{user});advance(1);await new Promise(r=>setImmediate(r));assert.equal(render().identidad,'fresh','Queued sign-in before logout cannot relabel the fresh session');
  assert.equal(commercialCalls,0);assert.ok(serverCalls>0);
  console.log('Founder cliente: reloj del servidor, caché limitada, sin SDK/cobros, offline, doble activación y cambio de UUID OK');
 })().catch(e=>{console.error(e);process.exitCode=1});

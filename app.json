@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/blindly-app-icon.png",
     "scheme": "blindly",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
     "ios": {
       "bundleIdentifier": "com.blindly.app",
       "supportsTablet": false,
@@ -38,17 +38,23 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      ["expo-notifications", { "defaultChannel": "club", "color": "#D5B768" }],
+      [
+        "expo-notifications",
+        {
+          "defaultChannel": "club",
+          "color": "#D5B768"
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#0A1713",
+          "backgroundColor": "#0D1011",
           "image": "./assets/images/blindly-logo.png",
           "imageWidth": 360,
           "resizeMode": "contain",
           "dark": {
-            "backgroundColor": "#0A1713",
+            "backgroundColor": "#0D1011",
             "image": "./assets/images/blindly-logo.png"
           }
         }
@@ -80,7 +86,7 @@
       "reactCompiler": true
     },
     "description": "Mesa de poker presencial con turnos, ciegas, fichas y puntuación sincronizados.",
-    "backgroundColor": "#0A1713",
+    "backgroundColor": "#0D1011",
     "primaryColor": "#0A1713",
     "githubUrl": "https://github.com/ArgerichFacu/Blindly",
     "extra": {

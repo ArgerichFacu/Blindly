@@ -1,5 +1,5 @@
 import { useFocusEffect } from "expo-router";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { listarJugadores, type Jugador } from "./jugadores";
@@ -16,34 +16,54 @@ export function useSala(codigo: string) {
     [conectado, setConectado] = useState(false);
   const recarga = useRef<() => Promise<void>>(async () => {});
   const reintento = useRef<() => Promise<void>>(async () => {});
+  const identidadActual = useRef<string | null>(null), epoca = useRef(0);
+  const [revisionIdentidad, setRevisionIdentidad] = useState(0);
+  const [sesionReemplazada, setSesionReemplazada] = useState(false);
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((_evento, sesion) => {
+      const id = sesion?.user.id ?? null;
+      if (id === identidadActual.current) return;
+      if (identidadActual.current) setSesionReemplazada(true);
+      identidadActual.current = id; epoca.current++;
+      setSala(null); setJugadores([]); setUsuario(""); setError(null); setConectado(false);
+      recarga.current = reintento.current = async () => {};
+      setRevisionIdentidad(v => v + 1);
+    });
+    return () => data.subscription.unsubscribe();
+  }, []);
   const aplicar = useCallback(
-    (nueva: Sala) =>
+    (nueva: Sala) => {
+      if (revisionIdentidad !== epoca.current) return;
       setSala((actual) =>
         !actual || actual.id !== nueva.id || nueva.revision >= actual.revision
           ? nueva
           : actual,
-      ),
-    [],
+      );
+    },
+    [revisionIdentidad],
   );
   useFocusEffect(
     useCallback(() => {
+      void revisionIdentidad;
       let activo = true,
         canal: RealtimeChannel | undefined,
         generacion = 0,
         consulta = 0;
       let temporizador: ReturnType<typeof setTimeout> | undefined;
+      const turno = epoca.current;
+      const vigente = () => activo && turno === epoca.current;
       async function refrescar() {
         const numero = ++consulta;
         try {
           const nueva = await obtenerSalaPorCodigo(codigo);
           const lista = await listarJugadores(nueva.id);
-          if (activo && numero === consulta) {
+          if (vigente() && numero === consulta) {
             aplicar(nueva);
             setJugadores(lista);
             setError(null);
           }
         } catch (e) {
-          if (activo) {
+          if (vigente()) {
             setError(e);
             console.warn("[Realtime mesa] recarga", e);
           }
@@ -67,7 +87,7 @@ export function useSala(codigo: string) {
               filter: `id=eq.${salaId}`,
             },
             () => {
-              if (activo && version === generacion) void refrescar();
+              if (vigente() && version === generacion) void refrescar();
             },
           )
           .on(
@@ -79,11 +99,11 @@ export function useSala(codigo: string) {
               filter: `sala_id=eq.${salaId}`,
             },
             () => {
-              if (activo && version === generacion) void refrescar();
+              if (vigente() && version === generacion) void refrescar();
             },
           )
           .subscribe((estado, e) => {
-            if (!activo || version !== generacion) return;
+            if (!vigente() || version !== generacion) return;
             console.warn("[Realtime mesa]", estado, e?.message ?? "");
             setConectado(estado === "SUBSCRIBED");
             if (estado === "SUBSCRIBED") {
@@ -94,7 +114,7 @@ export function useSala(codigo: string) {
             ) {
               if (temporizador) clearTimeout(temporizador);
               temporizador = setTimeout(() => {
-                if (activo) conectar(salaId);
+                if (vigente()) conectar(salaId);
               }, 5000);
             }
           });
@@ -105,14 +125,15 @@ export function useSala(codigo: string) {
           const yo = await asegurarSesion();
           await sincronizarReloj();
           const nueva = await obtenerSalaPorCodigo(codigo);
-          if (!activo) return;
+          if (!vigente()) return;
           setUsuario(yo.id);
+          setSesionReemplazada(false);
           aplicar(nueva);
           id = nueva.id;
           conectar(id);
           await refrescar();
         } catch (e) {
-          if (activo) setError(e);
+          if (vigente()) setError(e);
         }
       }
       const reintentar = async () => {
@@ -125,7 +146,7 @@ export function useSala(codigo: string) {
       reintento.current = reintentar;
       const escucha = AppState.addEventListener("change", (estado) => {
         console.warn("[Realtime mesa] aplicación", estado);
-        if (estado === "active" && activo) {
+        if (estado === "active" && vigente()) {
           void sincronizarReloj().catch((e) => console.warn(e));
           void reintentar();
         }
@@ -139,7 +160,7 @@ export function useSala(codigo: string) {
         if (temporizador) clearTimeout(temporizador);
         if (canal) void supabase.removeChannel(canal);
       };
-    }, [codigo, aplicar]),
+    }, [codigo, aplicar, revisionIdentidad]),
   );
   return {
     sala,
@@ -147,6 +168,7 @@ export function useSala(codigo: string) {
     usuario,
     error,
     conectado,
+    sesionReemplazada,
     aplicar,
     refrescar: () => recarga.current(),
     reconectar: () => reintento.current(),

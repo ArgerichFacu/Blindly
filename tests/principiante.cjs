@@ -77,9 +77,9 @@ function elementos(nodo, tipo, out = []) {
   }
   return out;
 }
-function panel(principiante, props) {
+function panel(principiante, props, fontScale = 1) {
   const instancia = componente("src/components/PanelApuesta.tsx", {
-    "react-native": { View: "View" },
+    "react-native": { View: "View", useWindowDimensions: () => ({ fontScale }) },
     "./Controles": { Boton: "Boton", Campo: "Campo", Texto: "Texto" },
     "./AyudaTurno": { AyudaTurno: "Ayuda" },
     "../lib/Preferencias": {

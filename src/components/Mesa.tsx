@@ -65,7 +65,7 @@ export function Mesa({ codigo }: { codigo: string }) {
     jugadores.length,
   );
   const corriendo = sala?.estado === "jugando";
-  const volver = useSalidaMesa(protegerSalidaMesa(sala?.estado, !!mesa.error));
+  const volver = useSalidaMesa(!mesa.sesionReemplazada && protegerSalidaMesa(sala?.estado, !!mesa.error));
   useFocusEffect(
     useCallback(() => {
       setEnfocada(true);
@@ -647,7 +647,7 @@ export function Mesa({ codigo }: { codigo: string }) {
       <Boton
         titulo={t("Opciones")}
         secundario
-        onPress={() => router.push("/opciones")}
+        onPress={() => router.push("/configuracion")}
       />
       <Modal
         visible={!!reparto}
@@ -779,7 +779,7 @@ export function Mesa({ codigo }: { codigo: string }) {
         onRequestClose={() => setEditando(null)}
       >
         <View style={estilos.fondo}>
-          <View style={[estilos.modal, { backgroundColor: tema.fondo }]}>
+          <ScrollView contentContainerStyle={[estilos.modal, { backgroundColor: tema.fondo }]} keyboardShouldPersistTaps="handled">
             <Campo
               etiqueta={editando?.nombre ?? ""}
               keyboardType="number-pad"
@@ -811,7 +811,7 @@ export function Mesa({ codigo }: { codigo: string }) {
               disabled={accion.ocupado}
               onPress={() => setEditando(null)}
             />
-          </View>
+          </ScrollView>
         </View>
       </Modal>
     </Pantalla>

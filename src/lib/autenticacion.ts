@@ -156,7 +156,9 @@ export async function cerrarSesion() {
     if (r.error) throw r.error;
     await AsyncStorage.removeItem(PENDIENTE);
     // Nuevo invitado; PlusProvider borra lo anterior y usa este UUID, no otro RC id.
-    return asegurarSesion();
+    // El logout ya terminó. Si falla la red al crear el invitado, Acceso queda
+    // válido sin sesión y permite reintentar; nunca restaura la cuenta anterior.
+    return asegurarSesion().catch(() => null);
   });
 }
 export async function solicitarReset(email: string, contexto: ContextoAuth = {}) {

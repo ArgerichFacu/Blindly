@@ -107,9 +107,11 @@ export function PlusProvider({ children }: { children: ReactNode }) {
       else { generacion.current++; limpiar(); }
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_evento, sesion) => {
-      if (!sesion?.user.id) { generacion.current++; usuario.current = null; limpiar(); return; }
-      if (usuario.current !== sesion.user.id) { generacion.current++; limpiar(); }
-      setTimeout(() => { if (vivo) void cargar(sesion.user.id); }, 0);
+      const id = sesion?.user.id ?? null;
+      if (usuario.current !== id) { generacion.current++; usuario.current = id; limpiar(); setError(null); }
+      if (!id) return;
+      // Una tarea encolada antes de logout no puede adoptar el UUID anterior.
+      setTimeout(() => { if (vivo && usuario.current === id) void cargar(id); }, 0);
     });
     const invalidar = () => { generacion.current++; };
     return () => {

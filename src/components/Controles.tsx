@@ -11,6 +11,7 @@ import {
   View,
   KeyboardAvoidingView,
   Platform,
+  useWindowDimensions,
   type TextInputProps,
   type StyleProp,
   type TextStyle,
@@ -27,6 +28,7 @@ export function Texto({
   selectable = false,
   numberOfLines,
   accessibilityLiveRegion,
+  maxFontSizeMultiplier,
 }: {
   children: ReactNode;
   suave?: boolean;
@@ -34,6 +36,7 @@ export function Texto({
   selectable?: boolean;
   numberOfLines?: number;
   accessibilityLiveRegion?: "none" | "polite" | "assertive";
+  maxFontSizeMultiplier?: number;
 }) {
   const { tema } = useTema();
   const personalizado = StyleSheet.flatten(style);
@@ -47,11 +50,12 @@ export function Texto({
       selectable={selectable}
       numberOfLines={numberOfLines}
       accessibilityLiveRegion={accessibilityLiveRegion}
+      maxFontSizeMultiplier={maxFontSizeMultiplier}
       style={[
         estilos.texto,
         { color: suave ? tema.textoSuave : tema.textoFuerte },
         style,
-        { lineHeight, includeFontPadding: true },
+        { lineHeight, includeFontPadding: true, flexShrink: 1, minWidth: 0 },
       ]}
     >
       {children}
@@ -85,6 +89,7 @@ export function Boton({
       disabled={disabled}
       style={({ pressed }) => [
         estilos.boton,
+        { minWidth: 0, flexShrink: 1 },
         {
           backgroundColor: secundario ? tema.fondoTarjeta : tema.acento,
           borderColor: secundario ? tema.borde : SALON.oroLuz,
@@ -106,7 +111,7 @@ export function Boton({
       <Text
         style={[
           estilos.textoBoton,
-          { color: secundario ? tema.textoFuerte : tema.acentoTexto },
+          { color: secundario ? tema.textoFuerte : tema.acentoTexto, flexShrink: 1, minWidth: 0, includeFontPadding: true },
         ]}
       >
         {titulo}
@@ -351,6 +356,7 @@ export function Pantalla({
   const { tema } = useTema(),
     { t } = usePreferencias();
   const regresar = useVolver(volver && !onVolver);
+  const { fontScale } = useWindowDimensions();
   return (
     <SafeAreaView edges={enTabs ? ["top", "left", "right"] : ["top", "bottom", "left", "right"]} style={{ flex: 1, backgroundColor: tema.fondo }}>
       <Acabado material="fondo" />
@@ -372,19 +378,19 @@ export function Pantalla({
                 onPress={onVolver ?? regresar}
                 style={[estilos.volver, RELIEVE.bajo, { borderColor: tema.borde, backgroundColor: tema.fondoTarjeta }]}
               >
-                <Texto style={{ fontSize: 22 }}>‹</Texto>
+                <Texto maxFontSizeMultiplier={1} style={{ fontSize: 22 }}>‹</Texto>
               </Pressable>
             )}
             <View style={{ flex: 1, gap: 3 }}>
-              <Texto style={[estilos.titulo, titulo.length > 20 && { fontSize: 23, lineHeight: 30 }]}>{titulo}</Texto>
+              <Texto style={[estilos.titulo, (titulo.length > 20 || fontScale > 1.4) && { fontSize: 23, lineHeight: 30 }]}>{titulo}</Texto>
               {!!subtitulo && (
                 <Texto suave style={{ fontSize: 13, lineHeight: 19 }}>
                   {subtitulo}
                 </Texto>
               )}
             </View>
-            {volver && (
-              <Texto style={{ color: tema.acento, fontSize: 22 }}>♠</Texto>
+            {volver && fontScale <= 1.4 && (
+              <Texto maxFontSizeMultiplier={1} style={{ color: tema.acento, fontSize: 22 }}>♠</Texto>
             )}
           </View>}
           {children}
@@ -393,11 +399,12 @@ export function Pantalla({
           <View
             style={{
               backgroundColor: tema.fondoTarjeta,
+              maxHeight: "60%",
               borderTopWidth: 1,
               borderColor: tema.borde,
             }}
           >
-            <View style={estilos.pie}>{pie}</View>
+            <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={estilos.pie}>{pie}</ScrollView>
           </View>
         )}
       </KeyboardAvoidingView>
@@ -420,7 +427,7 @@ const estilos = StyleSheet.create({
     marginBottom: 2,
   },
   volver: {
-    height: 44,
+    minHeight: 44,
     width: 44,
     alignItems: "center",
     justifyContent: "center",
@@ -445,6 +452,7 @@ const estilos = StyleSheet.create({
   campo: { gap: 7, flexGrow: 1, flexShrink: 1, minWidth: 0 },
   input: {
     fontSize: 17,
+    lineHeight: 26,
     minHeight: 52,
     borderWidth: 1,
     borderRadius: 13,

@@ -16,7 +16,7 @@ import { miPuntuacion, type Puntuacion } from "../../lib/puntuacion";
 import { useTema } from "../../lib/TemaContext";
 import { usePreferencias } from "../../lib/Preferencias";
 import { usePlus } from "../../lib/PlusContext";
-export default function Perfil() {
+export default function Perfil({ enTabs = true }: { enTabs?: boolean } = {}) {
     const router = useRouter(), { t, preferencias, mensajeError } = usePreferencias(), { tema } = useTema(), plus = usePlus(), clubes = useClubes();
     const [puntos, setPuntos] = useState<Puntuacion | null>(null), [error, setError] = useState<unknown>(null), [revision, setRevision] = useState(0);
     const identidad = useNombreVisible();
@@ -41,8 +41,8 @@ export default function Perfil() {
     const nombreLegacy = detalles.flatMap(d => d.miembros).find(m => m.user_id === identidad.usuario?.id)?.nombre;
     const nombre = identidad.nombre || nombreLegacy || t("Jugador");
     const acceso = plus.activo ? plus.tipoAcceso === "FOUNDER_TRIAL" ? "Founder Trial" : "Blindly Plus" : "Free";
-    return <Pantalla titulo={t("Perfil")} volver={false} enTabs>
-    <Superficie variante="hero" style={{ paddingVertical: 28, gap: 14, alignItems: "center" }}><View style={{ flexDirection: "row", gap: 8, alignItems: "center", alignSelf: "stretch", borderBottomWidth: 1, borderColor: tema.borde, paddingBottom: 12 }}><Icono nombre="cartas" color={tema.acento} size={18}/><Texto suave style={{ fontSize: 10, letterSpacing: 1.5 }}>{t("TARJETA DE JUGADOR")}</Texto></View><View style={{ width: 88, height: 88, borderRadius: 44, ...RELIEVE.panel, boxShadow: `0 8px 24px rgba(0,0,0,.3), 0 0 0 5px ${velo(tema.acento, "0D")}`, backgroundColor: tema.pano, borderWidth: 1, borderColor: velo(tema.acento, "80"), alignItems: "center", justifyContent: "center" }}><Texto style={{ fontSize: 32, fontWeight: "700", color: tema.acento }}>{inicialNombre(nombre)}</Texto></View><Texto style={{ fontSize: 26, fontWeight: "800", textAlign: "center", flexShrink: 1, alignSelf: "stretch" }}>{nombre}</Texto><Texto suave>{t(acceso)}</Texto>
+    return <Pantalla titulo={t("Perfil")} volver={!enTabs} enTabs={enTabs}>
+    <Superficie variante="hero" style={{ paddingVertical: 28, gap: 14, alignItems: "center" }}><View style={{ flexDirection: "row", gap: 8, alignItems: "center", alignSelf: "stretch", borderBottomWidth: 1, borderColor: tema.borde, paddingBottom: 12 }}><Icono nombre="cartas" color={tema.acento} size={18}/><Texto suave style={{ fontSize: 10, letterSpacing: 1.5 }}>{t("TARJETA DE JUGADOR")}</Texto></View><View style={{ width: 88, height: 88, borderRadius: 44, ...RELIEVE.panel, boxShadow: `0 8px 24px rgba(0,0,0,.3), 0 0 0 5px ${velo(tema.acento, "0D")}`, backgroundColor: tema.pano, borderWidth: 1, borderColor: velo(tema.acento, "80"), alignItems: "center", justifyContent: "center" }}><Texto maxFontSizeMultiplier={1.4} style={{ fontSize: 32, fontWeight: "700", color: tema.acento }}>{inicialNombre(nombre)}</Texto></View><Texto style={{ fontSize: 26, fontWeight: "800", textAlign: "center", flexShrink: 1, alignSelf: "stretch" }}>{nombre}</Texto><Texto suave>{t(acceso)}</Texto>
       <Boton titulo={t("Editar nombre")} secundario compacto disabled={!identidad.usuario || guardando} onPress={() => { setPropietario(identidad.usuario?.id ?? null); setBorrador(nombre); setEditando(true); setErrorNombre(null); setMensaje(""); }} />
     </Superficie>
     {editorVisible && <Tarjeta style={{ gap: 14 }}>

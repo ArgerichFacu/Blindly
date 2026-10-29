@@ -38,10 +38,12 @@ const inicial: Preferencias = {
 };
 const Contexto = createContext({
   preferencias: inicial,
+  listo: false,
   cambiar: (_: Partial<Preferencias>) => {},
 });
 export function PreferenciasProvider({ children }: { children: ReactNode }) {
   const [preferencias, setPreferencias] = useState(inicial);
+  const [listo, setListo] = useState(false);
   const actual = useRef(inicial);
   const secuencia = useRef(Promise.resolve());
   const pendientes = useRef<Partial<Preferencias>>({});
@@ -72,7 +74,8 @@ export function PreferenciasProvider({ children }: { children: ReactNode }) {
         actual.current = { ...nuevas, ...pendientes.current };
         setPreferencias(actual.current);
       })
-      .catch((e) => console.warn("No se pudieron cargar las preferencias", e));
+      .catch((e) => console.warn("No se pudieron cargar las preferencias", e))
+      .finally(() => setListo(true));
     secuencia.current = secuencia.current.then(() => carga);
   }, []);
   function cambiar(cambios: Partial<Preferencias>) {
@@ -89,7 +92,7 @@ export function PreferenciasProvider({ children }: { children: ReactNode }) {
       .catch((e) => console.warn("No se pudieron guardar las preferencias", e));
   }
   return (
-    <Contexto.Provider value={{ preferencias, cambiar }}>
+    <Contexto.Provider value={{ preferencias, cambiar, listo }}>
       {children}
     </Contexto.Provider>
   );

@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, useWindowDimensions } from "react-native";
 import { Texto } from "./Controles";
 import { useTema } from "../lib/TemaContext";
 import { usePreferencias } from "../lib/Preferencias";
@@ -56,7 +56,7 @@ function FichasRol({ roles }: { roles: string }) {
               ]}
             />
             <View style={[styles.fichaInterior, { borderColor: color.texto }]} />
-            <Text style={[styles.textoRol, { color: color.texto }]}>{rol}</Text>
+            <Text maxFontSizeMultiplier={1.4} style={[styles.textoRol, { color: color.texto }]}>{rol}</Text>
           </View>
         );
       })}
@@ -90,8 +90,10 @@ export function MesaAsientos({
     roles = rolesMesa(jugadores, orden, dealer, boton, posiciones);
   const larga = orden.length > 6,
     alto = larga ? Math.ceil(orden.length / 2) * 76 + 12 : 292;
+  const { fontScale, width } = useWindowDimensions();
+  const lista = fontScale > 1.3 || width < 360 || jugadores.some(j => j.fichas.toLocaleString().length > 6);
   return (
-    <View style={[styles.marco, { height: alto }]}>
+    <View style={[styles.marco, lista ? { width: "100%", gap: 24 } : { height: alto }]}>
       <View
         style={[
           styles.pano,
@@ -100,6 +102,7 @@ export function MesaAsientos({
             backgroundColor: tema.pano,
             borderColor: tema.borde,
           },
+          lista && { position: "relative", left: 0, top: 0, width: "100%", height: undefined, minHeight: 120, padding: 20, borderRadius: 24 },
         ]}
       >
         <View style={[styles.linea, { borderColor: tema.textoSuave + "30" }]} />
@@ -131,7 +134,7 @@ export function MesaAsientos({
         const angulo = Math.PI / 2 + (i * 2 * Math.PI) / orden.length;
         const izquierda = i < Math.ceil(orden.length / 2);
         const idx = izquierda ? i : orden.length - 1 - i;
-        const x = larga ? (izquierda ? 0 : 216) : 108 + 104 * Math.cos(angulo),
+        const x = larga ? (izquierda ? 0 : 216) : 110 + 104 * Math.cos(angulo),
           y = larga ? 6 + idx * 76 : 112 + 108 * Math.sin(angulo);
         const activo = id === turno;
         const esYo = id === jugadorActual;
@@ -149,11 +152,12 @@ export function MesaAsientos({
                 borderWidth: esYo ? 2 : 1,
                 opacity: j?.eliminado_en || j?.retirado ? 0.55 : 1,
               },
+              lista && { position: "relative", left: 0, top: 0, width: "100%", height: undefined, minHeight: 76, padding: 18, gap: 10 },
             ]}
           >
             <FichasRol roles={roles[id] ?? ""} />
             <Texto
-              numberOfLines={1}
+              numberOfLines={lista ? undefined : 1}
               style={{
                 fontSize: 11,
                 lineHeight: 16,
@@ -185,6 +189,7 @@ export function MesaAsientos({
                   ]}
                 />
                 <Texto
+                  numberOfLines={lista ? undefined : 1}
                   style={{
                     fontSize: esYo ? 16 : 14,
                     lineHeight: 19,
@@ -198,7 +203,7 @@ export function MesaAsientos({
               </View>
             )}
             <Texto
-              numberOfLines={1}
+              numberOfLines={lista ? undefined : 1}
               style={{
                 fontSize: 8,
                 lineHeight: 13,
@@ -215,10 +220,10 @@ export function MesaAsientos({
   );
 }
 const styles = StyleSheet.create({
-  marco: { width: 300, alignSelf: "center" },
+  marco: { width: 320, alignSelf: "center" },
   pano: {
     position: "absolute",
-    left: 32,
+    left: 42,
     top: 35,
     width: 236,
     borderRadius: 120,
@@ -263,7 +268,7 @@ const styles = StyleSheet.create({
   textoRol: { fontSize: 7, lineHeight: 9, fontWeight: "900" },
   asiento: {
     position: "absolute",
-    width: 84,
+    width: 100,
     minHeight: 58,
     borderWidth: 1,
     borderRadius: 14,
