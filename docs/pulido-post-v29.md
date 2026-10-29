@@ -15,7 +15,7 @@
 
 ## Archivos de implementación
 
-- app.json, package.json.
+- app.json, package.json, package-lock.json.
 - src/app/_layout.tsx, src/app/cuenta.tsx, src/app/configuracion.tsx, src/app/mi-perfil.tsx.
 - src/app/(principal)/_layout.tsx, opciones.tsx, perfil.tsx.
 - src/components/Controles.tsx, OpcionesApp.tsx, Mesa.tsx, MesaAsientos.tsx, PanelApuesta.tsx.
@@ -30,6 +30,8 @@ Nuevas: tests/tema-hidratacion.cjs, tests/accesibilidad-layout.cjs y tests/sala-
 Ampliadas: auth-convencional.cjs (38 casos, incluido logout completado con invitado posterior offline), inicio-cuenta.cjs (limpieza de campos, acceso sin sesión, reintento y carrera INITIAL_SESSION/Google), founder-plus.cjs (eventos encolados de distinto UUID), splash.cjs (hidratación y fondos coherentes), texto-ui.cjs (escalado, wrapping y alturas) y principiante.cjs (entorno de dimensiones). Navegación y permisos/reglas anteriores siguen en la batería completa.
 
 Se ejecutan npm test, npm run typecheck, npm run lint y empaquetado web/Android/iOS. El workflow Verificar Blindly repite los controles en el commit demo; [ejecuciones de main](https://github.com/ArgerichFacu/Blindly/actions/workflows/verify.yml).
+
+La primera ejecución de CI detectó nueve parches recomendados nuevos de Expo 57. Se aplicó expo install --fix, manteniendo React Native 0.86.3, Supabase JS 2.116.0 y Purchases 10.11.0. Expo queda en 57.0.31 y Router en 57.0.29, con lockfile actualizado, sin excluir checks. [Router 57.0.29](https://github.com/expo/expo/blob/sdk-57/packages/expo-router/CHANGELOG.md) también corrige retención de estado de otro ID en navegación y pestañas entrantes en blanco. Se repiten Doctor/compatibilidad, pruebas y bundles tras esos parches; el fallo inicial de CI no se presenta como fallo de los tests de aplicación.
 
 QA contra Supabase real con cliente aislado: logout a invitado nuevo sin heredar Founder, re-login con mismo UUID y nombre; Reviewer email/password conserva PLAY_REVIEW. El Reviewer tiene una partida activa y su guard rechaza logout como corresponde; no se altera esa partida ni se revocan sus otras sesiones. Sólo se elimina la identidad descartable propia. Google OAuth no se vuelve a consentir en este bloque; se conservan sus pruebas de flujo y la evidencia anterior.
 
