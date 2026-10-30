@@ -1,3 +1,5 @@
+Entrega Android más reciente: [Alpha v30 — AAB validado para carga manual](release-alpha-v30.md). Historial previo: [Founder Trial v29](founder-entrega.md). Las secciones siguientes conservan el cierre histórico v22.
+
 # Cierre del producto — v22
 
 **Feature freeze activo desde 2026-10-12.** El usuario aprobó Redoble y Cuac de v22 tras rechazar los anteriores. No se agregan features antes de publicar: sólo bugs críticos, seguridad, crashes y bloqueos de compras/publicación.
