@@ -1,6 +1,6 @@
 # Blindly Payment RC — Gate A
 
-01/11/2026 (ART). **Gate A abierto. No se autoriza todavía compilar v31, publicar ni habilitar pagos públicos.** Última entrega local: [v30](release-alpha-v30.md). No se modifican sus binarios ni la configuración de producto.
+01/11/2026 (ART). **Gate A BLOQUEADO por acceso operativo a las consolas; no aprobado. No se autoriza todavía compilar v31, publicar ni habilitar pagos públicos.** Última entrega local: [v30](release-alpha-v30.md); el titular confirma v30 publicada en Play. Sus binarios no se modifican. La separación de lectura/autorización está implementada en fuente y testeada, pendiente de runtime desde Play.
 
 ## Comprobado en esta pasada
 
@@ -8,7 +8,8 @@
 - `.credentials/revenuecat-key.json` y `.credentials/revenuecat-android-public-sdk.txt` están ignorados por Git. El JSON de servicio no existe localmente: no se creó, imprimió ni subió ninguno. Su ausencia local no prueba su estado en RevenueCat.
 - Clave pública Android local con prefijo goog_: GET Offerings devuelve HTTP 200, current_offering_id default y cero paquetes para esa app/clave y una identidad sintética de auditoría. La clave no se muestra ni se incorpora al código o al informe. Esto no confirma el package de su app, las credenciales Google, el entitlement ni la importación de productos.
 - 01/11/2026 21:47 ART: RPC estado_lanzamiento_plus confirma founder_trial_enabled=true y real_payments_enabled=false. Se usa una sesión de lectura aislada del Reviewer y sólo se cierra esa sesión. No se modifica su cuenta, Plus ni partidas.
-- No se dispone aún de navegador conectado para inspeccionar o modificar Google Cloud, Play Console y RevenueCat. TinyFish se solicitó; su instalación/conexión sigue sin confirmar. No se atribuye ningún cambio remoto a esta pasada.
+- TinyFish ya figura instalado, confirmado mediante el catálogo de integraciones después del aviso del titular. Sin embargo, este chat no recibe herramientas operativas de TinyFish; no hay una operación disponible para abrir una sesión de navegador. No se pide reinstalarlo ni se improvisa otro controlador. No se atribuye ningún cambio remoto a esta pasada.
+- La ruta C:/Users/facun/Documents/Codex/Blindly-release indicada en el prompt de continuación no existe en este host. Se continúa en el repositorio ya activo G:/Blindly/proyecto, sin crear otra copia en C:.
 
 Evidencia local sanitizada: `G:/Blindly/cache/gate-a-offerings.json` y `G:/Blindly/cache/gate-a-payments-state.json`. No es evidencia del Gate B ni de precios obtenidos por BillingClient.
 
@@ -63,11 +64,21 @@ Tras validar credenciales, conectar la app correcta de RevenueCat a Google y usa
 
 No cambiar por suposición Track new purchases from server-to-server notifications ni el método de identificación: debe preservarse la relación con UUID Supabase y comprobar el efecto sobre CustomerInfo.
 
-## Bloqueo detectado para Gate B
+## Separación de catálogo y autorización implementada
 
-El código actual en src/lib/PlusContext.tsx retorna antes de prepararCompras si real_payments_enabled es false. La vía de comprar/restaurar también llama exigirPagosReales antes de configurar SDK/leer ofertas. Por tanto **compilar con -PlayBilling no basta** para probar Purchases.configure → UUID → getOfferings con pagos públicos apagados.
+La continuación del titular autoriza expresamente completar esta separación, sin generar v31 ni aprobar Gate A. En src/lib/plus.ts se añade consultarCatalogoPlus: requiere identidad recuperable, reutiliza la inicialización serializada con el UUID Supabase, lee Purchases.getOfferings().all.default y vuelve a cotejar el App User ID. No llama purchase, restore, paywall, management ni sincronizar-plus.
 
-Este bloque sólo registra el hallazgo. Tras completar Gate A se deberá preparar una lectura/diagnóstico de SDK y ofertas separada de la autorización de compra, manteniendo las comprobaciones de identidad y los guards de compra/restauración/servidor. No se implementa ahora ni se usa real_payments_enabled=true como atajo. El Reviewer conserva su acceso permanente y no sustituye al license tester.
+En src/lib/PlusContext.tsx, una build con PLUS_DISPONIBLE=true y pagos remotos false puede consultar ese catálogo para una cuenta protegida. Se expone sólo internamente mediante usePlus().catalogo y errorCatalogo; refrescar() completa la lectura. Las cuentas invitadas, Plus Demo, el Reviewer y las builds sin SDK válido conservan el camino sin SDK de esta fase. No se cambia la UI comercial ni se añade una pantalla de pago/diagnóstico.
+
+El catálogo se borra al cambiar UUID, salir de sesión o pasar a segundo plano. Sus respuestas tardías se descartan por generación/identidad. Una falla de red/catálogo queda aislada en errorCatalogo y no revoca Trial ni su caché validada; la consulta no mantiene cargando las acciones gratuitas de Trial. CustomerInfo de esta lectura no concede Plus ni escribe accesos_plus.
+
+Comprar, restaurar comercialmente, abrir el paywall y administrar siguen sujetos al doble gate: build/config válida y exigirPagosReales en servidor. No se cambian las flags de build actuales, el backend Trial, su duración, el package, la firma ni las credenciales del cliente. Consultar precios puede usar internamente la conexión del SDK a Play; esto no ejecuta el flujo visual de cobro.
+
+tests/plus-comercial.cjs usa el módulo real con SDK/RPC simulados y comprueba: default aunque current sea otro; UUID; tres productos y priceString conservados; pagos OFF con cero paywall/restore/management/sincronización; CustomerInfo con entitlement que no concede acceso; catálogo vacío que no aprueba Gate A; errores de catálogo sin quitar Trial; cambio de UUID durante getOfferings; build desactivada; Reviewer; caminos ON de compra/restore/management sólo simulados; revocación del servidor antes de una acción. Las pruebas previas de Founder, configuración RevenueCat e identidad concurrente siguen pasando.
+
+Validación local: npm test completo, npm run typecheck, npm run lint y los tests Plus/Founder/RevenueCat aprobados. Logs en G:/Blindly/cache/payment-rc-separacion-*.log. No hay prueba nueva de SDK real/Google Play runtime, precios reales del dispositivo ni compras. Las fixtures no validan el mapeo remoto.
+
+01/11/2026 22:12 ART: RPC de sólo lectura vuelve a confirmar founder_trial_enabled=true y real_payments_enabled=false después de los cambios de código. No se activaron flags de servidor para probar.
 
 Las referencias locales a com.blindly.app corresponden al bundle iOS y al paquete explícito Plus Demo; no se cambian globalmente. Antes de v31 se cotejarán la app RevenueCat Android, su goog_ y el manifiesto de com.blindly.studio. Los registros históricos no son configuración de producción.
 
@@ -78,5 +89,13 @@ Las referencias locales a com.blindly.app corresponden al bundle iOS y al paquet
 3. Instalar desde track de Google Play. Verificar configure/UUID, default, los tres packages y precios localizados del dispositivo. GET público de auditoría, mocks o sideload no satisfacen este Gate B.
 4. Antes de comprar, preparar license testers seleccionados oficialmente en Play y confirmar el método de pago de prueba. Mensual/anual: compra, renovación/cancelación/expiración; Founder: compra única, lifetime/restore/reinstalación. Completar cancelación de compra, pending, red, reinicio, cambio de cuenta/dispositivo, restore, CustomerInfo, RTDN y sincronizar-plus sin tocar cuentas/partidas reales.
 5. No abrir pagos públicos para ejecutar QA; resolver primero un mecanismo acotado para testers, con aprobación y validación separadas. No se ha creado ese mecanismo en esta pasada.
+
+## Cierre de este bloque
+
+- **HECHO:** separación de catálogo/autorización en fuente; pruebas de regresión y documentación. Nada nuevo en Cloud, Play o RevenueCat.
+- **VERIFICADO:** TinyFish instalado; sin operaciones expuestas a este chat. Suite/tipos/lint locales en verde; Trial ON / Payments OFF. Se conserva la evidencia previa GET HTTP 200/default vacío, sin repetir la consulta remota ni declararla una comprobación nueva.
+- **PENDIENTE:** todos los checks remotos señalados en la tabla, especialmente app/key correctas, credenciales aceptadas y los tres productos en default. No se diagnostica propagación ni permisos faltantes sin poder inspeccionar esas consolas. Gate B runtime no ejecutado; v31 no generada.
+- **MANUAL/EXTERNO:** falta que la sesión exponga las herramientas del TinyFish ya instalado. No falta una nueva autorización para instalarlo. Una vez operativo, sólo solicitar al titular login/MFA/consentimiento o confirmaciones sensibles requeridas por la consola.
+- **SECRETOS:** no se creó, mostró, subió ni versionó una credencial nueva. No se tocó la clave pública local ni se la copió al código. Se conservan las imágenes de productos ajenas a este bloque sin versionarlas.
 
 [Pruebas oficiales Play](https://developer.android.com/google/play/billing/test) y [guía sandbox RevenueCat](https://www.revenuecat.com/docs/test-and-launch/sandbox/google-play-store).

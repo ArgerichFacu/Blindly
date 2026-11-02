@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState, useRef, type ReactNode } from "react";
 import { AppState, Linking } from "react-native";
-import Purchases, { type CustomerInfo, type CustomerInfoUpdateListener } from "react-native-purchases";
+import Purchases, { type CustomerInfo, type CustomerInfoUpdateListener, type PurchasesOffering } from "react-native-purchases";
 import RevenueCatUI, { PAYWALL_RESULT } from "react-native-purchases-ui";
 import { asegurarSesion } from "./sesion";
 import { supabase } from "./supabase";
-import { PLUS_DISPONIBLE, PLUS_ENTITLEMENT, prepararCompras, prepararIdentidadCompra, obtenerOfertaPlus, tieneEntitlementPlus } from "./plus";
+import { PLUS_DISPONIBLE, PLUS_ENTITLEMENT, prepararCompras, prepararIdentidadCompra, consultarCatalogoPlus, obtenerOfertaPlus, tieneEntitlementPlus } from "./plus";
 import { sincronizarPlusServidor } from "./plusServidor";
 import { PLUS_DEMO } from "./plusDemo";
 import {
@@ -19,6 +19,7 @@ type EstadoPlus = {
   identidad: string | null;
   trial: EstadoFounder | null; trialDisponible: boolean; trialExpiraEn: string | null;
   trialRestanteMs: number; pagosRealesActivos: boolean; lanzamientoDisponible: boolean;
+  catalogo: PurchasesOffering | null; errorCatalogo: unknown;
   comprar: () => Promise<void>; restaurar: () => Promise<void>; gestionar: () => Promise<void>;
   refrescar: () => Promise<void>; iniciarPrueba: () => Promise<void>;
   registrarVista: () => Promise<void>; registrarInteres: (plan: PlanPlus) => Promise<void>;
@@ -28,11 +29,13 @@ const ContextoPlus = createContext<EstadoPlus>({
   disponible: false, cargando: false, activo: false, gestionable: false, vencimiento: null,
   error: null, tipoAcceso: "FREE", identidad: null, trial: null, trialDisponible: false, trialExpiraEn: null,
   trialRestanteMs: 0, pagosRealesActivos: false, lanzamientoDisponible: false,
+  catalogo: null, errorCatalogo: null,
   comprar: async () => {}, restaurar: async () => {}, gestionar: async () => {}, refrescar: async () => {},
   iniciarPrueba: async () => {}, registrarVista: async () => {}, registrarInteres: async () => {}, registrarWaitlist: async () => false,
 });
 export function PlusProvider({ children }: { children: ReactNode }) {
   const [info, setInfo] = useState<CustomerInfo | null>(null);
+  const [catalogo, setCatalogo] = useState<PurchasesOffering | null>(null), [errorCatalogo, setErrorCatalogo] = useState<unknown>(null);
   const [cargando, setCargando] = useState(!PLUS_DEMO), [revisionPlay, setRevisionPlay] = useState(false);
   const [remoto, setRemoto] = useState<EstadoFounder | null>(null), [instante, setInstante] = useState(0);
   const [error, setError] = useState<unknown>(null);
@@ -49,7 +52,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
       setTimeout(() => { if (montado.current) void cargar(); }, 0);
     }
   }
-  function limpiar() { cache.current = null; setCacheVisible(null); setIdentidad(null); setRemoto(null); setInfo(null); setRevisionPlay(false); }
+  function limpiar() { cache.current = null; setCacheVisible(null); setIdentidad(null); setRemoto(null); setInfo(null); setCatalogo(null); setErrorCatalogo(null); setRevisionPlay(false); }
   function adoptar(estado: EstadoFounder, id: string) {
     cache.current = cacheFounder(estado, id); setInstante(ahoraMonotono()); setCacheVisible(cache.current); setIdentidad(id); setRemoto(estado); setRevisionPlay(estado.access_source === "PLAY_REVIEW");
   }
@@ -73,23 +76,40 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     if (operando.current) { recargaPendiente.current = true; return; }
     const turno = ++generacion.current; setCargando(true); setError(null);
     try {
-      const id = usuarioId ?? (await asegurarSesion()).id;
+      const actual = await asegurarSesion();
+      const id = usuarioId ?? actual.id;
+      if (id !== actual.id) return;
       if (turno !== generacion.current || !montado.current) return;
       if (usuario.current !== id) limpiar();
       usuario.current = id;
       const estado = await consultarFounder();
       if (turno !== generacion.current || !montado.current) return;
       adoptar(estado, id);
-      if (!estado.real_payments_enabled || !PLUS_DISPONIBLE || estado.access_source === "PLAY_REVIEW") {
-        quitarListener(); setInfo(null); return;
+      if (!PLUS_DISPONIBLE || estado.access_source === "PLAY_REVIEW") {
+        quitarListener(); setInfo(null); setCatalogo(null); setErrorCatalogo(null); return;
       }
+      if (!estado.real_payments_enabled) {
+        quitarListener(); setInfo(null); setCatalogo(null); setErrorCatalogo(null);
+        if (actual.is_anonymous !== false) return;
+        // La consulta del catálogo no bloquea las acciones gratuitas del Trial.
+        setCargando(false);
+        try {
+          const oferta = await consultarCatalogoPlus(actual);
+          if (turno === generacion.current && montado.current && usuario.current === id) setCatalogo(oferta);
+        } catch (e) {
+          // Un fallo de catálogo no revoca el Trial ni el estado ya validado.
+          if (turno === generacion.current && montado.current && usuario.current === id) setErrorCatalogo(e);
+        }
+        return;
+      }
+      setCatalogo(null); setErrorCatalogo(null);
       const nuevaInfo = await prepararCompras(id);
       if (turno !== generacion.current || !montado.current) return;
       setInfo(nuevaInfo); escucharCompras(); await sincronizarPlusServidor();
     } catch (e) {
       if (turno === generacion.current && montado.current) {
         setInstante(ahoraMonotono());
-        setInfo(null); setRevisionPlay(false); setError(e);
+        setInfo(null); setCatalogo(null); setErrorCatalogo(null); setRevisionPlay(false); setError(e);
         // Sólo el trial ya comprobado admite caché breve, dentro de su plazo.
         if (cache.current?.estado.access_source !== "FOUNDER_TRIAL") { cache.current = null; setCacheVisible(null); setRemoto(null); }
         quitarListener();
@@ -174,6 +194,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
   const pagado = estado?.access_source === "REVENUECAT_PAID" || (comercialDisponible && tieneEntitlementPlus(info));
   const tipoAcceso: FuentePlus = PLUS_DEMO ? "PLUS_DEMO" : revision ? "PLAY_REVIEW" : pagado ? "REVENUECAT_PAID" : estado?.active ? "FOUNDER_TRIAL" : "FREE";
   const valor: EstadoPlus = {
+    catalogo, errorCatalogo,
     demostracion: PLUS_DEMO, disponible: comercialDisponible, cargando, activo: tipoAcceso !== "FREE", tipoAcceso, identidad,
     gestionable: comercialDisponible && !!info?.managementURL,
     vencimiento: tipoAcceso === "FOUNDER_TRIAL" ? estado?.expires_at ?? null : info?.entitlements.active[PLUS_ENTITLEMENT]?.expirationDate ?? estado?.paid_expires_at ?? null,

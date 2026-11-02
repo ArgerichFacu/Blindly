@@ -80,6 +80,15 @@ export async function prepararIdentidadCompra(usuario: User) {
   await prepararCompras(usuario.id);
 }
 
+// Inicializar/consultar no autoriza compras ni sincroniza accesos comerciales.
+export async function consultarCatalogoPlus(usuario: User) {
+  await prepararIdentidadCompra(usuario);
+  const oferta = (await Purchases.getOfferings()).all.default;
+  if ((await Purchases.getAppUserID()) !== usuario.id) throw new Error("SESION_CAMBIO");
+  if (!oferta) throw new Error("PLUS_OFERTA_INCOMPLETA");
+  return oferta;
+}
+
 export async function obtenerOfertaPlus() {
   const oferta = (await Purchases.getOfferings()).current;
   // Founder puede retirarse de la venta sin invalidar las otras opciones ni
