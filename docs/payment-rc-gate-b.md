@@ -1,5 +1,27 @@
 # Payment RC — Gate B
 
+Actualización posterior: CLI administradora ya accede a Blindly. Lectura directa confirma Founder Trial=true y real_payments_enabled=false. Allowlist privada implementada/aplicada, cuenta administracionblindly@gmail.com registrada deshabilitada; el titular no confirmó estar en Pruebas de licencia. No se iniciarán compras hasta verificarlo y observar medio sandbox. V32 se recompila con permiso de QA separado del flag global; no habilitar pagos públicos. sincronizar-plus clasifica entorno por transacción, sin conceder Plus por estar en la lista. [Revisión actual v32](release-v32-production-candidate.md).
+
+## Evidencia nueva — v31 desde Play, 02/11/2026 18:45–18:47 ART
+
+**Etapa catálogo aprobada. Gate B completo NO aprobado:** compras/restore/RTDN/accesos_plus y revalidación v32 siguen pendientes.
+
+Samsung A32 autorizado: versionCode31/name1.0.0, installer com.android.vending, firma de distribución Play `470d4a3d4462979aaec1c68c29c963fa25496de5acd3174e33932f5ca1974d8f`, coincide con baseline v30. Cuenta en UI Mi cuenta: administracionblindly@gmail.com y Google conectado; no Reviewer. Login completado manualmente por el titular.
+
+Log del PID actual, diagnóstico sanitizado de la build v31: sdkConfigurado=true, identidadCoincide=true, offering=default. La igualdad compara App User ID con el UUID Supabase en código; no se publican UUIDs/tokens.
+
+| Paquete | Producto | Precio real SDK | Moneda |
+|---|---|---|---|
+|$rc_monthly|blindly_plus:monthly|$ 1.500,00|ARS|
+|$rc_annual|blindly_plus:annual|$ 15.400,00|ARS|
+|$rc_lifetime|blindly_plus_founder_lifetime|$ 38.400,00|ARS|
+
+Son precios localizados observados, no modificaciones ni fixtures. La primera lectura del helper descartaba JSON porque ReactNativeJS añade comillas al final de la línea: se corrigió sólo el parser local de evidencia y se limitó logcat al PID actual; no se cambió/recompiló v31 para obtener estos resultados.
+
+Founder Trial aparece disponible; no se activó/consumió la prueba. La pantalla muestra la rama v31 Precio previsto/waitlist, sin Ver planes ni Restaurar compras. Evidencia de pagos OFF por predicado de la build validada: en v31 consultarCatalogoPlus sólo se invoca desde !estado.real_payments_enabled; coincide con la UI. No se capturó una respuesta RPC administrativa directa en esta sesión. Sin purchase/restore/management, grants ni escrituras comerciales.
+
+Archivos privados fuera de Git: G:/Blindly/cache/payment-rc-device-v31/evidence.json, catalogue-phase-approval.json, ui-gates.json y base-v31.apk. Evidencia visual privada en G:/Blindly/privado/blindly-v32-qa.xml y blindly-plus-v31*.xml. Los estados pendientes anteriores se conservan a continuación como historia, no invalidan esta nueva observación.
+
 Actualización v32, 02/11/2026 18:00 ART: API Play confirma v31 completed en Alpha y SHA coincidente. Carga/distribución cerradas; runtime, license tester, compras/restore/RTDN/accesos_plus pendientes. USB ausente. Validar con v32 desde Play repitiendo Auth/Plus/R8/logout; ver [candidata v32](release-v32-production-candidate.md).
 
 02/11/2026 (ART). Gate A aprobado en [payment-rc-gate-a.md](payment-rc-gate-a.md); no se repite. **Gate B todavía pendiente de instalación y ejecución desde Google Play.**

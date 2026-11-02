@@ -16,6 +16,7 @@ function json(body: Record<string, unknown>, status = 200) {
 type EntitlementRevenueCat = {
   expires_date?: string | null;
   product_identifier?: string;
+  purchase_date?: string;
 };
 
 Deno.serve(async (request: Request) => {
@@ -50,6 +51,7 @@ Deno.serve(async (request: Request) => {
   );
 
   let entitlement: EntitlementRevenueCat | null = null;
+  let entorno: "sandbox" | "production" | "unknown" = "unknown";
   // RevenueCat devuelve 201 la primera vez que materializa un subscriber.
   // El cuerpo tiene el mismo formato que la respuesta 200 posterior.
   if (respuesta.status === 200 || respuesta.status === 201) {
@@ -58,6 +60,16 @@ Deno.serve(async (request: Request) => {
       (cuerpo?.subscriber?.entitlements?.blindly_plus as
         | EntitlementRevenueCat
         | undefined) ?? null;
+    const producto = entitlement?.product_identifier;
+    if (producto) {
+      const subscriber = cuerpo.subscriber;
+      const compras = subscriber.non_subscriptions?.[producto] ?? [];
+      const compra = Array.isArray(compras) && typeof entitlement?.purchase_date === "string"
+        ? compras.find((p: { purchase_date?: string }) => p.purchase_date === entitlement?.purchase_date) : undefined;
+      const transaccion = subscriber.subscriptions?.[producto] ?? compra;
+      if (transaccion?.is_sandbox === true) entorno = "sandbox";
+      else if (transaccion?.is_sandbox === false) entorno = "production";
+    }
   } else if (respuesta.status !== 404) {
     console.error("RevenueCat rechazó la consulta", respuesta.status);
     return json({ code: "PLUS_NO_VERIFICADO" }, 502);
@@ -77,7 +89,7 @@ Deno.serve(async (request: Request) => {
       entitlement: "blindly_plus",
       vence_en: venceEn,
       verificado_en: new Date().toISOString(),
-      entorno: "unknown",
+      entorno,
     },
     { onConflict: "user_id" },
   );

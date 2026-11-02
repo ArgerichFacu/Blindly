@@ -22,7 +22,7 @@ export default function Cuenta() {
     [email, setEmail] = useState(""), [nombre, setNombre] = useState(""), [password, setPassword] = useState(""), [confirmacion, setConfirmacion] = useState(""),
     [codigo, setCodigo] = useState(""), [clave, setClave] = useState(""),
     [ocupado, setOcupado] = useState(false), [error, setError] = useState<unknown>(null), [aviso, setAviso] = useState(""),
-    [seguridad, setSeguridad] = useState(false), [confirmarBorrado, setConfirmarBorrado] = useState(false), [revision, setRevision] = useState(0);
+    [seguridad, setSeguridad] = useState(false), [confirmarBorrado, setConfirmarBorrado] = useState(false), [confirmarSalida, setConfirmarSalida] = useState(false), [revision, setRevision] = useState(0);
   const cerrojo = useRef(false), vivo = useRef(true), ultimoUsuario = useRef<string | null>(null), googleInicial = useRef(false);
   const versionSesion = useRef(0);
   const [sesionCargada, setSesionCargada] = useState(false);
@@ -54,7 +54,7 @@ export default function Cuenta() {
           setEmail(sesion?.user.is_anonymous === false && !cuentaConClave(sesion.user) ? sesion.user.email ?? "" : "");
           setNombre(nombreVisible(sesion?.user));
           setCodigo(""); setClave(""); setAviso("");
-          setSeguridad(false); setConfirmarBorrado(false);
+          setSeguridad(false); setConfirmarBorrado(false); setConfirmarSalida(false);
           setModo(accion === "password" && sesion ? "password" : sesion?.user.is_anonymous === false ? "cuenta" : "login");
         }
         setSesionCargada(true);
@@ -100,11 +100,17 @@ export default function Cuenta() {
   const campoEmail = <Campo etiqueta={t("Email")} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} autoComplete="email" textContentType="emailAddress" editable={!ocupado}/>;
   const camposPassword = <><Campo etiqueta={t("Contraseña")} value={password} onChangeText={setPassword} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete={modo === "login" ? "current-password" : "new-password"} editable={!ocupado}/>{modo !== "login" && <Campo etiqueta={t("Confirmar contraseña")} value={confirmacion} onChangeText={setConfirmacion} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete="new-password" editable={!ocupado}/>}</>;
   const google = () => void ejecutar(async () => { const u = await continuarGoogle("auto", contextoAuth); if (u) await listo(u); });
+  const salir = (conservar = false) => void ejecutar(async () => { const u=await cerrarSesion(conservar); if (!vivo.current) return; setUsuario(u);setModo("login");setSeguridad(false);setConfirmarSalida(false);router.dismissAll();router.replace("/cuenta"); });
   return <Pantalla scrollRef={scroll} titulo={t(usuario && !invitado && modo === "cuenta" ? "Mi cuenta" : "Acceso")} subtitulo={t("Tu mesa de poker, conectada.")}>
     {!!error && <Tarjeta><Texto accessibilityLiveRegion="assertive">{mensajeError(error)}</Texto>
       {error instanceof PartidaActivaCuenta && <>
         <Texto suave>{t(error.anfitrion ? "Sos anfitrión de una mesa activa. Volvé para terminarla de forma segura; cerrar sesión no elimina la mesa." : "Seguís participando en una partida. Volvé a la mesa para resolver tu salida antes de cerrar sesión.")}</Texto>
         <Boton titulo={t("Volver a la partida")} disabled={ocupado} onPress={() => router.push({ pathname: "/sala", params: { codigo: error.codigo } })}/>
+        {protegida && (confirmarSalida ? <>
+          <Texto>{t("La partida conserva tu lugar, tus fichas y el anfitrión. Para continuar o administrarla, volvé a ingresar con esta misma cuenta.")}</Texto>
+          <Boton titulo={t("Confirmar cierre de sesión")} disabled={ocupado} onPress={() => salir(true)}/>
+          <Boton titulo={t("Cancelar")} secundario disabled={ocupado} onPress={() => setConfirmarSalida(false)}/>
+        </> : <Boton titulo={t("Cerrar sesión conservando la partida")} secundario disabled={ocupado} onPress={() => setConfirmarSalida(true)}/>)}
       </>}
       <Boton titulo={t("Reintentar")} secundario disabled={ocupado} onPress={() => { setError(null); setRevision(v=>v+1); }}/></Tarjeta>}
     {!!aviso && <Tarjeta><Texto accessibilityLiveRegion="polite">{t(aviso)}</Texto></Tarjeta>}
@@ -147,7 +153,7 @@ export default function Cuenta() {
           <Boton titulo={t("Métodos de acceso")} secundario disabled={ocupado} onPress={()=>setSeguridad(v=>!v)}/>
           {seguridad && <>{!googleConectado && <Boton titulo={t("Vincular Google")} disabled={ocupado} onPress={google}/>}
             {!esLegacy && <Boton titulo={t("Cambiar contraseña")} secundario disabled={ocupado} onPress={()=>cambiarModo("reset")}/>}</>}
-          <Boton titulo={t("Cerrar sesión")} secundario disabled={ocupado} onPress={()=>void ejecutar(async()=>{ const u=await cerrarSesion(); if (!vivo.current) return; setUsuario(u);setModo("login");setSeguridad(false); router.dismissAll(); router.replace("/cuenta"); })}/>
+          <Boton titulo={t("Cerrar sesión")} secundario disabled={ocupado} onPress={()=>salir()}/>
         </Tarjeta>
       </>}
       {modo === "legacy" && usuario && <Tarjeta><Texto style={{fontWeight:"700"}}>{t("Clave de recuperación · legacy")}</Texto><Texto suave>{t("Para cuentas creadas con la versión anterior. No necesitás una clave para usar Google o email.")}</Texto>

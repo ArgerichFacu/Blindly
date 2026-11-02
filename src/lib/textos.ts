@@ -2665,3 +2665,18 @@ Object.assign(textos, {
     "Você ainda participa de uma partida. Volte à mesa para resolver sua saída antes de sair da conta."
   ]
 });
+
+Object.assign(textos, {
+  "La partida conserva tu lugar, tus fichas y el anfitrión. Para continuar o administrarla, volvé a ingresar con esta misma cuenta.": [
+    "The game keeps your seat, chips and host. Sign back in with this same account to continue or manage it.",
+    "A partida mantém seu lugar, suas fichas e o anfitrião. Entre novamente com esta mesma conta para continuar ou administrá-la."
+  ],
+  "Cerrar sesión conservando la partida": [
+    "Sign out and keep the game",
+    "Sair da conta mantendo a partida"
+  ],
+  "Confirmar cierre de sesión": [
+    "Confirm sign out",
+    "Confirmar saída da conta"
+  ]
+});

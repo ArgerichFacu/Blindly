@@ -67,5 +67,12 @@ export async function registrarVistaFounder() {
 }
 export async function exigirPagosReales() {
   const r = await supabase.rpc("estado_lanzamiento_plus");
-  if (r.error || r.data?.real_payments_enabled !== true) throw new Error("PLUS_PAGOS_NO_DISPONIBLES");
+  if (r.error || typeof r.data?.real_payments_enabled !== "boolean") throw new Error("PLUS_PAGOS_NO_DISPONIBLES");
+  if (r.data.real_payments_enabled !== true && !(await consultarPermisoPagoTester())) throw new Error("PLUS_PAGOS_NO_DISPONIBLES");
+}
+export async function consultarPermisoPagoTester() {
+  try {
+    const r = await supabase.rpc("mi_permiso_pago_tester");
+    return !r.error && r.data === true;
+  } catch { return false; } // Un permiso QA ausente/offline no bloquea el Trial.
 }

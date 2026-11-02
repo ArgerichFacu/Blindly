@@ -9,6 +9,7 @@ function escenario(params={inicio:'1'}) {
   const jsx=(type,props)=>({type,props});
   const controls=Object.fromEntries(['Pantalla','Texto','Tarjeta','Campo','Boton','Etiqueta'].map(n=>[n,n]));
   const inicio={ocupado:false,elegir:async valor=>{llamadas.push(['elegir',valor]);return persistir}};
+  class PartidaActiva extends Error { constructor(){super('PARTIDA_ACTIVA_CUENTA');this.codigo='ABCDE';this.anfitrion=true} }
   const authApi={
     validarPassword:(p,c)=>{if(p.length<8||p!==c)throw new Error('password')},leerPendiente:async()=>null,
     registrarEmail:async(email,nombre,ctx)=>{llamadas.push(['registrar',email,nombre,ctx]);user={...user,new_email:email};for(const cb of listeners)cb('USER_UPDATED',{user});return {usuario:user.id,email}},
@@ -30,13 +31,13 @@ function escenario(params={inicio:'1'}) {
     '../lib/supabase':{supabase:{auth:{onAuthStateChange:cb=>{listeners.push(cb);return {data:{subscription:{unsubscribe(){}}}}}}}},
     '../lib/autenticacion':authApi,
     '../lib/nombreVisible':{nombreVisible:u=>u?.user_metadata?.display_name??u?.user_metadata?.full_name??''},
-    '../lib/sesion':{asegurarSesion:async()=>user,PartidaActivaCuenta:class extends Error{},cuentaConClave:u=>!!u?.email?.endsWith('@recovery.blindly.invalid'),crearClaveRecuperacion:async mostrar=>{user={id:'uuid-A',is_anonymous:false,email:'uuid-A@recovery.blindly.invalid'};mostrar('KEY-TEST');return {usuario:user,clave:'KEY-TEST'}},recuperarConClave:async()=>user={id:'uuid-legacy',is_anonymous:false,email:'uuid-legacy@recovery.blindly.invalid'},eliminarCuenta:async()=>llamadas.push(['delete'])},
+    '../lib/sesion':{asegurarSesion:async()=>user,PartidaActivaCuenta:PartidaActiva,cuentaConClave:u=>!!u?.email?.endsWith('@recovery.blindly.invalid'),crearClaveRecuperacion:async mostrar=>{user={id:'uuid-A',is_anonymous:false,email:'uuid-A@recovery.blindly.invalid'};mostrar('KEY-TEST');return {usuario:user,clave:'KEY-TEST'}},recuperarConClave:async()=>user={id:'uuid-legacy',is_anonymous:false,email:'uuid-legacy@recovery.blindly.invalid'},eliminarCuenta:async()=>llamadas.push(['delete'])},
   };
   const api={};vm.runInNewContext(source,{exports:api,require:name=>{assert.ok(mocks[name],`Import ${name}`);return mocks[name]}});
   const render=()=>{indice=0;return api.default()};
   function elementos(nodo,tipo,out=[]){if(Array.isArray(nodo))nodo.forEach(n=>elementos(n,tipo,out));else if(nodo&&typeof nodo==='object'){if(nodo.type===tipo)out.push(nodo.props);elementos(nodo.props?.children,tipo,out)}return out}
   const botones=()=>elementos(render(),'Boton'),campo=nombre=>elementos(render(),'Campo').find(c=>c.etiqueta===nombre);
-  return {llamadas,authApi,render,elementos,botones,campo,emit:(e,s)=>listeners.forEach(fn=>fn(e,s)),cargar:async()=>{render();montajes.splice(0).forEach(fn=>fn());foco();await flush()},click:async titulo=>{const b=botones().find(b=>b.titulo===titulo);assert.ok(b,`Botón ${titulo}`);b.onPress();await flush()},set persistir(v){persistir=v},set user(v){user=v}};
+  return {partidaActiva:()=>new PartidaActiva(),llamadas,authApi,render,elementos,botones,campo,emit:(e,s)=>listeners.forEach(fn=>fn(e,s)),cargar:async()=>{render();montajes.splice(0).forEach(fn=>fn());foco();await flush()},click:async titulo=>{const b=botones().find(b=>b.titulo===titulo);assert.ok(b,`Botón ${titulo}`);b.onPress();await flush()},set persistir(v){persistir=v},set user(v){user=v}};
 }
 (async()=>{
   const invitado=escenario();await invitado.cargar();assert.ok(invitado.botones().some(b=>b.titulo==='Ingresar con Google'));assert.ok(!invitado.elementos(invitado.render(),'Texto').some(t=>t.children==='uuid-A'),'UUID técnico fuera de acceso principal');
@@ -52,6 +53,9 @@ function escenario(params={inicio:'1'}) {
   for(const volver of ['ligas','puntuacion','plus','head-to-head','liga-nueva','unirse','liga','liga-unirse']){const params={inicio:'0',volver,liga:'club',codigo:volver==='liga-unirse'?'0123456789ABCDEF0123':'ABCDE',nombre:'Nico',seccion:'ranking',temporada:'season'};const c=escenario(params);await c.cargar();c.campo('Email').onChangeText('a@example.com');c.campo('Contraseña').onChangeText('password');await c.click('Iniciar sesión');await c.click('Continuar con esta cuenta');const route=c.llamadas.at(-1)[1];if(['liga','unirse','liga-unirse'].includes(volver)){assert.equal(route.pathname,`/${volver}`);if(volver==='liga'){assert.equal(route.params.id,'club');assert.equal(route.params.temporada,'season')}else assert.equal(route.params.codigo,params.codigo)}else assert.equal(route,`/${volver}`)}
   const doble=escenario();await doble.cargar();doble.campo('Email').onChangeText('a@example.com');doble.campo('Contraseña').onChangeText('password');let finish,count=0;doble.authApi.entrarEmail=()=>{count++;return new Promise(resolve=>finish=()=>resolve({id:'uuid-B',is_anonymous:false}))};const b=doble.botones().find(b=>b.titulo==='Iniciar sesión');b.onPress();b.onPress();assert.equal(count,1);finish();await flush();
   const google=escenario({inicio:'1',accion:'google'});const cargaGoogle=google.cargar();google.emit('INITIAL_SESSION',{user:{id:'uuid-A',is_anonymous:true}});await cargaGoogle;assert.equal(google.llamadas.length,1);assert.equal(google.llamadas[0][0],'google');assert.equal(google.llamadas[0][1],"auto");assert.equal(google.llamadas[0][2].inicio,'1');await google.cargar();assert.equal(google.llamadas.length,1,'Foco no repite Google automáticamente');
+  const activa=escenario({inicio:'0'});await activa.cargar();activa.campo('Email').onChangeText('protected@example.com');activa.campo('Contraseña').onChangeText('password-A');await activa.click('Iniciar sesión');
+  let signouts=0;activa.authApi.cerrarSesion=async conservar=>{if(!conservar)throw activa.partidaActiva();signouts++;return {id:'fresh',is_anonymous:true}};
+  await activa.click('Cerrar sesión');assert.ok(activa.botones().some(b=>b.titulo==='Volver a la partida'));await activa.click('Cerrar sesión conservando la partida');assert.equal(signouts,0);await activa.click('Cancelar');assert.equal(signouts,0);await activa.click('Cerrar sesión conservando la partida');await activa.click('Confirmar cierre de sesión');assert.equal(signouts,1);assert.ok(activa.botones().some(b=>b.titulo==='Iniciar sesión'));
   console.log('OK: acceso convencional, invitado, registro/verificación, legacy avanzado, contexto, tutorial y doble toque en UI.');
   const logout=escenario({inicio:'0'});await logout.cargar();logout.campo('Email').onChangeText('reviewer@example.com');logout.campo('Contraseña').onChangeText('testpassword');await logout.click('Iniciar sesión');
   logout.authApi.cerrarSesion=async()=>{logout.emit('SIGNED_OUT',null);logout.user=null;return null};await logout.click('Cerrar sesión');

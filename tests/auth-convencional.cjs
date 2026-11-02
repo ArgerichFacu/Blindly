@@ -5,6 +5,7 @@ const vm = require('node:vm');
 const ts = require('typescript');
 const compile = path => ts.transpileModule(fs.readFileSync(path, 'utf8'), {compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText;
 const service = compile('src/lib/autenticacion.ts'), session = compile('src/lib/sesion.ts');
+const identidad={};vm.runInNewContext(compile('src/lib/identidad.ts'),{exports:identidad});
 const key = 'blindly.auth.pendiente.v1';
 function escenario() {
   const estado = {user:{id:'uuid-A',is_anonymous:true}, datos:false, plus:false, jugador:[], host:[], llamadas:[], storage:new Map(), exchange:null};
@@ -27,12 +28,14 @@ function escenario() {
   const sesion={};
   vm.runInNewContext(session,{exports:sesion,require:name=>name==='./plus'?{tienePlusActivo:async()=>estado.plus}:{supabase:sb},Error});
   const api={},platform={OS:'android'},web={maybeCompleteAuthSession(){},openAuthSessionAsync:async()=>({type:'success',url:'blindly://auth-callback?code=good'})};
-  const mocks={'@react-native-async-storage/async-storage':{__esModule:true,default:store},'expo-web-browser':web,'expo-linking':{createURL:()=> 'blindly://auth-callback'},'react-native':{Platform:platform},'./supabase':{supabase:sb},'./sesion':sesion};
+  const mocks={'@react-native-async-storage/async-storage':{__esModule:true,default:store},'expo-web-browser':web,'expo-linking':{createURL:()=> 'blindly://auth-callback'},'react-native':{Platform:platform},'./supabase':{supabase:sb},'./sesion':sesion,'./identidad':identidad};
   vm.runInNewContext(service,{exports:api,require:name=>{assert.ok(mocks[name],name);return mocks[name]},Error,Date,URL,Map,Number,globalThis:{location:{origin:'http://localhost:8090',assign:url=>estado.llamadas.push(['navigate',url])}},setTimeout:()=>0});
   return {api,estado,auth,store,platform,web,sesion,pendiente:(tipo,email)=>{estado.storage.set(key,JSON.stringify({tipo,usuario:estado.user.id,email,fecha:Date.now()}));estado.original={...estado.user}}};
 }
 const casos=[];
 function caso(nombre,fn){casos.push([nombre,fn])}
+caso('logout confirmado de protegido conserva mesa/host/jugadores',async()=>{for(const host of [true,false]){const {api,estado}=escenario();estado.user={id:'uuid-A',is_anonymous:false,email:'a@example.com',email_confirmed_at:'yes'};const sala={id:'sala',codigo:'ABCDE',estado:'jugando',host_id:host?'uuid-A':'otro',orden:['j']};estado.jugador=[{id:'j',sala,eliminado_en:null}];estado.host=host?[sala]:[];const antes=JSON.stringify({sala,jugadores:estado.jugador});await assert.rejects(api.cerrarSesion(),/PARTIDA_ACTIVA_CUENTA/);await api.cerrarSesion(true);assert.equal(JSON.stringify({sala,jugadores:estado.jugador}),antes);assert.equal(estado.llamadas[0][0],'logout');assert.equal(estado.llamadas[0][1].scope,'local')}});
+caso('invitado activo no evade protección con confirmar salida',async()=>{const {api,estado}=escenario();estado.jugador=[{id:'j',sala:{id:'sala',codigo:'ABCDE',estado:'jugando',host_id:'otro',orden:['j']},eliminado_en:null}];await assert.rejects(api.cerrarSesion(true),/PARTIDA_ACTIVA_CUENTA/);assert.equal(estado.llamadas.length,0)});
 caso('Google automático desde invitado vacío recupera B',async()=>{const {api,estado}=escenario();estado.exchange={id:'uuid-B',is_anonymous:false};assert.equal((await api.continuarGoogle()).id,'uuid-B');assert.equal(estado.llamadas[0][0],'oauth');assert.ok(!estado.llamadas.some(x=>x[0]==='link'))});
 caso('Google automático conserva legacy A',async()=>{const {api,estado}=escenario();estado.user={id:'uuid-A',email:'uuid-A@recovery.blindly.invalid',is_anonymous:false};assert.equal((await api.continuarGoogle()).id,'uuid-A');assert.equal(estado.llamadas[0][0],'link')});
 caso('Google ya conectado no abre OAuth ni duplica identidad',async()=>{const {api,estado}=escenario();estado.user={id:'uuid-A',is_anonymous:false,identities:[{provider:'google',user_id:'uuid-A'}]};assert.equal((await api.continuarGoogle()).id,'uuid-A');assert.equal(estado.llamadas.length,0)});

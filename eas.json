@@ -46,6 +46,7 @@
     },
     "production-candidate": {
       "extends": "payment-rc",
+      "autoIncrement": false,
       "buildArtifactPaths": ["android/app/build/outputs/mapping/release/**"]
     }
   },

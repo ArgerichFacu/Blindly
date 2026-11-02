@@ -9,7 +9,7 @@ import { sincronizarPlusServidor } from "./plusServidor";
 import { PLUS_DEMO } from "./plusDemo";
 import {
   activarFounder, consultarFounder,
-  registrarVistaFounder, exigirPagosReales, cacheFounder, estadoFounderVigente,
+  registrarVistaFounder, exigirPagosReales, consultarPermisoPagoTester, cacheFounder, estadoFounderVigente,
   CACHE_FOUNDER_MS, ahoraMonotono, type CacheFounder, type EstadoFounder, type FuentePlus,
 } from "./founderPlus";
 
@@ -38,6 +38,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
   const [cargando, setCargando] = useState(!PLUS_DEMO), [revisionPlay, setRevisionPlay] = useState(false);
   const [remoto, setRemoto] = useState<EstadoFounder | null>(null), [instante, setInstante] = useState(0);
   const [error, setError] = useState<unknown>(null);
+  const [permisoTester, setPermisoTester] = useState(false);
   const [cacheVisible, setCacheVisible] = useState<CacheFounder | null>(null);
   const [identidad, setIdentidad] = useState<string | null>(null);
   const generacion = useRef(0), usuario = useRef<string | null>(null), montado = useRef(true), operando = useRef(false);
@@ -51,7 +52,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
       setTimeout(() => { if (montado.current) void cargar(); }, 0);
     }
   }
-  function limpiar() { cache.current = null; setCacheVisible(null); setIdentidad(null); setRemoto(null); setInfo(null); setCatalogo(null); setErrorCatalogo(null); setRevisionPlay(false); }
+  function limpiar() { cache.current = null; setCacheVisible(null); setIdentidad(null); setRemoto(null); setInfo(null); setCatalogo(null); setErrorCatalogo(null); setRevisionPlay(false); setPermisoTester(false); }
   function adoptar(estado: EstadoFounder, id: string) {
     cache.current = cacheFounder(estado, id); setInstante(ahoraMonotono()); setCacheVisible(cache.current); setIdentidad(id); setRemoto(estado); setRevisionPlay(estado.access_source === "PLAY_REVIEW");
   }
@@ -73,7 +74,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
   async function cargar(usuarioId?: string) {
     if (PLUS_DEMO) { setCargando(false); return; }
     if (operando.current) { recargaPendiente.current = true; return; }
-    const turno = ++generacion.current; setCargando(true); setError(null);
+    const turno = ++generacion.current; setCargando(true); setError(null); setPermisoTester(false);
     try {
       const actual = await asegurarSesion();
       const id = usuarioId ?? actual.id;
@@ -87,7 +88,10 @@ export function PlusProvider({ children }: { children: ReactNode }) {
       if (!PLUS_DISPONIBLE || estado.access_source === "PLAY_REVIEW") {
         quitarListener(); setInfo(null); setCatalogo(null); setErrorCatalogo(null); return;
       }
-      if (!estado.real_payments_enabled) {
+      const tester = !estado.real_payments_enabled && actual.is_anonymous === false && await consultarPermisoPagoTester();
+      if (turno !== generacion.current || !montado.current) return;
+      setPermisoTester(tester);
+      if (!estado.real_payments_enabled && !tester) {
         quitarListener(); setInfo(null); setCatalogo(null); setErrorCatalogo(null);
         if (actual.is_anonymous !== false) return;
         // La consulta del catálogo no bloquea las acciones gratuitas del Trial.
@@ -113,6 +117,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
       if (turno === generacion.current && montado.current) {
         setInstante(ahoraMonotono());
         setInfo(null); setCatalogo(null); setErrorCatalogo(null); setRevisionPlay(false); setError(e);
+        setPermisoTester(false);
         // Sólo el trial ya comprobado admite caché breve, dentro de su plazo.
         if (cache.current?.estado.access_source !== "FOUNDER_TRIAL") { cache.current = null; setCacheVisible(null); setRemoto(null); }
         quitarListener();
@@ -192,7 +197,7 @@ export function PlusProvider({ children }: { children: ReactNode }) {
   }
   // El tiempo es un input explícito del render, también para React Compiler.
   const estado = PLUS_DEMO ? null : estadoFounderVigente(cacheVisible, identidad, instante);
-  const comercialDisponible = !PLUS_DEMO && PLUS_DISPONIBLE && estado?.real_payments_enabled === true;
+  const comercialDisponible = !PLUS_DEMO && PLUS_DISPONIBLE && !!estado && (estado.real_payments_enabled === true || permisoTester);
   const revision = revisionPlay && estado?.access_source === "PLAY_REVIEW";
   const pagado = estado?.access_source === "REVENUECAT_PAID" || (comercialDisponible && tieneEntitlementPlus(info));
   const tipoAcceso: FuentePlus = PLUS_DEMO ? "PLUS_DEMO" : revision ? "PLAY_REVIEW" : pagado ? "REVENUECAT_PAID" : estado?.active ? "FOUNDER_TRIAL" : "FREE";

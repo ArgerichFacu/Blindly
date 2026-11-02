@@ -5,6 +5,7 @@ import { Platform } from "react-native";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "./supabase";
 import { asegurarSesion, cuentaConClave, validarCambioCuenta, consultarPartidaCuenta } from "./sesion";
+import { identidadUsuario } from "./identidad";
 
 WebBrowser.maybeCompleteAuthSession();
 const PENDIENTE = "blindly.auth.pendiente.v1";
@@ -139,14 +140,16 @@ export async function entrarEmail(email: string, password: string) {
     return r.data.user;
   });
 }
-export async function cerrarSesion() {
+export async function cerrarSesion(conservarPartida = false) {
   return operacion(async () => {
     const u = await asegurarSesion();
     const datos = await supabase.rpc("mi_identidad_tiene_datos");
     if (datos.error) throw datos.error;
     if (u.is_anonymous && datos.data !== false) throw new Error("PROTEGER_INVITADO");
     const partida = await consultarPartidaCuenta(u);
-    if (partida) throw partida;
+    // Confirmación explícita sólo para una identidad recuperable. No hay
+    // abandono, DELETE de membresías, transferencia de host ni cierre de mesa.
+    if (partida && (!conservarPartida || !identidadUsuario(u).recuperable)) throw partida;
     await mismaSesion(u.id);
     const r = await supabase.auth.signOut({ scope: "local" });
     if (r.error) throw r.error;

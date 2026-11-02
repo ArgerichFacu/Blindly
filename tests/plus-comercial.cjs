@@ -7,7 +7,7 @@ const paquetes = ['$rc_monthly','$rc_annual','$rc_lifetime'].map((identifier,i)=
 const oferta = {identifier:'default',availablePackages:paquetes};
 let user = {id:'uuid-a',is_anonymous:true}, uuid = null, offerings = {current:oferta}, info = {entitlements:{active:{}},managementURL:null};
 let pagos = 0, restores = 0, sincronizaciones = 0, gestiones = 0, presentada, resultado = 'CANCELLED', consultarOfertas = async()=>offerings;
-let payments=true, founderPatch={};
+let payments=true, paymentTester=false, founderPatch={};
 const purchases = {
  isConfigured:async()=>uuid!==null, setLogLevel:async()=>{}, configure:o=>{uuid=o.appUserID;},
  getAppUserID:async()=>uuid, logIn:async id=>{uuid=id;}, getCustomerInfo:async()=>info,
@@ -27,7 +27,7 @@ const react = {
 };
 const ctx = {};
 const {estado,helper}=require('./founder-fixture.cjs');
-const founder=helper(async name=>({data:name==='estado_lanzamiento_plus'?{real_payments_enabled:payments}:estado({real_payments_enabled:payments,...founderPatch}),error:null}));
+const founder=helper(async name=>({data:name==='estado_lanzamiento_plus'?{real_payments_enabled:payments}:name==='mi_permiso_pago_tester'?paymentTester:estado({real_payments_enabled:payments,...founderPatch}),error:null}));
 vm.runInNewContext(compilar('src/lib/PlusContext.tsx'),{exports:ctx, setTimeout:()=>0,clearTimeout:()=>{},setInterval:()=>0,clearInterval:()=>{},
  require:n=>({
   react, 'react/jsx-runtime':{jsx:(_type,props)=>props},
@@ -115,5 +115,13 @@ const protegido = id => ({id,is_anonymous:false,email:`${id}@recovery.blindly.in
  const antes=pagos,pending=render().comprar();await new Promise(r=>setImmediate(r));
  authChanged('SIGNED_IN',{user:protegido('uuid-c')});resolve({current:oferta});await pending;
  assert.equal(pagos,antes,'un cambio de UUID durante ofertas no abre el pago anterior');
+ // QA privado permite el flujo, sin mutar el flag global ni conceder Plus.
+ payments=false;paymentTester=true;user=protegido('qa-tester');authChanged('SIGNED_IN',{user});
+ info={entitlements:{active:{}},managementURL:null};consultarOfertas=async()=>({current:oferta,all:{default:oferta}});
+ await render().refrescar();assert.equal(render().disponible,true);assert.equal(render().pagosRealesActivos,false);assert.equal(render().activo,false);
+ const antesQA=pagos;await render().comprar();assert.equal(pagos,antesQA+1);assert.equal(render().activo,false,'Permiso y resultado PURCHASED sin entitlement no otorgan Plus');
+ paymentTester=false;await assert.rejects(render().comprar(),/PLUS_PAGOS_NO_DISPONIBLES/);assert.equal(pagos,antesQA+1);
+ await render().refrescar();assert.equal(render().disponible,false);
+ paymentTester=true;await render().refrescar();authChanged('SIGNED_OUT',null);assert.equal(render().disponible,false,'Logout limpia permiso tester de inmediato');
  console.log('Plus: catálogo OFF sin cobros/grants, Trial aislado, identidad/carreras y doble gate; compra/restore/management ON sólo simulados OK');
 })().catch(e=>{console.error(e);process.exitCode=1;});

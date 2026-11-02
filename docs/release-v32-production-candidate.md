@@ -1,5 +1,36 @@
 # Blindly 1.0 — v32 production candidate
 
+## Revisión posterior al catálogo de v31
+
+La etapa catálogo pasó en v31 desde Play; ahora se prepara el mismo versionCode32 (todavía no cargado a Play, sujeto a nueva lectura antes de construir) con el permiso privado necesario para QA de compras. **El primer AAB32 es referencia técnica, no la entrega final para cargar Alpha.** El perfil production-candidate deja autoIncrement=false para conservar32 mientras siga libre en Play; EAS remoto ya está en32. No se manipula la versión de Play ni se reasigna un código ya cargado.
+
+- `private.plus_payment_testers` + helper privado SECURITY DEFINER con auth.uid validado, sin UUID de entrada; RPC pública SECURITY INVOKER devuelve sólo permiso propio. RLS y sin permisos de tabla cliente. No concede Plus ni escribe accesos_plus. Reviewer/anónimo/baneado no pueden usarlo. La cuenta Google elegida conserva su UUID y está insertada **enabled=false** hasta verificar Pruebas de licencia; Alpha no las reemplaza. No se inició compra.
+- Migración `20261102220150_payment_testers_gate_b.sql` aplicada vía CLI al proyecto correcto y registrada con migration repair después de ejecutar el SQL. Test transaccional con rol authenticated en servidor pasa y revierte su contexto. Global payments=false, Founder Trial=true, cero filas comerciales para ese tester. La migración anterior de waitlist ya se encontró aplicada y marcada DEPRECATED, sin volver a ejecutarla; conserva13 filas históricas de funnel y1 de waitlist.
+- Cliente distingue permiso QA del flag global, limpia permiso al cambiar identidad/background y reconsulta la autorización antes del paywall/restore/gestión. Error/red ausente falla cerrado sin bloquear Trial. Suite SQL/cliente verifica que habilitar el flujo no otorga Plus.
+- sincronizar-plus versión3 ACTIVE, verify_jwt=true conservado; sin JWT devuelve401. Ahora clasifica entorno sandbox/production desde la transacción devuelta por RevenueCat (suscripción o Lifetime por producto/fecha), no desde flags del cliente. Sin entitlement sigue inactivo; Lifetime mantiene vence_en=null. Se conserva verificación por getUser y secreto server-side. Tests ejecutan el handler con respuestas controladas; todavía falta una compra real de prueba.
+- Logout del caso original: auditoría de sólo lectura encontró3 salas Reviewer `jugando`, última actividad de octubre, con miembro dentro del orden y un host. No se cerraron ni declararon vencidas por antigüedad. Se añade confirmación explícita para cuentas recuperables: **Cerrar sesión conservando la partida**. No cambia mesas/memberships/host/fichas/puntos; permite recuperar la misma cuenta después. El invitado no puede evadir su protección. Volver a la partida y Cancelar conservan la sesión.48 escenarios Auth + UI de confirmación pasan; repetir físicamente en v32.
+- Site URL cambió de localhost:3000 a la homepage real https://argerichfacu.github.io/Blindly/ mediante config mínimo privado y diff revisado con un único campo declarado. Verificación posterior: Google, callback exacto, anónimo, manual linking y confirmación de correo conservados. **No cambia el hostname OAuth Supabase**. Custom domains: API devuelve entitlement_required, requiere plan Pro+ y add-on; no se contrató ni inventó dominio. El titular no sabe aún si hay dominio propio.
+
+## Resultado técnico del primer AAB32
+
+EAS `26bbfb5d-55fc-4957-b7fe-68cef91275bd`, FINISHED, source97c0c74, code32/name1.0.0. Archivo de referencia G:/Blindly/entregas/Blindly-1.0.0-production-candidate-v32.aab, SHA256 `246ee006d6abfba9c61aa4ba7803f83d8d14948458d70684a977ddb152704c91`. Bundletool/jarsigner pasan; certificado de carga igual a v30/v31, package y Billing correctos, permisos sin delta, cuatro ABI/16KB alignment, Android SDK key correcta, sin Test Store ni archivos de credenciales detectados.
+
+| Medición | v31 | Primer v32 |
+|---|---:|---:|
+| AAB bytes |108122521|102851105|
+| DEX total bytes |71833068|17170456|
+| DEX archivos |7|2|
+| class_defs |58447|17760|
+| method_ids sumados, no únicos |428564|106708|
+
+DEX −76,10%; AAB −4,88% (v32 incluye metadata/mapping comprimidos que v31 no tenía). r8.json efectivo: R8 8.12.14, obfuscation/optimizations/shrinking=true, ProGuardCompatibilityMode=false y optimizedResourceShrinking=true; noOptimizationPercentage18,02. Configuration sin dontoptimize/dontshrink/dontobfuscate globales. **No equivale al resultado DEX de Play.**
+
+Mapping/configuration/usage/seeds/resources/r8.json conservados fuera de Git en G:/Blindly/privado/v32-r8. Mapping del AAB y del tar idénticos, SHA256 `9b666bbb55d90bf6a2e8dc21ef12e8f57b7c2db2ab843727949b1e8df5c18795`. La revisión final con QA privado necesita su propio SHA/mapping y repetir validación; no atribuirle estos hashes.
+
+Los apartados siguientes documentan la preparación inicial. Cuando indiquen pendiente de acceso/catálogo/build/migración, esta actualización registra el avance sin reescribir evidencias históricas.
+
+Actualización 18:47 ART: teléfono conectado/autorizado, v31 desde Play y firma confirmadas. Cuenta protegida administracionblindly@gmail.com con Google; SDK default devuelve los tres paquetes/precios ARS reales e igualdad de identidad. **Etapa catálogo aprobada**, no Gate B completo. Trial disponible sin activarlo; UI y rama de código v31 confirman pagos OFF. Ver [evidencia nueva](payment-rc-gate-b.md). V32 continúa en compilación; repetir su QA. Dominio propio sigue sin confirmar según el titular; no cambiar DNS/Auth por inferencia. CI671828d también success.
+
 02/11/2026, ART. **En preparación; NO aprobada para producción.** Gate A cerrado, Founder Trial conservado y pagos públicos deshabilitados. Sin cambios de package `com.blindly.studio`, firma, entitlement `blindly_plus`, productos ni precios.
 
 ## Base y v31
