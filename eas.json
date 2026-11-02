@@ -38,6 +38,11 @@
       "distribution": "store",
       "android": { "buildType": "app-bundle" },
       "env": { "EXPO_PUBLIC_PLUS_READY": "true" }
+    },
+    "payment-rc": {
+      "extends": "play-testing",
+      "credentialsSource": "local",
+      "env": { "EXPO_PUBLIC_PAYMENT_RC_DIAGNOSTICS": "true" }
     }
   },
   "submit": {

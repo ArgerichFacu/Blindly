@@ -9,6 +9,12 @@ import Purchases, {
 export const PLUS_ENTITLEMENT = "blindly_plus";
 export const PLUS_HABILITADO =
   process.env.EXPO_PUBLIC_PLUS_READY === "true";
+const DIAGNOSTICO_PAYMENT_RC =
+  process.env.EXPO_PUBLIC_PAYMENT_RC_DIAGNOSTICS === "true";
+
+function registrarCatalogoRC(evento: Record<string, unknown>) {
+  if (DIAGNOSTICO_PAYMENT_RC) console.info("[BlindlyPaymentRC]", JSON.stringify(evento));
+}
 
 const clave =
   Platform.OS === "ios"
@@ -82,11 +88,28 @@ export async function prepararIdentidadCompra(usuario: User) {
 
 // Inicializar/consultar no autoriza compras ni sincroniza accesos comerciales.
 export async function consultarCatalogoPlus(usuario: User) {
-  await prepararIdentidadCompra(usuario);
-  const oferta = (await Purchases.getOfferings()).all.default;
-  if ((await Purchases.getAppUserID()) !== usuario.id) throw new Error("SESION_CAMBIO");
-  if (!oferta) throw new Error("PLUS_OFERTA_INCOMPLETA");
-  return oferta;
+  try {
+    await prepararIdentidadCompra(usuario);
+    const oferta = (await Purchases.getOfferings()).all.default;
+    if ((await Purchases.getAppUserID()) !== usuario.id) throw new Error("SESION_CAMBIO");
+    if (!oferta) throw new Error("PLUS_OFERTA_INCOMPLETA");
+    registrarCatalogoRC({
+      evento: "catalogo_leido", sdkConfigurado: true, identidadCoincide: true,
+      offering: oferta.identifier,
+      paquetes: oferta.availablePackages.map(paquete => ({
+        paquete: paquete.identifier, producto: paquete.product.identifier,
+        precio: paquete.product.price, precioLocalizado: paquete.product.priceString,
+        moneda: paquete.product.currencyCode,
+      })),
+    });
+    return oferta;
+  } catch (error) {
+    // Nunca registrar el error crudo: el SDK puede incluir identificadores o recibos.
+    const codigos = ["PLUS_NO_CONFIGURADO", "PLUS_PROTEGER_CUENTA", "SESION_CAMBIO", "PLUS_OFERTA_INCOMPLETA"];
+    const codigo = error instanceof Error && codigos.includes(error.message) ? error.message : "SDK_ERROR";
+    registrarCatalogoRC({ evento: "catalogo_error", codigo });
+    throw error;
+  }
 }
 
 export async function obtenerOfertaPlus() {
