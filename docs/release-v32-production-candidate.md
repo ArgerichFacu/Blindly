@@ -1,5 +1,11 @@
 # Blindly 1.0 — v32 production candidate
 
+Corrección backend adicional: `20261102222856_preservar_uuid_trial_en_auth.sql` aplicada y registrada. mi_identidad_tiene_datos ahora incluye Trial activo/vencido, accesos comerciales y presencia/ownership de mesas, además de historial/clubes/plantillas. Sólo visitar Plus no cuenta como progreso. Esto evita que el Google automático cambie de UUID cuando el único dato era la prueba de72h; no cambia Trial ni el contrato RPC y no exige recompilar Android. Pruebas SQL de antes/después/expirado pasan. Mantiene comparación auth.uid, sin UUID de entrada ni metadata como autorización.
+
+Advisors del backend:55 WARN y0 ERROR, sin hallazgos nuevos frente a la lectura previa ni permisos cliente sobre la tabla de testers. Se conservan avisos existentes de funciones SECURITY DEFINER/identidades anónimas/extensión y leaked-password protection desactivada. Esta última requiere Pro+ según [Supabase](https://supabase.com/docs/guides/auth/password-security); queda revisión de seguridad de Auth antes de producción, sin contratar planes ni alterar passwords.
+
+Estado actual de la revisión QA: source `3f75f7725291c7603844c733919b548d577f46eb` (`demo`) en main, CI [41535872179](https://github.com/ArgerichFacu/Blindly/actions/runs/41535872179) success. Nueva build EAS `834874ed-c72b-4434-8b0e-f6addad86d02`, mismo code32 libre en Play a19:16 ART; todavía en cola al registrar. El titular confirmó Pruebas de licencia guardadas para la lista dedicada; ahora sólo su permiso privado está enabled=true, global=false, Trial=true y cero grants. Falta prueba del medio sandbox en el diálogo real. No usar el primer AAB de referencia para omitir esta revisión de Auth/logout/QA.
+
 ## Revisión posterior al catálogo de v31
 
 La etapa catálogo pasó en v31 desde Play; ahora se prepara el mismo versionCode32 (todavía no cargado a Play, sujeto a nueva lectura antes de construir) con el permiso privado necesario para QA de compras. **El primer AAB32 es referencia técnica, no la entrega final para cargar Alpha.** El perfil production-candidate deja autoIncrement=false para conservar32 mientras siga libre en Play; EAS remoto ya está en32. No se manipula la versión de Play ni se reasigna un código ya cargado.

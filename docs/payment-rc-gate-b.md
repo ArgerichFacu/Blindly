@@ -1,5 +1,7 @@
 # Payment RC — Gate B
 
+Licencia, 02/11/2026: el titular abrió la pantalla real Licencia para testing (/license-tester), creó/seleccionó la lista dedicada Blindly Billing QA con administracionblindly@gmail.com y confirmó guardado. RESPOND_NORMALLY se conserva; listas Alpha/interna no se seleccionan como conjunto para facturación. Es confirmación del titular, no lectura por API. Se habilitó sólo su fila privada, verificada con contexto authenticated en transacción revertida: permiso=true, flag global=false, cero accesos_plus para ese UUID. Antes de confirmar cualquier compra, comprobar en el teléfono cuenta Google correcta y medio “de prueba”; si aparece un medio real, detener.
+
 Actualización posterior: CLI administradora ya accede a Blindly. Lectura directa confirma Founder Trial=true y real_payments_enabled=false. Allowlist privada implementada/aplicada, cuenta administracionblindly@gmail.com registrada deshabilitada; el titular no confirmó estar en Pruebas de licencia. No se iniciarán compras hasta verificarlo y observar medio sandbox. V32 se recompila con permiso de QA separado del flag global; no habilitar pagos públicos. sincronizar-plus clasifica entorno por transacción, sin conceder Plus por estar en la lista. [Revisión actual v32](release-v32-production-candidate.md).
 
 ## Evidencia nueva — v31 desde Play, 02/11/2026 18:45–18:47 ART
