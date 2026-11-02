@@ -45,3 +45,7 @@ La arquitectura actual exige `real_payments_enabled=true` en servidor para abrir
 QA pendiente: compra mensual/anual, renovación, cancelación/expiración, Founder no consumible y expirationDate null, restore, restart, logout/login, reinstalación desde Play, cambio de identidad, otro dispositivo compatible, pending/cancelación de flujo, convivencia y vencimiento Trial, CustomerInfo, sincronizar-plus/accesos_plus y RTDN de eventos reales de test. Cada punto se documentará como aprobado, fallido o no ejecutado con evidencia; la notificación de configuración de Gate A no satisface esos eventos.
 
 No se habilitan pagos públicos automáticamente después del QA. No se implementa ni despliega la allowlist antes de aprobar esta primera fase del catálogo.
+
+## Actualización de preparación
+
+AAB v31 EAS terminado y validado: ver release-payment-rc-v31.md. El teléfono quedó autorizado por USB; baseline v30 de Play y certificado de distribución registrados. Track tester agregado/aceptado y cuenta protegida Google correcta observada tras reinstalación v30 expresamente pedida por el titular. Todavía no hay v31 instalada porque el AAB no fue cargado a Alpha. Todos los controles runtime de la tabla siguen pendientes; los datos de fixtures no son precios localizados del teléfono.
