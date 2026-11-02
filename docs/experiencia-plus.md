@@ -1,5 +1,7 @@
 # Experiencia Plus: mesas, estadísticas y recap
 
+Actualización v32: con pagos habilitados, Obtener Plus funciona antes/durante/después del Founder Trial opcional; el pago tiene prioridad comercial independiente. Con pagos deshabilitados no se ofrece compra ni restore. Waitlist/interés retirados de UX; historia conservada y revocación cliente preparada en migration. Ver [estado y QA de v32](release-v32-production-candidate.md). No se cambia el acceso a mesas/estadísticas/recap descrito a continuación.
+
 La migración `20261005170548_plus_mesas_estadisticas_recap.sql` completa las fases 8 a 13 del plan freemium. Reutiliza `salas`, `puntuacion_partidas`, `liga_temporadas` y la verificación server-side del entitlement `blindly_plus`.
 
 Está aplicada y registrada en el proyecto remoto `ddvbbkwhisuezloorhfg`. La auditoría del 5 de octubre de 2026 verificó tabla, RLS, política de owner, privilegios, RPC públicas, helpers privados y el límite Free; una prueba real con una identidad temporal confirmó los bloqueos Plus y la privacidad del recap.

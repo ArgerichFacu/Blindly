@@ -57,3 +57,46 @@ Activación futura: sólo tras CI, AAB, Alpha/QA/Auth/R8/DEX, Gate B/Billing, pr
 **Production candidate APPROVED: NO. Producción automática: NO.** Build ID/SHA, mediciones y checks se registrarán con evidencia efectiva.
 
 Validación local: npm test completo, TypeScript y lint código0. Pruebas adicionales después:46 escenarios Auth, estados de logout y UI protegida/guest/reset/registro/legacy; generación Android real y Plus ON/OFF simulado. Sin resultados físicos inventados. Logs fuera de Git en G:/Blindly/cache/v32-*.log. La migración se verifica con historial completo PGlite y revocación de permisos, no contra otro proyecto remoto.
+
+Build iniciado: EAS `26bbfb5d-55fc-4957-b7fe-68cef91275bd`, code32/name1.0.0, source `97c0c747bed0c6bbef7c163dced90580edd31a5b`, perfil production-candidate, checkout limpio G:/Blindly/cache/production-candidate-v32. CI [41525792280](https://github.com/ArgerichFacu/Blindly/actions/runs/41525792280): tipos/lint/tests/compatibilidad/auditoría crítica pasan; empaquetado todavía en curso al registrar esta observación. No confundir con build terminado.
+
+CI final del commit de código: **success**, incluido empaquetado web/Android/iOS (02/11/2026 18:13 ART). Escaneo de372 archivos versionados sin patrones de claves privadas/JSON de servicio/claves SDK reales embebidas. El resultado no reemplaza la inspección del AAB.
+
+## Controles solicitados para el cierre
+
+| # | Control | Estado efectivo |
+|---|---|---|
+|1|CTA Plus|Obtener Plus cuando pagos ON; oculto OFF|
+|2|Compra inmediata|Implementada/probada con SDK simulado; real pendiente|
+|3|Founder Trial|72h opt-in, sin renovación/cobro; lógica servidor intacta|
+|4|Waitlist|UX retirada, historia preservada; revocación remota pendiente|
+|5|Google login|Un CTA ES/EN/PT; pruebas locales pasan|
+|6|Google link interno|Servicio decide y conserva UUID; Seguridad permite vínculo|
+|7|BLINDLY1|Sólo recovery legacy en UI; sin nueva creación|
+|8|Google branding|Configuración histórica documentada; verificación actual pendiente|
+|9|Dominio OAuth mostrado|Sigue Supabase según evidencia del titular; sin prueba de cambio|
+|10|Custom Auth domain|Sin dominio DNS acreditado ni add-on; no modificado|
+|11|Logout|Corrección/UX implementadas; QA físico pendiente|
+|12|Stale|Eliminado/fuera de orden/huérfana/finalizada/host sin miembros cubiertos; caso remoto original pendiente|
+|13|Danger Zone|Sólo cuenta recuperable en Mi cuenta; tests guest/registro/reset/recovery pasan|
+|14|R8|Configuración persistente y generación nativa verificadas; build/QA pendientes|
+|15|Shrink|Código y recursos activados en release|
+|16|Obfuscation|Defaults optimize/full mode; confirmar mapping efectivo|
+|17|DEX antes/después|Base v31 medida; v32 pendiente|
+|18|Mapping|Solicitado como artefacto; descarga privada pendiente|
+|19|Play DEX|Sin resultado v32 todavía|
+|20|Financial Features|No cambiar por IAP; lectura actual pendiente|
+|21|Billing declarations|Auditoría actual pendiente|
+|22|Data Safety|Lectura/reconciliación actual pendiente; no sobrescrita|
+|23|Content Rating|IARC actual pendiente|
+|24|Store Listing|Leída por API: sin promesa incorrecta gratis/sin compras permanentes|
+|25|Gate B|Pendiente de SDK en instalación Play|
+|26|Billing QA|Pendiente license tester/allowlist/método sandbox y eventos reales|
+|27|Tests|Suite completa y46 casos Auth adicionales pasan local; CI pasa|
+|28|Typecheck|Código0 y CI pasa|
+|29|Lint|Código0 y CI pasa|
+|30|CI|41525792280 success para97c0c74|
+|31|EAS v32|26bbfb5d-55fc-4957-b7fe-68cef91275bd iniciado|
+|32|SHA-256|Pendiente artefacto terminado|
+|33|Alpha|v31 completed; v32 todavía sin cargar|
+|34|Bloqueantes producción|Build/AAB/DEX/mapping, acceso administrativo correcto, dominio/branding, declaraciones, Gate B/Billing, QA físico y autorización final|

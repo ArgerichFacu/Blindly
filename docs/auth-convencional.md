@@ -1,5 +1,7 @@
 # Auth convencional — candidato Android v28
 
+Actualización v32: un único Ingresar con Google en Acceso/introducción; el servicio elige login o vínculo según identidad/progreso. Vincular Google queda en Seguridad. BLINDLY1 sólo recupera cuentas antiguas, sin creación desde UI; eliminación sólo para cuenta protegida en Mi cuenta. Logout distingue membership residual/eliminado/sala finalizada de participación activa y ofrece volver a la partida. Implementación/pruebas en [v32](release-v32-production-candidate.md); el QA físico anterior no se atribuye a v32. Las secciones v28 siguientes son históricas.
+
 Estado al 12/10/2026: **cerrada la validación Android pendiente de Google/correo, cambio de password, cancelación y corte de red**. Email/password, reset y Google comprobados contra Supabase real mediante SDK oficial. SMTP Gmail, Google OAuth y marca guardados; callbacks exactos configurados. Login, errores, persistencia, logout y Plus comprobados en emulador. A32 v28: retornos Google/correo, Google con proceso cerrado, cancelación OAuth y cambio de password desde UI pasan. No equivale al cierre de publicación: conservar los límites de QA y pendientes externos que se detallan abajo. **v28 disponible para testers internos desde las 14:27 ART**, reemplazando v22 en ese canal. Ver [entrega y alcance del cierre](auth-entrega.md).
 
 ## Funcionamiento e identidad
