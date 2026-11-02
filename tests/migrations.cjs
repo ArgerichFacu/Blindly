@@ -48,6 +48,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261012221902_founder_guard_lecturas.sql",
     "20261014074959_nombre_visible_perfil.sql",
     "20261014075731_nombre_visible_unicode.sql",
+    "20261102210000_deprecar_waitlist_plus.sql",
   ]);
 
   const baseSources = fs

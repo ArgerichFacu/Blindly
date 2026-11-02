@@ -61,8 +61,6 @@ async function rpcEstado(nombre: string, parametros?: { p_plan: PlanPlus }) {
 }
 export const consultarFounder = () => rpcEstado("estado_founder_trial");
 export const activarFounder = () => rpcEstado("iniciar_prueba_founder");
-export const guardarInteresFounder = (plan: PlanPlus) => rpcEstado("registrar_interes_plus", { p_plan: plan });
-export const guardarWaitlistFounder = () => rpcEstado("registrar_waitlist_plus");
 export async function registrarVistaFounder() {
   const r = await supabase.rpc("registrar_vista_plus");
   if (r.error) throw new Error("PLUS_LANZAMIENTO_NO_DISPONIBLE");

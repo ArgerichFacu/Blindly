@@ -1,5 +1,7 @@
 # Blindly v31 — Payment RC
 
+Actualización 02/11/2026 18:00 ART: API Play confirma Alpha31 completed, SHA AAB coincidente y producción sin releases. Las secciones anteriores de carga pendiente quedan como historia; la carga ya fue realizada por el titular. Gate B runtime sigue pendiente. Preparación siguiente: [v32](release-v32-production-candidate.md).
+
 02/11/2026 (ART). Preparación autorizada después de Gate A. **AAB EAS terminado, descargado y validado; carga/distribución Alpha y Gate B pendientes.**
 
 | Campo | Estado previsto / resultado |

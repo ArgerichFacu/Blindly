@@ -2602,3 +2602,66 @@ Object.assign(errores, {
   NOMBRE_VISIBLE_INVALIDO: "Ingresá un nombre de 1 a 30 caracteres, sin saltos de línea ni caracteres de control.",
   NOMBRE_VISIBLE_NO_COINCIDE: "Tu sesión cambió. Volvé a intentarlo."
 });
+
+Object.assign(textos, {
+  "Ingresar con Google": [
+    "Sign in with Google",
+    "Entrar com Google"
+  ],
+  "Vincular Google": [
+    "Link Google",
+    "Vincular Google"
+  ],
+  "Recuperar cuenta antigua": [
+    "Recover an old account",
+    "Recuperar conta antiga"
+  ],
+  "Protegé tu cuenta vinculando Google o email.": [
+    "Protect your account by linking Google or email.",
+    "Proteja sua conta vinculando Google ou email."
+  ],
+  "BLINDLY PLUS": [
+    "BLINDLY PLUS",
+    "BLINDLY PLUS"
+  ],
+  "La prueba es opcional: 72 horas, una vez por cuenta. Sin tarjeta ni cobro automático.": [
+    "The trial is optional: 72 hours, once per account. No card or automatic charge.",
+    "A experiência é opcional: 72 horas, uma vez por conta. Sem cartão nem cobrança automática."
+  ],
+  "Podés comprar Plus ahora, sin empezar la prueba ni esperar a que termine.": [
+    "You can buy Plus now, without starting the trial or waiting for it to end.",
+    "Você pode comprar Plus agora, sem iniciar a experiência nem esperar que termine."
+  ],
+  "Obtener Plus": [
+    "Get Plus",
+    "Obter Plus"
+  ],
+  "Suscripción mensual. Renovación automática.": [
+    "Monthly subscription. Auto-renews.",
+    "Assinatura mensal. Renovação automática."
+  ],
+  "Suscripción anual. Renovación automática.": [
+    "Annual subscription. Auto-renews.",
+    "Assinatura anual. Renovação automática."
+  ],
+  "Pago único. Sin renovación.": [
+    "One-time payment. No renewal.",
+    "Pagamento único. Sem renovação."
+  ],
+  "Founder Trial es independiente de Google Play. No inicia una suscripción y no se cobra al terminar.": [
+    "Founder Trial is separate from Google Play. It does not start a subscription and there is no charge when it ends.",
+    "Founder Trial é independente do Google Play. Não inicia uma assinatura e não há cobrança ao terminar."
+  ],
+  "Volver a la partida": [
+    "Return to the game",
+    "Voltar à partida"
+  ],
+  "Sos anfitrión de una mesa activa. Volvé para terminarla de forma segura; cerrar sesión no elimina la mesa.": [
+    "You host an active table. Return to finish it safely; signing out does not delete the table.",
+    "Você é anfitrião de uma mesa ativa. Volte para encerrá-la com segurança; sair da conta não exclui a mesa."
+  ],
+  "Seguís participando en una partida. Volvé a la mesa para resolver tu salida antes de cerrar sesión.": [
+    "You are still in a game. Return to the table to resolve leaving before signing out.",
+    "Você ainda participa de uma partida. Volte à mesa para resolver sua saída antes de sair da conta."
+  ]
+});

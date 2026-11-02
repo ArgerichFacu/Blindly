@@ -79,6 +79,7 @@
       "expo-asset",
       "./plugins/with-revenuecat-android",
       "./plugins/with-android-page-sizes",
+      "./plugins/with-android-release-optimization",
       "expo-sharing"
     ],
     "experiments": {

@@ -43,6 +43,10 @@
       "extends": "play-testing",
       "credentialsSource": "local",
       "env": { "EXPO_PUBLIC_PAYMENT_RC_DIAGNOSTICS": "true" }
+    },
+    "production-candidate": {
+      "extends": "payment-rc",
+      "buildArtifactPaths": ["android/app/build/outputs/mapping/release/**"]
     }
   },
   "submit": {

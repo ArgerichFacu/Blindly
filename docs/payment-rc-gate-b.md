@@ -1,5 +1,7 @@
 # Payment RC — Gate B
 
+Actualización v32, 02/11/2026 18:00 ART: API Play confirma v31 completed en Alpha y SHA coincidente. Carga/distribución cerradas; runtime, license tester, compras/restore/RTDN/accesos_plus pendientes. USB ausente. Validar con v32 desde Play repitiendo Auth/Plus/R8/logout; ver [candidata v32](release-v32-production-candidate.md).
+
 02/11/2026 (ART). Gate A aprobado en [payment-rc-gate-a.md](payment-rc-gate-a.md); no se repite. **Gate B todavía pendiente de instalación y ejecución desde Google Play.**
 
 ## Candidato y cuenta de prueba

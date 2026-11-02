@@ -107,11 +107,7 @@ const sb = {
       error: socialError,
     };
   },
-  from: () => ({
-    select: () => ({
-      eq: () => ({ in: () => ({ limit: async () => ({ data: activas }) }) }),
-    }),
-  }),
+  from: () => { const b={select:()=>b,eq:()=>b,in:()=>b,limit:async()=>({data:activas}),then:(a,c)=>Promise.resolve({data:activas}).then(a,c)};return b; },
 };
 const exportsAuth = {};
 vm.runInNewContext(
@@ -149,7 +145,7 @@ vm.runInNewContext(
     /PROTEGER_INVITADO/,
   );
   historial = 0;
-  activas = [{}];
+  activas = [{id:'sala',codigo:'ABCDE',estado:'jugando',host_id:'guest'}];
   await assert.rejects(
     () => exportsAuth.solicitarCodigo("test@example.com", true),
     /PROTEGER_INVITADO/,

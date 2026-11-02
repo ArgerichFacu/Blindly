@@ -8,9 +8,9 @@ import { PLUS_DISPONIBLE, PLUS_ENTITLEMENT, prepararCompras, prepararIdentidadCo
 import { sincronizarPlusServidor } from "./plusServidor";
 import { PLUS_DEMO } from "./plusDemo";
 import {
-  activarFounder, consultarFounder, guardarInteresFounder, guardarWaitlistFounder,
+  activarFounder, consultarFounder,
   registrarVistaFounder, exigirPagosReales, cacheFounder, estadoFounderVigente,
-  CACHE_FOUNDER_MS, ahoraMonotono, type CacheFounder, type EstadoFounder, type FuentePlus, type PlanPlus,
+  CACHE_FOUNDER_MS, ahoraMonotono, type CacheFounder, type EstadoFounder, type FuentePlus,
 } from "./founderPlus";
 
 type EstadoPlus = {
@@ -22,8 +22,7 @@ type EstadoPlus = {
   catalogo: PurchasesOffering | null; errorCatalogo: unknown;
   comprar: () => Promise<void>; restaurar: () => Promise<void>; gestionar: () => Promise<void>;
   refrescar: () => Promise<void>; iniciarPrueba: () => Promise<void>;
-  registrarVista: () => Promise<void>; registrarInteres: (plan: PlanPlus) => Promise<void>;
-  registrarWaitlist: () => Promise<boolean>;
+  registrarVista: () => Promise<void>;
 };
 const ContextoPlus = createContext<EstadoPlus>({
   disponible: false, cargando: false, activo: false, gestionable: false, vencimiento: null,
@@ -31,7 +30,7 @@ const ContextoPlus = createContext<EstadoPlus>({
   trialRestanteMs: 0, pagosRealesActivos: false, lanzamientoDisponible: false,
   catalogo: null, errorCatalogo: null,
   comprar: async () => {}, restaurar: async () => {}, gestionar: async () => {}, refrescar: async () => {},
-  iniciarPrueba: async () => {}, registrarVista: async () => {}, registrarInteres: async () => {}, registrarWaitlist: async () => false,
+  iniciarPrueba: async () => {}, registrarVista: async () => {},
 });
 export function PlusProvider({ children }: { children: ReactNode }) {
   const [info, setInfo] = useState<CustomerInfo | null>(null);
@@ -106,6 +105,10 @@ export function PlusProvider({ children }: { children: ReactNode }) {
       const nuevaInfo = await prepararCompras(id);
       if (turno !== generacion.current || !montado.current) return;
       setInfo(nuevaInfo); escucharCompras(); await sincronizarPlusServidor();
+      try {
+        const oferta = await consultarCatalogoPlus(actual);
+        if (turno === generacion.current && montado.current && usuario.current === id) setCatalogo(oferta);
+      } catch (e) { if (turno === generacion.current && montado.current) setErrorCatalogo(e); }
     } catch (e) {
       if (turno === generacion.current && montado.current) {
         setInstante(ahoraMonotono());
@@ -215,8 +218,6 @@ export function PlusProvider({ children }: { children: ReactNode }) {
     },
     refrescar: () => cargar(), iniciarPrueba: async () => { await operacionFounder(activarFounder); },
     registrarVista: async () => { if (!PLUS_DEMO) { await asegurarSesion(); await registrarVistaFounder(); } },
-    registrarInteres: async plan => { await operacionFounder(() => guardarInteresFounder(plan)); },
-    registrarWaitlist: async () => (await operacionFounder(guardarWaitlistFounder))?.contactable === true,
   };
   return <ContextoPlus.Provider value={valor}>{children}</ContextoPlus.Provider>;
 }

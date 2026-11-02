@@ -50,3 +50,38 @@ assert.equal(
 );
 
 console.log("Configuración nativa validada");
+const properties = config._internal.modResults.android.gradleProperties;
+const property = key => properties.find(p => p.type === 'property' && p.key === key)?.value;
+assert.equal(property('android.enableMinifyInReleaseBuilds'), 'true');
+assert.equal(property('android.enableShrinkResourcesInReleaseBuilds'), 'true');
+assert.equal(property('android.r8.optimizedResourceShrinking'), 'true');
+assert.notEqual(property('android.enableR8.fullMode'), 'false');
+// Introspect omite mods de Gradle. Generar de verdad en una copia descartable
+// verifica que el plugin sobreviva a prebuild sin tocar android/ del operador.
+const fs = require('node:fs'), path = require('node:path'), os = require('node:os');
+const tempRoot = fs.realpathSync(os.tmpdir());
+const fixture = fs.mkdtempSync(path.join(tempRoot, 'blindly-native-'));
+try {
+  for (const name of ['app.json', 'app.config.ts', 'package.json']) fs.copyFileSync(name, path.join(fixture, name));
+  for (const name of ['plugins', 'assets/images']) fs.cpSync(name, path.join(fixture, name), { recursive: true });
+  fs.symlinkSync(path.resolve('node_modules'), path.join(fixture, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
+  const prebuild = spawnSync(process.execPath, [require.resolve('expo/bin/cli'), 'prebuild', '--platform', 'android', '--no-install'], {
+    cwd: fixture, encoding: 'utf8', env: { ...process.env, CI: '1', EXPO_NO_DOTENV: '1' },
+  });
+  assert.equal(prebuild.status, 0, prebuild.stderr);
+  const gradle = fs.readFileSync(path.join(fixture, 'android/app/build.gradle'), 'utf8');
+  assert.match(gradle, /getDefaultProguardFile\("proguard-android-optimize.txt"\)/);
+  assert.doesNotMatch(gradle, /getDefaultProguardFile\("proguard-android.txt"\)/);
+  assert.match(gradle, /minifyEnabled enableMinifyInReleaseBuilds/);
+  assert.match(gradle, /shrinkResources enableShrinkResources.toBoolean\(\)/);
+  const generated = fs.readFileSync(path.join(fixture, 'android/gradle.properties'), 'utf8');
+  for (const key of ['android.enableMinifyInReleaseBuilds', 'android.enableShrinkResourcesInReleaseBuilds', 'android.r8.optimizedResourceShrinking']) assert.ok(generated.includes(key + '=true'));
+} finally {
+  const target = fs.realpathSync(fixture);
+  assert.equal(path.dirname(target), tempRoot);
+  assert.ok(path.basename(target).startsWith('blindly-native-'));
+  // Unlink the junction explicitly; never traverse shared dependencies.
+  if (fs.existsSync(path.join(target, 'node_modules'))) fs.unlinkSync(path.join(target, 'node_modules'));
+  fs.rmSync(target, { recursive: true, force: true, maxRetries: 3, retryDelay: 200 });
+}
+console.log('Release Android generada: R8, optimize defaults, full mode y resource shrinking habilitados; sin keep global agregado.');

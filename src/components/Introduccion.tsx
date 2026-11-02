@@ -64,7 +64,7 @@ export function Introduccion() {
               {t("No se pudo guardar tu progreso. Probá otra vez.")}
             </Texto>
           )}
-          <Boton titulo={t("Continuar con Google")} disabled={inicio.ocupado}
+          <Boton titulo={t("Ingresar con Google")} disabled={inicio.ocupado}
             onPress={() => router.push({ pathname: "/cuenta", params: { inicio: "1", accion: "google" } })}/>
           <Boton titulo={t("Crear cuenta / Iniciar sesión")} secundario disabled={inicio.ocupado}
             onPress={() => router.push({ pathname: "/cuenta", params: { inicio: "1" } })}/>

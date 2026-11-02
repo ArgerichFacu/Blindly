@@ -6,7 +6,8 @@ const state=async()=> (await q('select estado_founder_trial() s'))[0].s;
 const start=async()=> (await q('select iniciar_prueba_founder() s'))[0].s;
 (async()=>{
  await db.exec("create role anon;create role authenticated;create role service_role;create schema auth;create table auth.users(id uuid primary key,is_anonymous boolean default false,banned_until timestamptz,email text,email_confirmed_at timestamptz,raw_user_meta_data jsonb default '{}'::jsonb);create function auth.uid() returns uuid language sql as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;grant usage on schema auth to authenticated;grant execute on function auth.uid() to authenticated;create publication supabase_realtime;");
- for(const f of fs.readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')).sort())await db.exec(fs.readFileSync('supabase/migrations/'+f,'utf8'));
+ const deprecated='20261102210000_deprecar_waitlist_plus.sql';
+ for(const f of fs.readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')&&f!==deprecated).sort())await db.exec(fs.readFileSync('supabase/migrations/'+f,'utf8'));
  for(let n=1;n<=5;n++)await q('insert into auth.users(id,is_anonymous,email,email_confirmed_at) values($1,$2,$3,case when $4 then now() end)',[uid(n),n===1,n===3?'legacy@recovery.blindly.invalid':`qa${n}@example.org`,n!==1&&n!==4]);
  await own(1);let s=await state();assert.equal(s.eligible,true);assert.equal(s.used,false);assert.equal(s.real_payments_enabled,false);
  await q('select registrar_vista_plus()');await q('select registrar_vista_plus()');assert.equal((await state()).used,false,'Views never activate trial');
@@ -49,6 +50,15 @@ const start=async()=> (await q('select iniciar_prueba_founder() s'))[0].s;
  await db.exec('reset role');
  for(const table of ['plus_lanzamiento','plus_founder_trials','plus_founder_funnel']){const r=(await q("select relrowsecurity rls,has_table_privilege('authenticated',oid,'INSERT,UPDATE,DELETE,SELECT') access from pg_class where oid=$1::regclass",['private.'+table]))[0];assert.equal(r.rls,true);assert.equal(r.access,false);}
  await q('delete from auth.users where id=$1',[uid(1)]);assert.equal((await q('select count(*)::int n from private.plus_founder_trials where user_id=$1',[uid(1)]))[0].n,0);assert.equal((await q('select count(*)::int n from private.plus_founder_funnel where user_id=$1',[uid(1)]))[0].n,0);
- console.log('Founder SQL: 72h, idempotencia, RLS, cuatro identidades, expiración exacta, datos conservados, embudo y tres fases OK');
+ // Simula v31 antes de v32 y comprueba compatibilidad de lectura/historia.
+ const before=(await q('select * from private.plus_founder_funnel order by user_id'));
+ await db.exec(fs.readFileSync('supabase/migrations/'+deprecated,'utf8'));
+ assert.deepEqual(await q('select * from private.plus_founder_funnel order by user_id'),before);
+ await own(3);await assert.rejects(()=>q('select registrar_waitlist_plus()'),/permission denied/);
+ await assert.rejects(()=>q("select registrar_interes_plus('annual')"),/permission denied/);
+ assert.equal((await state()).access_source,'REVENUECAT_PAID');
+ await db.exec('reset role');
+ for(const role of ['anon','authenticated'])for(const fn of ['registrar_waitlist_plus()','registrar_interes_plus(text)'])assert.equal((await q('select has_function_privilege($1,$2,\'EXECUTE\') p',[role,fn]))[0].p,false);
+ console.log('Founder SQL: 72h, RLS, expiración, pago sobre Trial e historia conservados; endpoints waitlist/interés revocados en v32 OK');
  await db.close();
 })().catch(async e=>{console.error(e);await db.close();process.exitCode=1});

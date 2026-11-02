@@ -4,7 +4,7 @@ import * as Linking from "expo-linking";
 import { Platform } from "react-native";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "./supabase";
-import { asegurarSesion, cuentaConClave, validarCambioCuenta } from "./sesion";
+import { asegurarSesion, cuentaConClave, validarCambioCuenta, consultarPartidaCuenta } from "./sesion";
 
 WebBrowser.maybeCompleteAuthSession();
 const PENDIENTE = "blindly.auth.pendiente.v1";
@@ -145,12 +145,8 @@ export async function cerrarSesion() {
     const datos = await supabase.rpc("mi_identidad_tiene_datos");
     if (datos.error) throw datos.error;
     if (u.is_anonymous && datos.data !== false) throw new Error("PROTEGER_INVITADO");
-    const [jugador, host] = await Promise.all([
-      supabase.from("jugadores").select("sala:salas!inner(estado)").eq("user_id", u.id).in("sala.estado", ["jugando", "pausado"]).limit(1),
-      supabase.from("salas").select("id").eq("host_id", u.id).in("estado", ["jugando", "pausado"]).limit(1),
-    ]);
-    if (jugador.error || host.error) throw jugador.error ?? host.error;
-    if (jugador.data?.length || host.data?.length) throw new Error("PARTIDA_ACTIVA_CUENTA");
+    const partida = await consultarPartidaCuenta(u);
+    if (partida) throw partida;
     await mismaSesion(u.id);
     const r = await supabase.auth.signOut({ scope: "local" });
     if (r.error) throw r.error;
@@ -185,9 +181,20 @@ export async function guardarPassword(password: string, confirmacion: string) {
     return r.data.user;
   });
 }
-export async function continuarGoogle(vincular = true, contexto: ContextoAuth = {}) {
+export async function continuarGoogle(metodo: boolean | "auto" = "auto", contexto: ContextoAuth = {}) {
   return operacion(async () => {
     const u = await asegurarSesion();
+    // La elección de API pertenece al servicio, no al usuario. Una cuenta
+    // protegida/legacy siempre conserva su UUID; un invitado con progreso también.
+    if (metodo === "auto" && u.is_anonymous === false && u.identities?.some(i => i.provider === "google" && i.user_id === u.id)) return u;
+    let vincular = metodo === "auto" ? u.is_anonymous === false : metodo;
+    if (metodo === "auto" && u.is_anonymous !== false) {
+      try { await validarCambioCuenta(u); vincular = false; }
+      catch (e) {
+        if (!(e instanceof Error) || e.message !== "PROTEGER_INVITADO") throw e;
+        vincular = true;
+      }
+    }
     if (!vincular) await validarCambioCuenta(u);
     await mismaSesion(u.id);
     const opciones = { provider: "google" as const, options: { redirectTo: retornoAuth(), skipBrowserRedirect: true, queryParams: { prompt: "select_account" } } };

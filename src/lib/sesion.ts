@@ -33,6 +33,36 @@ export function cuentaConClave(usuario: User) {
   );
 }
 
+type SalaCuenta = { id: string; codigo: string; estado: string; host_id: string; orden: string[] };
+export class PartidaActivaCuenta extends Error {
+  constructor(readonly codigo: string, readonly anfitrion: boolean) { super("PARTIDA_ACTIVA_CUENTA"); }
+}
+// No se considera activa por antigüedad ni por una preferencia local. Se lee
+// el estado actual bajo RLS; un eliminado ya no tiene que quedarse en la mesa.
+export async function consultarPartidaCuenta(usuario: User): Promise<PartidaActivaCuenta | null> {
+  const [jugador, host] = await Promise.all([
+    supabase.from("jugadores").select("id,eliminado_en,sala:salas!inner(id,codigo,estado,host_id,orden)").eq("user_id", usuario.id).in("sala.estado", ["jugando", "pausado"]),
+    supabase.from("salas").select("id,codigo,estado,host_id").eq("host_id", usuario.id).in("estado", ["jugando", "pausado"]),
+  ]);
+  if (jugador.error || host.error) throw jugador.error ?? host.error;
+  // Un host puede estar eliminado y seguir a cargo de una mesa real.
+  for (const sala of host.data ?? []) {
+    if (!["jugando", "pausado"].includes(sala.estado)) continue;
+    const miembros = await supabase.from("jugadores").select("id").eq("sala_id", sala.id).limit(1);
+    if (miembros.error) throw miembros.error;
+    if (miembros.data?.length) return new PartidaActivaCuenta(sala.codigo, true);
+  }
+  for (const j of jugador.data ?? []) {
+    const sala = j.sala as unknown as SalaCuenta | null;
+    if (sala && ["jugando", "pausado"].includes(sala.estado) && !j.eliminado_en && sala.host_id !== usuario.id) {
+      if (!Array.isArray(sala.orden)) throw new Error("SESION_REQUERIDA");
+      if (!sala.orden.includes(j.id)) continue; // Membership residual fuera de los asientos actuales.
+      return new PartidaActivaCuenta(sala.codigo, false);
+    }
+  }
+  return null;
+}
+
 async function codigoFuncion(error: unknown, fallback: string) {
   const contexto = (
     error as { context?: { json?: () => Promise<{ code?: string }> } }
@@ -51,18 +81,10 @@ export async function validarCambioCuenta(usuario: User) {
   ]);
   if (propios.error) throw propios.error;
   if (typeof propios.data !== "boolean") throw new Error("SESION_REQUERIDA");
-  const partidas = await supabase
-    .from("jugadores")
-    .select("sala:salas!inner(estado)")
-    .eq("user_id", usuario.id)
-    .in("sala.estado", ["jugando", "pausado"])
-    .limit(1);
-  if (partidas.error) throw partidas.error;
-  const anfitrion = await supabase.from("salas").select("id").eq("host_id", usuario.id).in("estado", ["jugando", "pausado"]).limit(1);
-  if (anfitrion.error) throw anfitrion.error;
+  const partida = await consultarPartidaCuenta(usuario);
   if (
     (usuario.is_anonymous && propios.data) ||
-    partidas.data?.length || anfitrion.data?.length ||
+    partida ||
     plusActivo
   )
     throw new Error("PROTEGER_INVITADO");
