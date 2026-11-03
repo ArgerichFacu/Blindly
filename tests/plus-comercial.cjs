@@ -122,6 +122,13 @@ const protegido = id => ({id,is_anonymous:false,email:`${id}@recovery.blindly.in
  payments=false;paymentTester=true;user=protegido('qa-tester');authChanged('SIGNED_IN',{user});
  info={entitlements:{active:{}},managementURL:null};consultarOfertas=async()=>({current:oferta,all:{default:oferta}});
  await render().refrescar();assert.equal(render().disponible,true);assert.equal(render().pagosRealesActivos,false);assert.equal(render().activo,false);
+ assert.equal(plus.catalogoPlusValido({...oferta,availablePackages:[...paquetes].reverse()}),true,'El orden no cambia la identidad comercial');
+ for(const index of [0,1,2]){
+  const wrong=paquetes.map((p,i)=>i===index?{...p,product:{...p.product,identifier:'unrelated.android.product'}}:p);
+  assert.equal(plus.catalogoPlusValido({...oferta,availablePackages:wrong}),false,'No mezclar productos de otra app o base plan');
+ }
+ assert.equal(plus.catalogoPlusValido({...oferta,availablePackages:[paquetes[0],paquetes[1],paquetes[1]]}),false,'Un duplicado no sustituye Lifetime');
+ assert.equal(plus.catalogoPlusValido({...oferta,availablePackages:paquetes.map((p,i)=>i===2?{...p,product:{...p.product,priceString:' '}}:p)}),false,'Lifetime necesita precio localizado real');
  const antesQA=pagos;await render().comprar();assert.equal(pagos,antesQA+1);assert.equal(render().activo,false,'Permiso y resultado PURCHASED sin entitlement no otorgan Plus');
  paymentTester=false;await assert.rejects(render().comprar(),/PLUS_PAGOS_NO_DISPONIBLES/);assert.equal(pagos,antesQA+1);
  await render().refrescar();assert.equal(render().disponible,false);

@@ -23,7 +23,7 @@ let hooks=[],cursor=0,commercialCalls=0;
 let timers=new Map(),timerId=0;
 const schedule=(fn,delay)=>{const id=++timerId;timers.set(id,{fn,at:clock+delay,delay});return id};
 const advance=ms=>{clock+=ms;for(const [id,t] of [...timers])if(t.at<=clock){timers.delete(id);t.fn()}};
-const forbidden=()=>{commercialCalls++;throw Error('Phase 1 must not invoke billing SDK')};
+const forbidden=()=>{commercialCalls++;throw Error('Trial must not invoke commercial billing methods')};
 const react={createContext:()=>({Provider:'Provider'}),useContext(){},useState:v=>{const i=cursor++;if(!(i in hooks))hooks[i]=v;return [hooks[i],n=>hooks[i]=typeof n==='function'?n(hooks[i]):n]},useRef:v=>{const i=cursor++;if(!(i in hooks))hooks[i]={current:v};return hooks[i]},useEffect:(f,deps)=>{const i=cursor++,prev=hooks[i];if(!prev||deps.some((d,j)=>d!==prev.deps[j])){prev?.cleanup?.();hooks[i]={deps,cleanup:f()}}}};
 const out={},deps={react,'react/jsx-runtime':{jsx:(_,p)=>p},'react-native':{AppState:{currentState:'active',addEventListener:(_,f)=>{appChanged=f;return {remove(){}}}},Linking:{openURL:forbidden}},
  'react-native-purchases':{__esModule:true,default:new Proxy({},{get:()=>forbidden})},'react-native-purchases-ui':{__esModule:true,default:{presentPaywallIfNeeded:forbidden},PAYWALL_RESULT:{}},
@@ -47,5 +47,5 @@ const render=()=>{cursor=0;return out.PlusProvider({children:null}).value};
  appChanged('background');assert.equal(render().lanzamientoDisponible,false,'Background discards cache to avoid suspended-clock extension');
  user={id:'old',is_anonymous:false};changed('SIGNED_IN',{user});changed('SIGNED_OUT',null);user={id:'fresh',is_anonymous:true};changed('SIGNED_IN',{user});advance(1);await new Promise(r=>setImmediate(r));assert.equal(render().identidad,'fresh','Queued sign-in before logout cannot relabel the fresh session');
  assert.equal(commercialCalls,0);assert.ok(serverCalls>0);
- console.log('Founder cliente: reloj del servidor, caché limitada, sin SDK/cobros, offline, doble activación y cambio de UUID OK');
+ console.log('Founder cliente: reloj del servidor, caché limitada, catálogo aislado sin Billing/grants, offline, doble activación y cambio de UUID OK');
 })().catch(e=>{console.error(e);process.exitCode=1});

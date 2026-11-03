@@ -18,7 +18,7 @@ Brave / connector_openai_browser no figura en las herramientas de esta ejecució
 
 Custom Domain y vanity devuelven entitlement_required en el proyecto real. Supabase exige Pro+; [Pro desde USD25/mes](https://supabase.com/pricing), vanity incluido en plan pago; Custom Domain adicional [USD0,0137/h, aproximadamente USD10/mes](https://supabase.com/docs/guides/platform/manage-your-usage/custom-domains). Requiere además dominio propio no acreditado por el titular y su coste de registro. Beneficio: Auth/OAuth con hostname de marca; vanity seguiría bajo supabase.co. No se contrató plan/add-on, no se inventó dominio y no se activó DNS. La URL pública sigue https://ddvbbkwhisuezloorhfg.supabase.co, el callback Google actual sigue vigente y blindly://auth-callback se conserva. Site URL conserva la homepage real ajustada en v32. El hostname técnico NO está resuelto; correo de seguridad Google pendiente de validación real.
 
-El teléfono no aparece conectado por ADB al iniciar v33. Las pruebas físicas, sandbox Billing y QA R8 desde Play no se sustituyen por pruebas simuladas ni sideload.
+El teléfono se conectó después: Samsung A32 autorizado, v32/name1.0.0 instalada desde Play. Está como invitado, no en la cuenta Google QA. Se observó Home directo y Acceso al abrir Mi cuenta: referencia física del defecto que corrige la migración. Se conserva el invitado para probar update v32→v33 sin reinstalar ni borrar datos. En Plus de v32 la vista capturada muestra Trial disponible, sin planes/CTA en esa vista; no se activó Trial ni Billing. Evidencia privada: G:/Blindly/privado/v32-to-v33-baseline.json y v32-plus-baseline.json. Las pruebas físicas de v33, sandbox Billing y QA R8 desde Play no se sustituyen por estos datos ni por pruebas simuladas/sideload.
 
 ## Registro solicitado
 
@@ -39,8 +39,8 @@ El teléfono no aparece conectado por ADB al iniciar v33. Las pruebas físicas, 
 |13|Annual|catálogo exacto; representación paywall y compra pendientes|
 |14|Lifetime|catálogo exacto; representación paywall y compra pendientes|
 |15|Precios|product.priceString; no precios fijos ni ahorro porcentual fijo nuevo|
-|16|Privacy|verificación publicada del paywall pendiente|
-|17|Terms|verificación publicada del paywall pendiente|
+|16|Privacy|privacy.html de Blindly HTTP200; enlace dentro del paywall pendiente|
+|17|Terms|terms.html de Blindly HTTP200; enlace dentro del paywall pendiente|
 |18|ES/EN/PT|copy cliente traducido; editor RevenueCat pendiente|
 |19|Dominio Supabase|hostname técnico sigue presente; no declarar resuelto|
 |20|Custom Domain/vanity|bloqueados por plan pago; dominio propio no acreditado|
@@ -61,11 +61,11 @@ El teléfono no aparece conectado por ADB al iniciar v33. Las pruebas físicas, 
 |35|Tests|npm test completo pasa; regresiones adicionales de layout/UI/traducciones pasan|
 |36|Typecheck|pasa|
 |37|Lint|pasa|
-|38|CI|pendiente nuevo commit|
-|39|Build v33|pendiente cerrar cambios cliente/tests; perfil production-candidate|
+|38|CI|cbf23aa success, [41701197151](https://github.com/ArgerichFacu/Blindly/actions/runs/41701197151)|
+|39|Build v33|EAS17948428-dbfd-41eb-ac8a-cdd3c557f1c0 en cola; code33/name1.0.0, fuente cbf23aa, perfil production-candidate|
 |40|SHA256|pendiente artefacto v33|
 |41|Alpha|v32 completed verificado; v33 pendiente|
-|42|Blockers|Brave no expuesto; paywall/Draft/declaraciones; USB/QA Play/Billing; dominio/coste documentado|
+|42|Blockers|Brave no expuesto; paywall/Draft/declaraciones; EAS en cola y QA v33 Play/Billing pendiente; dominio/coste documentado|
 
 ## Antes de producción
 
