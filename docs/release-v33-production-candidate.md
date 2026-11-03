@@ -61,8 +61,8 @@ El teléfono se conectó después: Samsung A32 autorizado, v32/name1.0.0 instala
 |35|Tests|npm test completo pasa; regresiones adicionales de layout/UI/traducciones pasan|
 |36|Typecheck|pasa|
 |37|Lint|pasa|
-|38|CI|cbf23aa success, [41701197151](https://github.com/ArgerichFacu/Blindly/actions/runs/41701197151)|
-|39|Build v33|EAS17948428-dbfd-41eb-ac8a-cdd3c557f1c0 en cola; code33/name1.0.0, fuente cbf23aa, perfil production-candidate|
+|38|CI|fuente cbf23aa success ([41701197151](https://github.com/ArgerichFacu/Blindly/actions/runs/41701197151)); regresiones/documentación 8cc4d37 success ([41707218368](https://github.com/ArgerichFacu/Blindly/actions/runs/41707218368))|
+|39|Build v33|[EAS17948428-dbfd-41eb-ac8a-cdd3c557f1c0](https://expo.dev/accounts/facuargerich/projects/blindly/builds/17948428-dbfd-41eb-ac8a-cdd3c557f1c0) en cola; code33/name1.0.0, fuente cbf23aa, perfil production-candidate|
 |40|SHA256|pendiente artefacto v33|
 |41|Alpha|v32 completed verificado; v33 pendiente|
 |42|Blockers|Brave no expuesto; paywall/Draft/declaraciones; EAS en cola y QA v33 Play/Billing pendiente; dominio/coste documentado|
@@ -70,3 +70,13 @@ El teléfono se conectó después: Samsung A32 autorizado, v32/name1.0.0 instala
 ## Antes de producción
 
 Publicar y comprobar el paywall existente con los tres planes, textos reales, precios localizados, renovación correcta y enlaces propios válidos. Sin ensayo gratuito de tienda que sugiera cobro después del Founder Trial. Validar la v33 minificada instalada desde Play: acceso actualizado/invitado recordado/Google/email/logout, navegación/audio/deep links y flujos de Plus. Antes de confirmar cada compra comprobar la cuenta correcta y medio de prueba de Play; cualquier medio real detiene la operación. Registrar CustomerInfo, entitlement, sincronización server-side, RTDN y accesos_plus sandbox. Verificar también rollback de autorización sin pérdida indebida de accesos ya pagados; no aprobar por mocks. Revisar Data Safety, IARC, Ads, App access, Target audience, monetización y Needs attention; app gratuita con compras opcionales no implica funciones financieras. Detener antes de producción y antes de activar pagos públicos.
+
+## Continuación operativa — 03/11/2026 16:57 ART
+
+EAS todavía IN_QUEUE después de unos43minutos; no hay SHA33 ni mapping33 disponibles. No se duplica la build ni se modifica v32. Fuente de la app fija en cbf23aa; el commit posterior8cc4d37 sólo cambia documentación/tests y su CI también pasó. El teléfono está conectado/autorizado y se mantiene el invitado de v32 para la prueba de migración; no se inició sesión Google en este invitado ni Trial/Billing.
+
+Seguimiento local en ejecución: `node G:/Blindly/cache/v33-monitor.cjs`. Consulta el estado de la build enviada y, cuando finaliza, descarga únicamente su AAB/artifact de R8, comprueba code33/commit exacto, bundletool, firma, package, permisos, ABI/16KB, SDK key Android esperada, ausencia de Test Store/credenciales, mapping idéntico al embebido y flags R8. Después mide DEX contra v31/v32 y verifica marcadores compilados de inicio.v2/CTA/permiso tester. No publica nada. Es un proceso de esta PC, no un monitor remoto permanente; su ventana de seguimiento es limitada y no autoriza ninguna aprobación automática de producción/Gate B.
+
+Resultados previstos sólo si las comprobaciones pasan: G:/Blindly/entregas/Blindly-1.0.0-production-candidate-v33.aab y .sha256; validación en G:/Blindly/entregas/validacion-production-candidate-v33/; mapping privado en G:/Blindly/privado/v33-r8/build/outputs/mapping/release/mapping.txt. Aún NO se presentan esos archivos como entregados. Estado/logs: G:/Blindly/cache/v33-eas-state.json, v33-eas-start.log y v33-validate.py.log / v33-r8-validate.py.log. No publicar URLs firmadas de los JSON ni claves/recibos.
+
+Brave fue confirmado habilitado por el titular y se volvió a inspeccionar la ejecución: no expone controlador Browser/Brave ni connector_openai_browser. Se buscó también el plugin y no aparece. Se preservaron sesiones/cookies y no se usó Computer Use ni TinyFish. Para continuar edición/publicación del paywall, revisión de declaraciones y carga Alpha mediante la interfaz pedida hace falta que ese controlador esté realmente disponible; no simular acciones ni afirmar que el Draft fue publicado. No se solicitan nuevas credenciales por chat.
