@@ -59,7 +59,7 @@ function escenario(params={inicio:'1'}) {
   console.log('OK: acceso convencional, invitado, registro/verificación, legacy avanzado, contexto, tutorial y doble toque en UI.');
   const logout=escenario({inicio:'0'});await logout.cargar();logout.campo('Email').onChangeText('reviewer@example.com');logout.campo('Contraseña').onChangeText('testpassword');await logout.click('Iniciar sesión');
   logout.authApi.cerrarSesion=async()=>{logout.emit('SIGNED_OUT',null);logout.user=null;return null};await logout.click('Cerrar sesión');
-  assert.equal(logout.campo('Email').value,'');assert.equal(logout.campo('Contraseña').value,'');assert.ok(logout.botones().some(b=>b.titulo==='Iniciar sesión'));assert.deepEqual(logout.llamadas.slice(-2),[['dismissAll'],['replace','/cuenta']]);
+  assert.equal(logout.campo('Email').value,'');assert.equal(logout.campo('Contraseña').value,'');assert.ok(logout.botones().some(b=>b.titulo==='Iniciar sesión'));assert.deepEqual(logout.llamadas.slice(-2),[['dismissAll'],['replace','/']]);
   logout.user={id:'guest-new',is_anonymous:true};await logout.click('Jugar como invitado');assert.equal(logout.llamadas.at(-1)[0],'replace');
   console.log('Logout UI: SIGNED_OUT sin invitado, credenciales vacías, navegación limpia y acceso/invitado recuperable OK');
 })().catch(e=>{console.error(e);process.exitCode=1});

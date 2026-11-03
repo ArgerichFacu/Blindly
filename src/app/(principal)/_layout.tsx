@@ -10,12 +10,16 @@ import { Introduccion } from "../../components/Introduccion";
 import { useInicio } from "../../lib/InicioContext";
 import { usePreferencias } from "../../lib/Preferencias";
 import { useTema } from "../../lib/TemaContext";
+import { identidadUsuario } from "../../lib/identidad";
+import { necesitaAcceso } from "../../lib/inicio";
 export const unstable_settings = { initialRouteName: "index" };
 export default function Principal() {
     const { tema } = useTema(), { t } = usePreferencias(), inicio = useInicio(), insets = useSafeAreaInsets();
     const { fontScale } = useWindowDimensions(), identidad = useNombreVisible();
-    if (inicio.datos?.fase !== "terminado")
-        return <Introduccion />;
+    const protegida = !!identidad.usuario && identidadUsuario(identidad.usuario).recuperable;
+    const acceso = !identidad.usuario || necesitaAcceso(inicio.datos, identidad.usuario.id, protegida);
+    if (!identidad.usuario || (!protegida && (!inicio.datos || acceso || inicio.datos.fase !== "terminado")))
+        return <Introduccion acceso={acceso} usuarioId={identidad.usuario?.id} errorSesion={identidad.error} />;
     const pantallas: [
         string,
         string,

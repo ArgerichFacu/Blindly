@@ -1,8 +1,10 @@
-export const CLAVE_INICIO = "blindly.inicio.v1";
+export const CLAVE_INICIO = "blindly.inicio.v2";
+export const CLAVE_INICIO_ANTERIOR = "blindly.inicio.v1";
 export type EleccionInicio = "invitado" | "cuenta";
 export type DatosInicio = {
-  version: 1;
+  version: 2;
   eleccion: EleccionInicio | null;
+  identidad: string | null;
   fase: "bienvenida" | "tutorial" | "terminado";
   paso: 0 | 1 | 2 | 3;
 };
@@ -11,8 +13,9 @@ type AlmacenInicio = {
   setItem: (clave: string, valor: string) => Promise<void>;
 };
 const inicial: DatosInicio = {
-  version: 1,
+  version: 2,
   eleccion: null,
+  identidad: null,
   fase: "bienvenida",
   paso: 0,
 };
@@ -20,17 +23,33 @@ export function leerInicio(texto: string | null): DatosInicio {
   try {
     const d = texto ? JSON.parse(texto) : null;
     if (
-      d?.version === 1 &&
+      d?.version === 2 &&
+      (d.identidad === null || (typeof d.identidad === "string" && d.identidad.length > 0)) &&
+      (d.eleccion === null || ["invitado", "cuenta"].includes(d.eleccion)) &&
       [0, 1, 2, 3].includes(d.paso) &&
-      ((d.fase === "bienvenida" && d.eleccion === null && d.paso === 0) ||
-        (["tutorial", "terminado"].includes(d.fase) &&
-          ["invitado", "cuenta"].includes(d.eleccion)))
+      ["bienvenida", "tutorial", "terminado"].includes(d.fase)
     )
-      return { version: 1, eleccion: d.eleccion, fase: d.fase, paso: d.paso };
+      return { version: 2, eleccion: d.eleccion, identidad: d.identidad, fase: d.fase, paso: d.paso };
   } catch {
     /* Un registro inválido reinicia solo la introducción, nunca la sesión. */
   }
   return { ...inicial };
+}
+
+// La elección de invitado de v1 no prueba que haya visto el acceso de v33.
+// Se conserva el tutorial, incluso terminado, sin tocar ningún dato de Auth.
+export function migrarInicio(texto: string | null): DatosInicio {
+  try {
+    const d = texto ? JSON.parse(texto) : null;
+    if (d?.version === 1 && [0, 1, 2, 3].includes(d.paso) &&
+      ["bienvenida", "tutorial", "terminado"].includes(d.fase))
+      return { ...inicial, fase: d.fase, paso: d.paso };
+  } catch { /* Sólo se migra el inicio local válido. */ }
+  return { ...inicial };
+}
+
+export function necesitaAcceso(datos: DatosInicio | null, usuarioId: string, protegida: boolean) {
+  return !protegida && !(datos?.eleccion === "invitado" && datos.identidad === usuarioId);
 }
 
 // No contiene auth: elegir invitado o leer el tutorial no crea ni cambia un usuario.
@@ -49,8 +68,10 @@ export function crearInicio(almacen: AlmacenInicio) {
     publicar({ error: false });
     carga = almacen
       .getItem(CLAVE_INICIO)
-      .then((texto) => {
-        publicar({ datos: leerInicio(texto) });
+      .then(async (texto) => {
+        const datos = texto !== null ? leerInicio(texto) : migrarInicio(await almacen.getItem(CLAVE_INICIO_ANTERIOR));
+        if (texto === null) await almacen.setItem(CLAVE_INICIO, JSON.stringify(datos));
+        publicar({ datos });
         return true;
       })
       .catch(() => {
@@ -89,12 +110,11 @@ export function crearInicio(almacen: AlmacenInicio) {
       };
     },
     cargar,
-    elegir: (eleccion: EleccionInicio) =>
-      guardar((d) =>
-        d.fase === "bienvenida"
-          ? { version: 1, eleccion, fase: "tutorial", paso: 0 }
-          : d,
-      ),
+    elegir: (eleccion: EleccionInicio, identidad: string) => {
+      if (!identidad) return Promise.resolve(false);
+      return guardar((d) => ({ ...d, eleccion, identidad,
+        fase: d.fase === "bienvenida" ? "tutorial" : d.fase }));
+    },
     avanzar: () =>
       guardar((d) =>
         d.fase !== "tutorial"

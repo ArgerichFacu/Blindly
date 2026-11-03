@@ -4,6 +4,7 @@ import { identidadUsuario } from "./identidad";
 import Purchases, {
   LOG_LEVEL,
   type CustomerInfo,
+  type PurchasesOffering,
 } from "react-native-purchases";
 
 export const PLUS_ENTITLEMENT = "blindly_plus";
@@ -89,10 +90,12 @@ export async function prepararIdentidadCompra(usuario: User) {
 // Inicializar/consultar no autoriza compras ni sincroniza accesos comerciales.
 export async function consultarCatalogoPlus(usuario: User) {
   try {
-    await prepararIdentidadCompra(usuario);
+    // Un invitado puede ver precios; comprar/restaurar siguen exigiendo cuenta
+    // recuperable y autorización remota en cada operación.
+    await prepararCompras(usuario.id);
     const oferta = (await Purchases.getOfferings()).all.default;
     if ((await Purchases.getAppUserID()) !== usuario.id) throw new Error("SESION_CAMBIO");
-    if (!oferta) throw new Error("PLUS_OFERTA_INCOMPLETA");
+    if (!catalogoPlusValido(oferta)) throw new Error("PLUS_OFERTA_INCOMPLETA");
     registrarCatalogoRC({
       evento: "catalogo_leido", sdkConfigurado: true, identidadCoincide: true,
       offering: oferta.identifier,
@@ -112,14 +115,21 @@ export async function consultarCatalogoPlus(usuario: User) {
   }
 }
 
+export function catalogoPlusValido(oferta: PurchasesOffering | null | undefined): oferta is PurchasesOffering {
+  const productos = {
+    $rc_monthly: "blindly_plus:monthly",
+    $rc_annual: "blindly_plus:annual",
+    $rc_lifetime: "blindly_plus_founder_lifetime",
+  };
+  return oferta?.identifier === "default" && oferta.availablePackages.length === 3 &&
+    Object.entries(productos).every(([id, producto]) => oferta.availablePackages.some(p =>
+      p.identifier === id && p.product.identifier === producto &&
+      Number.isFinite(p.product.price) && p.product.price > 0 && !!p.product.priceString?.trim()));
+}
+
 export async function obtenerOfertaPlus() {
-  const oferta = (await Purchases.getOfferings()).current;
-  // Founder puede retirarse de la venta sin invalidar las otras opciones ni
-  // eliminar el entitlement de sus compradores.
-  const paquetes = ["$rc_monthly", "$rc_annual"];
-  if (!oferta || !paquetes.every(id => oferta.availablePackages.some(p =>
-    p.identifier === id && p.product.price > 0 && !!p.product.priceString
-  )) || oferta.availablePackages.some(p => !p.product.priceString || p.product.price <= 0)) throw new Error("PLUS_OFERTA_INCOMPLETA");
+  const oferta = (await Purchases.getOfferings()).all.default;
+  if (!catalogoPlusValido(oferta)) throw new Error("PLUS_OFERTA_INCOMPLETA");
   return oferta;
 }
 

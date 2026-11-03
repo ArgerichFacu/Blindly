@@ -5,7 +5,7 @@ vm.runInNewContext(compilar('src/lib/identidad.ts'),{exports:identidad});
 const productos=['blindly_plus:monthly','blindly_plus:annual','blindly_plus_founder_lifetime'];
 const paquetes = ['$rc_monthly','$rc_annual','$rc_lifetime'].map((identifier,i)=>({identifier,product:{identifier:productos[i],price:1,priceString:'ARS 1,00'}}));
 const oferta = {identifier:'default',availablePackages:paquetes};
-let user = {id:'uuid-a',is_anonymous:true}, uuid = null, offerings = {current:oferta}, info = {entitlements:{active:{}},managementURL:null};
+let user = {id:'uuid-a',is_anonymous:true}, uuid = null, offerings = {current:oferta,all:{default:oferta}}, info = {entitlements:{active:{}},managementURL:null};
 let pagos = 0, restores = 0, sincronizaciones = 0, gestiones = 0, presentada, resultado = 'CANCELLED', consultarOfertas = async()=>offerings;
 let payments=true, paymentTester=false, founderPatch={};
 const purchases = {
@@ -46,17 +46,17 @@ const protegido = id => ({id,is_anonymous:false,email:`${id}@recovery.blindly.in
  user=protegido('uuid-a');await render().comprar();
  assert.equal(uuid,user.id);assert.equal(pagos,1);assert.equal(presentada.offering,oferta);
  assert.equal(presentada.requiredEntitlementIdentifier,'blindly_plus');assert.equal(render().activo,false);
- offerings={current:null};await assert.rejects(render().comprar(),/PLUS_OFERTA_INCOMPLETA/);assert.equal(pagos,1);
- offerings={current:{availablePackages:paquetes.filter(p=>p.identifier!=='$rc_annual')}};
+ offerings={all:{}};await assert.rejects(render().comprar(),/PLUS_OFERTA_INCOMPLETA/);assert.equal(pagos,1);
+ offerings={all:{default:{identifier:'default',availablePackages:paquetes.filter(p=>p.identifier!=='$rc_annual')}}};
  await assert.rejects(render().comprar(),/PLUS_OFERTA_INCOMPLETA/);
- offerings={current:oferta};resultado='ERROR';await assert.rejects(render().comprar(),/PLUS_ERROR_COMPRA/);
+ offerings={current:oferta,all:{default:oferta}};resultado='ERROR';await assert.rejects(render().comprar(),/PLUS_ERROR_COMPRA/);
  consultarOfertas=async()=>{throw Error('NETWORK_ERROR');};const antesRed=pagos;
  await assert.rejects(render().comprar(),/NETWORK_ERROR/);assert.equal(pagos,antesRed);assert.equal(render().activo,false);
  consultarOfertas=async()=>offerings;
  resultado='PURCHASED';info={entitlements:{active:{blindly_plus:{isActive:true,expirationDate:null}}},managementURL:null};
  await render().comprar();assert.equal(render().activo,true);assert.equal(render().gestionable,false);
- // Retirar Founder de la venta no quita el entitlement ni bloquea suscripciones.
- offerings={current:{availablePackages:paquetes.slice(0,2)}};await render().comprar();assert.equal(render().activo,true);
+ // La candidata requiere los tres planes, sin quitar accesos ya adquiridos.
+ offerings={all:{default:{identifier:'default',availablePackages:paquetes.slice(0,2)}}};await assert.rejects(render().comprar(),/PLUS_OFERTA_INCOMPLETA/);assert.equal(plus.tieneEntitlementPlus(info),true);
  user=protegido('uuid-b');await render().restaurar();assert.equal(uuid,'uuid-b');assert.equal(restores,1);
  assert.equal(render().activo,true);assert.ok(sincronizaciones>0);
  info={entitlements:{active:{blindly_plus:{isActive:true,expirationDate:'2000-01-01'}}}};
@@ -74,11 +74,14 @@ const protegido = id => ({id,is_anonymous:false,email:`${id}@recovery.blindly.in
  assert.deepEqual(render().catalogo.availablePackages.map(p=>p.product.identifier),productos);
  assert.ok(render().catalogo.availablePackages.every(p=>p.product.priceString==='ARS 1,00'));
  assert.equal(render().activo,false,'CustomerInfo por sí solo no concede acceso con pagos OFF');
- assert.equal(render().disponible,false);assert.equal(render().gestionable,false);
+ assert.equal(render().disponible,false);assert.equal(render().gestionable,false);assert.equal(render().catalogoDisponible,true);assert.equal(render().compraVisible,true);assert.equal(render().compraAutorizada,false);
  await assert.rejects(render().comprar(),/PLUS_PAGOS_NO_DISPONIBLES/);
  await assert.rejects(render().restaurar(),/PLUS_PAGOS_NO_DISPONIBLES/);
  await assert.rejects(render().gestionar(),/PLUS_SIN_GESTION/);
  assert.deepEqual({pagos,restores,gestiones,sincronizaciones},antesLectura,'sin paywall, restore, management ni escritura comercial durante catálogo');
+ // Invitado ve catálogo con su UUID sin compras ni escrituras comerciales.
+ user={id:'guest-catalogue',is_anonymous:true};authChanged('SIGNED_IN',{user});await render().refrescar();assert.equal(uuid,user.id);assert.equal(render().compraVisible,true);assert.equal(render().compraAutorizada,false);await assert.rejects(render().comprar(),/PLUS_PAGOS_NO_DISPONIBLES/);assert.deepEqual({pagos,restores,gestiones,sincronizaciones},antesLectura);
+ user=protegido('uuid-b');authChanged('SIGNED_IN',{user});
  // Error del catálogo separado: no borra el Trial ni su caché validada.
  const ahora=new Date();founderPatch={active:true,used:true,eligible:false,access_source:'FOUNDER_TRIAL',server_now:ahora.toISOString(),started_at:ahora.toISOString(),expires_at:new Date(+ahora+72*3600000).toISOString()};
  consultarOfertas=async()=>{throw Error('CATALOGO_OFFLINE')};
@@ -88,7 +91,7 @@ const protegido = id => ({id,is_anonymous:false,email:`${id}@recovery.blindly.in
  await render().refrescar();assert.equal(render().errorCatalogo,null);assert.equal(render().catalogo,oferta);
  // La ausencia de paquetes no se transforma en un Gate aprobado ni en Plus.
  offerings={all:{default:{identifier:'default',availablePackages:[]}}};await render().refrescar();
- assert.equal(render().catalogo.availablePackages.length,0);assert.equal(render().activo,false);
+ assert.equal(render().catalogo,null);assert.match(render().errorCatalogo.message,/PLUS_OFERTA_INCOMPLETA/);assert.equal(render().activo,false);
  offerings={all:{}};await render().refrescar();assert.match(render().errorCatalogo.message,/PLUS_OFERTA_INCOMPLETA/);
  // Cambio de cuenta mientras getOfferings está pendiente: descartar respuesta.
  let finishCatalogo;consultarOfertas=()=>new Promise(r=>finishCatalogo=r);
@@ -113,7 +116,7 @@ const protegido = id => ({id,is_anonymous:false,email:`${id}@recovery.blindly.in
  assert.deepEqual({pagos,restores,gestiones},antesRevocar);payments=true;
  let resolve;consultarOfertas=()=>new Promise(r=>{resolve=r;});
  const antes=pagos,pending=render().comprar();await new Promise(r=>setImmediate(r));
- authChanged('SIGNED_IN',{user:protegido('uuid-c')});resolve({current:oferta});await pending;
+ authChanged('SIGNED_IN',{user:protegido('uuid-c')});resolve({all:{default:oferta}});await pending;
  assert.equal(pagos,antes,'un cambio de UUID durante ofertas no abre el pago anterior');
  // QA privado permite el flujo, sin mutar el flag global ni conceder Plus.
  payments=false;paymentTester=true;user=protegido('qa-tester');authChanged('SIGNED_IN',{user});

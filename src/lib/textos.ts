@@ -1,6 +1,8 @@
 export type Idioma = "es" | "en" | "pt";
 // El español es la clave legible; las variables se interpolan después de traducir.
 export const textos: Record<string, [string, string]> = {
+  "Compará los planes de Blindly Plus.": ["Compare Blindly Plus plans.", "Compare os planos do Blindly Plus."],
+  "Blindly Plus todavía no está disponible para compras.": ["Blindly Plus is not available for purchases yet.", "Blindly Plus ainda não está disponível para compras."],
   "Editar nombre": ["Edit name", "Editar nome"],
   "Nombre visible": ["Display name", "Nome visível"],
   "Guardar nombre": ["Save name", "Salvar nome"],
@@ -2594,7 +2596,7 @@ Object.assign(textos, {
 Object.assign(errores, {
   "PLUS_LANZAMIENTO_NO_DISPONIBLE": "El estado de Plus no está disponible. Revisá tu conexión y probá de nuevo.",
   "PLUS_PRUEBA_CONEXION": "Necesitás conexión para activar tu prueba.",
-  "PLUS_PAGOS_NO_DISPONIBLES": "Los pagos todavía no están disponibles.",
+  "PLUS_PAGOS_NO_DISPONIBLES": "Blindly Plus todavía no está disponible para compras.",
   "PLUS_PLAN_INVALIDO": "Elegí un plan válido.",
   "PLUS_OPERACION_EN_CURSO": "Ya hay una operación de Plus en curso."
 });

@@ -12,7 +12,7 @@ const deps = {
  'react-native-purchases': {__esModule:true, default:purchases},
  'react-native-purchases-ui': {__esModule:true, default:{}, PAYWALL_RESULT:{}},
  './sesion': {asegurarSesion:async()=>user},
- './plus': {PLUS_DISPONIBLE:false, tieneEntitlementPlus:()=>false},
+ './plus': {PLUS_DISPONIBLE:false, tieneEntitlementPlus:()=>false, catalogoPlusValido:()=>false},
  './plusDemo': {PLUS_DEMO:false},
  './founderPlus': founder,
  './plusServidor': {},

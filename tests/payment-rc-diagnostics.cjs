@@ -44,7 +44,9 @@ function setup(enabled) {
   assert.doesNotMatch(JSON.stringify(active.logs), /private-|secret-receipt|goog_/);
   const off = setup(false); await off.exports.consultarCatalogoPlus(user); assert.equal(off.logs.length, 0);
   const guest = setup(true);
-  await assert.rejects(guest.exports.consultarCatalogoPlus({...user, is_anonymous: true}), /PLUS_PROTEGER_CUENTA/);
-  assert.equal(guest.calls(), 0);
+  assert.equal(await guest.exports.consultarCatalogoPlus({...user, is_anonymous: true}),offering);
+  assert.equal(guest.calls(),1);
+  await assert.rejects(guest.exports.prepararIdentidadCompra({...user,is_anonymous:true}),/PLUS_PROTEGER_CUENTA/);
+  assert.doesNotMatch(JSON.stringify(guest.logs),/private-|secret-receipt|goog_/);
   console.log('Payment RC: evidencia de catálogo/identidad sin UUID, claves, recibos ni errores crudos; desactivada fuera del perfil RC OK');
 })().catch(error => {console.error(error); process.exitCode = 1;});

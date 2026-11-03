@@ -9,13 +9,13 @@ import { LogoBlindly } from "./LogoBlindly";
 
 export { PasosTutorial } from "./TutorialInteractivo";
 
-export function Introduccion() {
+export function Introduccion({ acceso = false, usuarioId, errorSesion }: { acceso?: boolean; usuarioId?: string; errorSesion?: unknown }) {
   const inicio = useInicio(),
     { t } = usePreferencias(),
     router = useRouter();
   return (
     <Pantalla titulo="blindly." volver={false}>
-      {!inicio.datos ? (
+      {!inicio.datos || !usuarioId ? (
         <Tarjeta>
           <Texto>
             {t(
@@ -30,8 +30,9 @@ export function Introduccion() {
               onPress={() => void inicio.cargar()}
             />
           )}
+          {!!errorSesion && <Boton titulo={t("Reintentar")} onPress={() => router.push({ pathname: "/cuenta", params: { inicio: "1" } })} />}
         </Tarjeta>
-      ) : inicio.datos.fase === "tutorial" ? (
+      ) : !acceso && inicio.datos.fase === "tutorial" ? (
         <PasosTutorial
           paso={inicio.datos.paso}
           ocupado={inicio.ocupado}
@@ -69,7 +70,7 @@ export function Introduccion() {
           <Boton titulo={t("Crear cuenta / Iniciar sesión")} secundario disabled={inicio.ocupado}
             onPress={() => router.push({ pathname: "/cuenta", params: { inicio: "1" } })}/>
           <Boton titulo={t("Jugar como invitado")} secundario disabled={inicio.ocupado}
-            onPress={() => void inicio.elegir("invitado")}/>
+            onPress={() => void inicio.elegir("invitado", usuarioId)}/>
           <Texto suave>
             {t(
               "Podés proteger tu cuenta más adelante desde Opciones → Mi cuenta.",

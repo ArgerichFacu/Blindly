@@ -4,7 +4,7 @@ import Purchases, { type CustomerInfo, type CustomerInfoUpdateListener, type Pur
 import RevenueCatUI, { PAYWALL_RESULT } from "react-native-purchases-ui";
 import { asegurarSesion } from "./sesion";
 import { supabase } from "./supabase";
-import { PLUS_DISPONIBLE, PLUS_ENTITLEMENT, prepararCompras, prepararIdentidadCompra, consultarCatalogoPlus, obtenerOfertaPlus, tieneEntitlementPlus } from "./plus";
+import { PLUS_DISPONIBLE, PLUS_ENTITLEMENT, prepararCompras, prepararIdentidadCompra, consultarCatalogoPlus, obtenerOfertaPlus, tieneEntitlementPlus, catalogoPlusValido } from "./plus";
 import { sincronizarPlusServidor } from "./plusServidor";
 import { PLUS_DEMO } from "./plusDemo";
 import {
@@ -20,6 +20,7 @@ type EstadoPlus = {
   trial: EstadoFounder | null; trialDisponible: boolean; trialExpiraEn: string | null;
   trialRestanteMs: number; pagosRealesActivos: boolean; lanzamientoDisponible: boolean;
   catalogo: PurchasesOffering | null; errorCatalogo: unknown;
+  catalogoDisponible: boolean; compraVisible: boolean; compraAutorizada: boolean;
   comprar: () => Promise<void>; restaurar: () => Promise<void>; gestionar: () => Promise<void>;
   refrescar: () => Promise<void>; iniciarPrueba: () => Promise<void>;
   registrarVista: () => Promise<void>;
@@ -29,6 +30,7 @@ const ContextoPlus = createContext<EstadoPlus>({
   error: null, tipoAcceso: "FREE", identidad: null, trial: null, trialDisponible: false, trialExpiraEn: null,
   trialRestanteMs: 0, pagosRealesActivos: false, lanzamientoDisponible: false,
   catalogo: null, errorCatalogo: null,
+  catalogoDisponible: false, compraVisible: false, compraAutorizada: false,
   comprar: async () => {}, restaurar: async () => {}, gestionar: async () => {}, refrescar: async () => {},
   iniciarPrueba: async () => {}, registrarVista: async () => {},
 });
@@ -93,7 +95,6 @@ export function PlusProvider({ children }: { children: ReactNode }) {
       setPermisoTester(tester);
       if (!estado.real_payments_enabled && !tester) {
         quitarListener(); setInfo(null); setCatalogo(null); setErrorCatalogo(null);
-        if (actual.is_anonymous !== false) return;
         // La consulta del catálogo no bloquea las acciones gratuitas del Trial.
         setCargando(false);
         try {
@@ -201,8 +202,11 @@ export function PlusProvider({ children }: { children: ReactNode }) {
   const revision = revisionPlay && estado?.access_source === "PLAY_REVIEW";
   const pagado = estado?.access_source === "REVENUECAT_PAID" || (comercialDisponible && tieneEntitlementPlus(info));
   const tipoAcceso: FuentePlus = PLUS_DEMO ? "PLUS_DEMO" : revision ? "PLAY_REVIEW" : pagado ? "REVENUECAT_PAID" : estado?.active ? "FOUNDER_TRIAL" : "FREE";
+  const catalogoDisponible = !PLUS_DEMO && catalogoPlusValido(catalogo);
   const valor: EstadoPlus = {
     catalogo, errorCatalogo,
+    catalogoDisponible, compraVisible: catalogoDisponible && !pagado && !revision,
+    compraAutorizada: comercialDisponible && !revision,
     demostracion: PLUS_DEMO, disponible: comercialDisponible, cargando, activo: tipoAcceso !== "FREE", tipoAcceso, identidad,
     gestionable: comercialDisponible && !!info?.managementURL,
     vencimiento: tipoAcceso === "FOUNDER_TRIAL" ? estado?.expires_at ?? null : info?.entitlements.active[PLUS_ENTITLEMENT]?.expirationDate ?? estado?.paid_expires_at ?? null,
