@@ -1,5 +1,7 @@
 # Blindly v33 — hotfix y candidata previa a producción
 
+04/11/2026 (ART). **Única v33 FINISHED, descargada y validada; NO PRODUCTION READY.** EAS `17948428-dbfd-41eb-ac8a-cdd3c557f1c0`, fuente de app `cbf23aa2a3688743497c80cad784116b2f8339ec`. SHA256 `7c539d8361b0b26f5574c8f9096a3b7d67a2869a1143e17e1e953e8faf386fe9`. No se generó otra build. Alpha sigue en32; v33 aún no está cargada. Brave no expone controlador y no hay credenciales de publicación adecuadas por CLI/API. Founder Trial=true y real_payments_enabled=false verificados hoy; tester protegido Google habilitado, no Reviewer, UUID conservado. Actualización desde Play y Gate B comercial siguen pendientes. El detalle anterior se conserva como registro histórico cuando indica cola o build pendiente.
+
 03/11/2026 (ART). Trabajo en curso; **NO PRODUCTION READY**. Producción no autorizada; pagos públicos apagados. Gate A se conserva aprobado. V32 permanece intacta: Alpha32 completed verificado por API, SHA256 `90aeb7f1dba81aa5fa3241571ac9a366c8d86b0a332f15332b1dc08c06c362e6`. Código33 libre en Play al iniciar; EAS remoto preparado en33, autoIncrement=false.
 
 ## Cambios de v33
@@ -31,7 +33,7 @@ El teléfono se conectó después: Samsung A32 autorizado, v32/name1.0.0 instala
 |5|Logout|nuevo UUID vuelve a Acceso; partidas conservadas; QA física pendiente|
 |6|CTA Plus|visible con catálogo válido, independiente del permiso de compra|
 |7|Trial|opcional72h; sin tarjeta/suscripción/cobro; compra independiente|
-|8|Payment tester|habilitado remoto, UUID conservado, no Reviewer|
+|8|Payment tester|revalidado04/11: enabled=true, protegido Google, UUID conservado, no Reviewer; marcador compilado presente|
 |9|License tester|confirmación titular02/11; relectura Brave y diálogo sandbox pendientes|
 |10|RevenueCat paywall ID|pendiente de acceso administrativo/Brave|
 |11|Draft|no editado/publicado; pendiente|
@@ -55,17 +57,17 @@ El teléfono se conectó después: Samsung A32 autorizado, v32/name1.0.0 instala
 |29|Restore|guard conservado; pendiente prueba física|
 |30|Pending/cancel/restart/reinstall|pendiente prueba física|
 |31|RTDN|infraestructura Gate A conservada; transacciones QA pendientes|
-|32|R8|plugin/optimización/shrink/obfuscation conservados; mapping v33 pendiente build|
-|33|DEX|v32 medido -76,10%; v33 y respuesta Play pendientes|
+|32|R8|8.12.14; optimize/shrink/obfuscation/full mode/resource shrinking comprobados; mapping privado coincide con AAB; runtime Play pendiente|
+|33|DEX|v33:2DEX/17170456bytes, −76.10% vs v31; idénticos a v32. Respuesta Play pendiente|
 |34|Play declarations|pendiente revisión UI Brave; no se cambian por inferencia|
 |35|Tests|npm test completo pasa; regresiones adicionales de layout/UI/traducciones pasan|
 |36|Typecheck|pasa|
 |37|Lint|pasa|
 |38|CI|fuente cbf23aa success ([41701197151](https://github.com/ArgerichFacu/Blindly/actions/runs/41701197151)); regresiones/documentación 8cc4d37 success ([41707218368](https://github.com/ArgerichFacu/Blindly/actions/runs/41707218368))|
-|39|Build v33|[EAS17948428-dbfd-41eb-ac8a-cdd3c557f1c0](https://expo.dev/accounts/facuargerich/projects/blindly/builds/17948428-dbfd-41eb-ac8a-cdd3c557f1c0) en cola; code33/name1.0.0, fuente cbf23aa, perfil production-candidate|
-|40|SHA256|pendiente artefacto v33|
-|41|Alpha|v32 completed verificado; v33 pendiente|
-|42|Blockers|Brave no expuesto; paywall/Draft/declaraciones; EAS en cola y QA v33 Play/Billing pendiente; dominio/coste documentado|
+|39|Build v33|[EAS17948428-dbfd-41eb-ac8a-cdd3c557f1c0](https://expo.dev/accounts/facuargerich/projects/blindly/builds/17948428-dbfd-41eb-ac8a-cdd3c557f1c0) FINISHED y validada; code33/name1.0.0, fuente cbf23aa, perfil production-candidate|
+|40|SHA256|`7c539d8361b0b26f5574c8f9096a3b7d67a2869a1143e17e1e953e8faf386fe9`|
+|41|Alpha|API04/11: v32 completed; v33 no cargada. Falta Brave o alternativa segura de publicación|
+|42|Blockers|Brave/publicación Alpha; paywall/Draft/declaraciones; update físico y Gate B; dominio/coste documentado|
 
 ## Antes de producción
 
@@ -80,3 +82,29 @@ Seguimiento local en ejecución: `node G:/Blindly/cache/v33-monitor.cjs`. Consul
 Resultados previstos sólo si las comprobaciones pasan: G:/Blindly/entregas/Blindly-1.0.0-production-candidate-v33.aab y .sha256; validación en G:/Blindly/entregas/validacion-production-candidate-v33/; mapping privado en G:/Blindly/privado/v33-r8/build/outputs/mapping/release/mapping.txt. Aún NO se presentan esos archivos como entregados. Estado/logs: G:/Blindly/cache/v33-eas-state.json, v33-eas-start.log y v33-validate.py.log / v33-r8-validate.py.log. No publicar URLs firmadas de los JSON ni claves/recibos.
 
 Brave fue confirmado habilitado por el titular y se volvió a inspeccionar la ejecución: no expone controlador Browser/Brave ni connector_openai_browser. Se buscó también el plugin y no aparece. Se preservaron sesiones/cookies y no se usó Computer Use ni TinyFish. Para continuar edición/publicación del paywall, revisión de declaraciones y carga Alpha mediante la interfaz pedida hace falta que ese controlador esté realmente disponible; no simular acciones ni afirmar que el Draft fue publicado. No se solicitan nuevas credenciales por chat.
+
+## Validación final del artefacto existente — 04/11/2026
+
+EAS finalizó03/11 a17:30:56 ART. El seguimiento local anterior dejó de correr al interrumpirse la sesión antes de descargar. Se comprobó que no había otro helper vivo ni archivos existentes y se descargó la misma build, sin rebuild ni cambio de versión/firma.
+
+- AAB: G:/Blindly/entregas/Blindly-1.0.0-production-candidate-v33.aab, 102853526bytes. SHA256 `7c539d8361b0b26f5574c8f9096a3b7d67a2869a1143e17e1e953e8faf386fe9`; checksum .sha256 en el mismo directorio.
+- Package com.blindly.studio, versionCode33, versionName1.0.0, debuggable=false. Bundletool validate y jarsigner pasan. Certificado de CARGA SHA256 `c5b6c355789f93255b188cef762db78de5a1900e286ce3b1ec9475f6c466422f`, coincide con v30/v31/v32. La firma de distribución de Play debe comprobarse después de instalar desde Alpha; no se confunden ambos certificados.
+- Permiso Billing presente, permisos sin delta respecto de la referencia, cuatroABI y PAGE_ALIGNMENT_16K. SDK Android pública esperada embebida, sin claves Android adicionales, sin claves Test Store ni archivos de credenciales/firma en el AAB. Escaneo adicional de 18974strings Hermes: cero marcadores de claves privadas, Supabase secret/management, RevenueCat secret, OpenAI secret o JWT service_role. Es un escaneo de marcadores de alta confianza, no una prueba universal de ausencia de todo secreto. Valores nunca publicados.
+- Marcadores compilados positivos: blindly.inicio.v2, catalogoDisponible, compraVisible, compraAutorizada, mi_permiso_pago_tester, exigirPagosReales; labels Obtener Plus / Ingresar con Google / Jugar como invitado y los tres packages/productos Android esperados. Esto comprueba el contenido de la candidata; la migración/CTA y autorización reales deben validarse en el teléfono después de actualizar desde Play.
+- R8 8.12.14: optimización, minificación/shrinking, obfuscation, full mode y optimized resource shrinking habilitados. Sin directivas globales dontoptimize/dontshrink/dontobfuscate. Mapping privado: G:/Blindly/privado/v33-r8/build/outputs/mapping/release/mapping.txt; 190161187bytes, SHA256 `9b666bbb55d90bf6a2e8dc21ef12e8f57b7c2db2ab843727949b1e8df5c18795`, idéntico al embebido en el AAB y al mapping v32. No subirlo a Git ni compartir su contenido.
+
+| Medida | v31 | v32 | v33 |
+|---|---:|---:|---:|
+|AAB bytes|108122521|102852377|102853526|
+|DEX bytes|71833068|17170456|17170456|
+|Cantidad DEX|7|2|2|
+|Class defs|58447|17760|17760|
+|Method IDs sumados, no únicos|428564|106708|106708|
+
+Reducción DEX de v33 frente a v31: 76.10%; hashes DEX de v33 iguales a v32. La advertencia/aceptación real de Play todavía no se comprobó para v33 porque no está cargada. V32 conserva su SHA90aeb7f1dba81aa5fa3241571ac9a366c8d86b0a332f15332b1dc08c06c362e6.
+
+Evidencia local: G:/Blindly/entregas/validacion-production-candidate-v33/validation.json, feature-checks.json y credential-scan.json; métricas G:/Blindly/cache/v33-dex-metrics.json; validación privada R8 G:/Blindly/privado/v33-r8/validation.json. Sólo documentación de repo cambia en esta continuación; código/config de app permanecen en la fuente congelada. No se repiten suites que ya pasaron para código sin cambios.
+
+API Play de sólo lectura04/11: Alpha32 completed, v33 no cargada, production sin releases. El edit temporal se descartó sin commit. EAS no tiene submit credential y no hay publicador CLI autenticado; la única cuenta de servicio local es para RevenueCat y no se reutiliza/amplía para publicación. Brave/connector_openai_browser sigue sin operaciones expuestas. Por eso quedan carga Alpha, edición/publicación visual del Draft y declaraciones pendientes, sin simular acciones.
+
+Hoy ADB no muestra teléfono conectado. Se preservan los baselines de v32 invitado; no se reinstaló, no se borraron datos ni se hizo sideload. Para la siguiente etapa hace falta que v33 esté disponible en Alpha y actualizar por Google Play conservando el invitado de v32. Google/login, tres accesos, elección invitado/reinicio/logout, catálogo/precios/CTA/Trial, QA sandbox y RTDN/CustomerInfo/Supabase siguen sin aprobación física v33. Dominios y correo Google continúan pendientes; no se contrató plan/add-on ni se cambió la URL.
