@@ -1,8 +1,9 @@
 const { withProjectBuildGradle } = require("expo/config-plugins");
 const { mergeContents } = require("@expo/config-plugins/build/utils/generateCode");
 
-// NDK r27's flexible-page switch only sets max-page-size. Android also
-// requires common-page-size so GNU_RELRO ends on a 16 KB boundary.
+// NDK r27's flexible-page switch only sets max-page-size. Also set
+// common-page-size to keep RELRO from sharing its trailing 16 KB page
+// with data that must remain writable in libraries compiled here.
 const GRADLE = `
 // Register before the React root plugin evaluates :app.
 subprojects { nativeProject ->
