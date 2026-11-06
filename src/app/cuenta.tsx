@@ -32,17 +32,19 @@ export default function Cuenta() {
   }, [modo, error, aviso]);
   const plusActual = useRef(plus);
   useEffect(() => { plusActual.current = plus; }, [plus]);
+  const inicioActual = useRef(inicio);
+  useEffect(() => { inicioActual.current = inicio; }, [inicio]);
   const googleConectado = usuario?.identities?.some(i => i.provider === "google") ?? false;
   const invitado = usuario?.is_anonymous !== false;
   const esLegacy = !!usuario && cuentaConClave(usuario);
   const protegida = !!usuario && identidadUsuario(usuario).recuperable;
-  const regresar = () => {
+  const regresar = useCallback(() => {
     if (volver === "unirse" && codigoClub && /^[A-Z2-9]{5}$/.test(codigoClub)) router.replace({ pathname: "/unirse", params: { codigo: codigoClub, nombre: nombreMesa?.slice(0,30) ?? "" } });
     else if (volver === "liga" && liga) router.replace({ pathname: "/liga", params: { id: liga, seccion, temporada } });
     else if (volver === "liga-unirse" && codigoClub && /^[A-F0-9]{20}$/.test(codigoClub)) router.replace({ pathname: "/liga-unirse", params: { codigo: codigoClub } });
     else if (volver && ["ligas","puntuacion","plus","head-to-head","liga-nueva"].includes(volver)) router.replace(`/${volver}` as "/ligas");
     else router.replace("/");
-  };
+  }, [volver, codigoClub, nombreMesa, liga, seccion, temporada, router]);
   useEffect(() => {
     vivo.current = true;
     const { data } = supabase.auth.onAuthStateChange((_evento, sesion) => {
@@ -69,11 +71,16 @@ export default function Cuenta() {
     try { await fn(); } catch (e) { if (vivo.current) setError(e); }
     finally { cerrojo.current = false; if (vivo.current) setOcupado(false); }
   }, []);
-  const listo = useCallback(async (u: User) => {
+  const listo = useCallback(async (u: User, continuar = true) => {
     if (!vivo.current) return;
     setUsuario(u); setModo("cuenta"); setPassword(""); setConfirmacion(""); setCodigo(""); setClave("");
+    if (continuar && identidadUsuario(u).recuperable) {
+      if (desdeInicio) {
+        if (await inicioActual.current.elegir("cuenta", u.id) && vivo.current) router.dismissTo("/");
+      } else regresar();
+    }
     await plusActual.current.refrescar();
-  }, []);
+  }, [desdeInicio, regresar, router]);
   useFocusEffect(useCallback(() => {
     let activo = true;
     const version = versionSesion.current;
@@ -87,9 +94,13 @@ export default function Cuenta() {
       else if (pendiente?.tipo === "email-link" && pendiente.usuario === u.id) { setEmail(pendiente.email ?? ""); setModo("verificar"); }
       else setModo(u.is_anonymous ? "login" : "cuenta");
       if (!u.is_anonymous && !cuentaConClave(u)) setEmail(u.email ?? "");
+      if (accion === "continuar" && identidadUsuario(u).recuperable) {
+        await ejecutar(() => listo(u));
+        return;
+      }
       if (accion === "google" && !googleInicial.current) {
         googleInicial.current = true;
-        await ejecutar(async () => { const nueva = await continuarGoogle("auto", contextoAuth); if(nueva) await listo(nueva); });
+        await ejecutar(async () => { const nueva = await continuarGoogle("auto", contextoAuth); if(nueva) await listo(nueva, u.is_anonymous !== false || desdeInicio || !!volver); });
       }
     }).catch(e => { if (activo && version === versionSesion.current) { setSesionCargada(true); setError(e); } });
     return () => { activo = false; };
@@ -99,7 +110,7 @@ export default function Cuenta() {
   function cambiarModo(nuevo: Modo) { setModo(nuevo); setError(null); setAviso(""); setPassword(""); setConfirmacion(""); setCodigo(""); }
   const campoEmail = <Campo etiqueta={t("Email")} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} autoComplete="email" textContentType="emailAddress" editable={!ocupado}/>;
   const camposPassword = <><Campo etiqueta={t("Contraseña")} value={password} onChangeText={setPassword} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete={modo === "login" ? "current-password" : "new-password"} editable={!ocupado}/>{modo !== "login" && <Campo etiqueta={t("Confirmar contraseña")} value={confirmacion} onChangeText={setConfirmacion} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete="new-password" editable={!ocupado}/>}</>;
-  const google = () => void ejecutar(async () => { const u = await continuarGoogle("auto", contextoAuth); if (u) await listo(u); });
+  const google = () => void ejecutar(async () => { const u = await continuarGoogle("auto", contextoAuth); if (u) await listo(u, invitado || desdeInicio || !!volver); });
   const salir = (conservar = false) => void ejecutar(async () => { const u=await cerrarSesion(conservar); if (!vivo.current) return; setUsuario(u);setModo("login");setSeguridad(false);setConfirmarSalida(false);router.dismissAll();router.replace("/"); });
   return <Pantalla scrollRef={scroll} titulo={t(usuario && !invitado && modo === "cuenta" ? "Mi cuenta" : "Acceso")} subtitulo={t("Tu mesa de poker, conectada.")}>
     {!!error && <Tarjeta><Texto accessibilityLiveRegion="assertive">{mensajeError(error)}</Texto>
@@ -139,7 +150,7 @@ export default function Cuenta() {
         <Boton titulo={t("Verificar y guardar contraseña")} disabled={ocupado || !codigo || !password || !confirmacion} onPress={()=>void ejecutar(async()=>listo(await confirmarEmailPassword(email,codigo,password,confirmacion)))}/>
       </Tarjeta>}
       {modo === "reset" && <Tarjeta><Texto>{t("Restablecer contraseña")}</Texto>{campoEmail}<Boton titulo={t("Enviar enlace de recuperación")} disabled={ocupado||!email} onPress={()=>void ejecutar(async()=>{ await solicitarReset(email,contextoAuth); setAviso("Si existe una cuenta con ese email, recibirás un enlace de recuperación. Abrilo en este mismo dispositivo."); })}/><Boton titulo={t("Volver")} secundario disabled={ocupado} onPress={()=>cambiarModo(invitado?"login":"cuenta")}/></Tarjeta>}
-      {modo === "password" && <Tarjeta><Texto>{t("Nueva contraseña")}</Texto>{camposPassword}<Boton titulo={t("Guardar contraseña")} disabled={ocupado||!password||!confirmacion} onPress={()=>void ejecutar(async()=>{await listo(await guardarPassword(password,confirmacion));setAviso("Contraseña actualizada.");})}/><Boton titulo={t("Cancelar")} secundario disabled={ocupado} onPress={()=>cambiarModo("cuenta")}/></Tarjeta>}
+      {modo === "password" && <Tarjeta><Texto>{t("Nueva contraseña")}</Texto>{camposPassword}<Boton titulo={t("Guardar contraseña")} disabled={ocupado||!password||!confirmacion} onPress={()=>void ejecutar(async()=>{await listo(await guardarPassword(password,confirmacion), desdeInicio || !!volver);if(vivo.current)setAviso("Contraseña actualizada.");})}/><Boton titulo={t("Cancelar")} secundario disabled={ocupado} onPress={()=>cambiarModo("cuenta")}/></Tarjeta>}
       {modo === "cuenta" && usuario && <>
         <Tarjeta><Texto style={{fontSize:24,fontWeight:"700"}}>{nombreVisible(usuario) || t("Jugador")}</Texto>
           {!esLegacy && <Texto suave>{usuario.email}</Texto>}

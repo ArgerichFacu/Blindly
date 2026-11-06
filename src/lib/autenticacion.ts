@@ -12,7 +12,7 @@ const PENDIENTE = "blindly.auth.pendiente.v1";
 export type ContextoAuth = { inicio?: string; volver?: string; liga?: string; codigo?: string; nombre?: string; seccion?: string; temporada?: string };
 type Pendiente = { tipo: "google-link" | "google-login" | "email-link" | "reset"; usuario: string; email?: string; fecha: number; contexto?: ContextoAuth };
 let ocupado = false;
-const retornos = new Map<string, Promise<{ usuario: User; reset: boolean; contexto: ContextoAuth }>>();
+const retornos = new Map<string, Promise<{ usuario: User; reset: boolean; acceso: boolean; contexto: ContextoAuth }>>();
 export const retornoAuth = () => Platform.OS === "web"
   ? `${globalThis.location.origin}/auth-callback`
   : Linking.createURL("auth-callback", { scheme: "blindly" });
@@ -239,7 +239,9 @@ export function procesarRetornoAuth(url: string) {
     }
     const reset = p.tipo === "reset";
     await AsyncStorage.removeItem(PENDIENTE);
-    return { usuario: r.data.user, reset: reset || p.tipo === "email-link", contexto: contextoSeguro(p.contexto) };
+    return { usuario: r.data.user, reset: reset || p.tipo === "email-link",
+      acceso: p.tipo === "google-login" || (p.tipo === "google-link" && actual.user.is_anonymous !== false),
+      contexto: contextoSeguro(p.contexto) };
   })();
   retornos.set(code, tarea);
   setTimeout(() => retornos.delete(code), 30000);

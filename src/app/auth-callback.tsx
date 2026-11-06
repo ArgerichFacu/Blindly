@@ -12,7 +12,11 @@ export default function RetornoAuth() {
     if(code)u.searchParams.set("code",code);
     if(error_code)u.searchParams.set("error_code",error_code);
     if(sb_flow_id)u.searchParams.set("sb_flow_id",sb_flow_id);
-    void procesarRetornoAuth(u.toString()).then(r=>{if(activo)router.replace({pathname:"/cuenta",params:{...r.contexto,...(r.reset?{accion:"password"}:{})}});}).catch(e=>{if(activo)setError(e);});
+    void procesarRetornoAuth(u.toString()).then(r=>{
+      if(!activo)return;
+      const accion=r.reset?"password":r.acceso||r.contexto.inicio==="1"||r.contexto.volver?"continuar":undefined;
+      router.replace({pathname:"/cuenta",params:{...r.contexto,...(accion?{accion}:{})}});
+    }).catch(e=>{if(activo)setError(e);});
     return()=>{activo=false};
   },[code,error_code,sb_flow_id,router]);
   return <Pantalla titulo={t("Mi cuenta")}><Tarjeta>{error?<><Texto accessibilityLiveRegion="assertive">{mensajeError(error)}</Texto><Boton titulo={t("Volver a mi cuenta")} onPress={()=>router.replace("/cuenta")}/></>:<Texto accessibilityLiveRegion="polite">{t("Comprobando tu acceso…")}</Texto>}</Tarjeta></Pantalla>;

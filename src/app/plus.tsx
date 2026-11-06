@@ -76,14 +76,6 @@ export default function Plus() {
       <Texto suave>{t("Versión de prueba, sin compras ni suscripciones.")}</Texto>
       <Boton titulo={t("Probar todos los sonidos")} onPress={() => router.push("/sonidos")} />
     </Tarjeta> : <>
-      {plus.catalogoDisponible && !comercialActivo && <Tarjeta>
-        <Texto suave>{t(plus.compraAutorizada ? "Podés comprar Plus ahora, sin empezar la prueba ni esperar a que termine." : "Compará los planes de Blindly Plus.")}</Texto>
-        {plus.catalogo?.availablePackages.map(p => <View key={p.identifier} style={{ gap: 4 }}>
-          <Texto>{t(p.identifier === "$rc_monthly" ? "Mensual" : p.identifier === "$rc_annual" ? "Anual" : "Founder Lifetime")} · {p.product.priceString}</Texto>
-          <Texto suave>{t(p.identifier === "$rc_monthly" ? "Suscripción mensual. Renovación automática." : p.identifier === "$rc_annual" ? "Suscripción anual. Renovación automática." : "Pago único. Sin renovación.")}</Texto>
-        </View>)}
-        <Texto suave>{t("Founder Trial es independiente de Google Play. No inicia una suscripción y no se cobra al terminar.")}</Texto>
-      </Tarjeta>}
       {plus.compraVisible && <Boton titulo={t(plus.cargando ? "Cargando…" : "Obtener Plus")}
         disabled={plus.cargando} onPress={() => void intentar(actual.current.comprar)} />}
       {comercialActivo && <Boton titulo={t(plus.gestionable ? "Administrar suscripción" : "Actualizar estado de Plus")} disabled={plus.cargando} onPress={() => void intentar(plus.gestionable ? actual.current.gestionar : actual.current.refrescar)} />}
