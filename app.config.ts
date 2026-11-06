@@ -15,7 +15,13 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       package: demo ? "com.blindly.app.plusdemo" : config.android?.package,
       // Esta fase no usa Advertising ID. Revisar declaración y consentimiento
       // antes de una futura versión publicitaria con unidades reales.
-      blockedPermissions: [...(config.android?.blockedPermissions ?? []), "com.google.android.gms.permission.AD_ID"],
+      blockedPermissions: [
+        ...(config.android?.blockedPermissions ?? []),
+        "com.google.android.gms.permission.AD_ID",
+        "android.permission.ACCESS_ADSERVICES_AD_ID",
+        "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+        "android.permission.ACCESS_ADSERVICES_TOPICS",
+      ],
     },
     plugins: [...(config.plugins ?? []), ["react-native-google-mobile-ads", {
       androidAppId: "ca-app-pub-3940256099942544~3347511713",

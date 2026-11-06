@@ -26,6 +26,9 @@ const blockedPermissions = [
   "android.permission.WRITE_EXTERNAL_STORAGE",
   "android.permission.SYSTEM_ALERT_WINDOW",
   "com.google.android.gms.permission.AD_ID",
+  "android.permission.ACCESS_ADSERVICES_AD_ID",
+  "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+  "android.permission.ACCESS_ADSERVICES_TOPICS",
 ];
 
 assert.ok(
