@@ -23,18 +23,21 @@ export default function LigaNueva() {
   const [jugador, setJugador] = useNombreInicial();
   const [ocupado, setOcupado] = useState(false);
   const [error, setError] = useState("");
+  const [limite, setLimite] = useState(false);
 
   async function guardar() {
     if (enviando.current) return;
     enviando.current = true;
     setOcupado(true);
     setError("");
+    setLimite(false);
     try {
       const creada = await crearLiga(nombre, temporada, jugador);
       void vibrarMomento("club", preferencias.hapticos, `club:${creada.liga_id}`);
       router.replace({ pathname: "/liga", params: { id: creada.liga_id } });
     } catch (e) {
       setError(mensajeError(e));
+      setLimite(String(typeof e === "object" && e && "message" in e ? e.message : e).includes("LIMITE_CLUBES_FREE"));
     } finally {
       enviando.current = false;
       setOcupado(false);
@@ -56,7 +59,7 @@ export default function LigaNueva() {
           </Texto>
           <Texto suave>
             {t(
-              "Las ligas son Free. Una clave de recuperación conserva tu identidad, tus puntos y tus temporadas.",
+              "Free incluye un club propio. Plus permite crear clubes ilimitados. Protegé tu cuenta para conservar tu identidad, puntos y temporadas.",
             )}
           </Texto>
           {!!identidad.error && <Texto>{mensajeError(identidad.error)}</Texto>}
@@ -111,6 +114,7 @@ export default function LigaNueva() {
         )}
       </Texto>
       {!!error && <Texto>{error}</Texto>}
+      {limite && <Boton titulo={t("Obtener Plus")} secundario onPress={() => router.push("/plus")} />}
       <Boton
         titulo={t(ocupado ? "Guardando…" : "Crear liga")}
         disabled={!valido || ocupado}

@@ -10,7 +10,18 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     name: demo ? "Blindly Plus Demo" : config.name ?? "Blindly",
     slug: config.slug ?? "blindly",
     scheme: demo ? "blindly-plus-demo" : config.scheme,
-    android: { ...config.android, package: demo ? "com.blindly.app.plusdemo" : config.android?.package },
+    android: {
+      ...config.android,
+      package: demo ? "com.blindly.app.plusdemo" : config.android?.package,
+      // Esta fase no usa Advertising ID. Revisar declaración y consentimiento
+      // antes de una futura versión publicitaria con unidades reales.
+      blockedPermissions: [...(config.android?.blockedPermissions ?? []), "com.google.android.gms.permission.AD_ID"],
+    },
+    plugins: [...(config.plugins ?? []), ["react-native-google-mobile-ads", {
+      androidAppId: "ca-app-pub-3940256099942544~3347511713",
+      iosAppId: "ca-app-pub-3940256099942544~1458002511",
+      delayAppMeasurementInit: true,
+    }]],
     extra: { ...config.extra, plusDemo: demo },
   };
 };

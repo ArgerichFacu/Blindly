@@ -25,6 +25,7 @@ const blockedPermissions = [
   "android.permission.READ_EXTERNAL_STORAGE",
   "android.permission.WRITE_EXTERNAL_STORAGE",
   "android.permission.SYSTEM_ALERT_WINDOW",
+  "com.google.android.gms.permission.AD_ID",
 ];
 
 assert.ok(
@@ -48,6 +49,11 @@ assert.equal(
   "singleTop",
   "RevenueCat requiere singleTop para no cancelar compras al volver de otra app",
 );
+const meta = name => manifest.application?.[0]?.['meta-data']?.find(item => item.$?.['android:name'] === name)?.$?.['android:value'];
+assert.equal(meta('com.google.android.gms.ads.APPLICATION_ID'), 'ca-app-pub-3940256099942544~3347511713');
+assert.equal(meta('com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT'), 'true');
+assert.equal(config._internal.modResults.ios.infoPlist.GADApplicationIdentifier, 'ca-app-pub-3940256099942544~1458002511');
+assert.equal(config._internal.modResults.ios.infoPlist.GADDelayAppMeasurementInit, true);
 
 console.log("Configuración nativa validada");
 const properties = config._internal.modResults.android.gradleProperties;

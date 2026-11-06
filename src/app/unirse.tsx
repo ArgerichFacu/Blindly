@@ -6,9 +6,11 @@ import { Pantalla, Boton, Texto, Campo } from "../components/Controles";
 import { usePreferencias } from "../lib/Preferencias";
 import { unirseASala } from "../lib/jugadores";
 import { useNombreInicial } from "../lib/useNombreInicial";
+import { usePublicidadSala } from "../lib/usePublicidadSala";
 export default function Unirse() {
   const router = useRouter(),
     { t, mensajeError } = usePreferencias();
+  const publicidad = usePublicidadSala();
   const params = useLocalSearchParams<{ codigo?: string; nombre?: string }>();
   const [nombre, setNombre] = useNombreInicial(
       typeof params.nombre === "string" ? params.nombre.slice(0, 30) : "",
@@ -28,6 +30,7 @@ export default function Unirse() {
   async function entrar() {
     if (bloqueo.current) return;
     if (!nombre.trim() || !codigo.trim()) {
+      publicidad.error();
       setError(t("Completá tu nombre y el código."));
       return;
     }
@@ -35,10 +38,14 @@ export default function Unirse() {
     setOcupado(true);
     setError("");
     setAcceso("");
+    const intento = publicidad.confirmar();
     try {
-      const { sala } = await unirseASala(codigo, nombre);
+      const entrada = await unirseASala(codigo, nombre);
+      const { sala } = entrada;
+      await intento.trasValidar(entrada);
       router.replace({ pathname: "/sala", params: { codigo: sala.codigo } });
     } catch (e) {
+      intento.error();
       setError(mensajeError(e));
       const mensaje = String(
         typeof e === "object" && e && "message" in e ? e.message : e,
@@ -60,7 +67,7 @@ export default function Unirse() {
     if (respuesta.granted) {
       escaneado.current = false;
       setCamara(true);
-    } else setError(t("Permitir cámara"));
+    } else { publicidad.error(); setError(t("Permitir cámara")); }
   }
   return (
     <Pantalla
@@ -96,6 +103,7 @@ export default function Unirse() {
               onBarcodeScanned={({ data }) => {
                 if (escaneado.current) return;
                 if (!/^BLINDLY:[A-Z2-9]{5}$/.test(data)) {
+                  publicidad.error();
                   setError(t("QR inválido"));
                   return;
                 }

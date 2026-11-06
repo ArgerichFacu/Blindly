@@ -7,9 +7,11 @@ import { unirseASala } from "../lib/jugadores";
 import { NIVELES_REGULAR } from "../lib/niveles";
 import { crearSalaDesdeMesa } from "../lib/mesasHabituales";
 import { useNombreInicial } from "../lib/useNombreInicial";
+import { usePublicidadSala } from "../lib/usePublicidadSala";
 export default function CrearSala() {
   const router = useRouter(),
     { t, mensajeError } = usePreferencias();
+  const publicidad = usePublicidadSala();
   const { temporada, liga, temporadaNombre, mesa, mesaNombre } = useLocalSearchParams<{
     temporada?: string;
     liga?: string;
@@ -25,12 +27,14 @@ export default function CrearSala() {
   async function crear() {
     if (bloqueo.current) return;
     if (!nombre.trim()) {
+      publicidad.error();
       setError(t("Completá tu nombre."));
       return;
     }
     bloqueo.current = true;
     setOcupado(true);
     setError("");
+    const intento = publicidad.confirmar();
     try {
       const sala =
         creada.current ??
@@ -38,9 +42,11 @@ export default function CrearSala() {
           ? await crearSalaDesdeMesa(mesa)
           : await crearSala(NIVELES_REGULAR, temporada?.trim() || null));
       creada.current = sala;
-      await unirseASala(sala.codigo, nombre);
+      const entrada = await unirseASala(sala.codigo, nombre);
+      await intento.trasValidar(entrada);
       router.replace({ pathname: "/sala", params: { codigo: sala.codigo } });
     } catch (e) {
+      intento.error();
       setError(mensajeError(e));
     } finally {
       bloqueo.current = false;

@@ -51,6 +51,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261102210000_deprecar_waitlist_plus.sql",
     "20261102220150_payment_testers_gate_b.sql",
     "20261102222856_preservar_uuid_trial_en_auth.sql",
+    "20261106022529_publicidad_discreta_cupo_clubes.sql",
   ]);
 
   const baseSources = fs

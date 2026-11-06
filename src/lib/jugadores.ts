@@ -17,7 +17,7 @@ export type Jugador = {
 export async function unirseASala(
   codigo: string,
   nombre: string,
-): Promise<{ sala: Sala; jugadorId: string }> {
+): Promise<{ sala: Sala; jugadorId: string; ingresoNuevo?: boolean }> {
   await asegurarSesion();
   const { data, error } = await supabase.rpc("unirse_mesa", {
     p_codigo: codigo.trim().toUpperCase(),

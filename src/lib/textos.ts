@@ -907,6 +907,17 @@ export const textos: Record<string, [string, string]> = {
   "Niveles inválidos": ["Invalid levels", "Níveis inválidos"],
 };
 
+Object.assign(textos, {
+  "Free incluye un club propio. Plus permite crear clubes ilimitados. Protegé tu cuenta para conservar tu identidad, puntos y temporadas.": [
+    "Free includes one club of your own. Plus lets you create unlimited clubs. Protect your account to keep your identity, points and seasons.",
+    "Free inclui um clube próprio. Plus permite criar clubes ilimitados. Proteja sua conta para manter sua identidade, pontos e temporadas.",
+  ],
+  "Free permite un club propio. Con Plus podés crear clubes ilimitados. Tus clubes existentes se conservan.": [
+    "Free allows one club of your own. With Plus you can create unlimited clubs. Your existing clubs are preserved.",
+    "Free permite um clube próprio. Com Plus você pode criar clubes ilimitados. Seus clubes existentes são preservados.",
+  ],
+});
+
 export const errores: Record<string, string> = {
   IDENTIDAD_CLUB_INVALIDA: "Elegí un color, emblema y fondo válidos para el club.",
   PUSH_NO_DISPONIBLE: "Este dispositivo todavía no tiene notificaciones habilitadas.",
@@ -1177,6 +1188,7 @@ Object.assign(textos, {
 });
 
 Object.assign(errores, {
+  LIMITE_CLUBES_FREE: "Free permite un club propio. Con Plus podés crear clubes ilimitados. Tus clubes existentes se conservan.",
   PLUS_PROTEGER_CUENTA: "Protegé o recuperá tu cuenta antes de comprar o restaurar Plus.",
   PLUS_OFERTA_INCOMPLETA: "No se pudieron cargar los planes de la tienda. Probá de nuevo más tarde.",
   PLUS_ERROR_COMPRA: "La tienda no pudo completar la compra. Revisá tu conexión y probá de nuevo.",

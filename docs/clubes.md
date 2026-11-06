@@ -1,5 +1,7 @@
 # Clubes Free y roles
 
+> Actualización comercial05/11/2026: Free permite **un club propio**, Plus permite ilimitados; unirse/participar sigue siendo Free y los clubes legacy se conservan. La implementación y los criterios vigentes están en [monetización publicitaria](monetizacion-publicitaria.md). La descripción histórica siguiente corresponde al cambio inicial de clubes Free.
+
 La próxima versión transforma las ligas en clubes permanentes Free. Crear un club, abrir/cerrar temporadas, asociar partidas y administrar miembros ya no requiere Plus. El juego casual mantiene las cuentas invitadas. Una cuenta protegida con clave de recuperación funciona sin SMTP y conserva su UUID.
 
 ## Experiencia y permisos
