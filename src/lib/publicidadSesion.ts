@@ -2,7 +2,7 @@
 // navegación, logout o cambio de cuenta. No guarda identificadores en disco.
 export type AnuncioPreparado = {
   listo: () => boolean;
-  mostrar: () => Promise<void>;
+  mostrar: (alAbrir: () => void) => Promise<"cerrado" | "fallo">;
   destruir: () => void;
 };
 export type EntradaValidada = {
@@ -10,13 +10,16 @@ export type EntradaValidada = {
   ingresoNuevo?: boolean;
 };
 export class SesionPublicidad {
-  private intentado = false;
+  private mostrado = false;
+  private presentando = false;
+  private bloqueada = false;
   constructor(private cargar: (permitido: () => boolean) => Promise<AnuncioPreparado | null>) {}
+  bloquear() { this.bloqueada = true; }
 
   abrir(permitido: () => boolean) {
     let vigente = true, huboError = false, presentando = false;
     let anuncio: AnuncioPreparado | null = null;
-    const puede = () => vigente && !huboError && !this.intentado && permitido();
+    const puede = () => vigente && !huboError && !this.mostrado && !this.presentando && !this.bloqueada && permitido();
     // No se espera esta promesa desde ninguna operación de sala.
     const destruir = (ad: AnuncioPreparado | null) => { try { ad?.destruir(); } catch { /* SDK opcional. */ } };
     if (puede()) void Promise.resolve().then(() => this.cargar(puede)).then(cargado => {
@@ -30,21 +33,28 @@ export class SesionPublicidad {
     return {
       cancelar,
       // Después de un error de sala se renuncia a monetizar esta sesión.
-      error: () => { this.intentado = true; huboError = true; cancelar(); },
-      confirmar: () => ({ vigente: puede() }),
-      trasValidar: async (intento: { vigente: boolean }, entrada: EntradaValidada) => {
+      error: () => { this.bloqueada = true; huboError = true; cancelar(); },
+      confirmar: () => ({ vigente: puede(), usado: false }),
+      trasValidar: async (intento: { vigente: boolean; usado: boolean }, entrada: EntradaValidada) => {
         let listo: AnuncioPreparado | null = null;
+        let reservado = false;
         try {
+          if (intento.usado) return;
+          intento.usado = true;
           if (!intento.vigente || !puede() || entrada.ingresoNuevo !== true || entrada.sala.estado !== "esperando") return;
           listo = anuncio;
           if (!listo?.listo()) return;
-          // Reserva sin await: doble toque o dos operaciones simultáneas no duplican
-          // impresiones. Un fallo de show también consume el intento de esta sesión.
-          this.intentado = true;
+          // La reserva impide concurrencia; sólo OPENED consume una impresión.
+          this.presentando = true;
           presentando = true;
-          await listo.mostrar();
-        } catch { /* La sala siempre continúa, incluso si listo() falla. */ }
-        finally { presentando = false; destruir(listo); if (listo) anuncio = null; }
+          reservado = true;
+          const resultado = await listo.mostrar(() => { this.mostrado = true; });
+          if (resultado !== "cerrado") this.bloqueada = true;
+        } catch { this.bloqueada = true; /* Un fallo incierto no es una impresión. */ }
+        finally {
+          if (reservado) { this.presentando = false; presentando = false; }
+          destruir(listo); if (listo) anuncio = null;
+        }
       },
     };
   }

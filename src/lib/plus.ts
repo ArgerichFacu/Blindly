@@ -135,6 +135,11 @@ export async function obtenerOfertaPlus() {
 
 export const BENEFICIOS_PLUS = [
   {
+    simbolo: "♧",
+    titulo: "Clubes propios ilimitados",
+    detalle: "Creá y administrá todos tus clubes propios. Unirte y participar en clubes de otros sigue siendo Free.",
+  },
+  {
     simbolo: "♛",
     titulo: "Personalizar botonera · Plus",
     detalle: "Elegí tus sonidos, marcá favoritos y cambiá el orden. Tus ajustes se conservan si vence Plus.",

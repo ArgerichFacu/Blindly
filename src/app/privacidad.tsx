@@ -18,7 +18,19 @@ export default function Privacidad() {
     ],
     [
       "Servicios",
-      "Supabase aloja la autenticación y la base de datos. RevenueCat gestiona el estado de Blindly Plus cuando está activado. Apple, Google y Expo pueden procesar datos técnicos al distribuir o ejecutar la app. Blindly no vende datos ni usa publicidad.",
+      "Supabase aloja autenticación y datos. RevenueCat verifica Blindly Plus. Apple, Google y Expo procesan información técnica para prestar sus servicios. Blindly no vende datos personales.",
+    ],
+    [
+      "Publicidad opcional",
+      "Free puede mostrar como máximo un anuncio interstitial de Google AdMob por sesión, sólo después de crear o unirse correctamente a una sala y antes del lobby. Plus, incluido Founder Trial, no muestra anuncios. En esta versión la publicidad pública está apagada: sólo testers autorizados pueden recibir anuncios de prueba.",
+    ],
+    [
+      "Datos del servicio publicitario",
+      "Al solicitar anuncios, Google puede procesar IP, interacciones, diagnósticos, identificadores técnicos y señales de consentimiento. La IP puede indicar ubicación aproximada. No enviamos nombres, email, clubes, códigos de sala ni resultados a AdMob. Esta fase bloquea Advertising ID en Android y solicita anuncios de prueba no personalizados; otros datos técnicos pueden seguir siendo tratados.",
+    ],
+    [
+      "Consentimiento publicitario",
+      "Si Google requiere consentimiento y no está disponible, se omite el anuncio. Con anuncios apagados y sin autorización de prueba no se pide consentimiento publicitario. Las opciones de consentimiento y revocación deben completarse antes de activar anuncios reales. Esta fase no ofrece un panel de preferencias publicitarias.",
     ],
     [
       "Conservación y eliminación",
@@ -36,7 +48,7 @@ export default function Privacidad() {
   return (
     <Pantalla
       titulo={t("Política de privacidad")}
-      subtitulo={t("Última actualización: 8 de octubre de 2026")}
+      subtitulo={t("Última actualización: 6 de noviembre de 2026")}
     >
       {secciones.map(([titulo, detalle]) => (
         <Tarjeta key={titulo}>

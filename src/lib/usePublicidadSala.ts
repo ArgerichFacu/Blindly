@@ -1,17 +1,22 @@
 import { useCallback, useLayoutEffect, useRef } from "react";
 import { useFocusEffect } from "expo-router";
 import { AppState } from "react-native";
+import * as Linking from "expo-linking";
 import { usePlus } from "./PlusContext";
-import { PUBLICIDAD } from "./publicidadConfig";
+import { PUBLICIDAD, permitePublicidadPrueba, escenarioAdsQA } from "./publicidadConfig";
+import { registrarPublicidadQA } from "./publicidadDiagnostico";
 import { SesionPublicidad } from "./publicidadSesion";
 import { supabase } from "./supabase";
 
 const sesion = new SesionPublicidad(async permitido => {
-  if (!PUBLICIDAD.ads_enabled || !permitido()) return null;
+  if (!PUBLICIDAD.soloPruebas || !permitido()) return null;
   const { data, error } = await supabase.rpc("estado_publicidad");
-  if (error || data?.ads_enabled !== true || data?.elegible_free !== true || !permitido()) return null;
+  if (error || !permitePublicidadPrueba(data) || !permitido()) return null;
+  const escenario = escenarioAdsQA(data);
+  if (!escenario) return null;
+  if (escenario === "no_load") { registrarPublicidadQA("qa_no_load"); return null; }
   const { prepararInterstitial } = await import("./publicidadAdmob");
-  return prepararInterstitial(permitido);
+  return prepararInterstitial(permitido, escenario);
 });
 
 // Sólo se usa en los dos formularios de entrada, nunca en la sala, el lobby,
@@ -26,29 +31,37 @@ export function usePublicidadSala() {
     if (anterior.identidad !== plus.identidad || plus.activo || plus.cargando || plus.error || plus.tipoAcceso !== "FREE") ventana.current?.cancelar();
   }, [plus]);
   useFocusEffect(useCallback(() => {
-    const identidad = acceso.current.identidad;
-    const actual = sesion.abrir(() => {
-      const p = acceso.current;
-      return PUBLICIDAD.ads_enabled && AppState.currentState === "active" &&
-        !!identidad && p.identidad === identidad && !p.activo && !p.cargando &&
-        !p.error && p.tipoAcceso === "FREE";
-    });
-    ventana.current = actual;
+    let vivo = true;
+    let actual: ReturnType<SesionPublicidad["abrir"]> | null = null;
+    const cancelar = () => { vivo = false; actual?.cancelar(); };
+    // Un inicio por deep link/recovery nunca habilita publicidad en esta sesión.
+    // Esta consulta no se espera desde crear/unirse; un toque temprano la omite.
+    void Linking.getInitialURL().then(url => {
+      if (!vivo || url || AppState.currentState !== "active") return;
+      const identidad = acceso.current.identidad;
+      actual = sesion.abrir(() => {
+        const p = acceso.current;
+        return vivo && AppState.currentState === "active" && !!identidad && p.identidad === identidad &&
+          !p.activo && !p.cargando && !p.error && p.tipoAcceso === "FREE";
+      });
+      ventana.current = actual;
+    }).catch(cancelar);
     const listener = AppState.addEventListener("change", estado => {
-      if (estado !== "active") actual.cancelar();
+      if (estado !== "active") cancelar();
       // Volver del background no precarga ni habilita una presentación tardía.
     });
-    return () => { actual.cancelar(); listener.remove(); if (ventana.current === actual) ventana.current = null; };
+    const links = Linking.addEventListener("url", cancelar);
+    return () => { cancelar(); listener.remove(); links.remove(); if (ventana.current === actual) ventana.current = null; };
   }, []));
   return {
-    error: () => ventana.current?.error(),
+    error: () => { sesion.bloquear(); ventana.current?.error(); },
     confirmar: () => {
       const actual = ventana.current;
       const intento = actual?.confirmar();
       return {
         trasValidar: (entrada: Parameters<NonNullable<typeof actual>["trasValidar"]>[1]) =>
           intento && actual ? actual.trasValidar(intento, entrada) : Promise.resolve(),
-        error: () => actual?.error(),
+        error: () => { sesion.bloquear(); actual?.error(); },
       };
     },
   };

@@ -47,6 +47,7 @@
     "production-candidate": {
       "extends": "payment-rc",
       "autoIncrement": false,
+      "env": { "EXPO_PUBLIC_ADS_QA_DIAGNOSTICS": "true" },
       "buildArtifactPaths": ["android/app/build/outputs/mapping/release/**"]
     }
   },

@@ -6,18 +6,21 @@ const crear=async()=> (await q("select crear_liga('Club','2026','Owner') v"))[0]
 (async()=>{
   await db.exec("create role anon;create role authenticated;create role service_role;create schema auth;create table auth.users(id uuid primary key,is_anonymous boolean default false,banned_until timestamptz,email text,email_confirmed_at timestamptz,raw_user_meta_data jsonb default '{}'::jsonb);create function auth.uid() returns uuid language sql as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;grant usage on schema auth to authenticated;grant execute on function auth.uid() to authenticated;create publication supabase_realtime;");
   const migracion='20261106022529_publicidad_discreta_cupo_clubes.sql';
-  for(const f of fs.readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')&&f!==migracion).sort())await db.exec(fs.readFileSync('supabase/migrations/'+f,'utf8'));
+  for(const f of fs.readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')&&f<migracion).sort())await db.exec(fs.readFileSync('supabase/migrations/'+f,'utf8'));
   for(let n=1;n<=7;n++)await q('insert into auth.users(id,is_anonymous,email,email_confirmed_at) values($1,$2,$3,now())',[uid(n),n===7,`user${n}@example.org`]);
   await como(1);const legacy=[await crear(),await crear()];
+  const invitados=[...legacy];await como(6);for(let n=0;n<18;n++)invitados.push(await crear());
   await db.exec('reset role');const antes=await q('select * from ligas order by id');
   await db.exec(fs.readFileSync('supabase/migrations/'+migracion,'utf8'));
+  for(const f of fs.readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')&&f>migracion).sort())await db.exec(fs.readFileSync('supabase/migrations/'+f,'utf8'));
   assert.deepEqual(await q('select * from ligas order by id'),antes,'Legacy no se toca');
   await como(1);await assert.rejects(crear,/LIMITE_CLUBES_FREE/);assert.equal((await q('select mis_ligas() v'))[0].v.length,2);
   await como(7);await assert.rejects(crear,/CUENTA_REQUERIDA/);
   await como(2);const propio=await crear();await assert.rejects(crear,/LIMITE_CLUBES_FREE/);
   await q("select actualizar_liga($1,'Archivado',true)",[propio.liga_id]);await assert.rejects(crear,/LIMITE_CLUBES_FREE/);
   // Ser admin/member ajeno no consume cupo, incluso con varios clubes invitados.
-  await db.exec('reset role');for(const l of legacy)await q("insert into liga_miembros(liga_id,user_id,nombre,rol) values($1,$2,'Invitado','admin')",[l.liga_id,uid(3)]);
+  await db.exec('reset role');for(const [n,l] of invitados.entries())await q("insert into liga_miembros(liga_id,user_id,nombre,rol) values($1,$2,'Invitado',$3)",[l.liga_id,uid(3),n<2?'admin':'member']);
+  await como(3);assert.equal((await q('select mis_ligas() v'))[0].v.length,20,'20 clubes ajenos no consumen cupo propio');
   await como(3);await crear();await assert.rejects(crear,/LIMITE_CLUBES_FREE/);
   // Trial y cada compra verificada son Plus: ilimitados, sin publicidad.
   await como(4);await q('select iniciar_prueba_founder()');await crear();await crear();
@@ -30,7 +33,7 @@ const crear=async()=> (await q("select crear_liga('Club','2026','Owner') v"))[0]
   await como(5);await assert.rejects(crear,/LIMITE_CLUBES_FREE/);assert.equal((await q('select mis_ligas() v'))[0].v.length,6);
   await db.exec('reset role');await q("update private.plus_founder_trials set started_at=now()-interval '73 hours',expires_at=now()-interval '1 hour' where user_id=$1",[uid(4)]);
   await como(4);await assert.rejects(crear,/LIMITE_CLUBES_FREE/);
-  await como(6);const config=(await q('select estado_publicidad() v'))[0].v;assert.deepEqual(config,{ads_enabled:false,elegible_free:true});
+  await como(6);const config=(await q('select estado_publicidad() v'))[0].v;assert.deepEqual(config,{ads_enabled:false,ads_qa_enabled:false,ads_qa_scenario:null,elegible_free:true});
   await assert.rejects(()=>q('update private.publicidad_config set ads_enabled=true'),/permission denied/);
   await assert.rejects(()=>q('select * from private.publicidad_config'),/permission denied/);
   await db.exec('reset role');await q('insert into private.accesos_revision_play(user_id) values($1)',[uid(6)]);

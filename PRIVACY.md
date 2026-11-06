@@ -1,6 +1,6 @@
 # Política de privacidad de Blindly
 
-**Última actualización: 12 de octubre de 2026**
+**Última actualización: 6 de noviembre de 2026**
 
 Blindly organiza partidas presenciales de poker entre amigos. No procesa apuestas con dinero real, premios ni transferencias entre jugadores.
 
@@ -16,7 +16,15 @@ Podés usar email y contraseña o vincular Google a tu identidad. Supabase Auth 
 
 Los datos se usan para autenticar al usuario, sincronizar una partida entre celulares, mantener la integridad de turnos, fichas y puntos, mostrar el historial y recuperar una identidad protegida.
 
-Supabase presta los servicios de autenticación, base de datos, sincronización y funciones de servidor. Cuando Blindly Plus está activado, RevenueCat recibe el identificador de cuenta de Supabase y el estado de las compras para validar el acceso, restaurarlo y atender la eliminación de datos. Expo, Apple y Google pueden procesar información técnica necesaria para compilar, distribuir, comprar y ejecutar la aplicación conforme a sus propias políticas. Blindly no vende datos personales, no incluye publicidad y no integra herramientas de seguimiento publicitario.
+Supabase presta los servicios de autenticación, base de datos, sincronización y funciones de servidor. Cuando Blindly Plus está activado, RevenueCat recibe el identificador de cuenta de Supabase y el estado de las compras para validar el acceso, restaurarlo y atender la eliminación de datos. Expo, Apple y Google pueden procesar información técnica necesaria para compilar, distribuir, comprar y ejecutar la aplicación conforme a sus propias políticas. Blindly no vende datos personales.
+
+## Publicidad y consentimiento
+
+Blindly 1.35 incorpora Google AdMob para un interstitial opcional de Free, después de crear o unirse correctamente a una sala y antes del lobby, como máximo una vez por sesión. No incluye banners ni anuncios durante el poker. Cualquier acceso Plus, incluido Founder Trial y revisión de Play, elimina la publicidad. En el estado inicial de esta versión, los anuncios están desactivados para el público: sólo testers autorizados pueden recibir anuncios oficiales de prueba. No hay unidades monetizables configuradas.
+
+Cuando se permiten solicitudes publicitarias, Google puede procesar dirección IP, interacciones con el anuncio, datos de diagnóstico, identificadores de dispositivo/cuenta y señales de consentimiento para prestar el servicio, medirlo y prevenir fraude. La IP puede permitir estimar una ubicación aproximada. Blindly no envía a AdMob nombres de jugadores, correo, clubes, códigos de sala ni resultados, ni pide ubicación GPS. La configuración Android de esta fase excluye el permiso Advertising ID; esto no elimina todos los demás datos técnicos del SDK. Los anuncios de prueba se solicitan como no personalizados.
+
+La User Messaging Platform de Google verifica si se pueden solicitar anuncios antes de inicializar el flujo publicitario. Si falta consentimiento requerido, la verificación falla o el estado es incierto, se omite el anuncio. Con publicidad deshabilitada y sin autorización QA no se solicitan anuncios ni consentimiento publicitario. Esta fase no ofrece un panel de preferencias publicitarias: el flujo de consentimiento y sus opciones de revocación deben completarse antes de activar anuncios reales. No se interpreta la ausencia de un formulario como consentimiento. Consultá la [política de privacidad de Google](https://policies.google.com/privacy).
 
 ## Conservación, acceso y eliminación
 

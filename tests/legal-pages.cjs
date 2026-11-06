@@ -26,7 +26,10 @@ for (const page of pages) {
 const privacy = fs.readFileSync(path.join(docs, "privacy.html"), "utf8");
 assert.match(privacy, /Supabase/);
 assert.match(privacy, /RevenueCat/);
-assert.match(privacy, /no incluye publicidad/i);
+assert.match(privacy, /Google AdMob/);
+assert.match(privacy, /anuncios públicos están apagados/i);
+assert.match(privacy, /consentimiento/i);
+assert.doesNotMatch(privacy, /no incluye publicidad/i);
 assert.match(privacy, /Eliminar mi cuenta/i);
 
 const deletion = fs.readFileSync(

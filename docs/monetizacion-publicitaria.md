@@ -12,7 +12,7 @@ La respuesta de `unirse_mesa` incorpora `ingresoNuevo`: sólo una incorporación
 
 ## Frecuencia y sesión
 
-**Máximo un intento de presentación por sesión de aplicación**, compartido entre crear/unirse y entre cuentas. Se reserva antes de invocar `show`, evitando doble toque y concurrencia. Un fallo de presentación consume ese intento; no se reintenta para incrementar impresiones.
+**Máximo una apertura por sesión de aplicación**, compartida entre crear/unirse y entre cuentas. Una reserva de presentación evita doble toque/concurrencia; sólo OPENED consume el cap como impresión. Los fallos inciertos bloquean la publicidad restante sin contarse como una impresión. Nunca se reintenta durante la misma navegación.
 
 Sesión = vida del runtime de la aplicación. Background/foreground, navegación, logout y cambio de cuenta no reinician el cupo. Terminar y volver a iniciar la app crea una nueva sesión. Sólo se conserva un booleano en memoria, sin timestamps de usuario, identificadores publicitarios, AsyncStorage ni tracking entre sesiones. Cambiar a background invalida la transición pendiente; no se precarga ni se presenta nada al regresar. Salir del formulario invalida esa oportunidad. Ante errores del flujo de sala, incluyendo validación o QR inválido, se renuncia a mostrar publicidad durante el resto de la sesión, aunque después se complete otra operación correctamente.
 
@@ -22,11 +22,11 @@ Founder Trial, mensual, anual, Founder Lifetime y Play Reviewer eliminan la publ
 
 ## Estado inicial y privacidad
 
-`PUBLICIDAD.ads_enabled=false` en el cliente y `private.publicidad_config.ads_enabled=false` en servidor. Ambos deben permitir anuncios; cambiar únicamente el servidor no puede activar esta candidata. La tabla es privada, con RLS y sin acceso de lectura/escritura de clientes. `estado_publicidad()` devuelve sólo el switch y la elegibilidad propia. No cambia los flags de pagos ni Founder Trial.
+`private.publicidad_config.ads_enabled=false` permanece en el servidor. v35 sólo admite test ads autorizados por `ads_qa_enabled` y una allowlist privada de cuentas protegidas con vencimiento; el flag público por sí solo no habilita esta fase. Tablas privadas con RLS y sin acceso cliente; `estado_publicidad()` devuelve flags/elegibilidad/escenario propios. No hay emails/UUIDs hardcodeados ni override de Plus. Los escenarios privados no_load/show_error/show_timeout permiten probar fallos sintéticos sin cambiar el switch público. No cambian pagos ni Founder Trial.
 
 SDK `react-native-google-mobile-ads` fijado en 17.4.0, compatible con RN0.86; únicamente App IDs de ejemplo de Google y `TestIds.INTERSTITIAL`, también en release. No hay IDs reales ni mediación. Inicialización/importación diferida, medición de app retrasada, requests no personalizados sin keywords, ubicación, contenido o datos de clubes/jugadores. Android bloquea `com.google.android.gms.permission.AD_ID`. No se solicita ATT ni se intenta acceder al IDFA. Web no carga SDK ni anuncios.
 
-Se consulta el estado de red sin pedir IP/MAC; offline o desconocido omite publicidad. La precarga tiene un límite de10s que no retiene la sala; el objeto se descarta a los55min. Si la presentación no abre ni devuelve error en750ms se destruye y continúa, sin mostrar un anuncio tardío sobre el lobby. Una presentación abierta continúa al cerrarse o fallar. Estos tiempos y el comportamiento nativo requieren QA real: las pruebas con SDK falso no acreditan funcionamiento físico.
+Se consulta el estado de red sin pedir IP/MAC; offline o desconocido omite publicidad. La precarga tiene un límite de10s que no retiene la sala; el objeto se descarta a los55min. Sin OPENED en750ms continúa; hay un límite total90s ante CLOSED perdido. El descarte de objetos no garantiza cerrar una actividad nativa ya visible: esta carrera requiere QA de hardware. Las pruebas con SDK falso no acreditan funcionamiento físico. El diagnóstico opt-in sólo registra eventos del SDK, sin identidad ni datos de partida.
 
 UMP se consulta antes de inicializar AdMob. Si no permite solicitar anuncios se omiten. **No se abre automáticamente un formulario de consentimiento en una transición de sala.** El flujo de consentimiento y de opciones de privacidad de producción queda pendiente; no se considera resuelto por usar anuncios no personalizados.
 
@@ -44,6 +44,6 @@ Se conserva todo club legacy, incluyendo cuentas Free con más de uno. Esas cuen
 
 `npm run test:publicidad` cubre la sesión, doble toque, precarga tardía, errores/timeouts/consentimiento/offline, Plus y los dos handlers de sala; además reconstruye la cadena SQL y prueba cupos, legacy, roles ajenos, archivados, expiración y permisos. Se ejecuta también como `posttest` de la suite general. No reemplaza QA en hardware ni la revisión de tienda.
 
-Este trabajo no reconstruye ni reemplaza el AAB v34 de Alpha y no autoriza un rollout Production. Los cambios de UI/SDK requieren otra build autorizada; el backend puede aplicar el cupo de forma compatible sin borrar datos. Estado de despliegue y comprobaciones se registran en el informe de release existente.
+El titular autorizó posteriormente una nueva v35, versión visible1.35, CI y distribución Alpha; no Production ni ads reales. Su estado, artefacto, auditoría y QA se registran en [release v35](release-v35-1.35-ads-clubes.md). v34 permanece como antecedente y no se reutiliza su artefacto.
 
 Fuentes: [Expo57](https://docs.expo.dev/versions/v57.0.0/), [Expo Network57](https://docs.expo.dev/versions/v57.0.0/sdk/network/), [instalación del SDK en Expo](https://docs.page/invertase/react-native-google-mobile-ads/installation/expo), [interstitial y precarga](https://docs.page/invertase/react-native-google-mobile-ads/ad-formats/interstitial), [consentimiento previo](https://docs.page/invertase/react-native-google-mobile-ads/consent-basics), [Google AdMob interstitial](https://developers.google.com/admob/android/interstitial).

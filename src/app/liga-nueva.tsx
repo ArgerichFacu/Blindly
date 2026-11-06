@@ -114,7 +114,7 @@ export default function LigaNueva() {
         )}
       </Texto>
       {!!error && <Texto>{error}</Texto>}
-      {limite && <Boton titulo={t("Obtener Plus")} secundario onPress={() => router.push("/plus")} />}
+      {limite && <Boton titulo={t("Ver Blindly Plus")} secundario onPress={() => router.push("/plus")} />}
       <Boton
         titulo={t(ocupado ? "Guardando…" : "Crear liga")}
         disabled={!valido || ocupado}
