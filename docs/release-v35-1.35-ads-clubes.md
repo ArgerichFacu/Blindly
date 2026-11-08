@@ -1,5 +1,11 @@
 # Blindly 1.35 — anuncios de prueba y cupo de clubes
 
+## Actualización posterior: pagos públicos — 08/11/2026
+
+El titular confirmó que Blindly ya está publicada y pidió activar los pagos. A las **13:29:15 ART** (16:29:15 UTC), se habilitó en Supabase `private.plus_lanzamiento.real_payments_enabled=true`. La lectura posterior confirmó `true`; `founder_trial_enabled=true` se conservó. No se tocaron `ads_enabled=false` ni `ads_qa_enabled=false`.
+
+La operación sólo cambió esa bandera: no hubo cambios de código, build, AAB, firma, versión, territorios, precios ni catálogo de RevenueCat. Se mantienen los planes Android ya configurados: mensual, anual y Founder Lifetime. No se ejecutó una compra real; el recorrido de cobro, la concesión del entitlement y su notificación no se volvieron a probar como parte de esta activación. El apartado de envío de abajo conserva el estado registrado el 07/11; la publicación actual fue confirmada por el titular en esta conversación.
+
 Actualización07/11/2026 (ART). **FEATURE FREEZE TOTAL — PRODUCTION EN REVISIÓN, envío10.** El titular autorizó expresamente confirmar/enviar35 y la publicación automática tras la aprobación de Google, con publicación gestionada desactivada y monetización pública OFF. Se confirmó y envió exactamente el AAB validado35/1.35, sin build nueva ni cambios de código, package, firma, versión, territorios o declaraciones. No modificar la release mientras Google revisa salvo rechazo o blocker real. Pagos públicos y anuncios comerciales siguen OFF; la autorización de lanzamiento no activa monetización.
 
 ## Envío efectivo a Production — 07/11/2026
