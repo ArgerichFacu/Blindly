@@ -2408,6 +2408,14 @@ Object.assign(textos, {
     "This Google account is linked to another account. Use the option to sign in to your existing account.",
     "Este Google já está vinculado a outra conta. Use a opção de entrar na sua conta existente."
   ],
+  "Lo que hiciste como invitado en este teléfono no se pasa a esa cuenta. Tu cuenta conserva todos sus datos.": [
+    "What you did as a guest on this phone won't move to that account. Your account keeps all its data.",
+    "O que você fez como convidado neste celular não passa para essa conta. Sua conta mantém todos os dados."
+  ],
+  "Entrar a mi cuenta existente": [
+    "Sign in to my existing account",
+    "Entrar na minha conta existente"
+  ],
   "El acceso con Google todavía necesita configuración. Podés jugar como invitado.": [
     "Google sign-in still needs configuration. You can play as a guest.",
     "O acesso com Google ainda precisa de configuração. Você pode jogar como convidado."

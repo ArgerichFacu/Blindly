@@ -23,6 +23,9 @@ export default function Cuenta() {
     [codigo, setCodigo] = useState(""), [clave, setClave] = useState(""),
     [ocupado, setOcupado] = useState(false), [error, setError] = useState<unknown>(null), [aviso, setAviso] = useState(""),
     [seguridad, setSeguridad] = useState(false), [confirmarBorrado, setConfirmarBorrado] = useState(false), [confirmarSalida, setConfirmarSalida] = useState(false), [revision, setRevision] = useState(0);
+  // Último método de acceso intentado por un invitado, para ofrecer entrar a la
+  // cuenta existente cuando el invitado actual bloquea el cambio.
+  const [intento, setIntento] = useState<{ tipo: "google" | "email"; descartar: boolean } | null>(null);
   const cerrojo = useRef(false), vivo = useRef(true), ultimoUsuario = useRef<string | null>(null), googleInicial = useRef(false);
   const versionSesion = useRef(0);
   const [sesionCargada, setSesionCargada] = useState(false);
@@ -100,6 +103,7 @@ export default function Cuenta() {
       }
       if (accion === "google" && !googleInicial.current) {
         googleInicial.current = true;
+        setIntento({ tipo: "google", descartar: false });
         await ejecutar(async () => { const nueva = await continuarGoogle("auto", contextoAuth); if(nueva) await listo(nueva, u.is_anonymous !== false || desdeInicio || !!volver); });
       }
     }).catch(e => { if (activo && version === versionSesion.current) { setSesionCargada(true); setError(e); } });
@@ -110,7 +114,19 @@ export default function Cuenta() {
   function cambiarModo(nuevo: Modo) { setModo(nuevo); setError(null); setAviso(""); setPassword(""); setConfirmacion(""); setCodigo(""); }
   const campoEmail = <Campo etiqueta={t("Email")} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} autoComplete="email" textContentType="emailAddress" editable={!ocupado}/>;
   const camposPassword = <><Campo etiqueta={t("Contraseña")} value={password} onChangeText={setPassword} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete={modo === "login" ? "current-password" : "new-password"} editable={!ocupado}/>{modo !== "login" && <Campo etiqueta={t("Confirmar contraseña")} value={confirmacion} onChangeText={setConfirmacion} secureTextEntry autoCapitalize="none" autoCorrect={false} autoComplete="new-password" editable={!ocupado}/>}</>;
-  const google = () => void ejecutar(async () => { const u = await continuarGoogle("auto", contextoAuth); if (u) await listo(u, invitado || desdeInicio || !!volver); });
+  const google = () => { setIntento({ tipo: "google", descartar: false }); void ejecutar(async () => { const u = await continuarGoogle("auto", contextoAuth); if (u) await listo(u, invitado || desdeInicio || !!volver); }); };
+  const entrarConEmail = () => { setIntento({ tipo: "email", descartar: false }); void ejecutar(async () => listo(await entrarEmail(email, password))); };
+  const bloqueoInvitado = invitado && modo === "login" && !!intento && !intento.descartar && error instanceof Error && ["AUTH_GOOGLE_OCUPADO", "PROTEGER_INVITADO"].includes(error.message);
+  const entrarExistente = () => {
+    if (!intento) return;
+    setIntento({ ...intento, descartar: true });
+    void ejecutar(async () => {
+      const u = intento.tipo === "google"
+        ? await continuarGoogle(false, contextoAuth, { descartarInvitado: true })
+        : await entrarEmail(email, password, { descartarInvitado: true });
+      if (u) await listo(u, true);
+    });
+  };
   const salir = (conservar = false) => void ejecutar(async () => { const u=await cerrarSesion(conservar); if (!vivo.current) return; setUsuario(u);setModo("login");setSeguridad(false);setConfirmarSalida(false);router.dismissAll();router.replace("/"); });
   return <Pantalla scrollRef={scroll} titulo={t(usuario && !invitado && modo === "cuenta" ? "Mi cuenta" : "Acceso")} subtitulo={t("Tu mesa de poker, conectada.")}>
     {!!error && <Tarjeta><Texto accessibilityLiveRegion="assertive">{mensajeError(error)}</Texto>
@@ -123,6 +139,10 @@ export default function Cuenta() {
           <Boton titulo={t("Cancelar")} secundario disabled={ocupado} onPress={() => setConfirmarSalida(false)}/>
         </> : <Boton titulo={t("Cerrar sesión conservando la partida")} secundario disabled={ocupado} onPress={() => setConfirmarSalida(true)}/>)}
       </>}
+      {bloqueoInvitado && <>
+        <Texto suave>{t("Lo que hiciste como invitado en este teléfono no se pasa a esa cuenta. Tu cuenta conserva todos sus datos.")}</Texto>
+        <Boton titulo={t("Entrar a mi cuenta existente")} disabled={ocupado} onPress={entrarExistente}/>
+      </>}
       <Boton titulo={t("Reintentar")} secundario disabled={ocupado} onPress={() => { setError(null); setRevision(v=>v+1); }}/></Tarjeta>}
     {!!aviso && <Tarjeta><Texto accessibilityLiveRegion="polite">{t(aviso)}</Texto></Tarjeta>}
     {!usuario && !sesionCargada ? <Texto>{t("Cargando…")}</Texto> : <>
@@ -130,7 +150,7 @@ export default function Cuenta() {
         <View style={{ alignItems: "center", gap: 12 }}><LogoBlindly ancho={180}/><Etiqueta>{t("POKER ENTRE AMIGOS")}</Etiqueta></View>
         <Boton titulo={t("Ingresar con Google")} disabled={ocupado} onPress={google}/>
         <Texto suave style={{ textAlign: "center" }}>{t("o")}</Texto>{campoEmail}{camposPassword}
-        <Boton titulo={t(ocupado ? "Cargando…" : "Iniciar sesión")} disabled={ocupado || !email || !password} onPress={() => void ejecutar(async()=>listo(await entrarEmail(email,password)))}/>
+        <Boton titulo={t(ocupado ? "Cargando…" : "Iniciar sesión")} disabled={ocupado || !email || !password} onPress={entrarConEmail}/>
         <Boton titulo={t("¿Olvidaste tu contraseña?")} secundario compacto disabled={ocupado} onPress={()=>cambiarModo("reset")}/>
         <Texto suave>{t("¿No tenés cuenta?")}</Texto><Boton titulo={t("Crear cuenta")} secundario disabled={ocupado} onPress={()=>cambiarModo("registro")}/>
       </Tarjeta>}
