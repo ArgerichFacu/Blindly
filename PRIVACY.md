@@ -1,6 +1,6 @@
 # Política de privacidad de Blindly
 
-**Última actualización: 6 de noviembre de 2026**
+**Última actualización: 8 de noviembre de 2026**
 
 Blindly organiza partidas presenciales de poker entre amigos. No procesa apuestas con dinero real, premios ni transferencias entre jugadores.
 
@@ -20,11 +20,11 @@ Supabase presta los servicios de autenticación, base de datos, sincronización 
 
 ## Publicidad y consentimiento
 
-Blindly 1.35 incorpora Google AdMob para un interstitial opcional de Free, después de crear o unirse correctamente a una sala y antes del lobby, como máximo una vez por sesión. No incluye banners ni anuncios durante el poker. Cualquier acceso Plus, incluido Founder Trial y revisión de Play, elimina la publicidad. En el estado inicial de esta versión, los anuncios están desactivados para el público: sólo testers autorizados pueden recibir anuncios oficiales de prueba. No hay unidades monetizables configuradas.
+Blindly 1.35 incorpora Google AdMob para un interstitial opcional de Free, después de crear o unirse correctamente a una sala y antes del lobby, como máximo una vez por sesión. No incluye banners ni anuncios durante el poker. Cualquier acceso Plus, incluido Founder Trial y revisión de Play, elimina la publicidad. La publicidad se activa desde el servidor. Mientras los anuncios públicos están apagados, sólo testers autorizados pueden recibir anuncios oficiales de prueba.
 
-Cuando se permiten solicitudes publicitarias, Google puede procesar dirección IP, interacciones con el anuncio, datos de diagnóstico, identificadores de dispositivo/cuenta y señales de consentimiento para prestar el servicio, medirlo y prevenir fraude. La IP puede permitir estimar una ubicación aproximada. Blindly no envía a AdMob nombres de jugadores, correo, clubes, códigos de sala ni resultados, ni pide ubicación GPS. La configuración Android de esta fase excluye el permiso Advertising ID; esto no elimina todos los demás datos técnicos del SDK. Los anuncios de prueba se solicitan como no personalizados.
+Cuando se permiten solicitudes publicitarias, Google puede procesar dirección IP, interacciones con el anuncio, datos de diagnóstico, identificadores de dispositivo/cuenta y señales de consentimiento para prestar el servicio, medirlo y prevenir fraude. La IP puede permitir estimar una ubicación aproximada. Blindly no envía a AdMob nombres de jugadores, correo, clubes, códigos de sala ni resultados, ni pide ubicación GPS. La configuración Android excluye el permiso Advertising ID y todos los anuncios se solicitan como no personalizados; esto no elimina todos los demás datos técnicos del SDK.
 
-La User Messaging Platform de Google verifica si se pueden solicitar anuncios antes de inicializar el flujo publicitario. Si falta consentimiento requerido, la verificación falla o el estado es incierto, se omite el anuncio. Con publicidad deshabilitada y sin autorización QA no se solicitan anuncios ni consentimiento publicitario. Esta fase no ofrece un panel de preferencias publicitarias: el flujo de consentimiento y sus opciones de revocación deben completarse antes de activar anuncios reales. No se interpreta la ausencia de un formulario como consentimiento. Consultá la [política de privacidad de Google](https://policies.google.com/privacy).
+Blindly usa la User Messaging Platform de Google. Con la publicidad activa, al abrir la app y sólo para usuarios Free, Google muestra un formulario de consentimiento únicamente donde la ley lo exige (por ejemplo, Espacio Económico Europeo, Reino Unido o algunos estados de EE. UU.). En esas regiones, Opciones incluye «Privacidad de anuncios» para revisar o retirar el consentimiento en cualquier momento. Si falta consentimiento requerido, la verificación falla o el estado es incierto, se omite el anuncio; la ausencia de un formulario no se interpreta como consentimiento. Mientras los anuncios públicos están apagados no se solicitan anuncios ni consentimiento publicitario, salvo a testers autorizados. Consultá la [política de privacidad de Google](https://policies.google.com/privacy).
 
 ## Conservación, acceso y eliminación
 

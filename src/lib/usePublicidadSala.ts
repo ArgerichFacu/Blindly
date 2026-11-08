@@ -3,20 +3,25 @@ import { useFocusEffect } from "expo-router";
 import { AppState } from "react-native";
 import * as Linking from "expo-linking";
 import { usePlus } from "./PlusContext";
-import { PUBLICIDAD, permitePublicidadPrueba, escenarioAdsQA } from "./publicidadConfig";
+import { modoPublicidad, escenarioAdsQA } from "./publicidadConfig";
 import { registrarPublicidadQA } from "./publicidadDiagnostico";
 import { SesionPublicidad } from "./publicidadSesion";
+import { UNIDAD_INTERSTICIAL_REAL } from "./publicidadUnidad";
 import { supabase } from "./supabase";
 
 const sesion = new SesionPublicidad(async permitido => {
-  if (!PUBLICIDAD.soloPruebas || !permitido()) return null;
+  if (!permitido()) return null;
   const { data, error } = await supabase.rpc("estado_publicidad");
-  if (error || !permitePublicidadPrueba(data) || !permitido()) return null;
-  const escenario = escenarioAdsQA(data);
+  if (error || !permitido()) return null;
+  const modo = modoPublicidad(data, UNIDAD_INTERSTICIAL_REAL);
+  if (!modo) return null;
+  // Los escenarios sintéticos de fallo sólo existen en la ruta QA.
+  const escenario = modo === "prueba" ? escenarioAdsQA(data as Record<string, unknown>) : "normal";
   if (!escenario) return null;
   if (escenario === "no_load") { registrarPublicidadQA("qa_no_load"); return null; }
   const { prepararInterstitial } = await import("./publicidadAdmob");
-  return prepararInterstitial(permitido, escenario);
+  // QA siempre usa el ID de prueba de Google; producción, la unidad real.
+  return prepararInterstitial(permitido, escenario, modo === "real" ? UNIDAD_INTERSTICIAL_REAL : undefined);
 });
 
 // Sólo se usa en los dos formularios de entrada, nunca en la sala, el lobby,

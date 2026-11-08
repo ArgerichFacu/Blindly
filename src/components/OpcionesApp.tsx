@@ -9,8 +9,10 @@ import { useTema } from "../lib/TemaContext";
 import { TEMAS } from "../lib/temas";
 import { capacidadesPlus } from "../lib/capacidadesPlus";
 import { usePlus } from "../lib/PlusContext";
+import { usePrivacidadAnunciosRequerida } from "../lib/privacidadAnuncios";
 export default function OpcionesApp({ enTabs = false }: { enTabs?: boolean }) {
     const router = useRouter(), { t, preferencias, cambiar } = usePreferencias(), { tema, elegirTema } = useTema(), plus = usePlus();
+    const privacidadAnuncios = usePrivacidadAnunciosRequerida();
     const [selector, setSelector] = useState<"idioma" | "tema" | null>(null);
     const etiqueta = (titulo: string) => <Texto suave style={{ fontSize: 11, letterSpacing: 1.5, marginTop: 20, marginBottom: 4 }}>{titulo}</Texto>;
     return <Pantalla titulo={t("Config")} volver={!enTabs} enTabs={enTabs}>
@@ -36,6 +38,7 @@ export default function OpcionesApp({ enTabs = false }: { enTabs?: boolean }) {
     <FilaOpcion titulo={t("Blindly Plus")} icono="plus" onPress={() => router.push("/plus")}/>
     <FilaOpcion titulo={t("Créditos de música")} onPress={() => router.push("/creditos")}/>
     <FilaOpcion titulo={t("Política de privacidad")} onPress={() => router.push("/privacidad")}/>
+    {privacidadAnuncios && <FilaOpcion titulo={t("Privacidad de anuncios")} onPress={() => void import("../lib/consentimientoAds").then(m => m.abrirOpcionesPrivacidadAnuncios()).catch(() => {})}/>}
     <FilaOpcion titulo={t("Términos y condiciones")} onPress={() => router.push("/terminos")}/>
   </Superficie></Pantalla>;
 }
