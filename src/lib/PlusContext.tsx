@@ -93,7 +93,10 @@ export function PlusProvider({ children }: { children: ReactNode }) {
       const tester = !estado.real_payments_enabled && actual.is_anonymous === false && await consultarPermisoPagoTester();
       if (turno !== generacion.current || !montado.current) return;
       setPermisoTester(tester);
-      if (!estado.real_payments_enabled && !tester) {
+      // Un invitado no puede comprar ni restaurar: sólo ve precios. Sincronizar
+      // su CustomerInfo escribiría filas comerciales vacías en accesos_plus.
+      const invitado = actual.is_anonymous !== false;
+      if ((!estado.real_payments_enabled && !tester) || invitado) {
         quitarListener(); setInfo(null); setCatalogo(null); setErrorCatalogo(null);
         // La consulta del catálogo no bloquea las acciones gratuitas del Trial.
         setCargando(false);
