@@ -12,6 +12,14 @@ const start=async()=> (await q('select iniciar_prueba_founder() s'))[0].s;
  await own(1);let s=await state();assert.equal(s.eligible,true);assert.equal(s.used,false);assert.equal(s.real_payments_enabled,false);
  await q('select registrar_vista_plus()');await q('select registrar_vista_plus()');assert.equal((await state()).used,false,'Views never activate trial');
  assert.equal((await q('select mi_identidad_tiene_datos() d'))[0].d,false,'Sólo ver Plus no impide login Google normal');
+ // sincronizar-plus guarda una fila inactiva para cada invitado con pagos activos.
+ await db.exec('reset role');await q("insert into accesos_plus(user_id,activo,entitlement,vence_en,verificado_en,entorno) values($1,false,'blindly_plus',null,now(),'unknown')",[uid(1)]);await own(1);
+ assert.equal((await q('select mi_identidad_tiene_datos() d'))[0].d,false,'Una verificación Plus inactiva no bloquea el login de una cuenta existente');
+ await db.exec('reset role');await q("update accesos_plus set activo=true,vence_en=now()+interval '1 day' where user_id=$1",[uid(1)]);await own(1);
+ assert.equal((await q('select mi_identidad_tiene_datos() d'))[0].d,true,'Un Plus vigente sí se conserva con el UUID');
+ await db.exec('reset role');await q("update accesos_plus set vence_en=now()-interval '1 minute' where user_id=$1",[uid(1)]);await own(1);
+ assert.equal((await q('select mi_identidad_tiene_datos() d'))[0].d,false,'Un Plus vencido no cuenta como dato');
+ await db.exec('reset role');await q('delete from accesos_plus where user_id=$1',[uid(1)]);await own(1);
  await assert.rejects(()=>q('select * from private.plus_lanzamiento'),/permission denied/);
  await assert.rejects(()=>q("update private.plus_lanzamiento set real_payments_enabled=true"),/permission denied/);
  await assert.rejects(()=>q('select private.tiene_founder_trial($1)',[uid(2)]),/permission denied/);
