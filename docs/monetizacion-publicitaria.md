@@ -59,3 +59,10 @@ Código listo en `feature/pagos-y-anuncios`; **no activa nada por sí solo**.
 - **Política de privacidad** actualizada (PRIVACY.md, pantalla y docs/privacy.html; la página pública se publica al mergear a `main`).
 
 Activación (orden): unidades reales y mensaje UMP en AdMob → variables EAS → build y publicación → `app-ads.txt` y declaraciones de Play revisadas → recién entonces `ads_enabled=true`, por decisión del titular.
+
+### AdMob configurado — 08/11/2026
+- App "Blindly" (Android, vinculada a Play `com.blindly.studio`): App ID `ca-app-pub-4933045860945005~8101071933`.
+- Bloque intersticial "Blindly - Sala (interstitial)": `ca-app-pub-4933045860945005/3858574598`. Sin video (sólo texto/imagen/rich media) y limitación de frecuencia de 1 impresión por usuario cada 60 minutos, como respaldo del cupo de la app.
+- `app-ads.txt` publicado en `https://argerichfacu.github.io/app-ads.txt` (repo `ArgerichFacu/argerichfacu.github.io`); AdMob debe rastrearlo.
+- Privacidad y mensajes: mensaje RGPD publicado (Consentir / No consentir / Gestionar opciones; 8 idiomas; política `https://argerichfacu.github.io/Blindly/privacy.html`) y mensaje de estados de EE. UU. publicado (inglés y español latino).
+- Pendiente del titular: perfil de pagos de AdMob, variables EAS y build. `ads_enabled` sigue en `false`.
