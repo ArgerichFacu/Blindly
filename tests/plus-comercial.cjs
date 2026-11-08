@@ -81,6 +81,11 @@ const protegido = id => ({id,is_anonymous:false,email:`${id}@recovery.blindly.in
  assert.deepEqual({pagos,restores,gestiones,sincronizaciones},antesLectura,'sin paywall, restore, management ni escritura comercial durante catálogo');
  // Invitado ve catálogo con su UUID sin compras ni escrituras comerciales.
  user={id:'guest-catalogue',is_anonymous:true};authChanged('SIGNED_IN',{user});await render().refrescar();assert.equal(uuid,user.id);assert.equal(render().compraVisible,true);assert.equal(render().compraAutorizada,false);await assert.rejects(render().comprar(),/PLUS_PAGOS_NO_DISPONIBLES/);assert.deepEqual({pagos,restores,gestiones,sincronizaciones},antesLectura);
+ // Con pagos públicos ON, el invitado ve precios pero nunca sincroniza ni compra.
+ payments=true;await render().refrescar();assert.equal(render().catalogo,oferta);assert.equal(render().activo,false);
+ assert.deepEqual({pagos,restores,gestiones,sincronizaciones},antesLectura,'Invitado con pagos ON no escribe accesos_plus');
+ await assert.rejects(render().comprar(),/PLUS_PROTEGER_CUENTA/);assert.deepEqual({pagos,restores,gestiones,sincronizaciones},antesLectura);
+ payments=false;
  user=protegido('uuid-b');authChanged('SIGNED_IN',{user});
  // Error del catálogo separado: no borra el Trial ni su caché validada.
  const ahora=new Date();founderPatch={active:true,used:true,eligible:false,access_source:'FOUNDER_TRIAL',server_now:ahora.toISOString(),started_at:ahora.toISOString(),expires_at:new Date(+ahora+72*3600000).toISOString()};

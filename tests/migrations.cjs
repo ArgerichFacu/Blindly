@@ -54,6 +54,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
     "20261106022529_publicidad_discreta_cupo_clubes.sql",
     "20261106063046_ads_qa_v35.sql",
     "20261106065317_ads_qa_escenarios.sql",
+    "20261108174000_identidad_datos_plus_activo.sql",
   ]);
 
   const baseSources = fs

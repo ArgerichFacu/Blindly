@@ -126,12 +126,15 @@ export async function confirmarEmailPassword(email: string, codigo: string, pass
     return r.data.user;
   });
 }
-export async function entrarEmail(email: string, password: string) {
+// descartarInvitado: el usuario confirmó entrar a su cuenta existente sin
+// pasarle lo hecho como invitado en este dispositivo.
+type OpcionesCambio = { descartarInvitado?: boolean };
+export async function entrarEmail(email: string, password: string, cambio: OpcionesCambio = {}) {
   return operacion(async () => {
     email = emailValido(email);
     if (!password) throw new Error("AUTH_CREDENCIALES");
     const u = await asegurarSesion();
-    await validarCambioCuenta(u);
+    await validarCambioCuenta(u, cambio);
     await mismaSesion(u.id);
     const r = await supabase.auth.signInWithPassword({ email, password });
     if (r.error) throw r.error;
@@ -184,21 +187,23 @@ export async function guardarPassword(password: string, confirmacion: string) {
     return r.data.user;
   });
 }
-export async function continuarGoogle(metodo: boolean | "auto" = "auto", contexto: ContextoAuth = {}) {
+export async function continuarGoogle(metodo: boolean | "auto" = "auto", contexto: ContextoAuth = {}, cambio: OpcionesCambio = {}) {
   return operacion(async () => {
     const u = await asegurarSesion();
     // La elección de API pertenece al servicio, no al usuario. Una cuenta
-    // protegida/legacy siempre conserva su UUID; un invitado con progreso también.
+    // protegida/legacy siempre conserva su UUID; un invitado con progreso también,
+    // salvo que el usuario confirme entrar a su cuenta Google existente.
     if (metodo === "auto" && u.is_anonymous === false && u.identities?.some(i => i.provider === "google" && i.user_id === u.id)) return u;
-    let vincular = metodo === "auto" ? u.is_anonymous === false : metodo;
-    if (metodo === "auto" && u.is_anonymous !== false) {
+    if (cambio.descartarInvitado && u.is_anonymous === false) throw new Error("CUENTA_YA_VINCULADA");
+    let vincular = cambio.descartarInvitado ? false : metodo === "auto" ? u.is_anonymous === false : metodo;
+    if (!cambio.descartarInvitado && metodo === "auto" && u.is_anonymous !== false) {
       try { await validarCambioCuenta(u); vincular = false; }
       catch (e) {
         if (!(e instanceof Error) || e.message !== "PROTEGER_INVITADO") throw e;
         vincular = true;
       }
     }
-    if (!vincular) await validarCambioCuenta(u);
+    if (!vincular) await validarCambioCuenta(u, cambio);
     await mismaSesion(u.id);
     const opciones = { provider: "google" as const, options: { redirectTo: retornoAuth(), skipBrowserRedirect: true, queryParams: { prompt: "select_account" } } };
     return solicitudPendiente({ tipo: vincular ? "google-link" : "google-login", usuario: u.id, fecha: Date.now(), contexto: contextoSeguro(contexto) }, async () => {

@@ -47,3 +47,22 @@ Se conserva todo club legacy, incluyendo cuentas Free con más de uno. Esas cuen
 El titular autorizó posteriormente una nueva v35, versión visible1.35, CI y distribución Alpha; no Production ni ads reales. Su estado, artefacto, auditoría y QA se registran en [release v35](release-v35-1.35-ads-clubes.md). v34 permanece como antecedente y no se reutiliza su artefacto.
 
 Fuentes: [Expo57](https://docs.expo.dev/versions/v57.0.0/), [Expo Network57](https://docs.expo.dev/versions/v57.0.0/sdk/network/), [instalación del SDK en Expo](https://docs.page/invertase/react-native-google-mobile-ads/installation/expo), [interstitial y precarga](https://docs.page/invertase/react-native-google-mobile-ads/ad-formats/interstitial), [consentimiento previo](https://docs.page/invertase/react-native-google-mobile-ads/consent-basics), [Google AdMob interstitial](https://developers.google.com/admob/android/interstitial).
+
+## Preparación para anuncios reales — 08/11/2026
+
+Código listo en `feature/pagos-y-anuncios`; **no activa nada por sí solo**.
+
+- **IDs por configuración.** `ADMOB_ANDROID_APP_ID` (app.config.ts) y `EXPO_PUBLIC_ADMOB_INTERSTITIAL_ANDROID` (`src/lib/publicidadUnidad.ts`) se cargan como variables EAS. Sin ellas la build usa los IDs de ejemplo de Google y nunca pide anuncios reales. La configuración falla si hay unidad real sin App ID, App ID de prueba o IDs de cuentas distintas. En desarrollo (`__DEV__`) nunca se usa la unidad real.
+- **Dos rutas.** `modoPublicidad()`: QA (`ads_qa_enabled` + allowlist) siempre con `TestIds`; producción sólo con `ads_enabled=true`, Free verificado (`elegible_free`) y unidad real válida. El placement, el cupo de uno por sesión y el fail-open no cambian.
+- **Consentimiento UMP al abrir.** `ConsentimientoAnuncios` (en `_layout`) llama a `AdsConsent.gatherConsent()` una vez por runtime, sólo para Free verificado y sólo si el servidor habilita publicidad. Google muestra el formulario únicamente donde la ley lo exige; en el resto resuelve sin UI. Plus nunca carga el SDK.
+- **Opciones de privacidad.** Si UMP informa `privacyOptionsRequirementStatus=REQUIRED`, Opciones muestra «Privacidad de anuncios» (`showPrivacyOptionsForm`).
+- **Política de privacidad** actualizada (PRIVACY.md, pantalla y docs/privacy.html; la página pública se publica al mergear a `main`).
+
+Activación (orden): unidades reales y mensaje UMP en AdMob → variables EAS → build y publicación → `app-ads.txt` y declaraciones de Play revisadas → recién entonces `ads_enabled=true`, por decisión del titular.
+
+### AdMob configurado — 08/11/2026
+- App "Blindly" (Android, vinculada a Play `com.blindly.studio`): App ID `ca-app-pub-4933045860945005~8101071933`.
+- Bloque intersticial "Blindly - Sala (interstitial)": `ca-app-pub-4933045860945005/3858574598`. Sin video (sólo texto/imagen/rich media) y limitación de frecuencia de 1 impresión por usuario cada 60 minutos, como respaldo del cupo de la app.
+- `app-ads.txt` publicado en `https://argerichfacu.github.io/app-ads.txt` (repo `ArgerichFacu/argerichfacu.github.io`); AdMob debe rastrearlo.
+- Privacidad y mensajes: mensaje RGPD publicado (Consentir / No consentir / Gestionar opciones; 8 idiomas; política `https://argerichfacu.github.io/Blindly/privacy.html`) y mensaje de estados de EE. UU. publicado (inglés y español latino).
+- Pendiente del titular: perfil de pagos de AdMob, variables EAS y build. `ads_enabled` sigue en `false`.

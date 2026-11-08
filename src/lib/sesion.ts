@@ -72,7 +72,10 @@ async function codigoFuncion(error: unknown, fallback: string) {
     : null;
   return respuesta?.code ?? fallback;
 }
-export async function validarCambioCuenta(usuario: User) {
+export async function validarCambioCuenta(
+  usuario: User,
+  opciones: { descartarInvitado?: boolean } = {},
+) {
   // Sólo consulta presencia de datos propios. El historial/social requiere
   // cuenta protegida, pero la recuperación debe conservar también datos legacy.
   const [propios, plusActivo] = await Promise.all([
@@ -82,8 +85,11 @@ export async function validarCambioCuenta(usuario: User) {
   if (propios.error) throw propios.error;
   if (typeof propios.data !== "boolean") throw new Error("SESION_REQUERIDA");
   const partida = await consultarPartidaCuenta(usuario);
+  // Dejar el invitado lo confirma el usuario en la UI. Una partida en curso
+  // nunca se abandona así: se informa la mesa para volver y resolverla.
+  if (opciones.descartarInvitado && partida) throw partida;
   if (
-    (usuario.is_anonymous && propios.data) ||
+    (usuario.is_anonymous && propios.data && !opciones.descartarInvitado) ||
     partida ||
     plusActivo
   )

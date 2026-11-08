@@ -45,15 +45,15 @@ function prueba(opts={}) {
 
   // Adaptador real contra SDK falso: errores, no inventario, consentimiento,
   // tiempos de carga y de presentación. Ningún callback tardío abre el lobby.
-  async function nativo({consent=true, allowed=true, showError=false, noOpened=false, online=true, destroyError=false,escenario='normal'}={}) {
+  async function nativo({consent=true, allowed=true, showError=false, noOpened=false, online=true, destroyError=false,escenario='normal',unidad}={}) {
     const events={}, timers=new Map();let id=0, init=0, request=0, destroys=0, shows=0;
     const ad={loaded:true,addAdEventListener:(e,fn)=>events[e]=fn,load:()=>{},destroy:()=>{destroys++;if(destroyError)throw Error('destroy')},show:async()=>{shows++;if(showError)throw Error('AdMob');if(!noOpened)events.opened()}};
-    const sdk={default:()=>({setRequestConfiguration:async()=>{},initialize:async()=>{init++}}),AdsConsent:{requestInfoUpdate:async()=>({canRequestAds:consent})},AdEventType:{LOADED:'loaded',OPENED:'opened',CLOSED:'closed',ERROR:'error'},TestIds:{INTERSTITIAL:'TEST'},MaxAdContentRating:{G:'G'},InterstitialAd:{createForAdRequest:(id,opts)=>{assert.equal(id,'TEST');assert.equal(opts.requestNonPersonalizedAdsOnly,true);request++;return ad}}};
+    const sdk={default:()=>({setRequestConfiguration:async()=>{},initialize:async()=>{init++}}),AdsConsent:{requestInfoUpdate:async()=>({canRequestAds:consent})},AdEventType:{LOADED:'loaded',OPENED:'opened',CLOSED:'closed',ERROR:'error'},TestIds:{INTERSTITIAL:'TEST'},MaxAdContentRating:{G:'G'},InterstitialAd:{createForAdRequest:(id,opts)=>{assert.equal(id,unidad??'TEST');assert.equal(opts.requestNonPersonalizedAdsOnly,true);request++;return ad}}};
     sdk.__esModule=true;
     let red;
     const network={getNetworkStateAsync:async()=>({isConnected:online,isInternetReachable:online}),addNetworkStateListener:fn=>{red=fn;return{remove(){}}}};
     const api=cargar('src/lib/publicidadAdmob.native.ts',{'react-native-google-mobile-ads':sdk,'expo-network':network,'./publicidadDiagnostico':{registrarPublicidadQA(){}}},{setTimeout:(fn,ms)=>{timers.set(++id,{fn,ms});return id},clearTimeout:i=>timers.delete(i)});
-    const p=api.prepararInterstitial(()=>allowed,escenario);await tick();
+    const p=api.prepararInterstitial(()=>allowed,escenario,unidad);await tick();
     return {p,events,timers,offline:()=>red({isConnected:false,isInternetReachable:false}),get init(){return init},get request(){return request},get destroys(){return destroys},get shows(){return shows}};
   }
   for(const cfg of [{consent:false},{allowed:false},{online:false}]){const c=await nativo(cfg);assert.equal(await c.p,null);assert.equal(c.init,0);assert.equal(c.request,0)}
@@ -64,6 +64,7 @@ function prueba(opts={}) {
     await p;assert.equal(c.destroys,1);assert.equal(c.shows,1);
     assert.equal(aperturas,cfg.showError||cfg.noOpened?0:1,'Sólo OPENED registra una impresión');
   }
+  const conUnidad=await nativo({unidad:'ca-app-pub-1234567890123456/1234567890'});assert.equal(conUnidad.request,1,'Producción pide la unidad real, no la de prueba');
   const vacio=await nativo();vacio.events.error();assert.equal(await vacio.p,null);
   const timeout=await nativo();[...timeout.timers.values()].find(t=>t.ms===10000).fn();assert.equal(await timeout.p,null);
   const offline=await nativo();offline.events.loaded();const listo=await offline.p;offline.offline();await listo.mostrar(()=>assert.fail('offline'));assert.equal(offline.shows,0,'Precargado pero offline continúa sin publicidad');
@@ -72,17 +73,37 @@ function prueba(opts={}) {
 
   // Con ads_enabled=false, el hook no consulta al servidor ni importa AdMob.
   const config=cargar('src/lib/publicidadConfig.ts');
-  for(const d of [null,{}, {ads_enabled:true,elegible_free:true}, {ads_qa_enabled:true,elegible_free:false}])assert.equal(config.permitePublicidadPrueba(d),false);
-  assert.equal(config.permitePublicidadPrueba({ads_enabled:false,ads_qa_enabled:true,elegible_free:true}),true);
+  const real='ca-app-pub-1234567890123456/1234567890';
+  for(const d of [null,{}, {ads_enabled:false,elegible_free:true}, {ads_qa_enabled:true,elegible_free:false}, {ads_enabled:true,elegible_free:false}])assert.equal(config.modoPublicidad(d,real),null);
+  assert.equal(config.modoPublicidad({ads_enabled:false,ads_qa_enabled:true,elegible_free:true},undefined),'prueba','QA usa IDs de prueba sin unidad real');
+  assert.equal(config.modoPublicidad({ads_enabled:true,elegible_free:true},real),'real');
+  for(const unidad of [undefined,'','ca-app-pub-3940256099942544/1033173712','ca-app-pub-123/1','ca-app-pub-1234567890123456~1234567890'])assert.equal(config.modoPublicidad({ads_enabled:true,elegible_free:true},unidad),null,'Sin unidad real válida no hay anuncios de producción: '+unidad);
   for(const source of ['FREE','FOUNDER_TRIAL','REVENUECAT_PAID','PLAY_REVIEW']) for(const deepLink of [false,true]) {
     let foco, rpc=0;
     const {usePublicidadSala}=cargar('src/lib/usePublicidadSala.ts',{
       react:{useCallback:f=>f,useRef:v=>({current:v}),useLayoutEffect:f=>f()},'expo-router':{useFocusEffect:f=>foco=f},
       'react-native':{AppState:{currentState:'active',addEventListener:()=>({remove(){}})}},'./PlusContext':{usePlus:()=>({identidad:'one',activo:source!=='FREE',cargando:false,error:null,tipoAcceso:source})},
       'expo-linking':{getInitialURL:async()=>deepLink?'blindly://auth-callback':null,addEventListener:()=>({remove(){}})},
-      './publicidadConfig':config,'./publicidadSesion':{SesionPublicidad},'./supabase':{supabase:{rpc:async()=>{rpc++;return{data:{ads_enabled:false,ads_qa_enabled:false,elegible_free:true},error:null}}}},
+      './publicidadConfig':config,'./publicidadSesion':{SesionPublicidad},'./publicidadUnidad':{UNIDAD_INTERSTICIAL_REAL:undefined},'./supabase':{supabase:{rpc:async()=>{rpc++;return{data:{ads_enabled:false,ads_qa_enabled:false,elegible_free:true},error:null}}}},
       './publicidadDiagnostico':{registrarPublicidadQA(){}},
     });usePublicidadSala();foco();await tick();assert.equal(rpc,source==='FREE'&&!deepLink?1:0,source);
+  }
+  // Consentimiento UMP al abrir: sólo Free verificado, flag del servidor y unidad real; Plus/QA OFF nunca cargan UMP.
+  for(const [caso,plusEstado,datos,unidad,espera] of [
+    ['free con anuncios reales',{tipoAcceso:'FREE',activo:false},{ads_enabled:true,elegible_free:true},real,1],
+    ['free con QA de prueba',{tipoAcceso:'FREE',activo:false},{ads_qa_enabled:true,elegible_free:true},undefined,1],
+    ['free sin unidad real',{tipoAcceso:'FREE',activo:false},{ads_enabled:true,elegible_free:true},undefined,0],
+    ['flag apagado',{tipoAcceso:'FREE',activo:false},{ads_enabled:false,elegible_free:true},real,0],
+    ['Plus',{tipoAcceso:'REVENUECAT_PAID',activo:true},{ads_enabled:true,elegible_free:false},real,0],
+    ['Founder Trial',{tipoAcceso:'FOUNDER_TRIAL',activo:true},{ads_enabled:true,elegible_free:false},real,0],
+  ]) {
+    let rpc=0,pedidos=0;
+    const comp=cargar('src/components/ConsentimientoAnuncios.tsx',{react:{useEffect:f=>f()},'react-native':{Platform:{OS:'android'}},
+      '../lib/PlusContext':{usePlus:()=>({identidad:'uno',cargando:false,error:null,...plusEstado})},'../lib/publicidadConfig':config,
+      '../lib/publicidadUnidad':{UNIDAD_INTERSTICIAL_REAL:unidad},'../lib/supabase':{supabase:{rpc:async()=>{rpc++;return{data:datos,error:null}}}},
+      '../lib/consentimientoAds':{pedirConsentimientoAnuncios:async()=>{pedidos++}}});
+    comp.ConsentimientoAnuncios();await tick();await tick();
+    assert.equal(rpc,plusEstado.activo?0:1,caso+': consulta al servidor sólo para Free');assert.equal(pedidos,espera,caso);
   }
   console.log('Publicidad: cap por runtime, doble toque, carga tardía, errores, reconexión, Plus, background, consentimiento, timeout y flag OFF OK');
 })().catch(e=>{console.error(e);process.exitCode=1});

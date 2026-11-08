@@ -4,7 +4,8 @@ import type { EscenarioAdsQA } from "./publicidadConfig";
 
 let inicializacion: Promise<boolean> | null = null;
 
-export async function prepararInterstitial(permitido: () => boolean, escenario: EscenarioAdsQA = "normal"): Promise<AnuncioPreparado | null> {
+// unidad: bloque real de AdMob; sin él se usa el ID de prueba oficial de Google.
+export async function prepararInterstitial(permitido: () => boolean, escenario: EscenarioAdsQA = "normal", unidad?: string): Promise<AnuncioPreparado | null> {
   if (!permitido()) return null;
   const network = await import("expo-network");
   const inicial = await network.getNetworkStateAsync();
@@ -13,8 +14,8 @@ export async function prepararInterstitial(permitido: () => boolean, escenario: 
   // No evaluar/importar el SDK cuando está apagado o Plus está activo/incierto.
   const { default: mobileAds, AdsConsent, AdEventType, InterstitialAd, TestIds, MaxAdContentRating } = await import("react-native-google-mobile-ads");
   if (!permitido()) return null;
-  // No abre formularios en esta transición. Si UMP requiere consentimiento,
-  // omite el anuncio. El flujo de consentimiento real es un gate de lanzamiento.
+  // No abre formularios en esta transición: el consentimiento se pide al abrir
+  // la app (ConsentimientoAnuncios). Si UMP todavía no permite anuncios, se omite.
   let consentimiento;
   try { consentimiento = await AdsConsent.requestInfoUpdate(); }
   catch { registrarPublicidadQA("consent_error"); return null; }
@@ -31,7 +32,7 @@ export async function prepararInterstitial(permitido: () => boolean, escenario: 
   if (!permitido()) return null;
   const actual = await network.getNetworkStateAsync();
   if (!permitido() || actual.isConnected !== true || actual.isInternetReachable !== true) return null;
-  const ad = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, { requestNonPersonalizedAdsOnly: true });
+  const ad = InterstitialAd.createForAdRequest(unidad ?? TestIds.INTERSTITIAL, { requestNonPersonalizedAdsOnly: true });
   let destruido = false, cargadoEn = 0;
   let terminar: ((resultado: "cerrado" | "fallo") => void) | null = null;
   let alAbrir: (() => void) | null = null;

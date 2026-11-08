@@ -94,3 +94,16 @@ try {
   fs.rmSync(target, { recursive: true, force: true, maxRetries: 3, retryDelay: 200 });
 }
 console.log('Release Android generada: R8, optimize defaults, full mode y resource shrinking habilitados; sin keep global agregado.');
+
+// App ID real por variable EAS; combinaciones inconsistentes no compilan.
+const introspeccion = env => spawnSync(process.execPath, [require.resolve("expo/bin/cli"), "config", "--type", "introspect", "--json"],
+  { cwd: process.cwd(), encoding: "utf8", env: { ...process.env, ...env } });
+const real = introspeccion({ ADMOB_ANDROID_APP_ID: "ca-app-pub-1234567890123456~1234567890", EXPO_PUBLIC_ADMOB_INTERSTITIAL_ANDROID: "ca-app-pub-1234567890123456/1234567890" });
+assert.equal(real.status, 0, real.stderr);
+const manifestReal = JSON.parse(real.stdout)._internal.modResults.android.manifest.manifest;
+assert.equal(manifestReal.application[0]["meta-data"].find(i => i.$["android:name"] === "com.google.android.gms.ads.APPLICATION_ID").$["android:value"], "ca-app-pub-1234567890123456~1234567890");
+for (const env of [
+  { EXPO_PUBLIC_ADMOB_INTERSTITIAL_ANDROID: "ca-app-pub-1234567890123456/1234567890" },
+  { ADMOB_ANDROID_APP_ID: "ca-app-pub-3940256099942544~3347511713" },
+  { ADMOB_ANDROID_APP_ID: "ca-app-pub-1234567890123456~1234567890", EXPO_PUBLIC_ADMOB_INTERSTITIAL_ANDROID: "ca-app-pub-6543210987654321/1234567890" },
+]) assert.notEqual(introspeccion(env).status, 0, JSON.stringify(env));
