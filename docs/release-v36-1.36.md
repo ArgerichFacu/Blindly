@@ -1,4 +1,4 @@
-# Blindly 1.36 (versionCode 36)
+# Blindly 1.36 (versionCode 36) — reemplazada por 1.37
 
 Rama `feature/pagos-y-anuncios` (PR #1). Perfil EAS `production-candidate` (entorno EAS "preview").
 
@@ -23,3 +23,8 @@ Rama `feature/pagos-y-anuncios` (PR #1). Perfil EAS `production-candidate` (ento
 5. Subir a prueba interna/cerrada y probar en el A32 instalado desde Play: login invitado→cuenta existente, compra de prueba, sin anuncios con `ads_enabled=false`.
 6. Producción: sólo con autorización del titular.
 7. Encender `ads_enabled`: sólo por decisión del titular, con la v36 publicada, perfil de pagos de AdMob completo y app aprobada en AdMob.
+
+## QA en el A32 (09/11) y 1.37
+- v36 instalada desde la prueba cerrada: sesión conservada al actualizar, logout correcto, invitado crea sala `2NBCC` y entra directo al lobby **sin anuncio ni actividad del SDK**.
+- **Hallazgo:** en Android la vuelta de Google entra por `/auth-callback`; con Google ya vinculado mostraba el error con "Volver a mi cuenta" y no ofrecía "Entrar a mi cuenta existente".
+- **1.37 (versionCode 37):** `/auth-callback` ante `AUTH_GOOGLE_OCUPADO` vuelve a Mi cuenta con `accion=google-ocupado`, que muestra el aviso y el botón. Mismas notas de Play que la v36.
