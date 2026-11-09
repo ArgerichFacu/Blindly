@@ -66,3 +66,6 @@ Activación (orden): unidades reales y mensaje UMP en AdMob → variables EAS �
 - `app-ads.txt` publicado en `https://argerichfacu.github.io/app-ads.txt` (repo `ArgerichFacu/argerichfacu.github.io`); AdMob debe rastrearlo.
 - Privacidad y mensajes: mensaje RGPD publicado (Consentir / No consentir / Gestionar opciones; 8 idiomas; política `https://argerichfacu.github.io/Blindly/privacy.html`) y mensaje de estados de EE. UU. publicado (inglés y español latino).
 - Pendiente del titular: perfil de pagos de AdMob, variables EAS y build. `ads_enabled` sigue en `false`.
+
+### Cambio de cuenta de AdMob — 09/11/2026
+La cuenta `fargerich48` se había creado por error. Todo AdMob pasa a **administracionblindly** (editor `pub-1093561603360160`): app `ca-app-pub-1093561603360160~1719264904` y bloque intersticial `ca-app-pub-1093561603360160/5619640600` (sin video, 1 impresión cada 60 min). En la cuenta vieja se borraron los detalles de la tienda para liberar el paquete. Variables EAS y `app-ads.txt` actualizados. **Las builds ≤ v38 tienen los IDs viejos**: antes de encender `ads_enabled` hace falta una build nueva.
