@@ -8,6 +8,7 @@ import { asegurarSesion, cuentaConClave, validarCambioCuenta, consultarPartidaCu
 import { identidadUsuario } from "./identidad";
 
 WebBrowser.maybeCompleteAuthSession();
+const OPCIONES_NAVEGADOR = { useProxyActivity: false, showInRecents: false } as const;
 const PENDIENTE = "blindly.auth.pendiente.v1";
 export type ContextoAuth = { inicio?: string; volver?: string; liga?: string; codigo?: string; nombre?: string; seccion?: string; temporada?: string };
 type Pendiente = { tipo: "google-link" | "google-login" | "email-link" | "reset"; usuario: string; email?: string; fecha: number; contexto?: ContextoAuth };
@@ -214,7 +215,10 @@ export async function continuarGoogle(metodo: boolean | "auto" = "auto", context
       if (r.error) throw r.error;
       if (!r.data.url) throw new Error("AUTH_GOOGLE_NO_CONFIGURADO");
       if (Platform.OS === "web") { globalThis.location.assign(r.data.url); return null; }
-      const resultado = await WebBrowser.openAuthSessionAsync(r.data.url, retornoAuth());
+      // Android: sin la actividad intermedia, la pestaña se abre con NO_HISTORY y se
+      // cierra al volver a la app. Con ella, la pestaña anterior quedaba viva en su
+      // propia tarea y un segundo inicio de sesión mostraba esa pestaña vieja.
+      const resultado = await WebBrowser.openAuthSessionAsync(r.data.url, retornoAuth(), OPCIONES_NAVEGADOR);
       if (resultado.type !== "success") { await AsyncStorage.removeItem(PENDIENTE); return null; }
       return (await procesarRetornoAuth(resultado.url)).usuario;
     });
