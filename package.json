@@ -1,7 +1,7 @@
 {
   "name": "blindly",
   "main": "expo-router/entry",
-  "version": "1.36.0",
+  "version": "1.37.0",
   "dependencies": {
     "@expo/metro-runtime": "~57.0.16",
     "@expo/ui": "~57.0.26",

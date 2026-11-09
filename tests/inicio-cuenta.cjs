@@ -47,8 +47,8 @@ async function destinoCallback(resultado) {
     'expo-router':{useLocalSearchParams:()=>({code:'qa-code'}),useRouter:()=>({replace:r=>route=r})},
     '../components/Controles':Object.fromEntries(['Pantalla','Tarjeta','Texto','Boton'].map(n=>[n,n])),
     '../lib/Preferencias':{usePreferencias:()=>({t:k=>k,mensajeError:()=>''})},
-    '../lib/autenticacion':{retornoAuth:()=> 'blindly://auth-callback',procesarRetornoAuth:async()=>resultado}};
-  vm.runInNewContext(compile('src/app/auth-callback.tsx'),{exports:api,require:n=>{assert.ok(mocks[n],n);return mocks[n]},URL});
+    '../lib/autenticacion':{retornoAuth:()=> 'blindly://auth-callback',procesarRetornoAuth:async()=>{if(resultado instanceof Error)throw resultado;return resultado}}};
+  vm.runInNewContext(compile('src/app/auth-callback.tsx'),{exports:api,require:n=>{assert.ok(mocks[n],n);return mocks[n]},URL,Error});
   api.default();efecto();await flush();return JSON.parse(JSON.stringify(route));
 }
 (async()=>{
@@ -56,6 +56,8 @@ async function destinoCallback(resultado) {
   assert.deepEqual(await destinoCallback({reset:false,acceso:true,contexto:{volver:'plus'}}),{pathname:'/cuenta',params:{volver:'plus',accion:'continuar'}});
   assert.deepEqual(await destinoCallback({reset:true,acceso:false,contexto:{inicio:'1'}}),{pathname:'/cuenta',params:{inicio:'1',accion:'password'}},'Email/reset conserva paso de contraseña');
   assert.deepEqual(await destinoCallback({reset:false,acceso:false,contexto:{}}),{pathname:'/cuenta',params:{}},'Vincular desde una cuenta protegida conserva Mi cuenta');
+  assert.deepEqual(await destinoCallback(new Error('AUTH_GOOGLE_OCUPADO')),{pathname:'/cuenta',params:{accion:'google-ocupado'}},'Google ocupado vuelve a Mi cuenta con la opción de cuenta existente');
+  const ocupado=escenario({accion:'google-ocupado'});await ocupado.cargar();assert.ok(ocupado.botones().some(b=>b.titulo==='Entrar a mi cuenta existente'),'Invitado ve Entrar a mi cuenta existente tras Google ocupado');
   const invitado=escenario();await invitado.cargar();assert.ok(invitado.botones().some(b=>b.titulo==='Ingresar con Google'));assert.ok(!invitado.elementos(invitado.render(),'Texto').some(t=>t.children==='uuid-A'),'UUID técnico fuera de acceso principal');
   assert.equal(invitado.botones().filter(b=>b.titulo.includes('Google')).length,1);
   const danger=escenario({inicio:'0'});await danger.cargar();

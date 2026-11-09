@@ -16,7 +16,12 @@ export default function RetornoAuth() {
       if(!activo)return;
       const accion=r.reset?"password":r.acceso||r.contexto.inicio==="1"||r.contexto.volver?"continuar":undefined;
       router.replace({pathname:"/cuenta",params:{...r.contexto,...(accion?{accion}:{})}});
-    }).catch(e=>{if(activo)setError(e);});
+    }).catch(e=>{
+      if(!activo)return;
+      // Google ya pertenece a otra cuenta: Mi cuenta ofrece entrar a la existente.
+      if(e instanceof Error&&e.message==="AUTH_GOOGLE_OCUPADO"){router.replace({pathname:"/cuenta",params:{accion:"google-ocupado"}});return;}
+      setError(e);
+    });
     return()=>{activo=false};
   },[code,error_code,sb_flow_id,router]);
   return <Pantalla titulo={t("Mi cuenta")}><Tarjeta>{error?<><Texto accessibilityLiveRegion="assertive">{mensajeError(error)}</Texto><Boton titulo={t("Volver a mi cuenta")} onPress={()=>router.replace("/cuenta")}/></>:<Texto accessibilityLiveRegion="polite">{t("Comprobando tu acceso…")}</Texto>}</Tarjeta></Pantalla>;

@@ -101,6 +101,12 @@ export default function Cuenta() {
         await ejecutar(() => listo(u));
         return;
       }
+      if (accion === "google-ocupado" && u.is_anonymous !== false && !googleInicial.current) {
+        googleInicial.current = true;
+        setIntento({ tipo: "google", descartar: false });
+        setError(new Error("AUTH_GOOGLE_OCUPADO"));
+        return;
+      }
       if (accion === "google" && !googleInicial.current) {
         googleInicial.current = true;
         setIntento({ tipo: "google", descartar: false });
