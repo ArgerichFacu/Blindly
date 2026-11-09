@@ -28,3 +28,9 @@ Rama `feature/pagos-y-anuncios` (PR #1). Perfil EAS `production-candidate` (ento
 - v36 instalada desde la prueba cerrada: sesión conservada al actualizar, logout correcto, invitado crea sala `2NBCC` y entra directo al lobby **sin anuncio ni actividad del SDK**.
 - **Hallazgo:** en Android la vuelta de Google entra por `/auth-callback`; con Google ya vinculado mostraba el error con "Volver a mi cuenta" y no ofrecía "Entrar a mi cuenta existente".
 - **1.37 (versionCode 37):** `/auth-callback` ante `AUTH_GOOGLE_OCUPADO` vuelve a Mi cuenta con `accion=google-ocupado`, que muestra el aviso y el botón. Mismas notas de Play que la v36.
+
+## 1.38 (versionCode 38)
+- QA de la v37 en el A32: el aviso con "Entrar a mi cuenta existente" aparece siempre (también cuando Android cierra la app por memoria mientras está abierto Google), pero al tocarlo **no entraba**.
+- **Causa:** `expo-web-browser` abre la pestaña de Google mediante una actividad intermedia con su propia tarea de Android; esa tarea sobrevivía al volver a la app y el segundo inicio de sesión reabría la pestaña vieja (Supabase sólo recibía otra vez el intento de vincular → 422).
+- **Arreglo:** `openAuthSessionAsync` con `useProxyActivity: false` y `showInRecents: false` (pestaña con `NO_HISTORY`, se cierra al volver).
+- Verificado en el A32 con un APK de prueba firmado con la clave de subida (instalado por USB, luego reemplazado por la versión de Play): invitado `QA37` con sala → Google → aviso → "Entrar a mi cuenta existente" → sesión iniciada en `administracionblindly` (Google conectado).
