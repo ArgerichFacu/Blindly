@@ -37,7 +37,8 @@ Leé también `AGENTS.md` (docs versionadas de Expo 57) y `docs/` (historial det
 ## Autenticación
 - Usuarios anónimos de Supabase como invitados; Google (OAuth web vía Supabase) y email/contraseña. Un invitado con progreso vincula Google a su UUID; si ese Google ya tiene cuenta, la UI ofrece "Entrar a mi cuenta existente".
 - `mi_identidad_tiene_datos()` decide si un invitado "tiene algo que perder". Sólo cuenta un Plus **vigente**: contar filas inactivas de `accesos_plus` bloqueó todos los logins el 2026-11-08 (migración `20261108174000`, aplicada a mano en el SQL Editor).
-- Marca OAuth (proyecto Google Cloud `blindly-511407`, en la cuenta Google personal del titular): mientras no esté verificada, Google muestra el dominio de Supabase en el login. La raíz `https://argerichfacu.github.io/` (repo `ArgerichFacu/argerichfacu.github.io`) se verificó en Search Console para eso; no borrar su archivo `google*.html`. También es el lugar para `app-ads.txt`.
+- Sitio público: **https://blindly.com.ar** (GitHub Pages desde `docs/` con `docs/CNAME`; DNS en Cloudflare, dominio registrado en NIC Argentina y delegado a `lina`/`mitch.ns.cloudflare.com`). Ahí viven `privacy.html`, `terms.html`, `account-deletion.html` y `app-ads.txt` (no borrar). La URL vieja `argerichfacu.github.io/Blindly/` redirige al dominio.
+- Marca OAuth (proyecto Google Cloud `blindly-511407`, en la cuenta Google personal del titular): mientras no esté verificada, Google muestra el dominio de Supabase en el login. Con `github.io` Google la rechazaba; se migra a `blindly.com.ar` (verificar el dominio en Search Console y reintentar 24 h después).
 
 ## Partida
 - Reloj en la fila de la sala (`acumulado_ms` + `inicio_en`), cada celular corrige con la RPC `hora_servidor`. RLS de jugadores con `soy_jugador_de` (security definer) para evitar recursión.
