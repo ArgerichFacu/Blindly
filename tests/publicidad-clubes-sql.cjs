@@ -33,7 +33,7 @@ const crear=async()=> (await q("select crear_liga('Club','2026','Owner') v"))[0]
   await como(5);await assert.rejects(crear,/LIMITE_CLUBES_FREE/);assert.equal((await q('select mis_ligas() v'))[0].v.length,6);
   await db.exec('reset role');await q("update private.plus_founder_trials set started_at=now()-interval '73 hours',expires_at=now()-interval '1 hour' where user_id=$1",[uid(4)]);
   await como(4);await assert.rejects(crear,/LIMITE_CLUBES_FREE/);
-  await como(6);const config=(await q('select estado_publicidad() v'))[0].v;assert.deepEqual(config,{ads_enabled:false,ads_qa_enabled:false,ads_qa_scenario:null,elegible_free:true});
+  await como(6);const config=(await q('select estado_publicidad() v'))[0].v;assert.deepEqual(config,{ads_unit_android:null,ads_qa_enabled:false,ads_qa_scenario:null,elegible_free:true});
   await assert.rejects(()=>q('update private.publicidad_config set ads_enabled=true'),/permission denied/);
   await assert.rejects(()=>q('select * from private.publicidad_config'),/permission denied/);
   await db.exec('reset role');await q('insert into private.accesos_revision_play(user_id) values($1)',[uid(6)]);

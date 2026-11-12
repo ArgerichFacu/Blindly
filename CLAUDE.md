@@ -32,13 +32,14 @@ Leé también `AGENTS.md` (docs versionadas de Expo 57) y `docs/` (historial det
 ## Anuncios
 - Regla del titular: **extremadamente poco invasivos**. Un único interstitial opcional para Free, después de que el servidor confirma crear/unirse a una sala y antes del lobby; máximo uno por sesión; si falla, se sigue sin esperar. Nada de banners ni anuncios en pantallas principales o paywall. Cualquier Plus los quita. Ver `docs/monetizacion-publicitaria.md`.
 - Flags: `private.publicidad_config.ads_enabled` (producción, **lo enciende sólo el titular**) y `ads_qa_enabled` + `private.ads_qa_testers` (QA con IDs de prueba).
+- Con el switch encendido, `estado_publicidad()` publica `ads_unit_android` (la unidad autorizada, columna de `publicidad_config`) y la app sólo muestra anuncios reales si fue compilada con esa misma unidad. Así las builds 1.36–1.38 (IDs de una cuenta de AdMob descartada) nunca muestran anuncios. Si cambia la unidad, hay que actualizar la columna **y** la variable EAS.
 - IDs reales sólo por variables EAS `ADMOB_ANDROID_APP_ID` y `EXPO_PUBLIC_ADMOB_INTERSTITIAL_ANDROID`; sin ellas se usan los IDs de prueba de Google. Consentimiento Google UMP al abrir (sólo Free y con anuncios activos) y fila "Privacidad de anuncios" en Opciones. Advertising ID bloqueado; anuncios no personalizados.
 
 ## Autenticación
 - Usuarios anónimos de Supabase como invitados; Google (OAuth web vía Supabase) y email/contraseña. Un invitado con progreso vincula Google a su UUID; si ese Google ya tiene cuenta, la UI ofrece "Entrar a mi cuenta existente".
 - `mi_identidad_tiene_datos()` decide si un invitado "tiene algo que perder". Sólo cuenta un Plus **vigente**: contar filas inactivas de `accesos_plus` bloqueó todos los logins el 2026-11-08 (migración `20261108174000`, aplicada a mano en el SQL Editor).
 - Sitio público: **https://blindly.com.ar** (GitHub Pages desde `docs/` con `docs/CNAME`; DNS en Cloudflare, dominio registrado en NIC Argentina y delegado a `lina`/`mitch.ns.cloudflare.com`). Ahí viven `privacy.html`, `terms.html`, `account-deletion.html` y `app-ads.txt` (no borrar). La URL vieja `argerichfacu.github.io/Blindly/` redirige al dominio.
-- Marca OAuth (proyecto Google Cloud `blindly-511407`, en la cuenta Google personal del titular): mientras no esté verificada, Google muestra el dominio de Supabase en el login. Con `github.io` Google la rechazaba; se migra a `blindly.com.ar` (verificar el dominio en Search Console y reintentar 24 h después).
+- Marca OAuth (proyecto Google Cloud `blindly-511407`, en la cuenta Google personal del titular): Con `github.io` Google la rechazaba. Desde el 2026-11-09 la marca usa `blindly.com.ar` (página principal, privacidad, términos y dominio autorizado), verificado en Search Console como propiedad de dominio con un TXT en Cloudflare (no borrar ese registro). Marca verificada y publicada el 2026-11-12: el login de Google muestra "Blindly".
 
 ## Partida
 - Reloj en la fila de la sala (`acumulado_ms` + `inicio_en`), cada celular corrige con la RPC `hora_servidor`. RLS de jugadores con `soy_jugador_de` (security definer) para evitar recursión.

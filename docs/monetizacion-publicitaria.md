@@ -69,3 +69,8 @@ Activación (orden): unidades reales y mensaje UMP en AdMob → variables EAS �
 
 ### Cambio de cuenta de AdMob — 09/11/2026
 La cuenta `fargerich48` se había creado por error. Todo AdMob pasa a **administracionblindly** (editor `pub-1093561603360160`): app `ca-app-pub-1093561603360160~1719264904` y bloque intersticial `ca-app-pub-1093561603360160/5619640600` (sin video, 1 impresión cada 60 min). En la cuenta vieja se borraron los detalles de la tienda para liberar el paquete. Variables EAS y `app-ads.txt` actualizados. **Las builds ≤ v38 tienen los IDs viejos**: antes de encender `ads_enabled` hace falta una build nueva.
+
+### Unidad autorizada por el servidor — 12/11/2026 (v39)
+El campo público `ads_enabled` lo leían las builds 1.36–1.38, que llevan la unidad de la cuenta descartada. Desde la migración `20261112035500` `estado_publicidad()` ya no lo devuelve: publica `ads_unit_android` (columna nueva de `private.publicidad_config`, con el bloque de `administracionblindly`) **sólo si `ads_enabled=true`**. `modoPublicidad()` exige que la unidad de la build sea exactamente esa. Resultado: el switch del titular sigue siendo uno solo (`ads_enabled`), y únicamente la 1.39 en adelante puede mostrar anuncios reales. La 1.35 y anteriores sólo conocen la ruta QA.
+
+En AdMob (cuenta nueva) se desactivaron los "Anuncios con alto nivel de interacción" y el dominio verificado es `blindly.com.ar` (`app-ads.txt`). Detalle de la versión en [release v39](release-v39-1.39.md).
