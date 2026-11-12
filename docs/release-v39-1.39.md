@@ -20,3 +20,9 @@ Rama `release/1.39`. Perfil EAS `production-candidate` (entorno EAS "preview").
 4. Prueba cerrada + QA en el A32: anuncio de prueba (ruta QA), consentimiento, sala sin anuncio para Plus.
 5. Play Console: declaración "Contiene anuncios" y Seguridad de los datos revisadas antes de producción.
 6. Producción y `ads_enabled=true`: sólo con autorización del titular.
+
+## Build (12/11)
+- PR #5 mergeado (`9117e2e`). La migración `20261112035500` la aplicó sola la integración de Supabase con GitHub al mergear; verificado en producción: `ads_enabled=false`, `ads_unit_android` = bloque de `administracionblindly`, y `estado_publicidad()` ya no publica `ads_enabled`.
+- Build EAS `85468bf5-0722-4968-bf2d-2254856177e6`, perfil `production-candidate`, desde un clon limpio de `main` (commit sólo de build con `autoIncrement`).
+- AAB `Blindly-1.39-production-candidate-v39.aab`, SHA-256 `dc034e9e6308951bd0d6a812052cec05e3d147fe30f106100c0001dc9d9815dd`.
+- Validado: `versionCode 39`, `versionName 1.39`, `targetSdk 36`, App ID `ca-app-pub-1093561603360160~1719264904` en el manifiesto, sin permiso `AD_ID`, unidad `ca-app-pub-1093561603360160/5619640600` en el bundle JS (las demás son los `TestIds` del SDK), 58 bibliotecas con alineación de 16 KB correcta.

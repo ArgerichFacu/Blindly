@@ -20,7 +20,7 @@ Leé también `AGENTS.md` (docs versionadas de Expo 57) y `docs/` (historial det
 
 ## Arquitectura en dos líneas
 - `src/app` rutas (Expo Router), `src/lib` lógica y contextos (`PlusContext`, `sesion`, `autenticacion`, `usePublicidadSala`), `src/components` UI.
-- Supabase: la fuente de verdad son `supabase/migrations/` (los `01–17.sql` son historia del prototipo). Tablas privadas en el esquema `private` con RLS y RPC `security definer`. Edge Functions en `supabase/functions/`.
+- Supabase: la fuente de verdad son `supabase/migrations/` (los `01–17.sql` son historia del prototipo). **Mergear a `main` aplica en producción las migraciones nuevas** (integración de Supabase con GitHub, verificado el 2026-11-12 con la `20261112035500`): escribirlas idempotentes y pedir el OK del titular antes del merge. Tablas privadas en el esquema `private` con RLS y RPC `security definer`. Edge Functions en `supabase/functions/`.
 
 ## Pagos (Plus)
 - Comprar exige tres cosas: build con `EXPO_PUBLIC_PLUS_READY=true`, clave RevenueCat `goog_…` (las `test_` se rechazan en release) y `private.plus_lanzamiento.real_payments_enabled=true` (o la allowlist `private.plus_payment_testers`). Activo desde 2026-11-08.
