@@ -20,3 +20,22 @@ Rama `release/1.39`. Perfil EAS `production-candidate` (entorno EAS "preview").
 4. Prueba cerrada + QA en el A32: anuncio de prueba (ruta QA), consentimiento, sala sin anuncio para Plus.
 5. Play Console: declaración "Contiene anuncios" y Seguridad de los datos revisadas antes de producción.
 6. Producción y `ads_enabled=true`: sólo con autorización del titular.
+
+## Build (12/11)
+- PR #5 mergeado (`9117e2e`). La migración `20261112035500` la aplicó sola la integración de Supabase con GitHub al mergear; verificado en producción: `ads_enabled=false`, `ads_unit_android` = bloque de `administracionblindly`, y `estado_publicidad()` ya no publica `ads_enabled`.
+- Build EAS `85468bf5-0722-4968-bf2d-2254856177e6`, perfil `production-candidate`, desde un clon limpio de `main` (commit sólo de build con `autoIncrement`).
+- AAB `Blindly-1.39-production-candidate-v39.aab`, SHA-256 `dc034e9e6308951bd0d6a812052cec05e3d147fe30f106100c0001dc9d9815dd`.
+- Validado: `versionCode 39`, `versionName 1.39`, `targetSdk 36`, App ID `ca-app-pub-1093561603360160~1719264904` en el manifiesto, sin permiso `AD_ID`, unidad `ca-app-pub-1093561603360160/5619640600` en el bundle JS (las demás son los `TestIds` del SDK), 58 bibliotecas con alineación de 16 KB correcta.
+
+## QA en el A32 (12/11)
+- Ruta QA habilitada con autorización del titular: `ads_qa_enabled=true` y `administracionblindly` en `private.ads_qa_testers` por 48 h (apagar al terminar).
+- v39 enviada a la prueba cerrada (reinició la revisión de la v38 en producción) y aprobada el mismo día. Instalada desde Play: `versionCode 39`.
+- UMP corre al abrir y resuelve sin formulario (`gdprApplies=0`, Argentina). Crear sala → "Anuncio de prueba" de Google (`sdk_init → load → ready → opened → closed`) → sala de espera `C4465`. Segunda sala `KN6DE` en la misma sesión: sin anuncio ni nueva carga (cupo de uno por sesión). Mismo resultado antes con la v38.
+- Los anuncios reales no se probaron en el dispositivo: sólo existen con `ads_enabled=true`.
+
+## Producción y anuncios reales (12/11)
+- La v38 quedó publicada en producción el 12/11. La v39 se promovió desde la prueba cerrada a **producción** (lanzamiento completo) y se envió a revisión. Notas: entrada desde invitado, anuncio breve para cuentas gratuitas, estabilidad.
+- Por decisión del titular: `ads_enabled=true` y ruta QA apagada (`ads_qa_enabled=false`, tester deshabilitado). Sólo la v39 (unidad autorizada) puede mostrar anuncios; el resto de los usuarios los verá cuando Google publique la v39.
+- Verificado en el A32 con la v39 de Play, cuenta Free: `sdk_init → load → ready` en ~4 s, anuncio real (instalación de una app) al crear la sala, cierre en dos pasos (saltar + X) → sala de espera `W6MAM`. No se tocó el anuncio.
+- AdMob → Controles de bloqueo → Anuncios de descarga de aplicaciones: bloqueada la app `free.pdfscanner.scan.pdf.cam.camscanner` ("PDF Scanner - OCR & Edit"), cuyo anuncio imitaba un aviso del sistema. AdMob no tiene una categoría para bloquear anuncios engañosos en general: los siguientes se bloquean uno por uno desde el Centro de revisión de anuncios (ya activo; tarda en listar los anuncios servidos) o por app/anunciante.
+- Pendiente: apagar `EXPO_PUBLIC_ADS_QA_DIAGNOSTICS` en una build futura si no se necesita.

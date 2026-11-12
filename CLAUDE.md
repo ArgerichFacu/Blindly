@@ -20,7 +20,7 @@ Leé también `AGENTS.md` (docs versionadas de Expo 57) y `docs/` (historial det
 
 ## Arquitectura en dos líneas
 - `src/app` rutas (Expo Router), `src/lib` lógica y contextos (`PlusContext`, `sesion`, `autenticacion`, `usePublicidadSala`), `src/components` UI.
-- Supabase: la fuente de verdad son `supabase/migrations/` (los `01–17.sql` son historia del prototipo). Tablas privadas en el esquema `private` con RLS y RPC `security definer`. Edge Functions en `supabase/functions/`.
+- Supabase: la fuente de verdad son `supabase/migrations/` (los `01–17.sql` son historia del prototipo). **Mergear a `main` aplica en producción las migraciones nuevas** (integración de Supabase con GitHub, verificado el 2026-11-12 con la `20261112035500`): escribirlas idempotentes y pedir el OK del titular antes del merge. Tablas privadas en el esquema `private` con RLS y RPC `security definer`. Edge Functions en `supabase/functions/`.
 
 ## Pagos (Plus)
 - Comprar exige tres cosas: build con `EXPO_PUBLIC_PLUS_READY=true`, clave RevenueCat `goog_…` (las `test_` se rechazan en release) y `private.plus_lanzamiento.real_payments_enabled=true` (o la allowlist `private.plus_payment_testers`). Activo desde 2026-11-08.
@@ -31,7 +31,7 @@ Leé también `AGENTS.md` (docs versionadas de Expo 57) y `docs/` (historial det
 
 ## Anuncios
 - Regla del titular: **extremadamente poco invasivos**. Un único interstitial opcional para Free, después de que el servidor confirma crear/unirse a una sala y antes del lobby; máximo uno por sesión; si falla, se sigue sin esperar. Nada de banners ni anuncios en pantallas principales o paywall. Cualquier Plus los quita. Ver `docs/monetizacion-publicitaria.md`.
-- Flags: `private.publicidad_config.ads_enabled` (producción, **lo enciende sólo el titular**) y `ads_qa_enabled` + `private.ads_qa_testers` (QA con IDs de prueba).
+- Flags: `private.publicidad_config.ads_enabled` (producción, **lo enciende sólo el titular**; encendido el 2026-11-12 con la v39) y `ads_qa_enabled` + `private.ads_qa_testers` (QA con IDs de prueba).
 - Con el switch encendido, `estado_publicidad()` publica `ads_unit_android` (la unidad autorizada, columna de `publicidad_config`) y la app sólo muestra anuncios reales si fue compilada con esa misma unidad. Así las builds 1.36–1.38 (IDs de una cuenta de AdMob descartada) nunca muestran anuncios. Si cambia la unidad, hay que actualizar la columna **y** la variable EAS.
 - IDs reales sólo por variables EAS `ADMOB_ANDROID_APP_ID` y `EXPO_PUBLIC_ADMOB_INTERSTITIAL_ANDROID`; sin ellas se usan los IDs de prueba de Google. Consentimiento Google UMP al abrir (sólo Free y con anuncios activos) y fila "Privacidad de anuncios" en Opciones. Advertising ID bloqueado; anuncios no personalizados.
 
