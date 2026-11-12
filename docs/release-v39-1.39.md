@@ -32,3 +32,9 @@ Rama `release/1.39`. Perfil EAS `production-candidate` (entorno EAS "preview").
 - v39 enviada a la prueba cerrada (reinició la revisión de la v38 en producción) y aprobada el mismo día. Instalada desde Play: `versionCode 39`.
 - UMP corre al abrir y resuelve sin formulario (`gdprApplies=0`, Argentina). Crear sala → "Anuncio de prueba" de Google (`sdk_init → load → ready → opened → closed`) → sala de espera `C4465`. Segunda sala `KN6DE` en la misma sesión: sin anuncio ni nueva carga (cupo de uno por sesión). Mismo resultado antes con la v38.
 - Los anuncios reales no se probaron en el dispositivo: sólo existen con `ads_enabled=true`.
+
+## Producción y anuncios reales (12/11)
+- La v38 quedó publicada en producción el 12/11. La v39 se promovió desde la prueba cerrada a **producción** (lanzamiento completo) y se envió a revisión. Notas: entrada desde invitado, anuncio breve para cuentas gratuitas, estabilidad.
+- Por decisión del titular: `ads_enabled=true` y ruta QA apagada (`ads_qa_enabled=false`, tester deshabilitado). Sólo la v39 (unidad autorizada) puede mostrar anuncios; el resto de los usuarios los verá cuando Google publique la v39.
+- Verificado en el A32 con la v39 de Play, cuenta Free: `sdk_init → load → ready` en ~4 s, anuncio real (instalación de una app) al crear la sala, cierre en dos pasos (saltar + X) → sala de espera `W6MAM`. No se tocó el anuncio.
+- Pendiente del titular: revisar en AdMob → Controles de bloqueo / Centro de revisión de anuncios los creativos engañosos (el primero imitaba un aviso del sistema), y apagar `EXPO_PUBLIC_ADS_QA_DIAGNOSTICS` en una build futura si no se necesita.
