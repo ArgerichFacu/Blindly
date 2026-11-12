@@ -34,3 +34,8 @@ Rama `feature/pagos-y-anuncios` (PR #1). Perfil EAS `production-candidate` (ento
 - **Causa:** `expo-web-browser` abre la pestaña de Google mediante una actividad intermedia con su propia tarea de Android; esa tarea sobrevivía al volver a la app y el segundo inicio de sesión reabría la pestaña vieja (Supabase sólo recibía otra vez el intento de vincular → 422).
 - **Arreglo:** `openAuthSessionAsync` con `useProxyActivity: false` y `showInRecents: false` (pestaña con `NO_HISTORY`, se cierra al volver).
 - Verificado en el A32 con un APK de prueba firmado con la clave de subida (instalado por USB, luego reemplazado por la versión de Play): invitado `QA37` con sala → Google → aviso → "Entrar a mi cuenta existente" → sesión iniciada en `administracionblindly` (Google conectado).
+
+## Producción (12/11)
+- QA de la v38 en el A32 instalada desde la prueba cerrada: login con Google muestra "Ir a Blindly" (marca verificada), invitado `QA38` con sala `YUZN6` → Google ocupado → "Entrar a mi cuenta existente" → sesión en `administracionblindly`; sala sin anuncio con `ads_enabled=false`; compra de prueba mensual → "PLUS ACTIVO" y `sincronizar-plus` respondió 200.
+- **Ojo en QA de compras:** si "Suscribirse" no responde, revisar burbujas flotantes (p. ej. Messenger): Google Play ignora los toques cuando hay una ventana encima (logcat: `obscured by … com.facebook.orca`).
+- 12/11: v38 promovida a **producción** (lanzamiento completo) y enviada a revisión de Google, con las mismas notas de la v36.
