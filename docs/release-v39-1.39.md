@@ -26,3 +26,9 @@ Rama `release/1.39`. Perfil EAS `production-candidate` (entorno EAS "preview").
 - Build EAS `85468bf5-0722-4968-bf2d-2254856177e6`, perfil `production-candidate`, desde un clon limpio de `main` (commit sólo de build con `autoIncrement`).
 - AAB `Blindly-1.39-production-candidate-v39.aab`, SHA-256 `dc034e9e6308951bd0d6a812052cec05e3d147fe30f106100c0001dc9d9815dd`.
 - Validado: `versionCode 39`, `versionName 1.39`, `targetSdk 36`, App ID `ca-app-pub-1093561603360160~1719264904` en el manifiesto, sin permiso `AD_ID`, unidad `ca-app-pub-1093561603360160/5619640600` en el bundle JS (las demás son los `TestIds` del SDK), 58 bibliotecas con alineación de 16 KB correcta.
+
+## QA en el A32 (12/11)
+- Ruta QA habilitada con autorización del titular: `ads_qa_enabled=true` y `administracionblindly` en `private.ads_qa_testers` por 48 h (apagar al terminar).
+- v39 enviada a la prueba cerrada (reinició la revisión de la v38 en producción) y aprobada el mismo día. Instalada desde Play: `versionCode 39`.
+- UMP corre al abrir y resuelve sin formulario (`gdprApplies=0`, Argentina). Crear sala → "Anuncio de prueba" de Google (`sdk_init → load → ready → opened → closed`) → sala de espera `C4465`. Segunda sala `KN6DE` en la misma sesión: sin anuncio ni nueva carga (cupo de uno por sesión). Mismo resultado antes con la v38.
+- Los anuncios reales no se probaron en el dispositivo: sólo existen con `ads_enabled=true`.
