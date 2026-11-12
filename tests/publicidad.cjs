@@ -74,28 +74,32 @@ function prueba(opts={}) {
   // Con ads_enabled=false, el hook no consulta al servidor ni importa AdMob.
   const config=cargar('src/lib/publicidadConfig.ts');
   const real='ca-app-pub-1234567890123456/1234567890';
-  for(const d of [null,{}, {ads_enabled:false,elegible_free:true}, {ads_qa_enabled:true,elegible_free:false}, {ads_enabled:true,elegible_free:false}])assert.equal(config.modoPublicidad(d,real),null);
-  assert.equal(config.modoPublicidad({ads_enabled:false,ads_qa_enabled:true,elegible_free:true},undefined),'prueba','QA usa IDs de prueba sin unidad real');
-  assert.equal(config.modoPublicidad({ads_enabled:true,elegible_free:true},real),'real');
-  for(const unidad of [undefined,'','ca-app-pub-3940256099942544/1033173712','ca-app-pub-123/1','ca-app-pub-1234567890123456~1234567890'])assert.equal(config.modoPublicidad({ads_enabled:true,elegible_free:true},unidad),null,'Sin unidad real válida no hay anuncios de producción: '+unidad);
+  const otra='ca-app-pub-6543210987654321/1234567890';
+  for(const d of [null,{}, {ads_unit_android:null,elegible_free:true}, {ads_qa_enabled:true,elegible_free:false}, {ads_unit_android:real,elegible_free:false}])assert.equal(config.modoPublicidad(d,real),null);
+  assert.equal(config.modoPublicidad({ads_enabled:true,elegible_free:true},real),null,'El campo viejo ads_enabled ya no habilita anuncios');
+  assert.equal(config.modoPublicidad({ads_unit_android:otra,elegible_free:true},real),null,'Una build con otra unidad (otra cuenta de AdMob) no muestra anuncios');
+  assert.equal(config.modoPublicidad({ads_unit_android:null,ads_qa_enabled:true,elegible_free:true},undefined),'prueba','QA usa IDs de prueba sin unidad real');
+  assert.equal(config.modoPublicidad({ads_unit_android:real,elegible_free:true},real),'real');
+  for(const unidad of [undefined,'','ca-app-pub-3940256099942544/1033173712','ca-app-pub-123/1','ca-app-pub-1234567890123456~1234567890'])assert.equal(config.modoPublicidad({ads_unit_android:unidad??real,elegible_free:true},unidad),null,'Sin unidad real válida no hay anuncios de producción: '+unidad);
   for(const source of ['FREE','FOUNDER_TRIAL','REVENUECAT_PAID','PLAY_REVIEW']) for(const deepLink of [false,true]) {
     let foco, rpc=0;
     const {usePublicidadSala}=cargar('src/lib/usePublicidadSala.ts',{
       react:{useCallback:f=>f,useRef:v=>({current:v}),useLayoutEffect:f=>f()},'expo-router':{useFocusEffect:f=>foco=f},
       'react-native':{AppState:{currentState:'active',addEventListener:()=>({remove(){}})}},'./PlusContext':{usePlus:()=>({identidad:'one',activo:source!=='FREE',cargando:false,error:null,tipoAcceso:source})},
       'expo-linking':{getInitialURL:async()=>deepLink?'blindly://auth-callback':null,addEventListener:()=>({remove(){}})},
-      './publicidadConfig':config,'./publicidadSesion':{SesionPublicidad},'./publicidadUnidad':{UNIDAD_INTERSTICIAL_REAL:undefined},'./supabase':{supabase:{rpc:async()=>{rpc++;return{data:{ads_enabled:false,ads_qa_enabled:false,elegible_free:true},error:null}}}},
+      './publicidadConfig':config,'./publicidadSesion':{SesionPublicidad},'./publicidadUnidad':{UNIDAD_INTERSTICIAL_REAL:undefined},'./supabase':{supabase:{rpc:async()=>{rpc++;return{data:{ads_unit_android:null,ads_qa_enabled:false,elegible_free:true},error:null}}}},
       './publicidadDiagnostico':{registrarPublicidadQA(){}},
     });usePublicidadSala();foco();await tick();assert.equal(rpc,source==='FREE'&&!deepLink?1:0,source);
   }
   // Consentimiento UMP al abrir: sólo Free verificado, flag del servidor y unidad real; Plus/QA OFF nunca cargan UMP.
   for(const [caso,plusEstado,datos,unidad,espera] of [
-    ['free con anuncios reales',{tipoAcceso:'FREE',activo:false},{ads_enabled:true,elegible_free:true},real,1],
+    ['free con anuncios reales',{tipoAcceso:'FREE',activo:false},{ads_unit_android:real,elegible_free:true},real,1],
+    ['free con build de otra unidad',{tipoAcceso:'FREE',activo:false},{ads_unit_android:otra,elegible_free:true},real,0],
     ['free con QA de prueba',{tipoAcceso:'FREE',activo:false},{ads_qa_enabled:true,elegible_free:true},undefined,1],
-    ['free sin unidad real',{tipoAcceso:'FREE',activo:false},{ads_enabled:true,elegible_free:true},undefined,0],
-    ['flag apagado',{tipoAcceso:'FREE',activo:false},{ads_enabled:false,elegible_free:true},real,0],
-    ['Plus',{tipoAcceso:'REVENUECAT_PAID',activo:true},{ads_enabled:true,elegible_free:false},real,0],
-    ['Founder Trial',{tipoAcceso:'FOUNDER_TRIAL',activo:true},{ads_enabled:true,elegible_free:false},real,0],
+    ['free sin unidad real',{tipoAcceso:'FREE',activo:false},{ads_unit_android:real,elegible_free:true},undefined,0],
+    ['flag apagado',{tipoAcceso:'FREE',activo:false},{ads_unit_android:null,elegible_free:true},real,0],
+    ['Plus',{tipoAcceso:'REVENUECAT_PAID',activo:true},{ads_unit_android:real,elegible_free:false},real,0],
+    ['Founder Trial',{tipoAcceso:'FOUNDER_TRIAL',activo:true},{ads_unit_android:real,elegible_free:false},real,0],
   ]) {
     let rpc=0,pedidos=0;
     const comp=cargar('src/components/ConsentimientoAnuncios.tsx',{react:{useEffect:f=>f()},'react-native':{Platform:{OS:'android'}},

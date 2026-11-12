@@ -32,6 +32,7 @@ Leé también `AGENTS.md` (docs versionadas de Expo 57) y `docs/` (historial det
 ## Anuncios
 - Regla del titular: **extremadamente poco invasivos**. Un único interstitial opcional para Free, después de que el servidor confirma crear/unirse a una sala y antes del lobby; máximo uno por sesión; si falla, se sigue sin esperar. Nada de banners ni anuncios en pantallas principales o paywall. Cualquier Plus los quita. Ver `docs/monetizacion-publicitaria.md`.
 - Flags: `private.publicidad_config.ads_enabled` (producción, **lo enciende sólo el titular**) y `ads_qa_enabled` + `private.ads_qa_testers` (QA con IDs de prueba).
+- Con el switch encendido, `estado_publicidad()` publica `ads_unit_android` (la unidad autorizada, columna de `publicidad_config`) y la app sólo muestra anuncios reales si fue compilada con esa misma unidad. Así las builds 1.36–1.38 (IDs de una cuenta de AdMob descartada) nunca muestran anuncios. Si cambia la unidad, hay que actualizar la columna **y** la variable EAS.
 - IDs reales sólo por variables EAS `ADMOB_ANDROID_APP_ID` y `EXPO_PUBLIC_ADMOB_INTERSTITIAL_ANDROID`; sin ellas se usan los IDs de prueba de Google. Consentimiento Google UMP al abrir (sólo Free y con anuncios activos) y fila "Privacidad de anuncios" en Opciones. Advertising ID bloqueado; anuncios no personalizados.
 
 ## Autenticación

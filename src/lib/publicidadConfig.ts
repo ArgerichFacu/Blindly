@@ -1,6 +1,7 @@
 // Un único interstitial opcional para Free (ver docs/monetizacion-publicitaria.md).
 // QA: anuncios oficiales de TEST sólo para la allowlist privada del servidor.
-// Producción: ads_enabled en el servidor + una unidad real configurada en la build.
+// Producción: el servidor publica la unidad autorizada (sólo con ads_enabled
+// encendido) y la build debe haber sido compilada con esa misma unidad.
 export type EscenarioAdsQA = "normal" | "no_load" | "show_error" | "show_timeout";
 export type ModoPublicidad = "prueba" | "real";
 
@@ -18,12 +19,13 @@ export function escenarioAdsQA(datos: Record<string, unknown>): EscenarioAdsQA |
 }
 
 // Decide qué anuncio corresponde según estado_publicidad(). Sin Free verificado,
-// sin flag o sin unidad real válida no hay publicidad.
+// sin unidad autorizada por el servidor o si la build trae otra unidad, no hay
+// publicidad. Las builds 1.36–1.38 leían 'ads_enabled', que ya no se publica.
 export function modoPublicidad(datos: unknown, unidadReal: string | undefined | null): ModoPublicidad | null {
   if (!datos || typeof datos !== "object") return null;
   const d = datos as Record<string, unknown>;
   if (d.elegible_free !== true) return null;
   if (d.ads_qa_enabled === true) return "prueba";
-  if (d.ads_enabled === true && unidadRealValida(unidadReal)) return "real";
+  if (unidadRealValida(unidadReal) && d.ads_unit_android === unidadReal) return "real";
   return null;
 }
