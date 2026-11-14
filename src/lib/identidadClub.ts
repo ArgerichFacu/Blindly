@@ -1,4 +1,5 @@
-export const coloresClub = { oro: "#D5B768", esmeralda: "#82CFAD", rubí: "#EB9CBA", zafiro: "#A9BDFC" } as const;
+import { COLORES_CLUB } from "./temas";
+export const coloresClub = COLORES_CLUB;
 export const emblemasClub = { picas: "♠", corazones: "♥", diamantes: "♦", treboles: "♣" } as const;
 export type IdentidadClub = { version: 1; color: keyof typeof coloresClub; emblema: keyof typeof emblemasClub; banner: "liso" | "rayas" | "diamantes" };
 export const identidadClubInicial: IdentidadClub = { version: 1, color: "oro", emblema: "picas", banner: "liso" };

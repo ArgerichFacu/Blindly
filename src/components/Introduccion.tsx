@@ -44,13 +44,12 @@ export function Introduccion({ acceso = false, usuarioId, errorSesion }: { acces
       ) : (
         <>
           <LogoBlindly ancho={200} />
-          <Etiqueta>{t("POKER ENTRE AMIGOS")}</Etiqueta>
+          <Etiqueta>{t("Poker entre amigos")}</Etiqueta>
           <Texto
             style={{
               fontSize: 36,
               lineHeight: 42,
               fontWeight: "700",
-              letterSpacing: -1,
             }}
           >
             {t("Tu mesa.\nTu liga.\nTus rivalidades.")}

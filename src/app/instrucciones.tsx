@@ -22,11 +22,11 @@ export default function Instrucciones() {
       <Acceso
         titulo={t("Combinaciones de poker")}
         detalle={t("Probá tus cartas y encontrá las cinco mejores.")}
-        simbolo="♠"
+        icono="cartas"
         onPress={() => router.push("/combinaciones")}
       />
       <Tarjeta>
-        <Etiqueta>{t("CÓMO SE JUEGA")}</Etiqueta>
+        <Etiqueta>{t("Cómo se juega")}</Etiqueta>
         <Texto>
           {t(
             "Recibís dos cartas privadas. La mesa puede mostrar hasta cinco cartas compartidas. Gana la mejor mano de cinco, o el último jugador que no se retiró.",
@@ -86,7 +86,7 @@ export default function Instrucciones() {
               "Retirarse (fold): dejás de participar en esa mano. Las fichas ya apostadas quedan en el pozo.",
             )}
           </Texto>
-          <Etiqueta>{t("EJEMPLO DE IGUALADA")}</Etiqueta>
+          <Etiqueta>{t("Ejemplo de igualada")}</Etiqueta>
           <Texto>
             {t(
               "La apuesta actual es 500 y ya pusiste 200. Igualar agrega 300; tu total en esa ronda queda en 500.",

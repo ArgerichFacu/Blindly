@@ -1,5 +1,5 @@
 import { PantallaCarga } from "./PantallaCarga";
-import { SALON } from "../lib/visual";
+
 import { useRangosMesa } from "../lib/puntuacion";
 import { useRouter, useFocusEffect, type Href } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -25,6 +25,7 @@ import { useSala } from "../lib/useSala";
 import { useAccionMesa } from "../lib/useAccionMesa";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
+import { VELO_MODAL } from "../lib/temas";
 import { esMiJugador } from "../lib/identidad";
 import { estadoActual, numeroDeNivel } from "../lib/niveles";
 import { ahoraServidor } from "../lib/tiempoServidor";
@@ -425,7 +426,7 @@ export function Mesa({ codigo }: { codigo: string }) {
         <>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
             <Tarjeta style={{ flex: 1, minWidth: anchoMinimoNivel, gap: 4, padding: 14 }}>
-              <Texto suave style={{ fontSize: 10, letterSpacing: 1 }}>
+              <Texto suave style={{ fontSize: 10 }}>
                 {estado.terminado
                   ? t("Fin de niveles")
                   : nivel.esBreak
@@ -446,7 +447,7 @@ export function Mesa({ codigo }: { codigo: string }) {
               </Texto>
             </Tarjeta>
             <Tarjeta style={{ flex: 1, minWidth: anchoMinimoNivel, gap: 4, padding: 14 }}>
-              <Texto suave style={{ fontSize: 10, letterSpacing: 1 }}>
+              <Texto suave style={{ fontSize: 10 }}>
                 {t("Ciegas")}
               </Texto>
               <Texto
@@ -540,7 +541,7 @@ export function Mesa({ codigo }: { codigo: string }) {
               {j.id === sala.turno_id ? " ◀ " + t("En turno") : ""}
               {j.retirado ? " · " + t("Retirado") : ""}
             </Texto>
-            {!j.eliminado_en && j.fichas === 0 && virtual && <View style={{ alignSelf: "flex-start", backgroundColor: SALON.bordo, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4 }}><Texto style={{ color: SALON.bordoTexto, fontSize: 12, fontWeight: "800" }}>{t("All-in")}</Texto></View>}
+            {!j.eliminado_en && j.fichas === 0 && virtual && <View style={{ alignSelf: "flex-start", backgroundColor: tema.error, borderRadius: 4, paddingHorizontal: 8, paddingVertical: 2 }}><Texto style={{ color: tema.textoAccion, fontSize: 12, fontWeight: "600" }}>{t("All-in")}</Texto></View>}
             <Texto suave style={{ fontSize: 12 }}>
               {rangos[j.id] === undefined
                 ? t("Rango no disponible")
@@ -823,7 +824,7 @@ const estilos = StyleSheet.create({
   fila: { flexDirection: "row", gap: 12, justifyContent: "center" },
   fondo: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.7)",
+    backgroundColor: VELO_MODAL,
     justifyContent: "center",
     padding: 20,
   },

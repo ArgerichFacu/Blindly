@@ -10,6 +10,7 @@ import { Icono } from "./Icono";
 import { obtenerInvitacionLiga } from "../lib/ligas";
 import { enlaceInvitacion } from "../lib/invitaciones";
 import { useTema } from "../lib/TemaContext";
+import { VELO_MODAL } from "../lib/temas";
 import { usePreferencias } from "../lib/Preferencias";
 export function InvitacionClub({ ligaId, nombre }: {
     ligaId: string;
@@ -44,11 +45,11 @@ export function InvitacionClub({ ligaId, nombre }: {
     return <>
     <Pressable accessibilityRole="button" accessibilityLabel={t("Invitar al club")} onPress={() => { setVisible(true); setQr(false); void obtener(); }} style={({ pressed }) => ({ alignSelf: "flex-end", flexDirection: "row", alignItems: "center", gap: 8, padding: 12, minHeight: 44, borderRadius: 24, borderWidth: 1, backgroundColor: tema.fondoTarjeta, ...RELIEVE.bajo, borderColor: velo(tema.acento, "40"), opacity: pressed ? .6 : 1 })}><Icono nombre="compartir" color={tema.acento} size={18}/><Texto style={{ fontSize: 13, color: tema.acento }}>{t("Invitar al club")}</Texto></Pressable>
     <Modal visible={visible} transparent animationType="slide" onRequestClose={() => setVisible(false)}>
-      <View style={{ flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0,0,0,.65)" }}>
+      <View style={{ flex: 1, justifyContent: "flex-end", backgroundColor: VELO_MODAL }}>
         <SafeAreaView edges={["bottom", "left", "right"]} style={{ maxHeight: "90%", backgroundColor: tema.fondoTarjeta, borderTopLeftRadius: 28, borderTopRightRadius: 28, borderTopWidth: 1, borderColor: velo(tema.acento, "50"), ...RELIEVE.modal }}><Acabado />
           <ScrollView contentContainerStyle={{ padding: 24, gap: 16 }} keyboardShouldPersistTaps="handled">
             <View style={{ width: 40, height: 4, borderRadius: 2, backgroundColor: tema.borde, alignSelf: "center" }}/>
-            <Texto suave style={{ fontSize: 11, letterSpacing: 1.5 }}>{t("Invitar al club")}</Texto>
+            <Texto suave style={{ fontSize: 11 }}>{t("Invitar al club")}</Texto>
             <Texto style={{ fontSize: 27, fontWeight: "800" }}>{nombre ?? t("Nuestro club de póker")}</Texto>
             <Texto suave>{t("Sumalos a la liga. La próxima noche empieza acá.")}</Texto>
             {ocupado && <Texto>{t("Cargando…")}</Texto>}

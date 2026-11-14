@@ -79,7 +79,7 @@ export default function Configurar() {
                   )
                 : t("Usá tus fichas o llevá el stack en el celular.")
             }
-            simbolo="◉"
+            icono="fichas"
             activo={!!sala.configuracion.fichas}
             disabled={accion.ocupado}
             onPress={() =>
@@ -101,7 +101,7 @@ export default function Configurar() {
                   )
                 : t("Una partida rápida, equilibrada o sin apuro.")
             }
-            simbolo="◷"
+            icono="reloj"
             activo={!!sala.configuracion.modo}
             disabled={accion.ocupado}
             onPress={() =>

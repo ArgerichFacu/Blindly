@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { View } from "react-native";
 import { Boton, Texto } from "./Controles";
 import { guardarIdentidadClub } from "../lib/ligas";
+import { useTema } from "../lib/TemaContext";
+import { Palo } from "./Icono";
 import { coloresClub, emblemasClub, identidadClubSegura, type IdentidadClub as Identidad } from "../lib/identidadClub";
 import { usePreferencias } from "../lib/Preferencias";
 
@@ -9,7 +11,7 @@ const nombres = { oro: "Oro", esmeralda: "Esmeralda", rubí: "Rubí", zafiro: "Z
 export function IdentidadClub({ ligaId, nombre, identidad, permitido, administrador, alGuardar }: {
   ligaId: string; nombre: string; identidad?: Identidad; permitido: boolean; administrador: boolean; alGuardar: () => void;
 }) {
-  const { t, mensajeError } = usePreferencias();
+  const { t, mensajeError } = usePreferencias(), { tema } = useTema();
   const guardada = identidadClubSegura(identidad);
   const [borrador, setBorrador] = useState(guardada), [editando, setEditando] = useState(false);
   const [ocupado, setOcupado] = useState(false), [error, setError] = useState<unknown>(null);
@@ -23,10 +25,10 @@ export function IdentidadClub({ ligaId, nombre, identidad, permitido, administra
     finally { enviando.current = false; setOcupado(false); }
   }
   return <View style={{ gap: 12 }}>
-    <View accessible accessibilityLabel={`${nombre} · ${t(nombres[vista.emblema])} · ${t(nombres[vista.color])}`} style={{ borderRadius: 20, padding: 18, borderWidth: 1, borderColor: color, backgroundColor: "#0A1713", flexDirection: "row", alignItems: "center", gap: 16, overflow: "hidden" }}>
+    <View accessible accessibilityLabel={`${nombre} · ${t(nombres[vista.emblema])} · ${t(nombres[vista.color])}`} style={{ borderRadius: 12, padding: 18, borderWidth: 2, borderColor: color, backgroundColor: tema.superficie, flexDirection: "row", alignItems: "center", gap: 16, overflow: "hidden" }}>
       {vista.banner !== "liso" && <View pointerEvents="none" style={{ position: "absolute", right: -24, top: -42, width: 150, height: 150, borderWidth: vista.banner === "rayas" ? 18 : 2, borderColor: color + "33", transform: [{ rotate: "45deg" }], borderRadius: vista.banner === "rayas" ? 75 : 8 }} />}
-      <Texto style={{ color, fontSize: 46, lineHeight: 54 }}>{emblemasClub[vista.emblema]}</Texto>
-      <Texto style={{ color: "#F3F0E4", fontSize: 22, fontWeight: "900", flex: 1 }}>{nombre}</Texto>
+      <Palo palo={emblemasClub[vista.emblema]} color={color} size={44} />
+      <Texto style={{ fontSize: 24, fontWeight: "700", flex: 1 }}>{nombre}</Texto>
     </View>
     {!!error && <Texto>{mensajeError(error)}</Texto>}
     {permitido && !editando && <Boton secundario compacto titulo={t("Personalizar club")} onPress={() => { setBorrador(guardada); setEditando(true); }} />}

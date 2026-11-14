@@ -56,7 +56,7 @@ export default function MiPuntuacion() {
     : [];
   return (
     <Pantalla titulo={t("Mi puntuación")}>
-      <Etiqueta>{t("SOLO VOS PODÉS VER TUS PUNTOS")}</Etiqueta>
+      <Etiqueta>{t("Solo vos podés ver tus puntos")}</Etiqueta>
       {!!error && (
         <Tarjeta>
           <Texto>{mensajeError(error)}</Texto>

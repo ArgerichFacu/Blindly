@@ -6,7 +6,7 @@ import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 import { cargarPersonalizado } from "../lib/almacenamiento";
 import { NIVELES_REGULAR, PRESETS, type Nivel } from "../lib/niveles";
-import { TEMAS, type TemaId } from "../lib/temas";
+import { TEMAS, TEMAS_MESA_HABITUAL, type TemaId } from "../lib/temas";
 import { entero, validarNiveles, type Configuracion, type Modo } from "../lib/mesa";
 import { misTemporadasPropias, type TemporadaPropia } from "../lib/ligas";
 import { eliminarMesaHabitual, guardarMesaHabitual, misMesasHabituales } from "../lib/mesasHabituales";
@@ -101,7 +101,7 @@ export default function EditarMesaHabitual() {
         musica: true,
       };
       setOcupado(true);
-      await guardarMesaHabitual({ id, nombre, jugadores, configuracion, tema: temaId, temporadaId });
+      await guardarMesaHabitual({ id, nombre, jugadores, configuracion, tema: temaId as "verde" | "rojo" | "negro", temporadaId });
       router.back();
     } catch (e) {
       setError(mensajeError(e));
@@ -159,7 +159,7 @@ export default function EditarMesaHabitual() {
         <Texto suave>{t("Los descansos conservan la duración del preset elegido.")}</Texto>
       </Seccion>
       <Seccion titulo={t("Tema")} inicial>
-        {TEMAS.map((paleta) => (
+        {TEMAS.filter((paleta) => TEMAS_MESA_HABITUAL.includes(paleta.id)).map((paleta) => (
           <Boton key={paleta.id} titulo={t(paleta.nombre)} secundario={temaId !== paleta.id} onPress={() => setTemaId(paleta.id)} />
         ))}
       </Seccion>

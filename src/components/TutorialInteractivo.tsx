@@ -7,7 +7,7 @@ import { Icono } from "./Icono";
 import { useTema } from "../lib/TemaContext";
 import { usePreferencias } from "../lib/Preferencias";
 import { vibrarToque } from "../lib/hapticos";
-import { SALON, velo } from "../lib/visual";
+import { velo } from "../lib/visual";
 
 function MesaDemo({ igualada = false }: { igualada?: boolean }) {
   const { tema } = useTema(), { t } = usePreferencias();
@@ -22,7 +22,7 @@ function MesaDemo({ igualada = false }: { igualada?: boolean }) {
     return () => { vivo = false; movimiento.stopAnimation(); };
   }, [igualada, movimiento]);
   return <View style={{ minHeight: 245, justifyContent: "center", alignItems: "center", marginVertical: 8 }}>
-    <View style={{ position: "absolute", left: 10, right: 10, top: 32, bottom: 25, borderRadius: 95, backgroundColor: tema.pano, borderWidth: 6, borderColor: SALON.surface, boxShadow: "inset 0 2px 12px #0005, 0 8px 18px #0004" }}/>
+    <View style={{ position: "absolute", left: 10, right: 10, top: 32, bottom: 25, borderRadius: 95, backgroundColor: tema.mesa, borderWidth: 6, borderColor: tema.superficie }}/>
     <View style={{ position: "absolute", top: 0, alignItems: "center", padding: 10, borderRadius: 18, borderWidth: 1, borderColor: tema.acento, backgroundColor: tema.fondoTarjeta, minWidth: 104 }}><Texto style={{ fontWeight: "800" }}>{t("Vos")} · SB</Texto><Texto style={{ color: tema.acento }}>{igualada ? "9.800" : "10.000"}</Texto><Texto suave style={{ fontSize: 11 }}>{t(igualada ? "Apuesta igualada" : "Te toca.")}</Texto></View>
     <View style={{ alignItems: "center", paddingTop: 5 }}><Texto suave style={{ fontSize: 11 }}>{t("Pozo")}</Texto><Texto accessibilityLiveRegion="polite" style={{ fontSize: 30, fontWeight: "800", color: tema.acento }}>{igualada ? "1.700" : "1.500"}</Texto>{igualada && <Texto style={{ color: tema.acento }}>+200</Texto>}</View>
     {[["Facu", "9.500", "DR · BTN"], ["Tomi", "8.200", "BB"]].map(([nombre, stack, rol], i) => <View key={nombre} style={{ position: "absolute", bottom: 0, [i ? "right" : "left"]: 0, alignItems: "center", padding: 10, backgroundColor: tema.fondoTarjeta, borderRadius: 16, borderWidth: 1, borderColor: tema.borde }}><Texto style={{ fontWeight: "700" }}>{nombre}</Texto><Texto suave>{stack}</Texto><Texto style={{ fontSize: 10, color: tema.acento }}>{rol}</Texto></View>)}
@@ -51,7 +51,7 @@ export function PasosTutorial({ paso, ocupado = false, error = false, avanzar, r
   return <>
     <View accessibilityRole="progressbar" accessibilityLabel={t("Paso {n} de 4", { n: paso + 1 })} accessibilityValue={{ min: 0, max: 4, now: paso + 1 }} style={{ gap: 8 }}><Texto suave>{t("Paso {n} de 4", { n: paso + 1 })}</Texto><View style={{ flexDirection: "row", gap: 8 }}>{[0, 1, 2, 3].map(n => <View key={n} style={{ height: 4, flex: 1, borderRadius: 4, backgroundColor: n <= paso ? tema.acento : tema.borde }}/>)}</View></View>
     <EntradaSuave key={paso}><Tarjeta variante="hero" style={{ gap: 14 }}>
-      <Etiqueta>{t(paso === 2 ? "SIMULACIÓN" : "POKER ENTRE AMIGOS")}</Etiqueta>
+      <Etiqueta>{t(paso === 2 ? "SIMULACIÓN" : "Poker entre amigos")}</Etiqueta>
       <Texto style={{ fontSize: 28, fontWeight: "800" }}>{t(titulos[paso])}</Texto>
       {paso === 0 && <><View style={{ flexDirection: "row", justifyContent: "center", gap: 12, paddingVertical: 22 }}><View style={{ width: 68, height: 100, transform: [{ rotate: "-8deg" }] }}><CartaPoker valor="A" palo="♠"/></View><View style={{ width: 68, height: 100, transform: [{ rotate: "8deg" }] }}><CartaPoker valor="K" palo="♥"/></View></View><Texto suave>{t("Blindly lleva el resto.")}</Texto></>}
       {paso === 1 && <><MesaDemo/><Texto suave>{t("Stacks, ciegas, turnos y pozos. Cada uno juega desde su celular.")}</Texto><Texto suave style={{ fontSize: 12 }}>{t("El dealer reparte las cartas y entrega el pozo al ganador.")}</Texto></>}

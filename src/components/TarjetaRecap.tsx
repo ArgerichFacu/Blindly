@@ -7,7 +7,7 @@ import { duracionLegible } from "../lib/recap";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 
-const medalla = (puesto: number) => puesto === 1 ? "🥇" : puesto === 2 ? "🥈" : puesto === 3 ? "🥉" : `${puesto}°`;
+const medalla = (puesto: number) => `${puesto}°`;
 
 export const TarjetaRecap = forwardRef<View, ViewProps & { recap: Recap }>(
   function TarjetaRecap({ recap, style, ...props }, ref) {
@@ -35,13 +35,13 @@ export const TarjetaRecap = forwardRef<View, ViewProps & { recap: Recap }>(
         <View style={{ gap: 20 }}>
           <LogoBlindly ancho={150} />
           <View>
-            <Texto suave style={{ letterSpacing: 2, fontWeight: "700" }}>{t("NOCHE DE POKER")}</Texto>
+            <Texto suave style={{ fontWeight: "700" }}>{t("Noche de poker")}</Texto>
             <Texto style={{ fontSize: 30, lineHeight: 36, fontWeight: "900" }}>{t("Resultado final")}</Texto>
           </View>
           <View style={{ gap: 12 }}>
             {recap.resultados.slice(0, 3).map((resultado, indice) => (
               <View key={resultado.user_id ?? `${resultado.puesto}-${indice}`} style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-                <Texto style={{ fontSize: 25, width: 42 }}>{medalla(resultado.puesto)}</Texto>
+                <Texto style={{ fontSize: 24, fontWeight: "700", width: 42, color: resultado.puesto === 1 ? tema.acento : tema.texto }}>{medalla(resultado.puesto)}</Texto>
                 <View style={{ flex: 1 }}><Texto numberOfLines={2} style={{ fontSize: 22, fontWeight: resultado.puesto === 1 ? "900" : "700", color: resultado.puesto === 1 ? tema.acento : tema.textoFuerte }}>{resultado.nombre}</Texto><Texto suave>{t("+{n} puntos", { n: resultado.puntos })}</Texto></View>
               </View>
             ))}
@@ -55,9 +55,9 @@ export const TarjetaRecap = forwardRef<View, ViewProps & { recap: Recap }>(
               <Texto suave>{recap.liga.temporada}</Texto>
             </View>
           )}
-          {!!recap.nuevo_mvp && <View style={{ padding: 14, borderRadius: 16, borderColor: tema.acento, borderWidth: 1 }}><Texto style={{ color: tema.acento, fontWeight: "800" }}>{t("NUEVO MVP")}</Texto><Texto numberOfLines={2}>{recap.nuevo_mvp.nombre}</Texto></View>}
+          {!!recap.nuevo_mvp && <View style={{ padding: 14, borderRadius: 16, borderColor: tema.acento, borderWidth: 1 }}><Texto style={{ color: tema.acento, fontWeight: "800" }}>{t("Nuevo MVP")}</Texto><Texto numberOfLines={2}>{recap.nuevo_mvp.nombre}</Texto></View>}
         </View>
-        <Texto suave style={{ textAlign: "center", letterSpacing: 1.5 }}>{t("JUGADO CON BLINDLY")}</Texto>
+        <Texto suave style={{ textAlign: "center" }}>{t("Jugado con Blindly")}</Texto>
       </View>
     );
   },

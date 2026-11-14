@@ -84,7 +84,7 @@ export default function HeadToHead() {
         subtitulo={t("Compará resultados con quienes compartiste mesa.")}
       >
         <Tarjeta>
-          <Etiqueta>{t("BLINDLY PLUS")}</Etiqueta>
+          <Etiqueta>{t("Blindly Plus")}</Etiqueta>
           <Texto>
             {t(
               "Descubrí quién terminó más veces arriba, sus victorias y sus podios compartidos.",

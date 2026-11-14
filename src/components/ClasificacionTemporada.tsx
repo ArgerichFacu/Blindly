@@ -37,7 +37,7 @@ export function ClasificacionTemporada({ranking,temporada,movimientos}:{ranking:
    </Tarjeta>;
   })}</View>}
   {datos.mvp && datos.carrera.length>1 && <Tarjeta>
-   <Etiqueta>{t("RACE FOR MVP")}</Etiqueta>
+   <Etiqueta>{t("Race for MVP")}</Etiqueta>
    {datos.carrera.map(({fila,proporcion,diferencia})=><View key={fila.user_id} style={{gap:5}}>
     <Texto style={{fontWeight:"700"}}>{fila.nombre} · {t("{n} puntos",{n:numero(fila.puntos)})}</Texto>
     <View accessibilityRole="progressbar" accessibilityLabel={fila.nombre} accessibilityValue={{min:0,max:100,now:Math.round(proporcion*100),text:t("{n} puntos",{n:numero(fila.puntos)})}} style={{height:8,backgroundColor:tema.borde,borderRadius:4,overflow:"hidden"}}><View style={{height:8,width:`${proporcion*100}%`,backgroundColor:tema.acento}} /></View>

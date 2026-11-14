@@ -6,6 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import * as SystemUI from "expo-system-ui";
 import { StatusBar } from "expo-status-bar";
 import { TemaProvider, useTema } from "../lib/TemaContext";
+import { TEMA_DEFECTO } from "../lib/temas";
 import { PreferenciasProvider, usePreferencias } from "../lib/Preferencias";
 import { PantallaCarga } from "../components/PantallaCarga";
 import { PlusProvider } from "../lib/PlusContext";
@@ -29,7 +30,7 @@ export function ContenidoApp() {
     return () => { vivo = false; };
   }, [lista, hidratado, tema.fondo]);
   return <ThemeProvider value={{ ...DarkTheme, colors: { ...DarkTheme.colors, background: tema.fondo, card: tema.fondoTarjeta, text: tema.textoFuerte, primary: tema.acento, border: tema.borde } }}>
-    <View style={{ flex: 1, backgroundColor: hidratado ? tema.fondo : "#0D1011" }}>
+    <View style={{ flex: 1, backgroundColor: hidratado ? tema.fondo : TEMA_DEFECTO.fondo }}>
       <StatusBar style="light" />
       <SesionNativa />
       {hidratado && (lista ? <><AvisosNativos /><ConsentimientoAnuncios /><Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: tema.fondo } }} /></> : <PantallaCarga onLoadEnd={alCargar} />)}

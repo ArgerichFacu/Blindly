@@ -39,7 +39,7 @@ export default function Mesas() {
   return (
     <Pantalla titulo={t("Mis mesas")} subtitulo={t("Tu partida de siempre, lista en pocos toques.")}>
       <Tarjeta style={{ borderColor: tema.acento }}>
-        <Etiqueta activa>{t("BLINDLY PLUS")}</Etiqueta>
+        <Etiqueta activa>{t("Blindly Plus")}</Etiqueta>
         <Texto style={{ fontSize: 22, fontWeight: "800" }}>{t("Guardá la mesa de tu grupo")}</Texto>
         <Texto suave>{t("Reutilizá jugadores habituales, fichas, ciegas, duración, tema y liga sin configurar todo otra vez.")}</Texto>
       </Tarjeta>
@@ -59,7 +59,7 @@ export default function Mesas() {
                 <Texto style={{ fontSize: 20, fontWeight: "800" }}>{mesa.nombre}</Texto>
                 <Texto suave>{t("{n} jugadores habituales", { n: mesa.jugadores.length })}</Texto>
               </View>
-              {!mesa.plus_activo && <Etiqueta>{t("SOLO LECTURA")}</Etiqueta>}
+              {!mesa.plus_activo && <Etiqueta>{t("Solo lectura")}</Etiqueta>}
             </View>
             <Texto suave>
               {stack ? `${stack.toLocaleString(preferencias.idioma)} ${t("de stack")}` : t("Fichas físicas")}
@@ -87,7 +87,7 @@ export default function Mesas() {
         <Acceso
           titulo={t("Nueva mesa habitual")}
           detalle={t("Guardá una plantilla para tu próxima partida.")}
-          simbolo="+"
+          icono="sumar"
           onPress={() => router.push("/mesa-habitual" as Href)}
         />
       )}

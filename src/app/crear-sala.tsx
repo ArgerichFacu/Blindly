@@ -65,7 +65,7 @@ export default function CrearSala() {
       </Texto>
       {!!temporada && (
         <Tarjeta>
-          <Etiqueta>{t("PARTIDA DE LIGA")}</Etiqueta>
+          <Etiqueta>{t("Partida de liga")}</Etiqueta>
           <Texto style={{ fontWeight: "700", fontSize: 17 }}>
             {liga ?? t("Liga")}
           </Texto>
@@ -77,7 +77,7 @@ export default function CrearSala() {
       )}
       {!!mesa && (
         <Tarjeta>
-          <Etiqueta>{t("MESA HABITUAL")}</Etiqueta>
+          <Etiqueta>{t("Mesa habitual")}</Etiqueta>
           <Texto style={{ fontWeight: "700", fontSize: 17 }}>{mesaNombre ?? t("Mesa habitual")}</Texto>
           <Texto suave>{t("La sala se creará con la configuración guardada. Podrás ajustarla antes de iniciar.")}</Texto>
         </Tarjeta>
