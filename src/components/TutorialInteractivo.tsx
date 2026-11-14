@@ -51,7 +51,7 @@ export function PasosTutorial({ paso, ocupado = false, error = false, avanzar, r
   return <>
     <View accessibilityRole="progressbar" accessibilityLabel={t("Paso {n} de 4", { n: paso + 1 })} accessibilityValue={{ min: 0, max: 4, now: paso + 1 }} style={{ gap: 8 }}><Texto suave>{t("Paso {n} de 4", { n: paso + 1 })}</Texto><View style={{ flexDirection: "row", gap: 8 }}>{[0, 1, 2, 3].map(n => <View key={n} style={{ height: 4, flex: 1, borderRadius: 4, backgroundColor: n <= paso ? tema.acento : tema.borde }}/>)}</View></View>
     <EntradaSuave key={paso}><Tarjeta variante="hero" style={{ gap: 14 }}>
-      <Etiqueta>{t(paso === 2 ? "SIMULACIÓN" : "Poker entre amigos")}</Etiqueta>
+      {paso === 2 && <Etiqueta>{t("Práctica")}</Etiqueta>}
       <Texto style={{ fontSize: 28, fontWeight: "800" }}>{t(titulos[paso])}</Texto>
       {paso === 0 && <><View style={{ flexDirection: "row", justifyContent: "center", gap: 12, paddingVertical: 22 }}><View style={{ width: 68, height: 100, transform: [{ rotate: "-8deg" }] }}><CartaPoker valor="A" palo="♠"/></View><View style={{ width: 68, height: 100, transform: [{ rotate: "8deg" }] }}><CartaPoker valor="K" palo="♥"/></View></View><Texto suave>{t("Blindly lleva el resto.")}</Texto></>}
       {paso === 1 && <><MesaDemo/><Texto suave>{t("Stacks, ciegas, turnos y pozos. Cada uno juega desde su celular.")}</Texto><Texto suave style={{ fontSize: 12 }}>{t("El dealer reparte las cartas y entrega el pozo al ganador.")}</Texto></>}

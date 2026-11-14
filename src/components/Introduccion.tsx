@@ -44,7 +44,6 @@ export function Introduccion({ acceso = false, usuarioId, errorSesion }: { acces
       ) : (
         <>
           <LogoBlindly ancho={200} />
-          <Etiqueta>{t("Poker entre amigos")}</Etiqueta>
           <Texto
             style={{
               fontSize: 36,
@@ -52,7 +51,7 @@ export function Introduccion({ acceso = false, usuarioId, errorSesion }: { acces
               fontWeight: "700",
             }}
           >
-            {t("Tu mesa.\nTu liga.\nTus rivalidades.")}
+            {t("El reloj y las cuentas de tu partida de poker.")}
           </Texto>
           <Texto suave>
             {t(

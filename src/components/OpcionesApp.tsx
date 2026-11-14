@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "expo-router";
-import { Switch, View } from "react-native";
+import { Pressable, Switch, View } from "react-native";
+import { Icono } from "./Icono";
 import { Pantalla, Texto, Boton } from "./Controles";
 import { Superficie } from "./Superficie";
 import { FilaOpcion } from "./FilaOpcion";
@@ -14,7 +15,7 @@ export default function OpcionesApp({ enTabs = false }: { enTabs?: boolean }) {
     const router = useRouter(), { t, preferencias, cambiar } = usePreferencias(), { tema, elegirTema } = useTema(), plus = usePlus();
     const privacidadAnuncios = usePrivacidadAnunciosRequerida();
     const [selector, setSelector] = useState<"idioma" | "tema" | null>(null);
-    const etiqueta = (titulo: string) => <Texto suave style={{ fontSize: 11, marginTop: 20, marginBottom: 4 }}>{titulo}</Texto>;
+    const etiqueta = (titulo: string) => <Texto suave style={{ fontSize: 14, fontWeight: "600", marginTop: 20, marginBottom: 4 }}>{titulo}</Texto>;
     return <Pantalla titulo={t("Config")} volver={!enTabs} enTabs={enTabs}>
     {etiqueta(t("Cuenta"))}<Superficie variante="suave" style={{ padding: 4, gap: 0 }}>
     <FilaOpcion titulo={t("Mi cuenta")} icono="perfil" onPress={() => router.push("/cuenta")}/>
@@ -23,10 +24,20 @@ export default function OpcionesApp({ enTabs = false }: { enTabs?: boolean }) {
     <FilaOpcion titulo={t("Clubes y notificaciones")} detalle={t("Preferencias por liga")} onPress={() => router.push("/ligas")}/>
     </Superficie>{etiqueta(t("Experiencia"))}<Superficie variante="suave" style={{ padding: 4, gap: 0 }}>
     <FilaOpcion titulo={t("Tema")} detalle={t(tema.nombre)} onPress={() => setSelector(selector === "tema" ? null : "tema")}/>
-    {selector === "tema" && <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>{TEMAS.map(paleta => <Boton key={paleta.id} titulo={`${t(paleta.nombre)}${paleta.plus ? " · Plus" : ""}`} compacto secundario={tema.id !== paleta.id} onPress={() => { if (paleta.plus && !capacidadesPlus(plus).personalizar)
-        router.push("/plus");
-    else
-        elegirTema(paleta.id); setSelector(null); }}/>)}</View>}
+    {selector === "tema" && <View accessibilityRole="radiogroup" style={{ gap: 0 }}>{TEMAS.map(paleta => {
+        const bloqueado = !!paleta.plus && !capacidadesPlus(plus).personalizar, elegido = tema.id === paleta.id;
+        return <Pressable key={paleta.id} accessibilityRole="radio" accessibilityState={{ checked: elegido }}
+          accessibilityLabel={`${t(paleta.nombre)}${bloqueado ? `. ${t("Requiere Plus")}` : ""}`}
+          onPress={() => { if (bloqueado) router.push("/plus"); else { elegirTema(paleta.id); setSelector(null); } }}
+          style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 56, paddingHorizontal: 12, borderTopWidth: 1, borderColor: tema.borde, opacity: pressed ? .7 : 1 })}>
+          <View style={{ flexDirection: "row", borderRadius: 4, overflow: "hidden", borderWidth: 1, borderColor: tema.bordeControl }}>
+            {[paleta.fondo, paleta.mesa, paleta.acento].map((c, i) => <View key={i} style={{ width: 14, height: 28, backgroundColor: c }} />)}
+          </View>
+          <Texto style={{ flex: 1, fontSize: 16 }}>{t(paleta.nombre)}</Texto>
+          {bloqueado ? <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}><Icono nombre="candado" color={tema.textoSecundario} size={18} /><Texto suave style={{ fontSize: 14, fontWeight: "600" }}>Plus</Texto></View>
+            : elegido ? <Icono nombre="check" color={tema.acento} size={22} /> : null}
+        </Pressable>;
+      })}</View>}
     <FilaOpcion titulo={t("Sonidos y ambiente")} onPress={() => router.push("/sonidos")}/>
     <FilaOpcion titulo={t("Modo principiante")} control={<Switch accessibilityLabel={t("Modo principiante")} value={preferencias.principiante} onValueChange={principiante => cambiar({ principiante })} trackColor={{ true: tema.acento }}/>}/>
     <FilaOpcion titulo={t("Vibraciones de momentos importantes")} control={<Switch accessibilityLabel={t("Vibraciones de momentos importantes")} value={preferencias.hapticos} onValueChange={hapticos => cambiar({ hapticos })} trackColor={{ true: tema.acento }}/>}/>

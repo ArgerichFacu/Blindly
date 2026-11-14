@@ -154,7 +154,7 @@ export default function Cuenta() {
     {!!aviso && <Tarjeta><Texto accessibilityLiveRegion="polite">{t(aviso)}</Texto></Tarjeta>}
     {!usuario && !sesionCargada ? <Texto>{t("Cargando…")}</Texto> : <>
       {modo === "login" && <Tarjeta>
-        <View style={{ alignItems: "center", gap: 12 }}><LogoBlindly ancho={180}/><Etiqueta>{t("Poker entre amigos")}</Etiqueta></View>
+        <View style={{ alignItems: "center", gap: 12 }}><LogoBlindly ancho={180}/></View>
         <Boton titulo={t("Ingresar con Google")} disabled={ocupado} onPress={google}/>
         <Texto suave style={{ textAlign: "center" }}>{t("o")}</Texto>{campoEmail}{camposPassword}
         <Boton titulo={t(ocupado ? "Cargando…" : "Iniciar sesión")} disabled={ocupado || !email || !password} onPress={entrarConEmail}/>

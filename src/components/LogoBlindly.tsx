@@ -1,34 +1,25 @@
 import { Image, View } from "react-native";
-export const LOGO_BLINDLY = require("../../assets/images/blindly-logo-transparent.png");
+
+// Wordmark "blindly:" (identidad Marcador), generado por scripts/brand/generar-marca.cjs.
+export const LOGO_BLINDLY = require("../../assets/brand/blindly-wordmark.png");
+const PROPORCION = 1200 / 499;
+
 export function LogoBlindly({
   onLoadEnd,
-  ancho = 260,
+  ancho = 220,
 }: {
   onLoadEnd?: () => void;
   ancho?: number;
 }) {
-  const escala = ancho / 260;
+  const alto = ancho / PROPORCION;
   return (
-    <View
-      style={{
-        width: ancho,
-        height: 220 * escala,
-        alignSelf: "center",
-        // Preserve the wordmark dot; never crop the transparent source.
-      }}
-    >
+    <View style={{ width: ancho, height: alto, alignSelf: "center" }}>
       <Image
         source={LOGO_BLINDLY}
         accessibilityLabel="Blindly"
         resizeMode="contain"
         onLoadEnd={onLoadEnd}
-        style={{
-          position: "absolute",
-          width: ancho,
-          height: 220 * escala,
-          left: 0,
-          top: 0,
-        }}
+        style={{ width: ancho, height: alto }}
       />
     </View>
   );

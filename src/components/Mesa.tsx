@@ -546,7 +546,7 @@ export function Mesa({ codigo }: { codigo: string }) {
               {rangos[j.id] === undefined
                 ? t("Rango no disponible")
                 : rangos[j.id] === null
-                  ? t("Sin rango")
+                  ? t("Todavía sin puntos")
                   : t("Rango global #{n}", { n: rangos[j.id]! })}
             </Texto>
             {!esperando && (
