@@ -14,9 +14,10 @@ export function Introduccion({ acceso = false, usuarioId, errorSesion }: { acces
     { t } = usePreferencias(),
     router = useRouter();
   return (
-    <Pantalla titulo="blindly." volver={false}>
+    <Pantalla titulo="Blindly" volver={false} cabecera={false}>
       {!inicio.datos || !usuarioId ? (
         <Tarjeta>
+          <LogoBlindly ancho={140} />
           <Texto>
             {t(
               inicio.error
