@@ -88,7 +88,7 @@ export function MesaAsientos({
   const larga = orden.length > 6,
     alto = larga ? Math.ceil(orden.length / 2) * 76 + 12 : 292;
   const { fontScale, width } = useWindowDimensions();
-  const lista = fontScale > 1.3 || width < 360 || jugadores.some(j => j.fichas.toLocaleString().length > 6);
+  const lista = fontScale > 1.3 || width < 360 || jugadores.some(j => formatoNumero(j.fichas, preferencias.idioma).length > 6);
   return (
     <View style={[styles.marco, lista ? { width: "100%", gap: 24 } : { height: alto }]}>
       <View
@@ -160,7 +160,6 @@ export function MesaAsientos({
                 color: activo ? tema.acentoTexto : tema.textoFuerte,
               }}
             >
-              {activo ? "▶ " : ""}
               {j?.nombre ?? i + 1}
             </Texto>
             {pozo !== undefined && (
@@ -193,7 +192,7 @@ export function MesaAsientos({
                     fontVariant: ["tabular-nums"],
                   }}
                 >
-                  {j?.fichas.toLocaleString()}
+                  {j ? formatoNumero(j.fichas, preferencias.idioma) : null}
                 </Texto>
               </View>
             )}

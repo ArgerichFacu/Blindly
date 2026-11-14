@@ -72,7 +72,7 @@ const tempRoot = fs.realpathSync(os.tmpdir());
 const fixture = fs.mkdtempSync(path.join(tempRoot, 'blindly-native-'));
 try {
   for (const name of ['app.json', 'app.config.ts', 'package.json']) fs.copyFileSync(name, path.join(fixture, name));
-  for (const name of ['plugins', 'assets/images']) fs.cpSync(name, path.join(fixture, name), { recursive: true });
+  for (const name of ['plugins', 'assets/brand', 'assets/fonts']) fs.cpSync(name, path.join(fixture, name), { recursive: true });
   fs.symlinkSync(path.resolve('node_modules'), path.join(fixture, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
   const prebuild = spawnSync(process.execPath, [require.resolve('expo/bin/cli'), 'prebuild', '--platform', 'android', '--no-install'], {
     cwd: fixture, encoding: 'utf8', env: { ...process.env, CI: '1', EXPO_NO_DOTENV: '1' },

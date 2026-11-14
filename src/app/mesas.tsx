@@ -8,6 +8,7 @@ import { useTema } from "../lib/TemaContext";
 import { usePlus } from "../lib/PlusContext";
 import { misMesasHabituales, type MesaHabitual } from "../lib/mesasHabituales";
 
+import { formatoNumero } from "../lib/numeros";
 function stackDe(mesa: MesaHabitual) {
   const fichas = mesa.configuracion.fichas;
   return fichas?.tipo === "virtuales" ? fichas.stack : null;
@@ -62,7 +63,7 @@ export default function Mesas() {
               {!mesa.plus_activo && <Etiqueta>{t("Solo lectura")}</Etiqueta>}
             </View>
             <Texto suave>
-              {stack ? `${stack.toLocaleString(preferencias.idioma)} ${t("de stack")}` : t("Fichas físicas")}
+              {stack ? `${formatoNumero(stack, preferencias.idioma)} ${t("de stack")}` : t("Fichas físicas")}
               {minutos ? ` · ${minutos} ${t("min por nivel")}` : ""}
             </Texto>
             {!!mesa.liga && <Texto suave>{t("Liga")}: {mesa.liga.nombre} · {mesa.liga.temporada}</Texto>}

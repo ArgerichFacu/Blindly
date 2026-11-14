@@ -6,13 +6,14 @@ import { useNombreVisible } from "../../lib/useNombreVisible";
 import { guardarNombreVisible, inicialNombre, validarNombreVisible } from "../../lib/nombreVisible";
 import { Icono } from "../../components/Icono";
 import { Superficie } from "../../components/Superficie";
-import { RELIEVE, velo } from "../../lib/visual";
+import { velo } from "../../lib/visual";
 import { FilaOpcion } from "../../components/FilaOpcion";
 import { TitulosJugador } from "../../components/TitulosJugador";
 import { necesitaCuenta } from "../../components/ProtegerCuenta";
 import { clasificacion } from "../../lib/clasificacion";
 import { useClubes } from "../../lib/useClubes";
 import { miPuntuacion, type Puntuacion } from "../../lib/puntuacion";
+import { formatoNumero } from "../../lib/numeros";
 import { useTema } from "../../lib/TemaContext";
 import { usePreferencias } from "../../lib/Preferencias";
 import { usePlus } from "../../lib/PlusContext";
@@ -54,7 +55,7 @@ export default function Perfil({ enTabs = true }: { enTabs?: boolean } = {}) {
     </Tarjeta>}
     {!!mensaje && !editando && propietario === identidad.usuario?.id && <Texto accessibilityLiveRegion="polite">{mensaje}</Texto>}
     {!!identidad.error && <Texto suave>{mensajeError(identidad.error)}</Texto>}
-    {puntos && <Tarjeta style={{ borderRadius: 24, flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around" }}>{[[puntos.puntos.toLocaleString(preferencias.idioma), t("Puntos acumulados")], [String(puntos.partidas), t("Partidas jugadas")], [puntos.rango ? `#${puntos.rango}` : "—", t("Rango")]].map(([valor, etiqueta]) => <View key={etiqueta} style={{ alignItems: "center", padding: 12, gap: 7, minWidth: 86, borderRadius: 16, backgroundColor: tema.fondo, borderWidth: 1, borderColor: velo(tema.acento, "16") }}><Texto style={{ fontSize: 27, fontWeight: "800", color: tema.acento }}>{valor}</Texto><Texto suave style={{ fontSize: 11 }}>{etiqueta}</Texto></View>)}</Tarjeta>}
+    {puntos && <Tarjeta style={{ borderRadius: 24, flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around" }}>{[[formatoNumero(puntos.puntos, preferencias.idioma, 3), t("Puntos acumulados")], [String(puntos.partidas), t("Partidas jugadas")], [puntos.rango ? `#${puntos.rango}` : "—", t("Rango")]].map(([valor, etiqueta]) => <View key={etiqueta} style={{ alignItems: "center", padding: 12, gap: 7, minWidth: 86, borderRadius: 16, backgroundColor: tema.fondo, borderWidth: 1, borderColor: velo(tema.acento, "16") }}><Texto style={{ fontSize: 27, fontWeight: "800", color: tema.acento }}>{valor}</Texto><Texto suave style={{ fontSize: 11 }}>{etiqueta}</Texto></View>)}</Tarjeta>}
     {!puntos && !error && <Texto suave>{t("Cargando…")}</Texto>}
     {!!error && <View style={{ gap: 8 }}><Texto suave>{mensajeError(error)}</Texto><Boton titulo={t(necesitaCuenta(error) ? "Proteger mi cuenta" : "Reintentar")} secundario compacto onPress={() => necesitaCuenta(error) ? router.push("/cuenta") : setRevision(v => v + 1)}/></View>}
     {titulos.length > 0 && <View style={{ gap: 10 }}><Texto suave>{t("Títulos automáticos")}</Texto>{titulos.map(({ fila, club, esMvp }, i) => <View key={`${fila.user_id}:${i}`} style={{ gap: 6 }}><Texto suave>{club}</Texto><TitulosJugador fila={fila} esMvp={esMvp}/></View>)}</View>}

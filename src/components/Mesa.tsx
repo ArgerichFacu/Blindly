@@ -3,7 +3,7 @@ import { PantallaCarga } from "./PantallaCarga";
 import { useRangosMesa } from "../lib/puntuacion";
 import { useRouter, useFocusEffect, type Href } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Modal, ScrollView, View, StyleSheet, useWindowDimensions } from "react-native";
+import { Modal, ScrollView, View, StyleSheet } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import {
@@ -12,12 +12,16 @@ import {
   Boton,
   Campo,
   Tarjeta,
+  Etiqueta,
   Seccion,
   Pasos,
 } from "./Controles";
 import { PanelApuesta } from "./PanelApuesta";
 import { AyudaTurno } from "./AyudaTurno";
 import { MesaAsientos } from "./MesaAsientos";
+import { MarcadorNivel } from "./MarcadorNivel";
+import { CifraViva } from "./CifraViva";
+import { EntradaSuave } from "./EntradaSuave";
 import { Botonera } from "./Botonera";
 import { AudioMesa } from "./AudioMesa";
 import { vibrarMomento } from "../lib/hapticos";
@@ -26,8 +30,9 @@ import { useAccionMesa } from "../lib/useAccionMesa";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 import { VELO_MODAL } from "../lib/temas";
+import { formatoNumero } from "../lib/numeros";
 import { esMiJugador } from "../lib/identidad";
-import { estadoActual, numeroDeNivel } from "../lib/niveles";
+import { estadoActual } from "../lib/niveles";
 import { ahoraServidor } from "../lib/tiempoServidor";
 import { protegerSalidaMesa, useSalidaMesa } from "../lib/useSalidaMesa";
 import {
@@ -39,8 +44,6 @@ import {
 } from "../lib/mesa";
 
 export function Mesa({ codigo }: { codigo: string }) {
-  const { width, fontScale } = useWindowDimensions();
-  const anchoMinimoNivel = Math.min(width - 40, Math.ceil(150 * fontScale));
   const router = useRouter(),
     { t, mensajeError, preferencias } = usePreferencias(),
     { tema } = useTema();
@@ -117,7 +120,6 @@ export function Mesa({ codigo }: { codigo: string }) {
       sala.boton_id ?? sala.dealer_id,
       sala,
     );
-  const nivel = sala.niveles[estado.indice];
   const segundos = Math.ceil(estado.msRestantes / 1000),
     tiempo =
       String(Math.floor(segundos / 60)).padStart(2, "0") +
@@ -272,7 +274,7 @@ export function Mesa({ codigo }: { codigo: string }) {
                     {t("Tu stack")}
                   </Texto>
                   <Texto style={{ fontWeight: "700", fontSize: 19 }}>
-                    {yo.fichas.toLocaleString()}
+                    {formatoNumero(yo.fichas, preferencias.idioma)}
                   </Texto>
                 </View>
               )}
@@ -424,45 +426,7 @@ export function Mesa({ codigo }: { codigo: string }) {
         </>
       ) : (
         <>
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-            <Tarjeta style={{ flex: 1, minWidth: anchoMinimoNivel, gap: 4, padding: 14 }}>
-              <Texto suave style={{ fontSize: 10 }}>
-                {estado.terminado
-                  ? t("Fin de niveles")
-                  : nivel.esBreak
-                    ? t("Descanso")
-                    : t("Nivel {n}", {
-                        n: numeroDeNivel(sala.niveles, estado.indice),
-                      })}
-              </Texto>
-              <Texto
-                style={{
-                  fontSize: 30,
-                  lineHeight: 36,
-                  fontWeight: "700",
-                  fontVariant: ["tabular-nums"],
-                }}
-              >
-                {tiempo}
-              </Texto>
-            </Tarjeta>
-            <Tarjeta style={{ flex: 1, minWidth: anchoMinimoNivel, gap: 4, padding: 14 }}>
-              <Texto suave style={{ fontSize: 10 }}>
-                {t("Ciegas")}
-              </Texto>
-              <Texto
-                style={{ fontSize: 25, lineHeight: 36, fontWeight: "600" }}
-              >
-                {nivel.esBreak
-                  ? "—"
-                  : nivel.smallBlind + " / " + nivel.bigBlind}
-              </Texto>
-            </Tarjeta>
-          </View>
-          <Texto>
-            {t("Mano {n}", { n: sala.mano })}
-            {virtual ? ` · ${t("Pozo")}: ${sala.pozo}` : ""}
-          </Texto>
+          <MarcadorNivel niveles={sala.niveles} indice={estado.indice} tiempo={tiempo} terminado={estado.terminado} mano={sala.mano} pozo={virtual ? sala.pozo : undefined} />
         </>
       )}
       {!!sala.orden.length && (
@@ -524,24 +488,24 @@ export function Mesa({ codigo }: { codigo: string }) {
         titulo={t("Jugadores") + " · " + jugadores.length + "/10"}
         inicial={esperando}
       >
-        <Texto>
-          {t("Jugadores")} ({jugadores.length}/10)
-        </Texto>
         {errorRangos && (
           <Texto suave>{t("No se pudieron cargar los rangos.")}</Texto>
         )}
         {orden.map((j) => (
-          <Tarjeta key={j.id} style={{ padding: 12, gap: 4 }}>
-            <Texto style={{ fontWeight: "700" }}>
-              {sala.orden.includes(j.id)
-                ? `${sala.orden.indexOf(j.id) + 1}. `
-                : ""}
-              {j.nombre} {j.user_id === sala.host_id ? "(host)" : ""}{" "}
-              {roles[j.id] ?? ""}
-              {j.id === sala.turno_id ? " ◀ " + t("En turno") : ""}
-              {j.retirado ? " · " + t("Retirado") : ""}
-            </Texto>
-            {!j.eliminado_en && j.fichas === 0 && virtual && <View style={{ alignSelf: "flex-start", backgroundColor: tema.error, borderRadius: 4, paddingHorizontal: 8, paddingVertical: 2 }}><Texto style={{ color: tema.textoAccion, fontSize: 12, fontWeight: "600" }}>{t("All-in")}</Texto></View>}
+          <EntradaSuave key={j.id}><Tarjeta style={{ padding: 12, gap: 6, borderColor: j.id === sala.turno_id ? tema.acento : tema.borde, borderWidth: j.id === sala.turno_id ? 2 : 1 }}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              {sala.orden.includes(j.id) && <Texto suave style={{ fontSize: 16, fontWeight: "600", minWidth: 20 }} condensada>{String(sala.orden.indexOf(j.id) + 1)}</Texto>}
+              <Texto numberOfLines={1} style={{ flex: 1, fontSize: 17, fontWeight: "600" }}>{j.nombre}</Texto>
+              {!esperando && <CifraViva valor={j.fichas} texto={formatoNumero(j.fichas, preferencias.idioma)} style={{ fontSize: 22, fontWeight: "700" }} />}
+            </View>
+            {(j.user_id === sala.host_id || !!roles[j.id] || j.id === sala.turno_id || j.retirado || !!j.eliminado_en || (!j.eliminado_en && j.fichas === 0 && virtual)) && <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
+              {j.id === sala.turno_id && <Etiqueta activa>{t("En turno")}</Etiqueta>}
+              {j.user_id === sala.host_id && <Etiqueta>{t("Host")}</Etiqueta>}
+              {(roles[j.id] ?? "").split(" / ").filter(Boolean).map((rol) => <Etiqueta key={rol}>{rol}</Etiqueta>)}
+              {j.retirado && <Etiqueta>{t("Retirado")}</Etiqueta>}
+              {!!j.eliminado_en && <Etiqueta>{t("Eliminado")}</Etiqueta>}
+              {!j.eliminado_en && j.fichas === 0 && virtual && <View style={{ backgroundColor: tema.error, borderRadius: 4, paddingHorizontal: 8, paddingVertical: 2 }}><Texto style={{ color: tema.textoAccion, fontSize: 12, fontWeight: "600" }}>{t("All-in")}</Texto></View>}
+            </View>}
             <Texto suave style={{ fontSize: 12 }}>
               {rangos[j.id] === undefined
                 ? t("Rango no disponible")
@@ -551,13 +515,9 @@ export function Mesa({ codigo }: { codigo: string }) {
             </Texto>
             {!esperando && (
               <>
-                <Texto>
-                  {j.fichas.toLocaleString()}{" "}
-                  {j.eliminado_en ? `· ${t("Eliminado")}` : ""}
-                </Texto>
                 {virtual && (
                   <Texto suave>
-                    {t("Apuesta de esta mano")}: {j.apuesta_mano}
+                    {t("Apuesta de esta mano")}: {formatoNumero(j.apuesta_mano, preferencias.idioma)}
                   </Texto>
                 )}
                 {dealer && !virtual && !finalizada && (
@@ -575,7 +535,7 @@ export function Mesa({ codigo }: { codigo: string }) {
                 )}
               </>
             )}
-          </Tarjeta>
+          </Tarjeta></EntradaSuave>
         ))}
       </Seccion>
       {!esperando && (

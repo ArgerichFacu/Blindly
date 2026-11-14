@@ -9,7 +9,7 @@ function escenario(source='FREE') {
   '../../components/Controles':Object.fromEntries(['Pantalla','Texto','Boton','Tarjeta','Campo'].map(k=>[k,k])),
   '../../components/Icono':{Icono:'Icono'},'../../components/Superficie':{Superficie:'Superficie'},'../../components/FilaOpcion':{FilaOpcion:'FilaOpcion'},'../../components/TitulosJugador':{TitulosJugador:'TitulosJugador'},'../../components/ProtegerCuenta':{necesitaCuenta:()=>false},
   '../../lib/clasificacion':{clasificacion:()=>({})},'../../lib/useClubes':{useClubes:()=>({datos:{detalles:{},usuario:'same'},recargar:()=>calls.push('reload')})},'../../lib/puntuacion':{miPuntuacion:async()=>null},
-  '../../lib/TemaContext':{useTema:()=>({tema:{}})},'../../lib/visual':{RELIEVE:{},velo:c=>c},'../../lib/Preferencias':{usePreferencias:()=>({t:k=>k,preferencias:{idioma:'es'},mensajeError:e=>e.message})},
+  '../../lib/TemaContext':{useTema:()=>({tema:{}})},'../../lib/numeros':{formatoNumero:n=>String(n)},'../../lib/visual':{RELIEVE:{},velo:c=>c},'../../lib/Preferencias':{usePreferencias:()=>({t:k=>k,preferencias:{idioma:'es'},mensajeError:e=>e.message})},
   '../../lib/PlusContext':{usePlus:()=>({activo:source!=='FREE',tipoAcceso:source})},'../../lib/useNombreVisible':{useNombreVisible:()=>identity},
   '../../lib/nombreVisible':{inicialNombre:n=>n[0],validarNombreVisible:n=>{if(!n.trim()||n.trim().length>30)throw Error('invalid');return n.trim()},guardarNombreVisible:async n=>{calls.push(n);await new Promise(r=>resolve=r);if(fail)throw Error('offline');identity={...identity,nombre:n.trim()};return identity.usuario}},
  };

@@ -6,10 +6,11 @@ import { clasificacion } from "../lib/clasificacion";
 import type { FilaRanking,TemporadaLiga } from "../lib/ligas";
 import { TitulosJugador } from "./TitulosJugador";
 import { velo } from "../lib/visual";
+import { formatoNumero } from "../lib/numeros";
 export function ClasificacionTemporada({ranking,temporada,movimientos}:{ranking:FilaRanking[];temporada:TemporadaLiga|null;movimientos?:Record<string,number>}) {
  const {t,preferencias}=usePreferencias(),{tema}=useTema();
  const datos=clasificacion(ranking,temporada?.estado);
- const numero=(n:number)=>Number(n).toLocaleString(preferencias.idioma,{maximumFractionDigits:3});
+ const numero=(n:number)=>formatoNumero(Number(n),preferencias.idioma,3);
  const fecha=(s:string)=>new Date(`${s}T12:00:00`).toLocaleDateString(preferencias.idioma);
  const destacado=datos.mvp??datos.campeon;
  return <>

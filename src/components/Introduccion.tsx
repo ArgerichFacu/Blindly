@@ -3,7 +3,7 @@ import { PasosTutorial } from "./TutorialInteractivo";
 import { useInicio } from "../lib/InicioContext";
 import { usePreferencias } from "../lib/Preferencias";
 
-import { Boton, Etiqueta, Pantalla, Tarjeta, Texto } from "./Controles";
+import { Boton, Pantalla, Tarjeta, Texto } from "./Controles";
 import { LogoBlindly } from "./LogoBlindly";
 
 

@@ -4,6 +4,7 @@ import type { User } from "@supabase/supabase-js";
 import { View, type ScrollView } from "react-native";
 import { Pantalla, Texto, Tarjeta, Campo, Boton, Etiqueta } from "../components/Controles";
 import { LogoBlindly } from "../components/LogoBlindly";
+import { useTema } from "../lib/TemaContext";
 import { asegurarSesion, recuperarConClave, cuentaConClave, eliminarCuenta, PartidaActivaCuenta } from "../lib/sesion";
 import { identidadUsuario } from "../lib/identidad";
 import { registrarEmail, confirmarEmailPassword, entrarEmail, cerrarSesion, solicitarReset, guardarPassword, continuarGoogle, validarPassword, leerPendiente } from "../lib/autenticacion";
@@ -13,7 +14,6 @@ import { usePlus } from "../lib/PlusContext";
 import { useInicio } from "../lib/InicioContext";
 import { nombreVisible } from "../lib/nombreVisible";
 type Modo = "login" | "registro" | "verificar" | "reset" | "password" | "cuenta" | "legacy";
-import { useTema } from "../lib/TemaContext";
 export default function Cuenta() {
   const { t, mensajeError } = usePreferencias(), router = useRouter(), plus = usePlus(), inicio = useInicio(), { tema } = useTema();
   const { inicio: origen, volver, liga, codigo: codigoClub, nombre: nombreMesa, seccion, temporada, accion } = useLocalSearchParams<{ inicio?: string; volver?: string; liga?: string; codigo?: string; nombre?: string; seccion?: string; temporada?: string; accion?: string }>();

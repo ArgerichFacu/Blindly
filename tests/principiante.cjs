@@ -82,8 +82,9 @@ function panel(principiante, props, fontScale = 1) {
     "react-native": { View: "View", useWindowDimensions: () => ({ fontScale }) },
     "./Controles": { Boton: "Boton", Campo: "Campo", Texto: "Texto" },
     "./AyudaTurno": { AyudaTurno: "Ayuda" },
+    "../lib/numeros": { formatoNumero: (n) => String(n) },
     "../lib/Preferencias": {
-      usePreferencias: () => ({ t, preferencias: { principiante } }),
+      usePreferencias: () => ({ t, preferencias: { principiante, idioma: "es" } }),
     },
   });
   const acciones = [],
@@ -140,6 +141,7 @@ function modal(virtual) {
     "./Controles": { Boton: "Boton", Texto: "Texto" },
     "../lib/Preferencias": { usePreferencias: () => ({ t }) },
     "../lib/TemaContext": { useTema: () => ({ tema: {} }) },
+    "../lib/temas": { VELO_MODAL: "#000000A6" },
   });
   const render = () => instancia.render("AyudaTurno", { virtual });
   assert.equal(elementos(render(), "Modal")[0].visible, false);

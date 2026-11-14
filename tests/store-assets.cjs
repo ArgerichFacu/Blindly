@@ -39,7 +39,7 @@ assert.equal(grafico.profundidad, 8);
 assert.equal(grafico.tipoColor, 2, "El gráfico debe ser RGB de 24 bits sin alfa");
 
 const iconoNativo = leerPng(
-  path.join("assets", "images", "blindly-app-icon.png"),
+  path.join("assets", "brand", "blindly-icono-1024.png"),
 );
 assert.deepEqual(
   { ancho: iconoNativo.ancho, alto: iconoNativo.alto },
@@ -48,12 +48,11 @@ assert.deepEqual(
 assert.equal(iconoNativo.tipoColor, 2, "El ícono nativo debe ser RGB sin alfa");
 
 for (const nombre of [
-  "blindly-icon-foreground.png",
-  "blindly-icon-monochrome.png",
-  "blindly-icon-foreground-v2.png",
-  "blindly-icon-monochrome-v2.png",
+  "blindly-adaptive-foreground.png",
+  "blindly-adaptive-monocromo.png",
+  "blindly-splash.png",
 ]) {
-  const imagen = leerPng(path.join("assets", "images", nombre));
+  const imagen = leerPng(path.join("assets", "brand", nombre));
   assert.equal(imagen.tipoColor, 6, `${nombre} debe conservar transparencia RGBA`);
 }
 

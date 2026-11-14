@@ -5,7 +5,6 @@ import {
   Pantalla,
   Boton,
   Texto,
-  Tarjeta,
   Acceso,
   Seccion,
 } from "../components/Controles";

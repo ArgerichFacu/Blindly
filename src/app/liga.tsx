@@ -38,6 +38,7 @@ import { seccionClub, type SeccionClub } from "../lib/destinoAviso";
 import { IdentidadClub } from "../components/IdentidadClub";
 import { vibrarMomento } from "../lib/hapticos";
 
+import { formatoNumero } from "../lib/numeros";
 export default function Liga() {
   const { id, temporada } = useLocalSearchParams<{ id: string; temporada?: string }>();
   return <ContenidoLiga key={`${id}:${temporada ?? ""}`} />;
@@ -127,9 +128,7 @@ function ContenidoLiga() {
   }
 
   const numero = (valor: number) =>
-    Number(valor).toLocaleString(preferencias.idioma, {
-      maximumFractionDigits: 2,
-    });
+    formatoNumero(Number(valor), preferencias.idioma, 2);
 
   return (
     <Pantalla

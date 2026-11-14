@@ -13,6 +13,7 @@ import { miPuntuacion, PUNTOS_F1, type Puntuacion } from "../lib/puntuacion";
 import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 import { ProtegerCuenta } from "../components/ProtegerCuenta";
+import { formatoNumero } from "../lib/numeros";
 export default function MiPuntuacion() {
   const router = useRouter();
   const { t, mensajeError, preferencias } = usePreferencias(),
@@ -41,7 +42,7 @@ export default function MiPuntuacion() {
     }, [revision]),
   );
   const numero = (n: number) =>
-    n.toLocaleString(preferencias.idioma, { maximumFractionDigits: 3 });
+    formatoNumero(n, preferencias.idioma, 3);
   const metricas = datos?.estadisticas
     ? [
         ["Partidas jugadas", datos.estadisticas.partidas],

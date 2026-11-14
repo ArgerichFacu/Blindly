@@ -10,6 +10,7 @@ import { usePreferencias } from "../lib/Preferencias";
 import { clasificacion } from "../lib/clasificacion";
 import { claveUltimaLiga } from "../lib/useClubes";
 import type { DetalleLiga, ResumenLiga } from "../lib/ligas";
+import { formatoNumero } from "../lib/numeros";
 export function ResumenClub({ liga, detalle, usuario }: {
     liga: ResumenLiga;
     detalle?: DetalleLiga;
@@ -18,7 +19,7 @@ export function ResumenClub({ liga, detalle, usuario }: {
     const router = useRouter(), { tema } = useTema(), { t, preferencias } = usePreferencias();
     const lider = detalle ? clasificacion(detalle.ranking, detalle.temporada?.estado).mvp : null;
     const yo = detalle?.ranking.find(f => f.user_id === usuario);
-    const numero = (n: number) => n.toLocaleString(preferencias.idioma);
+    const numero = (n: number) => formatoNumero(n, preferencias.idioma);
     return <Pressable accessibilityRole="button" accessibilityLabel={`${liga.nombre}, ${t("Ver liga")}`} onPress={() => {
             void AsyncStorage.setItem(claveUltimaLiga(usuario), liga.id).catch(() => { });
             router.push({ pathname: "/liga", params: { id: liga.id } });
