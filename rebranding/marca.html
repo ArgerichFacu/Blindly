@@ -1,0 +1,154 @@
+<title>Blindly: identidad Marcador</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap">
+<style>
+/* Layout: lámina de revisión en una columna; cada bloque es una pieza del sistema. Colores de la página = marca Blindly. */
+:root { --bg:#0E1512; --panel:#17211C; --fg:#F2F0E8; --muted:#A3B0A8; --line:#2A3A32; --ac:#5BD08A; --paper:#F2F0E8; --ink:#0E1512;
+  --num:"Barlow Condensed","Arial Narrow",sans-serif; --txt:"Barlow",system-ui,sans-serif; color-scheme:dark }
+* { box-sizing:border-box }
+body { background:var(--bg); color:var(--fg); font-family:var(--txt); font-size:16px; line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); padding-block:28px 64px }
+.w { max-width:1080px; margin:0 auto; display:flex; flex-direction:column; gap:48px }
+h1 { font:700 clamp(30px,5vw,44px)/1.05 var(--num); margin:0 }
+h2 { font:700 28px/1.1 var(--num); margin:0 0 16px }
+p { margin:0; max-width:66ch } .m { color:var(--muted) }
+code { font-family:ui-monospace,Consolas,monospace; font-size:12px; color:var(--muted) }
+section { border-top:1px solid var(--line); padding-top:24px }
+.g { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)) }
+.cell { background:var(--panel); border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:12px; min-width:0 }
+.cell.claro { background:var(--paper); color:var(--ink) }
+.cell small { font-size:13px; color:var(--muted) } .cell.claro small { color:#4A524D }
+.wm svg { width:100%; height:auto; max-width:420px; display:block }
+.sizes { display:flex; align-items:flex-end; gap:20px; flex-wrap:wrap }
+.sizes svg { display:block; height:auto }
+.ic { display:flex; gap:18px; flex-wrap:wrap; align-items:center }
+.ic .mask { width:96px; height:96px; overflow:hidden; background:#0E1512; flex:none }
+.ic .mask svg { width:100%; height:100%; display:block }
+.ic .wall { background:#D9DDE3; border-radius:12px; padding:14px; display:flex; gap:14px }
+.ic .wall .mask { background:#3C4A57 }
+.splash { width:180px; height:360px; border-radius:22px; border:6px solid #050606; background:#0E1512; display:grid; place-items:center }
+.splash svg { width:120px; height:auto }
+.temas { display:grid; gap:24px; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)) }
+.tema { display:flex; flex-direction:column; gap:12px; min-width:0 }
+.tema h3 { margin:0; font:700 20px var(--num); display:flex; gap:8px; align-items:center }
+.lock { font:600 12px var(--txt); border:1px solid var(--line); border-radius:999px; padding:2px 8px; color:var(--muted) }
+.sw { display:flex; flex-direction:column; gap:4px; font-size:13px }
+.sw span { display:flex; gap:8px; align-items:center } .sw i { width:16px; height:16px; border-radius:4px; display:block; border:1px solid #ffffff22; flex:none }
+.ph { background:var(--f); color:var(--t); border-radius:24px; border:6px solid #050606; padding:14px; display:flex; flex-direction:column; gap:10px; font-variant-numeric:tabular-nums; max-width:300px }
+.ph .top { display:flex; justify-content:space-between; font-size:12px; color:var(--t2) }
+.ph .mesa { background:var(--m); border-radius:12px; padding:12px 14px 14px }
+.ph .lvl { font:600 18px/1 var(--num); display:flex; justify-content:space-between } .ph .lvl span { font:500 13px var(--txt); opacity:.85 }
+.ph .time { font:700 92px/0.95 var(--num); margin:4px 0 8px -2px }
+.ph .bar { display:grid; grid-template-columns:repeat(12,1fr); gap:3px } .ph .bar i { height:5px; background:#0000002e; border-radius:1px } .ph .bar i.on { background:var(--t) } .ph .bar i.now { background:var(--am) }
+.ph .nums { display:grid; grid-template-columns:1.2fr 1.2fr 1fr; border-top:1px solid var(--b); border-bottom:1px solid var(--b) }
+.ph .nums div { padding:8px 0; display:flex; flex-direction:column } .ph .nums div+div { border-left:1px solid var(--b); padding-left:10px }
+.ph .nums small { font-size:11px; color:var(--t2) } .ph .nums b { font:600 21px/1.1 var(--num) }
+.ph .row { display:grid; grid-template-columns:1fr auto auto; gap:8px; align-items:center; padding:8px 0; border-bottom:1px solid var(--b); font-size:15px }
+.ph .row b { font:600 20px/1 var(--num) } .ph .nm em { font-style:normal; font-size:11px; color:var(--t2); border:1px solid var(--bc); border-radius:4px; padding:0 5px; margin-left:4px }
+.ph .turn { font-size:11px; font-weight:600; background:var(--ac); color:var(--f); border-radius:999px; padding:2px 8px }
+.ph .act { display:grid; grid-template-columns:1fr 1fr; gap:8px }
+.ph button { font:600 15px var(--txt); height:48px; border-radius:8px; background:transparent; color:var(--t); border:1.5px solid var(--bc) }
+.ph button.p { background:var(--ap); color:var(--ta); border-color:var(--ap) }
+.type { display:flex; flex-direction:column; gap:10px }
+.type div { display:grid; grid-template-columns:160px minmax(0,1fr); gap:16px; align-items:baseline; border-bottom:1px solid var(--line); padding-bottom:8px }
+.type small { color:var(--muted); font-size:13px }
+.fichas { display:flex; flex-wrap:wrap; gap:14px }
+.ficha { width:64px; height:64px; border-radius:50%; display:grid; place-items:center; font:700 20px var(--num); border:4px dashed #ffffffaa; outline:2px solid #00000033 }
+.palos svg { width:240px; height:auto; display:block }
+table { border-collapse:collapse; width:100%; font-size:14px } th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top } th { color:var(--muted); font-weight:500 }
+.tw { overflow-x:auto }
+</style>
+<div class="w">
+  <header style="display:flex;flex-direction:column;gap:12px">
+    <h1>Identidad Marcador</h1>
+    <p class="m">Fase 2 del rebranding de Blindly: logo, ícono, colores de los 4 temas, tipografía, palos y tono. Todavía no está aplicado en la app.</p>
+  </header>
+
+  <section><h2>Logo</h2>
+    <div class="g">
+      <div class="cell wm" style="grid-column:1/-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 308 128"><g transform="translate(6 4)"><g fill="#F2F0E8"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/><path transform="translate(54 0)" d="M0 2H12V86H0Z" fill-rule="evenodd"/><path transform="translate(76 0)" d="M0 38H12V86H0Z" fill-rule="evenodd"/><path transform="translate(76 0)" d="M3 20H9A3 3 0 0 1 12 23V29A3 3 0 0 1 9 32H3A3 3 0 0 1 0 29V23A3 3 0 0 1 3 20Z" fill-rule="evenodd"/><path transform="translate(98 0)" d="M0 38H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(98 0)" d="M12 38H24A20 20 0 0 1 44 58V86H32V58A8 8 0 0 0 24 50H12Z" fill-rule="evenodd"/><path transform="translate(152 0)" d="M31.5 2H44V86H31.5Z" fill-rule="evenodd"/><path transform="translate(152 0)" d="M32 38H20A20 20 0 0 0 0 58V66A20 20 0 0 0 20 86H32ZM32 50V74H20A8 8 0 0 1 12 66V58A8 8 0 0 1 20 50Z" fill-rule="evenodd"/><path transform="translate(206 0)" d="M0 2H12V86H0Z" fill-rule="evenodd"/><path transform="translate(228 0)" d="M0 38H12V66A8 8 0 0 0 20 74H32V38H44V98A20 20 0 0 1 24 118H6V106H24A8 8 0 0 0 32 98V86H20A20 20 0 0 1 0 66Z" fill-rule="evenodd"/></g><g fill="#5BD08A"><path transform="translate(284 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg><small>Wordmark <code>blindly:</code>. Los dos puntos son los del reloj (12:45) y van en el verde de acento.</small></div>
+      <div class="cell claro wm"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 308 128"><g transform="translate(6 4)" fill="#0E1512"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/><path transform="translate(54 0)" d="M0 2H12V86H0Z" fill-rule="evenodd"/><path transform="translate(76 0)" d="M0 38H12V86H0Z" fill-rule="evenodd"/><path transform="translate(76 0)" d="M3 20H9A3 3 0 0 1 12 23V29A3 3 0 0 1 9 32H3A3 3 0 0 1 0 29V23A3 3 0 0 1 3 20Z" fill-rule="evenodd"/><path transform="translate(98 0)" d="M0 38H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(98 0)" d="M12 38H24A20 20 0 0 1 44 58V86H32V58A8 8 0 0 0 24 50H12Z" fill-rule="evenodd"/><path transform="translate(152 0)" d="M31.5 2H44V86H31.5Z" fill-rule="evenodd"/><path transform="translate(152 0)" d="M32 38H20A20 20 0 0 0 0 58V66A20 20 0 0 0 20 86H32ZM32 50V74H20A8 8 0 0 1 12 66V58A8 8 0 0 1 20 50Z" fill-rule="evenodd"/><path transform="translate(206 0)" d="M0 2H12V86H0Z" fill-rule="evenodd"/><path transform="translate(228 0)" d="M0 38H12V66A8 8 0 0 0 20 74H32V38H44V98A20 20 0 0 1 24 118H6V106H24A8 8 0 0 0 32 98V86H20A20 20 0 0 1 0 66Z" fill-rule="evenodd"/><path transform="translate(284 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></svg><small>Versión tinta, para fondos claros.</small></div>
+      <div class="cell"><div class="sizes"><svg width="80" height="96" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 84"><g transform="translate(0 -2)"><g fill="#F2F0E8"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/></g><g fill="#5BD08A"><path transform="translate(58 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg><svg width="40" height="48" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 84"><g transform="translate(0 -2)"><g fill="#F2F0E8"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/></g><g fill="#5BD08A"><path transform="translate(58 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg><svg width="27" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 84"><g transform="translate(0 -2)"><g fill="#F2F0E8"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/></g><g fill="#5BD08A"><path transform="translate(58 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg><svg width="20" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 84"><g transform="translate(0 -2)"><g fill="#F2F0E8"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/></g><g fill="#5BD08A"><path transform="translate(58 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg></div><small>Símbolo <code>b:</code> a 96, 48, 32 y 24 px.</small></div>
+    </div>
+  </section>
+
+  <section><h2>Ícono de la app</h2>
+    <div class="g">
+      <div class="cell"><div class="ic"><div class="mask" style="border-radius:50%"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#0E1512"/><g transform="translate(147.50 119.60) scale(3.1)"><g fill="#F2F0E8"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/></g><g fill="#5BD08A"><path transform="translate(58 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg></div><div class="mask" style="border-radius:30%"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#0E1512"/><g transform="translate(147.50 119.60) scale(3.1)"><g fill="#F2F0E8"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/></g><g fill="#5BD08A"><path transform="translate(58 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg></div><div class="mask" style="border-radius:18px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#0E1512"/><g transform="translate(147.50 119.60) scale(3.1)"><g fill="#F2F0E8"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/></g><g fill="#5BD08A"><path transform="translate(58 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg></div></div><small>Ícono de Play (512) bajo las máscaras de Android: círculo, squircle y redondeado.</small></div>
+      <div class="cell"><div class="ic"><div class="mask" style="border-radius:50%;background:#0E1512"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 432 432"><g transform="translate(133.75 112.60) scale(2.35)"><g fill="#F2F0E8"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/></g><g fill="#5BD08A"><path transform="translate(58 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg></div><div class="wall"><div class="mask" style="border-radius:50%"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 432 432"><g transform="translate(133.75 112.60) scale(2.35)"><g fill="#FFFFFF"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/></g><g fill="#FFFFFF"><path transform="translate(58 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg></div><div class="mask" style="border-radius:30%;background:#E8EEF3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 432 432"><g transform="translate(133.75 112.60) scale(2.35)"><g fill="#2B3A48"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/></g><g fill="#2B3A48"><path transform="translate(58 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg></div></div></div><small>Adaptive icon (foreground sobre fondo liso) y monocromo de Android 13+, que el teléfono tiñe con su tema.</small></div>
+      <div class="cell" style="align-items:center"><div class="splash"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 308 128"><g transform="translate(6 4)"><g fill="#F2F0E8"><path transform="translate(0 0)" d="M0 2H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(0 0)" d="M12 38H24A20 20 0 0 1 44 58V66A20 20 0 0 1 24 86H12ZM12 50V74H24A8 8 0 0 0 32 66V58A8 8 0 0 0 24 50Z" fill-rule="evenodd"/><path transform="translate(54 0)" d="M0 2H12V86H0Z" fill-rule="evenodd"/><path transform="translate(76 0)" d="M0 38H12V86H0Z" fill-rule="evenodd"/><path transform="translate(76 0)" d="M3 20H9A3 3 0 0 1 12 23V29A3 3 0 0 1 9 32H3A3 3 0 0 1 0 29V23A3 3 0 0 1 3 20Z" fill-rule="evenodd"/><path transform="translate(98 0)" d="M0 38H12.5V86H0Z" fill-rule="evenodd"/><path transform="translate(98 0)" d="M12 38H24A20 20 0 0 1 44 58V86H32V58A8 8 0 0 0 24 50H12Z" fill-rule="evenodd"/><path transform="translate(152 0)" d="M31.5 2H44V86H31.5Z" fill-rule="evenodd"/><path transform="translate(152 0)" d="M32 38H20A20 20 0 0 0 0 58V66A20 20 0 0 0 20 86H32ZM32 50V74H20A8 8 0 0 1 12 66V58A8 8 0 0 1 20 50Z" fill-rule="evenodd"/><path transform="translate(206 0)" d="M0 2H12V86H0Z" fill-rule="evenodd"/><path transform="translate(228 0)" d="M0 38H12V66A8 8 0 0 0 20 74H32V38H44V98A20 20 0 0 1 24 118H6V106H24A8 8 0 0 0 32 98V86H20A20 20 0 0 1 0 66Z" fill-rule="evenodd"/></g><g fill="#5BD08A"><path transform="translate(284 0)" d="M3 44H9A3 3 0 0 1 12 47V53A3 3 0 0 1 9 56H3A3 3 0 0 1 0 53V47A3 3 0 0 1 3 44ZM3 74H9A3 3 0 0 1 12 77V83A3 3 0 0 1 9 86H3A3 3 0 0 1 0 83V77A3 3 0 0 1 3 74Z"/></g></g></svg></div><small>Splash: wordmark sobre #0E1512.</small></div>
+    </div>
+  </section>
+
+  <section><h2>Temas</h2>
+    <p class="m" style="margin-bottom:20px">La pantalla del timer con cada tema. Verde es el gratis; los otros tres son Plus. Botón principal claro y plano; el color de acento marca el nivel actual y quién está en turno.</p>
+    <div class="temas"><div class="tema"><h3>Verde</h3><div class="ph" style="--f:#0E1512;--s:#17211C;--b:#2A3A32;--bc:#6A7F73;--t:#F2F0E8;--t2:#A3B0A8;--ac:#5BD08A;--am:#5BD08A;--ap:#F2F0E8;--ta:#0E1512;--m:#1D4A3A">
+  <div class="top"><span>Sala 5KECN</span><span>6 jugadores</span></div>
+  <div class="mesa"><div class="lvl">Nivel 4 <span>de 12</span></div><div class="time">12:45</div>
+  <div class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="now"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div></div>
+  <div class="nums"><div><small>Ciegas</small><b>100 / 200</b></div><div><small>Sigue</small><b>150 / 300</b></div><div><small>Pozo</small><b>1.850</b></div></div>
+  <div class="rows"><div class="row"><span class="nm">Nico <em>Host</em></span><span></span><b>5.200</b></div><div class="row"><span class="nm">Juli</span><span class="turn">En turno</span><b>4.975</b></div><div class="row"><span class="nm">Tomi</span><span></span><b>3.100</b></div><div class="row"><span class="nm">Flor</span><span></span><b>2.450</b></div></div>
+  <div class="act"><button class="p">Pausar</button><button>Cerrar mano</button></div>
+</div><div class="sw"><span><i style="background:#0E1512"></i>fondo <code>#0E1512</code></span><span><i style="background:#17211C"></i>superficie <code>#17211C</code></span><span><i style="background:#1F2B25"></i>superficieElevada <code>#1F2B25</code></span><span><i style="background:#6A7F73"></i>bordeControl <code>#6A7F73</code></span><span><i style="background:#F2F0E8"></i>texto <code>#F2F0E8</code></span><span><i style="background:#A3B0A8"></i>textoSecundario <code>#A3B0A8</code></span><span><i style="background:#5BD08A"></i>acento <code>#5BD08A</code></span><span><i style="background:#1D4A3A"></i>mesa <code>#1D4A3A</code></span></div></div><div class="tema"><h3>Rojo <span class="lock">Plus</span></h3><div class="ph" style="--f:#170E10;--s:#22151A;--b:#452A33;--bc:#8F6470;--t:#F5EFEA;--t2:#C4AAB1;--ac:#F4A6BD;--am:#F4A6BD;--ap:#F5EFEA;--ta:#170E10;--m:#55202F">
+  <div class="top"><span>Sala 5KECN</span><span>6 jugadores</span></div>
+  <div class="mesa"><div class="lvl">Nivel 4 <span>de 12</span></div><div class="time">12:45</div>
+  <div class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="now"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div></div>
+  <div class="nums"><div><small>Ciegas</small><b>100 / 200</b></div><div><small>Sigue</small><b>150 / 300</b></div><div><small>Pozo</small><b>1.850</b></div></div>
+  <div class="rows"><div class="row"><span class="nm">Nico <em>Host</em></span><span></span><b>5.200</b></div><div class="row"><span class="nm">Juli</span><span class="turn">En turno</span><b>4.975</b></div><div class="row"><span class="nm">Tomi</span><span></span><b>3.100</b></div><div class="row"><span class="nm">Flor</span><span></span><b>2.450</b></div></div>
+  <div class="act"><button class="p">Pausar</button><button>Cerrar mano</button></div>
+</div><div class="sw"><span><i style="background:#170E10"></i>fondo <code>#170E10</code></span><span><i style="background:#22151A"></i>superficie <code>#22151A</code></span><span><i style="background:#2D1C22"></i>superficieElevada <code>#2D1C22</code></span><span><i style="background:#8F6470"></i>bordeControl <code>#8F6470</code></span><span><i style="background:#F5EFEA"></i>texto <code>#F5EFEA</code></span><span><i style="background:#C4AAB1"></i>textoSecundario <code>#C4AAB1</code></span><span><i style="background:#F4A6BD"></i>acento <code>#F4A6BD</code></span><span><i style="background:#55202F"></i>mesa <code>#55202F</code></span></div></div><div class="tema"><h3>Negro <span class="lock">Plus</span></h3><div class="ph" style="--f:#0C0D0E;--s:#16181A;--b:#2E3236;--bc:#6E757B;--t:#F1F1EE;--t2:#A6ABB0;--ac:#9AD0FF;--am:#9AD0FF;--ap:#F1F1EE;--ta:#0C0D0E;--m:#25323A">
+  <div class="top"><span>Sala 5KECN</span><span>6 jugadores</span></div>
+  <div class="mesa"><div class="lvl">Nivel 4 <span>de 12</span></div><div class="time">12:45</div>
+  <div class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="now"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div></div>
+  <div class="nums"><div><small>Ciegas</small><b>100 / 200</b></div><div><small>Sigue</small><b>150 / 300</b></div><div><small>Pozo</small><b>1.850</b></div></div>
+  <div class="rows"><div class="row"><span class="nm">Nico <em>Host</em></span><span></span><b>5.200</b></div><div class="row"><span class="nm">Juli</span><span class="turn">En turno</span><b>4.975</b></div><div class="row"><span class="nm">Tomi</span><span></span><b>3.100</b></div><div class="row"><span class="nm">Flor</span><span></span><b>2.450</b></div></div>
+  <div class="act"><button class="p">Pausar</button><button>Cerrar mano</button></div>
+</div><div class="sw"><span><i style="background:#0C0D0E"></i>fondo <code>#0C0D0E</code></span><span><i style="background:#16181A"></i>superficie <code>#16181A</code></span><span><i style="background:#1F2225"></i>superficieElevada <code>#1F2225</code></span><span><i style="background:#6E757B"></i>bordeControl <code>#6E757B</code></span><span><i style="background:#F1F1EE"></i>texto <code>#F1F1EE</code></span><span><i style="background:#A6ABB0"></i>textoSecundario <code>#A6ABB0</code></span><span><i style="background:#9AD0FF"></i>acento <code>#9AD0FF</code></span><span><i style="background:#25323A"></i>mesa <code>#25323A</code></span></div></div><div class="tema"><h3>Violeta realeza <span class="lock">Plus</span></h3><div class="ph" style="--f:#140C1F;--s:#1E1430;--b:#3A2757;--bc:#8A63C7;--t:#F3EEF9;--t2:#BCADD4;--ac:#A98BE0;--am:#D4C2F2;--ap:#F3EEF9;--ta:#140C1F;--m:#6B3FA0">
+  <div class="top"><span>Sala 5KECN</span><span>6 jugadores</span></div>
+  <div class="mesa"><div class="lvl">Nivel 4 <span>de 12</span></div><div class="time">12:45</div>
+  <div class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="now"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div></div>
+  <div class="nums"><div><small>Ciegas</small><b>100 / 200</b></div><div><small>Sigue</small><b>150 / 300</b></div><div><small>Pozo</small><b>1.850</b></div></div>
+  <div class="rows"><div class="row"><span class="nm">Nico <em>Host</em></span><span></span><b>5.200</b></div><div class="row"><span class="nm">Juli</span><span class="turn">En turno</span><b>4.975</b></div><div class="row"><span class="nm">Tomi</span><span></span><b>3.100</b></div><div class="row"><span class="nm">Flor</span><span></span><b>2.450</b></div></div>
+  <div class="act"><button class="p">Pausar</button><button>Cerrar mano</button></div>
+</div><div class="sw"><span><i style="background:#140C1F"></i>fondo <code>#140C1F</code></span><span><i style="background:#1E1430"></i>superficie <code>#1E1430</code></span><span><i style="background:#2A1B42"></i>superficieElevada <code>#2A1B42</code></span><span><i style="background:#8A63C7"></i>bordeControl <code>#8A63C7</code></span><span><i style="background:#F3EEF9"></i>texto <code>#F3EEF9</code></span><span><i style="background:#BCADD4"></i>textoSecundario <code>#BCADD4</code></span><span><i style="background:#A98BE0"></i>acento <code>#A98BE0</code></span><span><i style="background:#6B3FA0"></i>mesa <code>#6B3FA0</code></span></div></div></div>
+  </section>
+
+  <section><h2>Tipografía</h2>
+    <div class="type">
+      <div><small>Timer · Barlow Condensed 700 · 112</small><span style="font:700 112px/1 var(--num);font-variant-numeric:tabular-nums">12:45</span></div>
+      <div><small>Stack · 600 · 28</small><span style="font:600 28px var(--num);font-variant-numeric:tabular-nums">4.975</span></div>
+      <div><small>Título · 700 · 24</small><span style="font:700 24px var(--num)">Modo de juego</span></div>
+      <div><small>Subtítulo · Barlow 600 · 18</small><span style="font:600 18px var(--txt)">Estructura de ciegas</span></div>
+      <div><small>Cuerpo · Barlow 400 · 16</small><span>Elegí cuánto dura cada nivel. Lo podés cambiar con la partida en pausa.</span></div>
+      <div><small>Secundario · 14</small><span class="m" style="font-size:14px">Sigue 150 / 300 en 12 minutos</span></div>
+    </div>
+    <p class="m" style="margin-top:12px">Barlow y Barlow Condensed: SIL Open Font License 1.1, uso comercial permitido.</p>
+  </section>
+
+  <section><h2>Fichas y palos</h2>
+    <div class="g">
+      <div class="cell"><div class="fichas"><div class="ficha" style="background:#F4F3EF;color:#0E1512">25</div><div class="ficha" style="background:#BF3A31;color:#F2F0E8">100</div><div class="ficha" style="background:#2E9E6A;color:#F2F0E8">500</div><div class="ficha" style="background:#3464C9;color:#F2F0E8">1K</div><div class="ficha" style="background:#23262B;color:#F2F0E8">5K</div><div class="ficha" style="background:#F2C230;color:#0E1512">10K</div></div><small>Colores de ficha, iguales en todos los temas. Siempre con el valor escrito.</small></div>
+      <div class="cell palos"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 24">
+  <!-- Palos de Blindly, dibujo propio en grilla de 24. Relleno sólido; el color lo decide cada uso (tinta o rojo naipe). -->
+  <symbol id="pique" viewBox="0 0 24 24"><path d="M12 2.5C8.2 6.9 3.5 9.8 3.5 14a4.3 4.3 0 0 0 7.4 3c-.3 1.7-1 3-2.2 4.5h6.6c-1.2-1.5-1.9-2.8-2.2-4.5a4.3 4.3 0 0 0 7.4-3c0-4.2-4.7-7.1-8.5-11.5z"/></symbol>
+  <symbol id="corazon" viewBox="0 0 24 24"><path d="M12 20.5C6.2 16.3 2.5 12.9 2.5 8.7A4.7 4.7 0 0 1 12 6.3a4.7 4.7 0 0 1 9.5 2.4c0 4.2-3.7 7.6-9.5 11.8z"/></symbol>
+  <symbol id="diamante" viewBox="0 0 24 24"><path d="M12 2.5 19.5 12 12 21.5 4.5 12z"/></symbol>
+  <symbol id="trebol" viewBox="0 0 24 24"><circle cx="12" cy="7.2" r="4.2"/><circle cx="7" cy="13.4" r="4.2"/><circle cx="17" cy="13.4" r="4.2"/><path d="M10.8 13.5h2.4c.3 3.1 1 5.3 2.6 8H8.2c1.6-2.7 2.3-4.9 2.6-8z"/></symbol>
+  <use href="#pique" x="0" width="24" height="24" fill="#F2F0E8"/>
+  <use href="#corazon" x="32" width="24" height="24" fill="#FF7A6B"/>
+  <use href="#diamante" x="64" width="24" height="24" fill="#FF7A6B"/>
+  <use href="#trebol" x="96" width="24" height="24" fill="#F2F0E8"/>
+</svg><small>Palos dibujados a mano en SVG. Reemplazan a los ♠♥♦♣ de texto, que se ven distinto en cada teléfono.</small></div>
+    </div>
+  </section>
+
+  <section><h2>Tono</h2>
+    <div class="tw"><table>
+      <tr><th>Hoy</th><th>Propuesta (ES)</th><th>EN</th><th>PT</th></tr>
+      <tr><td>POKER ENTRE AMIGOS / La mesa está lista. Faltan ustedes.</td><td>Armá la partida o sumate a una</td><td>Start a game or join one</td><td>Crie uma partida ou entre em uma</td></tr>
+      <tr><td>Sin rango</td><td>Todavía sin puntos</td><td>No points yet</td><td>Ainda sem pontos</td></tr>
+      <tr><td>Unirme (dos botones)</td><td>Unirme con código o QR · Unirme a un club</td><td>Join with code or QR · Join a club</td><td>Entrar com código ou QR · Entrar em um clube</td></tr>
+      <tr><td>TU NOCHE DE POKER</td><td>Tus partidas</td><td>Your games</td><td>Suas partidas</td></tr>
+    </table></div>
+  </section>
+</div>
