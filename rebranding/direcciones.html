@@ -1,0 +1,283 @@
+<title>Blindly: tres direcciones</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: una columna de lectura; cada dirección es una fila texto + teléfono que se apila en pantallas angostas. */
+:root {
+  --bg: #F3F2EE; --panel: #FFFFFF; --fg: #171A18; --muted: #5C645F; --line: #D7D9D3; --mark: #1E6B4E;
+  --text: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #121513; --panel: #1A1E1C; --fg: #ECEDE8; --muted: #9BA39E; --line: #2D3330; --mark: #6CC79E; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #121513; --panel: #1A1E1C; --fg: #ECEDE8; --muted: #9BA39E; --line: #2D3330; --mark: #6CC79E; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--text); font-size: 16px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 64px }
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px }
+h1 { font-size: clamp(28px, 4.4vw, 40px); line-height: 1.12; margin: 0; text-wrap: balance; font-weight: 700; letter-spacing: -0.01em }
+h2 { font-size: 26px; line-height: 1.15; margin: 0; font-weight: 700 }
+h3 { font-size: 15px; margin: 0; font-weight: 600; color: var(--muted) }
+p { margin: 0; max-width: 64ch }
+.lead { font-size: 18px; color: var(--muted) }
+.intro { display: flex; flex-direction: column; gap: 14px }
+.pos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; border-top: 1px solid var(--line) }
+.pos div { padding: 14px 16px 14px 0; border-bottom: 1px solid var(--line); min-width: 0 }
+.pos b { display: block; font-size: 13px; color: var(--muted); font-weight: 600 }
+.dir { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 36px; align-items: start; padding-top: 32px; border-top: 2px solid var(--fg) }
+@media (max-width: 820px) { .dir { grid-template-columns: minmax(0, 1fr) } .dir .shot { justify-self: center } }
+.dir .txt { display: flex; flex-direction: column; gap: 16px; min-width: 0 }
+.tag { font-size: 14px; color: var(--mark); font-weight: 600 }
+ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; max-width: 62ch }
+.sw { display: flex; flex-wrap: wrap; gap: 8px }
+.sw span { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-variant-numeric: tabular-nums; border: 1px solid var(--line); background: var(--panel); border-radius: 6px; padding: 4px 10px 4px 4px }
+.sw i { width: 22px; height: 22px; border-radius: 4px; border: 1px solid rgba(128,128,128,.35); display: block }
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px }
+.pair div { min-width: 0; display: flex; flex-direction: column; gap: 4px; font-size: 15px }
+.rec { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 22px; display: flex; flex-direction: column; gap: 12px }
+.shot { display: flex; flex-direction: column; gap: 10px; align-items: center; max-width: 100% }
+.shot small { color: var(--muted); font-size: 13px; text-align: center }
+
+/* Teléfono: cada mockup fija sus propios colores (es una propuesta de marca, no sigue el tema de la página). */
+.phone { width: 320px; max-width: 100%; height: 640px; border-radius: 30px; border: 8px solid #0B0C0C; overflow: hidden; display: flex; flex-direction: column; font-variant-numeric: tabular-nums; box-shadow: 0 12px 30px rgba(0,0,0,.18) }
+.phone button { font: inherit; border: 0; cursor: default }
+
+/* A · Marcador */
+.a { background: #0E1512; color: #F2F0E8; font-family: "Barlow", system-ui, sans-serif; padding: 18px 18px 16px; gap: 0 }
+.a .top { display: flex; justify-content: space-between; font-size: 13px; color: #9DAAA2 }
+.a .lvl { margin-top: 20px; font: 600 20px/1 "Barlow Condensed", "Arial Narrow", sans-serif; color: #F2F0E8; display: flex; justify-content: space-between; align-items: baseline }
+.a .lvl span { font: 500 14px/1 "Barlow", sans-serif; color: #9DAAA2 }
+.a .time { font: 700 128px/0.92 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: -0.01em; margin: 6px 0 10px -3px }
+.a .bar { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px }
+.a .bar i { height: 6px; background: #26342D } .a .bar i.on { background: #F2F0E8 } .a .bar i.now { background: #5BD08A }
+.a .nums { display: grid; grid-template-columns: 1.2fr 1.2fr 1fr; margin-top: 16px; border-top: 1px solid #2A3A32; border-bottom: 1px solid #2A3A32 }
+.a .nums div { padding: 10px 0 11px; display: flex; flex-direction: column; gap: 2px } .a .nums div + div { border-left: 1px solid #2A3A32; padding-left: 12px }
+.a .nums small { font-size: 12px; color: #9DAAA2 } .a .nums b { font: 600 26px/1 "Barlow Condensed", sans-serif }
+.a .rows { margin-top: 6px; flex: 1 }
+.a .row { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; padding: 11px 0; border-bottom: 1px solid #1D2A24; font-size: 16px }
+.a .row b { font: 600 22px/1 "Barlow Condensed", sans-serif }
+.a .role { font-size: 12px; color: #9DAAA2; border: 1px solid #3A4B42; border-radius: 3px; padding: 1px 6px }
+.a .turn { font-size: 12px; font-weight: 600; color: #0E1512; background: #5BD08A; border-radius: 3px; padding: 2px 7px }
+.a .name { display: flex; gap: 8px; align-items: center; min-width: 0 }
+.a .act { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.a .act button { height: 50px; border-radius: 4px; font: 600 17px "Barlow", sans-serif; background: transparent; color: #F2F0E8; border: 1.5px solid #5A6C62 }
+.a .act button.p { background: #F2F0E8; color: #0E1512; border-color: #F2F0E8 }
+
+/* B · Naipe */
+.b { background: #1F4A3A; color: #FBFAF6; font-family: "Public Sans", system-ui, sans-serif; padding: 18px 16px 16px }
+.b .top { display: flex; justify-content: space-between; font-size: 13px; color: #C9D8CF }
+.b .card { background: #FBFAF6; color: #161614; border-radius: 12px; margin-top: 14px; padding: 12px 14px 14px; position: relative; display: flex; flex-direction: column; align-items: center }
+.b .idx { position: absolute; top: 10px; left: 12px; display: flex; flex-direction: column; align-items: center; font: 700 22px/1 "Fraunces", Georgia, serif } .b .idx svg { width: 15px; height: 15px; margin-top: 3px }
+.b .idx.r { top: auto; left: auto; bottom: 10px; right: 12px; transform: rotate(180deg) }
+.b .card h4 { margin: 6px 0 0; font: 600 17px/1.2 "Fraunces", Georgia, serif }
+.b .time { font: 600 96px/1 "Fraunces", Georgia, serif; letter-spacing: -0.03em; margin: 2px 0 4px }
+.b .bl { font: 600 22px/1.2 "Fraunces", Georgia, serif } .b .bl span { color: #C8322B }
+.b .nx { margin-top: 10px; padding-top: 9px; border-top: 1px solid #D9D4C6; width: 100%; display: flex; justify-content: space-between; font-size: 13px; color: #4A4A45; padding-inline: 34px }
+.b .rows { margin-top: 10px; flex: 1 }
+.b .row { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 11px 2px; border-bottom: 1px solid #2F5E4C; font-size: 16px }
+.b .row b { font: 600 19px/1 "Fraunces", Georgia, serif }
+.b .name { display: flex; gap: 8px; align-items: center }
+.b .role { font-size: 12px; color: #C9D8CF; font-style: italic }
+.b .turn { font-size: 12px; font-weight: 600; color: #161614; background: #FBFAF6; border-radius: 999px; padding: 2px 9px 2px 7px; display: inline-flex; gap: 5px; align-items: center } .b .turn svg { width: 10px; height: 10px }
+.b .act { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.b .act button { height: 50px; border-radius: 10px; font: 600 16px "Public Sans", sans-serif; background: transparent; color: #FBFAF6; border: 1.5px solid #8FB3A2 }
+.b .act button.p { background: #FBFAF6; color: #161614; border-color: #FBFAF6 }
+
+/* C · Fichas */
+.c { background: #14171B; color: #F4F3EF; font-family: "Bricolage Grotesque", system-ui, sans-serif; padding: 18px 16px 16px }
+.c .top { display: flex; justify-content: space-between; font-size: 13px; color: #A3A9B2 }
+.c .ring { position: relative; width: 236px; height: 236px; margin: 12px auto 4px }
+.c .ring svg { width: 100%; height: 100% }
+.c .ring div { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center }
+.c .ring span { font-size: 14px; color: #A3A9B2; font-weight: 500 } .c .ring b { font: 800 66px/1 "Bricolage Grotesque", sans-serif; letter-spacing: -0.03em }
+.c .blinds { display: flex; justify-content: center; gap: 18px; margin-top: 4px; font-size: 20px; font-weight: 700; align-items: center }
+.c .chip { width: 22px; height: 22px; border-radius: 50%; display: inline-block; vertical-align: -4px; margin-right: 6px; border: 3px dashed rgba(255,255,255,.85) }
+.c .next { text-align: center; font-size: 13px; color: #A3A9B2; margin-top: 4px; font-weight: 500 }
+.c .rows { margin-top: 10px; flex: 1; display: flex; flex-direction: column; gap: 6px }
+.c .row { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; background: #1E2228; border-radius: 14px; padding: 8px 12px 8px 8px; font-size: 16px; font-weight: 500 }
+.c .row.t { background: #F2C230; color: #14171B }
+.c .av { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 14px; color: #14171B }
+.c .row b { font-weight: 800; font-size: 18px }
+.c .row small { font-size: 12px; font-weight: 700; margin-left: 6px }
+.c .act { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-top: 8px }
+.c .act button { height: 52px; border-radius: 999px; font: 700 16px "Bricolage Grotesque", sans-serif; background: #1E2228; color: #F4F3EF }
+.c .act button.p { background: #F4F3EF; color: #14171B }
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <h1>Blindly: posicionamiento y tres direcciones visuales</h1>
+    <p class="lead">Fase 1 del rebranding. Todo lo de esta página es una propuesta: nada está decidido hasta que elijas una dirección.</p>
+    <p>La app hoy usa el idioma visual de los casinos online: fondo oscuro, dorado con brillo, tarjetas con degradé. Ese es exactamente el aspecto de las apps de apuestas truchas, y por eso a la gente le parece estafa. Blindly no es un casino: es la herramienta de una noche de poker en casa. La identidad tiene que salir de los objetos de esa noche, no de un casino.</p>
+  </header>
+
+  <section class="intro">
+    <h2>Posicionamiento propuesto</h2>
+    <div class="pos">
+      <div><b>Qué es</b>El reloj y la caja de la partida de poker con amigos. Las cartas y las fichas las ponen ustedes.</div>
+      <div><b>Para quién</b>Grupos que juegan en persona, y sobre todo el que organiza y hoy hace las cuentas a mano.</div>
+      <div><b>Qué promete</b>Todos ven el mismo reloj, las mismas ciegas y los mismos stacks. Nadie discute cuánto falta ni cuánto tiene cada uno.</div>
+      <div><b>Por qué confiar</b>No maneja plata, no es un juego de apuestas y no promete nada que no hace. La ficha de la tienda muestra la app tal cual es.</div>
+    </div>
+    <p>Personalidad: el amigo que organiza. Ordenado, directo, con humor seco. No vende lujo ni emoción de casino.</p>
+  </section>
+
+  <section class="dir">
+    <div class="txt">
+      <span class="tag">Dirección A</span>
+      <h2>Marcador</h2>
+      <p>Blindly como instrumento. Se parece al reloj de torneo de una sala de poker y a un marcador de cancha: números enormes, grilla, cero adorno.</p>
+      <h3>De dónde sale</h3>
+      <ul>
+        <li>El reloj de torneo que se proyecta en las salas: nivel, tiempo, ciegas, y nada más.</li>
+        <li>Tableros de horarios de estación y marcadores deportivos: tipografía condensada, columnas alineadas.</li>
+        <li>La barra de niveles es la estructura del torneo dibujada: 12 tramos, los jugados en blanco, el actual en verde.</li>
+      </ul>
+      <h3>Paleta tentativa (tema verde)</h3>
+      <div class="sw">
+        <span><i style="background:#0E1512"></i>Fondo #0E1512</span>
+        <span><i style="background:#17211C"></i>Superficie #17211C</span>
+        <span><i style="background:#F2F0E8"></i>Texto y acción #F2F0E8</span>
+        <span><i style="background:#5BD08A"></i>En juego #5BD08A</span>
+        <span><i style="background:#E5553B"></i>Último minuto #E5553B</span>
+      </div>
+      <p>Sin dorado. La acción principal es un botón claro y plano; el color se reserva para estados (en turno, último minuto).</p>
+      <h3>Tipografía</h3>
+      <p>Barlow Condensed para números y títulos, Barlow para texto. Las dos con licencia SIL Open Font.</p>
+      <div class="pair">
+        <div><h3>A favor</h3>Es la más legible a distancia de mesa y la que más se aleja del look de casino. Se ve seria, como una herramienta.</div>
+        <div><h3>Riesgo</h3>Puede sentirse fría. Necesita el tono de copy y las micro-animaciones para tener calidez.</div>
+      </div>
+    </div>
+    <div class="shot">
+      <div class="phone a" role="img" aria-label="Mockup del timer en la dirección Marcador">
+        <div class="top"><span>Sala 5KECN</span><span>6 jugadores</span></div>
+        <div class="lvl">Nivel 4 <span>de 12</span></div>
+        <div class="time">12:45</div>
+        <div class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="now"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="nums">
+          <div><small>Ciegas</small><b>100 / 200</b></div>
+          <div><small>Sigue</small><b>150 / 300</b></div>
+          <div><small>Pozo</small><b>1.850</b></div>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="name">Nico <span class="role">Host</span></span><span></span><b>5.200</b></div>
+          <div class="row"><span class="name">Juli</span><span class="turn">En turno</span><b>4.975</b></div>
+          <div class="row"><span class="name">Tomi</span><span></span><b>3.100</b></div>
+          <div class="row"><span class="name">Flor</span><span></span><b>2.450</b></div>
+        </div>
+        <div class="act"><button class="p">Pausar</button><button>Cerrar mano</button></div>
+      </div>
+      <small>Timer, dirección A</small>
+    </div>
+  </section>
+
+  <section class="dir">
+    <div class="txt">
+      <span class="tag">Dirección B</span>
+      <h2>Naipe</h2>
+      <p>Blindly como un mazo de cartas bien impreso. Lo importante vive sobre papel blanco de naipe, apoyado en el paño.</p>
+      <h3>De dónde sale</h3>
+      <ul>
+        <li>La carta misma: papel blanco, tinta negra y roja, el índice en la esquina (número arriba, palo abajo) repetido al revés.</li>
+        <li>La caja del mazo y la tipografía de imprenta de las barajas clásicas.</li>
+        <li>El paño real de una mesa, más claro y saturado que el verde casi negro de hoy.</li>
+      </ul>
+      <h3>Paleta tentativa (tema verde)</h3>
+      <div class="sw">
+        <span><i style="background:#1F4A3A"></i>Paño #1F4A3A</span>
+        <span><i style="background:#FBFAF6"></i>Papel #FBFAF6</span>
+        <span><i style="background:#161614"></i>Tinta #161614</span>
+        <span><i style="background:#C8322B"></i>Rojo naipe #C8322B</span>
+        <span><i style="background:#8FB3A2"></i>Borde #8FB3A2</span>
+      </div>
+      <p>El nivel actual es una carta: su número va en el índice de la esquina. El rojo se usa como en un mazo, poco y con sentido.</p>
+      <h3>Tipografía</h3>
+      <p>Fraunces para números y títulos, Public Sans para texto. Las dos con licencia SIL Open Font.</p>
+      <div class="pair">
+        <div><h3>A favor</h3>Es la más cálida y la más reconocible como "poker" sin parecer casino. El contraste tinta sobre papel es altísimo.</div>
+        <div><h3>Riesgo</h3>El papel blanco encandila un poco en una pieza oscura, y los números con serif se leen algo peor de lejos. Es la más trabajosa de llevar a los 4 temas.</div>
+      </div>
+    </div>
+    <div class="shot">
+      <div class="phone b" role="img" aria-label="Mockup del timer en la dirección Naipe">
+        <div class="top"><span>Sala 5KECN</span><span>6 jugadores</span></div>
+        <div class="card">
+          <span class="idx">4<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#161614" d="M12 2C8 7 3 10 3 14.5a4.5 4.5 0 0 0 7.6 3.2c-.3 1.6-1 2.9-2.1 4.3h7c-1.1-1.4-1.8-2.7-2.1-4.3A4.5 4.5 0 0 0 21 14.5C21 10 16 7 12 2z"/></svg></span>
+          <span class="idx r">4<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#161614" d="M12 2C8 7 3 10 3 14.5a4.5 4.5 0 0 0 7.6 3.2c-.3 1.6-1 2.9-2.1 4.3h7c-1.1-1.4-1.8-2.7-2.1-4.3A4.5 4.5 0 0 0 21 14.5C21 10 16 7 12 2z"/></svg></span>
+          <h4>Nivel 4 de 12</h4>
+          <div class="time">12:45</div>
+          <div class="bl">100 <span>/</span> 200</div>
+          <div class="nx"><span>Sigue 150 / 300</span><span>Pozo 1.850</span></div>
+        </div>
+        <div class="rows">
+          <div class="row"><span class="name">Nico <span class="role">host</span></span><b>5.200</b></div>
+          <div class="row"><span class="name">Juli <span class="turn"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#C8322B" d="M12 21C6 16 2.5 12.8 2.5 8.6A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 9.5 2.2C21.5 12.8 18 16 12 21z"/></svg>En turno</span></span><b>4.975</b></div>
+          <div class="row"><span class="name">Tomi</span><b>3.100</b></div>
+          <div class="row"><span class="name">Flor</span><b>2.450</b></div>
+        </div>
+        <div class="act"><button class="p">Pausar</button><button>Cerrar mano</button></div>
+      </div>
+      <small>Timer, dirección B</small>
+    </div>
+  </section>
+
+  <section class="dir">
+    <div class="txt">
+      <span class="tag">Dirección C</span>
+      <h2>Fichas</h2>
+      <p>Blindly como el maletín de fichas del grupo. Colores planos y formas redondas: más juego de mesa que sala de torneo.</p>
+      <h3>De dónde sale</h3>
+      <ul>
+        <li>La ficha de arcilla vista de arriba: el canto rayado se vuelve el anillo del reloj, que se va vaciando con el nivel.</li>
+        <li>Los colores de las fichas como código: cada jugador y cada valor tiene el suyo.</li>
+        <li>El botón de dealer y la bandeja donde se ordenan las fichas.</li>
+      </ul>
+      <h3>Paleta tentativa</h3>
+      <div class="sw">
+        <span><i style="background:#14171B"></i>Fondo #14171B</span>
+        <span><i style="background:#1E2228"></i>Superficie #1E2228</span>
+        <span><i style="background:#F4F3EF"></i>Ficha blanca #F4F3EF</span>
+        <span><i style="background:#D6453D"></i>Roja #D6453D</span>
+        <span><i style="background:#2E9E6A"></i>Verde #2E9E6A</span>
+        <span><i style="background:#3B6FD9"></i>Azul #3B6FD9</span>
+        <span><i style="background:#F2C230"></i>Amarilla #F2C230</span>
+      </div>
+      <p>El tema cambia el fondo y el color del anillo; los colores de ficha se mantienen en todos.</p>
+      <h3>Tipografía</h3>
+      <p>Bricolage Grotesque para todo, con el peso más grueso en los números. Licencia SIL Open Font.</p>
+      <div class="pair">
+        <div><h3>A favor</h3>Es la más simpática y la que mejor dice "juego entre amigos". El anillo de ficha es un símbolo propio y fácil de recordar.</div>
+        <div><h3>Riesgo</h3>Con tantos colores puede verse infantil o desordenada si no se controla. El reloj dentro del anillo queda más chico que en A.</div>
+      </div>
+    </div>
+    <div class="shot">
+      <div class="phone c" role="img" aria-label="Mockup del timer en la dirección Fichas">
+        <div class="top"><span>Sala 5KECN</span><span>6 jugadores</span></div>
+        <div class="ring">
+          <svg viewBox="0 0 236 236" aria-hidden="true">
+            <circle cx="118" cy="118" r="104" fill="none" stroke="#262B32" stroke-width="20"/>
+            <circle cx="118" cy="118" r="104" fill="none" stroke="#2E9E6A" stroke-width="20" stroke-dasharray="418 236" transform="rotate(-90 118 118)"/>
+            <circle cx="118" cy="118" r="104" fill="none" stroke="#F4F3EF" stroke-width="20" stroke-dasharray="18 36.45" transform="rotate(-90 118 118)" opacity="0.95"/>
+            <circle cx="118" cy="118" r="90" fill="none" stroke="#14171B" stroke-width="3"/>
+          </svg>
+          <div><span>Nivel 4 de 12</span><b>12:45</b></div>
+        </div>
+        <div class="blinds"><span><i class="chip" style="background:#D6453D"></i>100</span><span><i class="chip" style="background:#3B6FD9"></i>200</span></div>
+        <div class="next">Sigue 150 / 300 · Pozo 1.850</div>
+        <div class="rows">
+          <div class="row"><span class="av" style="background:#F4F3EF">N</span><span>Nico<small>host</small></span><b>5.200</b></div>
+          <div class="row t"><span class="av" style="background:#14171B;color:#F2C230">J</span><span>Juli<small>en turno</small></span><b>4.975</b></div>
+          <div class="row"><span class="av" style="background:#3B6FD9;color:#fff">T</span><span>Tomi</span><b>3.100</b></div>
+        </div>
+        <div class="act"><button class="p">Pausar</button><button>Cerrar mano</button></div>
+      </div>
+      <small>Timer, dirección C</small>
+    </div>
+  </section>
+
+  <section class="rec">
+    <h2>Qué recomiendo</h2>
+    <p><strong>Dirección A, Marcador.</strong> El problema a resolver es la confianza, y A es la que más se aleja del look de casino y la que mejor cumple lo que la app hace mejor: que el reloj y los stacks se lean desde cualquier silla.</p>
+    <p>De C me llevaría una sola idea a la A: los colores de ficha para la pantalla de valor de fichas y los stacks. B es mi segunda opción; es la más linda en una captura de tienda, pero la más incómoda de usar en una mesa con poca luz.</p>
+    <p>Las tres resuelven los anti-patrones: no hay degradés, brillo, dorado biselado, etiquetas en mayúsculas ni palos con emoji. Los mockups muestran datos de ejemplo.</p>
+  </section>
+</div>
