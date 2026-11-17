@@ -66,7 +66,7 @@ Tokens semánticos en `assets/brand/tokens.json`. La app debe leerlos de un úni
 
 - Violeta realeza usa `#6B3FA0` sólo en superficies grandes (la mesa); sobre ella el acento pasa a `#D4C2F2`.
 - **Fichas** (iguales en todos los temas, siempre con el valor escrito): blanca `#F4F3EF`, roja `#BF3A31`, verde `#2E9E6A`, azul `#3464C9`, negra `#23262B`, amarilla `#F2C230`.
-- **Contraste:** 78 combinaciones verificadas con `node scripts/brand/contraste.cjs`, 0 fallas. Tabla completa en `assets/brand/contraste.md`.
+- **Contraste:** 100 combinaciones verificadas con `node scripts/brand/contraste.cjs` (temas, fichas, naipes, marcadores de rol y colores de club), 0 fallas. Tabla completa en `assets/brand/contraste.md`.
 
 ## 5. Tipografía
 | Rol | Familia | Pesos | Licencia |
