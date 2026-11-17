@@ -25,11 +25,12 @@ export default function OpcionesApp({ enTabs = false }: { enTabs?: boolean }) {
     </Superficie>{etiqueta(t("Experiencia"))}<Superficie variante="suave" style={{ padding: 4, gap: 0 }}>
     <FilaOpcion titulo={t("Tema")} detalle={t(tema.nombre)} onPress={() => setSelector(selector === "tema" ? null : "tema")}/>
     {selector === "tema" && <View accessibilityRole="radiogroup" style={{ gap: 0 }}>{TEMAS.map(paleta => {
-        const bloqueado = !!paleta.plus && !capacidadesPlus(plus).personalizar, elegido = tema.id === paleta.id;
-        return <Pressable key={paleta.id} accessibilityRole="radio" accessibilityState={{ checked: elegido }}
+        // Mientras se verifica Plus no se muestra el candado ni se abre el paywall (un Plus pago lo vería parpadear).
+        const pendiente = !!paleta.plus && plus.cargando, bloqueado = !pendiente && !!paleta.plus && !capacidadesPlus(plus).personalizar, elegido = tema.id === paleta.id;
+        return <Pressable key={paleta.id} accessibilityRole="radio" accessibilityState={{ checked: elegido, disabled: pendiente }} disabled={pendiente}
           accessibilityLabel={`${t(paleta.nombre)}${bloqueado ? `. ${t("Requiere Plus")}` : ""}`}
           onPress={() => { if (bloqueado) router.push("/plus"); else { elegirTema(paleta.id); setSelector(null); } }}
-          style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 56, paddingHorizontal: 12, borderTopWidth: 1, borderColor: tema.borde, opacity: pressed ? .7 : 1 })}>
+          style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 56, paddingHorizontal: 12, borderTopWidth: 1, borderColor: tema.borde, opacity: pendiente ? .5 : pressed ? .7 : 1 })}>
           <View style={{ flexDirection: "row", borderRadius: 4, overflow: "hidden", borderWidth: 1, borderColor: tema.bordeControl }}>
             {[paleta.fondo, paleta.mesa, paleta.acento].map((c, i) => <View key={i} style={{ width: 14, height: 28, backgroundColor: c }} />)}
           </View>
