@@ -835,12 +835,16 @@ export function Mesa({ codigo }: { codigo: string }) {
       >
         <View style={estilos.fondo}>
           <ScrollView
+            style={{ flexGrow: 0 }}
             contentContainerStyle={[
               estilos.modal,
-              { backgroundColor: tema.fondo },
+              { backgroundColor: tema.superficie, borderWidth: 1, borderColor: tema.borde },
             ]}
             keyboardShouldPersistTaps="handled"
           >
+            <Texto style={{ fontSize: 22, fontWeight: "700" }}>
+              {t("Actualizar stack físico")}
+            </Texto>
             <Campo
               etiqueta={editando?.nombre ?? ""}
               keyboardType="number-pad"

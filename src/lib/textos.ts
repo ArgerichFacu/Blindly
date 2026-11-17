@@ -1073,7 +1073,6 @@ Object.assign(textos, {
       "Shared standings, points and results for your group. Guests play for free.",
       "Classificação, pontos e resultados compartilhados para seu grupo. Convidados jogam grátis.",
     ],
-  "+ Crear liga": ["+ Create league", "+ Criar liga"],
   "Crear mi liga con Plus": [
     "Create my league with Plus",
     "Criar minha liga com Plus",
