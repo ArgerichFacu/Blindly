@@ -32,7 +32,7 @@ export function ProximaFechaClub({ liga, fecha, administrar, activa, alCambiar }
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
         {(["voy", "no_puedo", "pendiente"] as const).map(respuesta => <Boton key={respuesta} titulo={t(respuesta === "voy" ? "Voy" : respuesta === "no_puedo" ? "No puedo" : "Pendiente")} compacto secundario={fecha.mi_respuesta !== respuesta} disabled={ocupado || !activa} onPress={() => void ejecutar(() => responderFechaLiga(fecha.id, respuesta))} />)}
       </View>
-    </> : <Texto suave>{t("Todavía no hay una próxima fecha. Organicen la siguiente noche de póker.")}</Texto>}
+    </> : <Texto suave>{t("Todavía no hay una próxima fecha. Organicen la siguiente noche de poker.")}</Texto>}
     {!!error && <><Texto>{mensajeError(error)}</Texto><Boton titulo={t("Actualizar club")} compacto secundario onPress={alCambiar} /></>}
     {administrar && activa && (!editar ? <>
       <Boton titulo={t(fecha ? "Reprogramar fecha" : "Programar fecha")} secundario disabled={ocupado} onPress={() => { setEditar(true); setDia(""); setHora(""); setLugar(fecha?.lugar ?? ""); setNota(fecha?.nota ?? ""); }} />

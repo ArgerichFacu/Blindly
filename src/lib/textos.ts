@@ -174,7 +174,7 @@ export const textos: Record<string, [string, string]> = {
   "Voy": ["I'm going", "Vou"],
   "No puedo": ["I can't make it", "Não posso"],
   "Pendiente": ["Pending", "Pendente"],
-  "Todavía no hay una próxima fecha. Organicen la siguiente noche de póker.": ["No upcoming date yet. Arrange your next poker night.", "Ainda não há um próximo encontro. Organizem a próxima noite de pôquer."],
+  "Todavía no hay una próxima fecha. Organicen la siguiente noche de poker.": ["No upcoming date yet. Arrange your next poker night.", "Ainda não há um próximo encontro. Organizem a próxima noite de pôquer."],
   "Reprogramar fecha": ["Reschedule", "Reagendar"],
   "Programar fecha": ["Schedule a game night", "Agendar encontro"],
   "Cancelar fecha": ["Cancel game night", "Cancelar encontro"],
@@ -294,7 +294,7 @@ export const textos: Record<string, [string, string]> = {
     "This member is no longer active in the club.",
     "Este membro não está mais ativo no clube.",
   ],
-  "Nuestro club de póker": ["Our poker club", "Nosso clube de pôquer"],
+  "Nuestro club de poker": ["Our poker club", "Nosso clube de pôquer"],
   "Un grupo, muchas temporadas. El historial se queda en el club.": [
     "One group, many seasons. The history stays with the club.",
     "Um grupo, muitas temporadas. O histórico fica no clube.",
@@ -449,7 +449,7 @@ export const textos: Record<string, [string, string]> = {
   ],
   "Probar mis cartas": ["Try my cards", "Testar minhas cartas"],
   "Explorar manos": ["Explore hands", "Explorar mãos"],
-  "Aprender póker": ["Learn poker", "Aprender poker"],
+  "Aprender poker": ["Learn poker", "Aprender poker"],
   "Reglas claras. Cartas reales.": [
     "Clear rules. Real cards.",
     "Regras claras. Cartas reais.",
@@ -2510,7 +2510,6 @@ Object.assign(textos, {
 
 Object.assign(textos, {
   "Founder Trial activo": ["Founder Trial active", "Founder Trial ativo"],
-  "Founder Trial": ["Founder Trial", "Founder Trial"],
   "PRÓXIMAMENTE": [
     "COMING SOON",
     "EM BREVE"

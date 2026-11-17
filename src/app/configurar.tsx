@@ -127,8 +127,8 @@ export default function Configurar() {
               </View>
               <Switch
                 accessibilityLabel={t("Música de ambiente")}
-                trackColor={{ false: tema.borde, true: tema.acento }}
-                thumbColor={tema.textoFuerte}
+                trackColor={{ false: tema.bordeControl, true: tema.acento }}
+                thumbColor={tema.texto}
                 value={!!sala.configuracion.musica}
                 disabled={accion.ocupado}
                 onValueChange={(valor) =>

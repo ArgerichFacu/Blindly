@@ -155,7 +155,7 @@ function ContenidoLiga() {
           <Tarjeta>
             <IdentidadClub ligaId={id} nombre={datos.liga.nombre} identidad={datos.liga.identidad} permitido={permisos.editarIdentidad} administrador={datos.liga.puede_administrar} alGuardar={actualizarRanking} />
             <Texto style={{ fontSize: 22, fontWeight: "800" }}>
-              {t("Nuestro club de póker")}
+              {t("Nuestro club de poker")}
             </Texto>
             <Texto suave>
               {datos.liga.descripcion ||

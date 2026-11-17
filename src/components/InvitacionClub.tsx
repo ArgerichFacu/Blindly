@@ -50,11 +50,11 @@ export function InvitacionClub({ ligaId, nombre }: {
           <ScrollView contentContainerStyle={{ padding: 24, gap: 16 }} keyboardShouldPersistTaps="handled">
             <View style={{ width: 40, height: 4, borderRadius: 2, backgroundColor: tema.borde, alignSelf: "center" }}/>
             <Texto suave style={{ fontSize: 12 }}>{t("Invitar al club")}</Texto>
-            <Texto style={{ fontSize: 27, fontWeight: "800" }}>{nombre ?? t("Nuestro club de póker")}</Texto>
+            <Texto style={{ fontSize: 27, fontWeight: "800" }}>{nombre ?? t("Nuestro club de poker")}</Texto>
             <Texto suave>{t("Sumalos a la liga. La próxima noche empieza acá.")}</Texto>
             {ocupado && <Texto>{t("Cargando…")}</Texto>}
             {invitacion && <>
-              <Boton titulo={t("Compartir invitación")} disabled={ocupado} onPress={() => void Share.share({ message: t("Te invitaron a {nombre}. Unite a la liga en Blindly y peleá por el MVP.\n{enlace}", { nombre: nombre ?? t("Nuestro club de póker"), enlace }) }).catch(e => setError(mensajeError(e)))}/>
+              <Boton titulo={t("Compartir invitación")} disabled={ocupado} onPress={() => void Share.share({ message: t("Te invitaron a {nombre}. Unite a la liga en Blindly y peleá por el MVP.\n{enlace}", { nombre: nombre ?? t("Nuestro club de poker"), enlace }) }).catch(e => setError(mensajeError(e)))}/>
               <Boton titulo={t(copiado ? "Enlace copiado" : "Copiar enlace")} secundario disabled={ocupado} onPress={() => void Clipboard.setStringAsync(enlace).then(() => setCopiado(true)).catch(e => setError(mensajeError(e)))}/>
               <Boton titulo={t(qr ? "Ocultar QR" : "Mostrar QR")} compacto secundario disabled={ocupado} onPress={() => setQr(v => !v)}/>
               {qr && <View accessible accessibilityLabel={t("Código de invitación: {codigo}", { codigo: invitacion.codigo })} style={{ alignSelf: "center", padding: 16, backgroundColor: "white", borderRadius: 12, ...RELIEVE.panel }}><QRCode value={enlace} size={180}/></View>}

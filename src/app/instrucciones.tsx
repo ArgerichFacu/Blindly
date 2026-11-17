@@ -16,7 +16,7 @@ export default function Instrucciones() {
     router = useRouter();
   return (
     <Pantalla
-      titulo={t("Aprender póker")}
+      titulo={t("Aprender poker")}
       subtitulo={t("Reglas claras. Cartas reales.")}
     >
       <Acceso

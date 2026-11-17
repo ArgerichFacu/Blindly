@@ -18,7 +18,7 @@ export default function OpcionesApp({ enTabs = false }: { enTabs?: boolean }) {
     const etiqueta = (titulo: string) => <Texto suave style={{ fontSize: 14, fontWeight: "600", marginTop: 20, marginBottom: 4 }}>{titulo}</Texto>;
     return <Pantalla titulo={t("Config")} volver={!enTabs} enTabs={enTabs}>
     {etiqueta(t("Cuenta"))}<Superficie variante="suave" style={{ padding: 4, gap: 0 }}>
-    <FilaOpcion titulo={t("Mi cuenta")} icono="perfil" onPress={() => router.push("/cuenta")}/>
+    <FilaOpcion titulo={t("Mi cuenta")} onPress={() => router.push("/cuenta")}/>
     <FilaOpcion titulo={t("Idioma")} detalle={preferencias.idioma === "es" ? "Español" : preferencias.idioma === "en" ? "English" : "Português"} onPress={() => setSelector(selector === "idioma" ? null : "idioma")}/>
     {selector === "idioma" && <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>{(["es", "en", "pt"] as const).map(idioma => <Boton key={idioma} titulo={idioma === "es" ? "Español" : idioma === "en" ? "English" : "Português"} compacto secundario={idioma !== preferencias.idioma} onPress={() => { cambiar({ idioma }); setSelector(null); }}/>)}</View>}
     <FilaOpcion titulo={t("Clubes y notificaciones")} detalle={t("Preferencias por liga")} onPress={() => router.push("/ligas")}/>
@@ -39,14 +39,14 @@ export default function OpcionesApp({ enTabs = false }: { enTabs?: boolean }) {
         </Pressable>;
       })}</View>}
     <FilaOpcion titulo={t("Sonidos y ambiente")} onPress={() => router.push("/sonidos")}/>
-    <FilaOpcion titulo={t("Modo principiante")} control={<Switch accessibilityLabel={t("Modo principiante")} value={preferencias.principiante} onValueChange={principiante => cambiar({ principiante })} trackColor={{ true: tema.acento }}/>}/>
-    <FilaOpcion titulo={t("Vibraciones de momentos importantes")} control={<Switch accessibilityLabel={t("Vibraciones de momentos importantes")} value={preferencias.hapticos} onValueChange={hapticos => cambiar({ hapticos })} trackColor={{ true: tema.acento }}/>}/>
+    <FilaOpcion titulo={t("Modo principiante")} control={<Switch accessibilityLabel={t("Modo principiante")} value={preferencias.principiante} onValueChange={principiante => cambiar({ principiante })} trackColor={{ false: tema.bordeControl, true: tema.acento }} thumbColor={tema.texto}/>}/>
+    <FilaOpcion titulo={t("Vibraciones de momentos importantes")} control={<Switch accessibilityLabel={t("Vibraciones de momentos importantes")} value={preferencias.hapticos} onValueChange={hapticos => cambiar({ hapticos })} trackColor={{ false: tema.bordeControl, true: tema.acento }} thumbColor={tema.texto}/>}/>
     </Superficie>{etiqueta(t("Aprender"))}<Superficie variante="suave" style={{ padding: 4, gap: 0 }}>
-    <FilaOpcion titulo={t("Aprender póker")} icono="libro" onPress={() => router.push("/instrucciones")}/>
+    <FilaOpcion titulo={t("Aprender poker")} onPress={() => router.push("/instrucciones")}/>
     <FilaOpcion titulo={t("Guía rápida")} onPress={() => router.push("/tutorial")}/>
     <FilaOpcion titulo={t("Combinaciones de poker")} onPress={() => router.push("/combinaciones")}/>
     </Superficie>{etiqueta("Blindly")}<Superficie variante="suave" style={{ padding: 4, gap: 0 }}>
-    <FilaOpcion titulo={t("Blindly Plus")} icono="plus" onPress={() => router.push("/plus")}/>
+    <FilaOpcion titulo={t("Blindly Plus")} onPress={() => router.push("/plus")}/>
     <FilaOpcion titulo={t("Créditos de música")} onPress={() => router.push("/creditos")}/>
     <FilaOpcion titulo={t("Política de privacidad")} onPress={() => router.push("/privacidad")}/>
     {privacidadAnuncios && <FilaOpcion titulo={t("Privacidad de anuncios")} onPress={() => void import("../lib/consentimientoAds").then(m => m.abrirOpcionesPrivacidadAnuncios()).catch(() => {})}/>}
