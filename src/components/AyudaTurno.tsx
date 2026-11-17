@@ -48,7 +48,7 @@ export function AyudaTurno({ virtual }: { virtual?: TurnoVirtual }) {
               maxWidth: 540,
               alignSelf: "center",
               backgroundColor: tema.fondoTarjeta,
-              borderRadius: 20,
+              borderRadius: 12,
               padding: 18,
               gap: 12,
             }}

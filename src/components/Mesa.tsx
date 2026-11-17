@@ -279,7 +279,7 @@ export function Mesa({ codigo }: { codigo: string }) {
               </View>
               {virtual && yo && (
                 <View style={{ alignItems: "flex-end" }}>
-                  <Texto suave style={{ fontSize: 10 }}>
+                  <Texto suave style={{ fontSize: 12 }}>
                     {t("Tu stack")}
                   </Texto>
                   <Texto style={{ fontWeight: "700", fontSize: 19 }}>
@@ -888,7 +888,7 @@ const estilos = StyleSheet.create({
   modal: {
     padding: 20,
     gap: 14,
-    borderRadius: 18,
+    borderRadius: 12,
     width: "100%",
     maxWidth: 500,
     alignSelf: "center",

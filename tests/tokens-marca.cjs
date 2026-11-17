@@ -13,6 +13,9 @@ for (const t of temas.TEMAS) {
   assert.equal(t.nombre, m.nombre);
 }
 for (const [k, v] of Object.entries(marca.fichas)) if (!k.startsWith("$")) assert.equal(temas.FICHAS[k], v, `ficha ${k}`);
+for (const [k, v] of Object.entries(marca.naipe)) if (!k.startsWith("$")) assert.equal(temas.NAIPE[k], v, `naipe ${k}`);
+for (const [k, v] of Object.entries(marca.rol)) if (!k.startsWith("$")) assert.deepEqual({ ...temas.COLORES_ROL[k] }, v, `rol ${k}`);
+for (const [k, v] of Object.entries(marca.club)) if (!k.startsWith("$")) assert.equal(temas.COLORES_CLUB[k], v, `club ${k}`);
 assert.equal(temas.TEMA_DEFECTO.id, "verde");
 assert.equal(temas.TEMAS.filter((t) => !t.plus).map((t) => t.id).join(), "verde", "Sólo el verde es gratis");
 

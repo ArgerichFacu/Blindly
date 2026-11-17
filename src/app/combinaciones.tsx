@@ -204,7 +204,7 @@ export default function Combinaciones() {
                 padding: 17,
                 gap: 14,
                 backgroundColor: tema.fondoTarjeta,
-                borderRadius: 22,
+                borderRadius: 12,
                 borderWidth: 1,
                 borderColor: expandida ? tema.acento : tema.borde,
               }}
@@ -220,7 +220,7 @@ export default function Combinaciones() {
                   flexDirection: "row",
                   alignItems: "center",
                   gap: 12,
-                  minHeight: 44,
+                  minHeight: 48,
                 }}
               >
                 <View
@@ -254,7 +254,7 @@ export default function Combinaciones() {
                     {t(mano.nombre)}
                   </Texto>
                   {i === 0 && (
-                    <Texto suave style={{ fontSize: 10 }}>
+                    <Texto suave style={{ fontSize: 12 }}>
                       {t("La mano más alta")}
                     </Texto>
                   )}

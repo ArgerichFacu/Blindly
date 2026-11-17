@@ -293,7 +293,7 @@ export default function ValorFichas() {
                   flexDirection: "row",
                   alignItems: "center",
                   gap: 12,
-                  minHeight: 44,
+                  minHeight: 48,
                   borderTopWidth: 1,
                   borderColor: tema.borde,
                 }}

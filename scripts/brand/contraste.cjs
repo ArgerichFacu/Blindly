@@ -4,7 +4,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
-const { temas, fichas } = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "assets", "brand", "tokens.json"), "utf8"));
+const { temas, fichas, naipe, rol, club } = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "assets", "brand", "tokens.json"), "utf8"));
 
 function lum(hex) {
   const [r, g, b] = hex.replace("#", "").match(/../g).map((h) => {
@@ -50,6 +50,29 @@ for (const [ficha, color] of Object.entries(fichas)) {
   const r = Math.max(ratio("#F2F0E8", color), ratio("#0E1512", color));
   if (r < 4.5) fallas++;
   filas.push(["Fichas", ficha, "mejor tinta", r, 4.5, r >= 4.5]);
+}
+
+// Naipes: índice y palo sobre el papel de la carta.
+for (const tinta of ["tinta", "rojo"]) {
+  const r = ratio(naipe[tinta], naipe.papel);
+  if (r < 4.5) fallas++;
+  filas.push(["Naipe", tinta, "papel", r, 4.5, r >= 4.5]);
+}
+// Marcadores de rol (DR, BTN, SB, BB): texto chico sobre el color de la ficha.
+for (const [id, c] of Object.entries(rol)) {
+  if (id.startsWith("$")) continue;
+  const r = ratio(c.texto, c.fondo);
+  if (r < 4.5) fallas++;
+  filas.push(["Rol", id, "ficha", r, 4.5, r >= 4.5]);
+}
+// Colores de club: emblema (no textual) sobre la superficie más clara de cada tema.
+for (const [id, color] of Object.entries(club)) {
+  if (id.startsWith("$")) continue;
+  for (const t of Object.values(temas)) {
+    const r = ratio(color, t.superficieElevada);
+    if (r < 3) fallas++;
+    filas.push(["Club " + t.nombre, id, "superficieElevada", r, 3, r >= 3]);
+  }
 }
 
 if (md) {

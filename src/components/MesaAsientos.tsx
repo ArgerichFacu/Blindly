@@ -99,7 +99,7 @@ export function MesaAsientos({
             backgroundColor: tema.pano,
             borderColor: tema.borde,
           },
-          lista && { position: "relative", left: 0, top: 0, width: "100%", height: undefined, minHeight: 120, padding: 20, borderRadius: 24 },
+          lista && { position: "relative", left: 0, top: 0, width: "100%", height: undefined, minHeight: 120, padding: 20, borderRadius: 12 },
         ]}
       >
         <View style={[styles.linea, { borderColor: tema.textoSuave + "30" }]} />
@@ -154,7 +154,7 @@ export function MesaAsientos({
             <Texto
               numberOfLines={lista ? undefined : 1}
               style={{
-                fontSize: 11,
+                fontSize: 12,
                 lineHeight: 16,
                 fontWeight: "700",
                 color: activo ? tema.acentoTexto : tema.textoFuerte,

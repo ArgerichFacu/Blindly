@@ -199,7 +199,7 @@ export function EvaluadorMano() {
                 onPress={() => setValor(v)}
                 style={{
                   width: 44,
-                  minHeight: 44,
+                  minHeight: 48,
                   borderRadius: 10,
                   borderWidth: 1,
                   borderColor: valor === v ? tema.acento : tema.borde,

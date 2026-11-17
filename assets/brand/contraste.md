@@ -78,3 +78,25 @@
 | Fichas | azul | mejor tinta | 4.83:1 | 4.5:1 | ✓ |
 | Fichas | negra | mejor tinta | 13.30:1 | 4.5:1 | ✓ |
 | Fichas | amarilla | mejor tinta | 11.05:1 | 4.5:1 | ✓ |
+| Naipe | tinta | papel | 16.61:1 | 4.5:1 | ✓ |
+| Naipe | rojo | papel | 5.84:1 | 4.5:1 | ✓ |
+| Rol | DR | ficha | 13.30:1 | 4.5:1 | ✓ |
+| Rol | BTN | ficha | 16.67:1 | 4.5:1 | ✓ |
+| Rol | SB | ficha | 4.83:1 | 4.5:1 | ✓ |
+| Rol | BB | ficha | 4.76:1 | 4.5:1 | ✓ |
+| Club Verde | oro | superficieElevada | 7.55:1 | 3:1 | ✓ |
+| Club Rojo | oro | superficieElevada | 8.30:1 | 3:1 | ✓ |
+| Club Negro | oro | superficieElevada | 8.22:1 | 3:1 | ✓ |
+| Club Violeta realeza | oro | superficieElevada | 8.10:1 | 3:1 | ✓ |
+| Club Verde | esmeralda | superficieElevada | 8.02:1 | 3:1 | ✓ |
+| Club Rojo | esmeralda | superficieElevada | 8.82:1 | 3:1 | ✓ |
+| Club Negro | esmeralda | superficieElevada | 8.74:1 | 3:1 | ✓ |
+| Club Violeta realeza | esmeralda | superficieElevada | 8.60:1 | 3:1 | ✓ |
+| Club Verde | rubí | superficieElevada | 6.99:1 | 3:1 | ✓ |
+| Club Rojo | rubí | superficieElevada | 7.69:1 | 3:1 | ✓ |
+| Club Negro | rubí | superficieElevada | 7.61:1 | 3:1 | ✓ |
+| Club Violeta realeza | rubí | superficieElevada | 7.49:1 | 3:1 | ✓ |
+| Club Verde | zafiro | superficieElevada | 7.95:1 | 3:1 | ✓ |
+| Club Rojo | zafiro | superficieElevada | 8.74:1 | 3:1 | ✓ |
+| Club Negro | zafiro | superficieElevada | 8.66:1 | 3:1 | ✓ |
+| Club Violeta realeza | zafiro | superficieElevada | 8.53:1 | 3:1 | ✓ |

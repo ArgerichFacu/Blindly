@@ -25,7 +25,7 @@ export const TarjetaRecap = forwardRef<View, ViewProps & { recap: Recap }>(
           backgroundColor: tema.fondo,
           borderColor: tema.acento,
           borderWidth: 2,
-          borderRadius: 28,
+          borderRadius: 12,
           padding: 26,
           justifyContent: "space-between",
           overflow: "hidden",
@@ -50,12 +50,12 @@ export const TarjetaRecap = forwardRef<View, ViewProps & { recap: Recap }>(
             {t("{n} jugadores", { n: recap.jugadores })}{duracion ? ` • ${duracion}` : ""}
           </Texto>
           {!!recap.liga && (
-            <View style={{ padding: 14, borderRadius: 16, backgroundColor: tema.fondoTarjeta }}>
+            <View style={{ padding: 14, borderRadius: 12, backgroundColor: tema.fondoTarjeta }}>
               <Texto style={{ fontWeight: "800" }}>{recap.liga.nombre}</Texto>
               <Texto suave>{recap.liga.temporada}</Texto>
             </View>
           )}
-          {!!recap.nuevo_mvp && <View style={{ padding: 14, borderRadius: 16, borderColor: tema.acento, borderWidth: 1 }}><Texto style={{ color: tema.acento, fontWeight: "800" }}>{t("Nuevo MVP")}</Texto><Texto numberOfLines={2}>{recap.nuevo_mvp.nombre}</Texto></View>}
+          {!!recap.nuevo_mvp && <View style={{ padding: 14, borderRadius: 12, borderColor: tema.acento, borderWidth: 1 }}><Texto style={{ color: tema.acento, fontWeight: "800" }}>{t("Nuevo MVP")}</Texto><Texto numberOfLines={2}>{recap.nuevo_mvp.nombre}</Texto></View>}
         </View>
         <Texto suave style={{ textAlign: "center" }}>{t("Jugado con Blindly")}</Texto>
       </View>
