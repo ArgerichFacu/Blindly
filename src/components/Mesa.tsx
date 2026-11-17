@@ -71,7 +71,9 @@ export function Mesa({ codigo }: { codigo: string }) {
     jugadores.length,
   );
   const corriendo = sala?.estado === "jugando";
-  const volver = useSalidaMesa(!mesa.sesionReemplazada && protegerSalidaMesa(sala?.estado, !!mesa.error));
+  const volver = useSalidaMesa(
+    !mesa.sesionReemplazada && protegerSalidaMesa(sala?.estado, !!mesa.error),
+  );
   useFocusEffect(
     useCallback(() => {
       setEnfocada(true);
@@ -155,8 +157,16 @@ export function Mesa({ codigo }: { codigo: string }) {
         },
         () => {
           setMonto("");
-          if (tipo === "allin" || (cantidad != null && cantidad === (yo?.fichas ?? 0) + (yo?.aporte_calle ?? 0)))
-            void vibrarMomento("allin", preferencias.hapticos, `allin:${sala!.id}:${sala!.mano}:${sala!.revision}:${yo?.id}`);
+          if (
+            tipo === "allin" ||
+            (cantidad != null &&
+              cantidad === (yo?.fichas ?? 0) + (yo?.aporte_calle ?? 0))
+          )
+            void vibrarMomento(
+              "allin",
+              preferencias.hapticos,
+              `allin:${sala!.id}:${sala!.mano}:${sala!.revision}:${yo?.id}`,
+            );
         },
       );
     } catch (e) {
@@ -263,9 +273,8 @@ export function Mesa({ codigo }: { codigo: string }) {
                         },
                       )}
                 </Texto>
-                <Texto suave style={{ fontSize: 11 }}>
-                  {t(sala.calle).toUpperCase()} ·{" "}
-                  {t("Mano {n}", { n: sala.mano })}
+                <Texto suave style={{ fontSize: 13 }}>
+                  {t(sala.calle)} · {t("Mano {n}", { n: sala.mano })}
                 </Texto>
               </View>
               {virtual && yo && (
@@ -311,29 +320,36 @@ export function Mesa({ codigo }: { codigo: string }) {
               corriendo &&
               yo &&
               !yo.retirado &&
-              !yo.eliminado_en &&
-              (["pasar", "igualar", "subir", "retirarse"] as const).map(
-                (tipo) => (
-                  <Boton
-                    key={tipo}
-                    titulo={t(
-                      tipo === "subir"
-                        ? "Apostar / subir"
-                        : tipo === "retirarse"
-                          ? "Retirarse"
-                          : tipo === "igualar"
-                            ? "Igualar"
-                            : "Pasar",
-                    )}
-                    disabled={accion.ocupado}
-                    onPress={() =>
-                      accion.ejecutar("turno_fisico", {
-                        ...datosTurno,
-                        tipo,
-                      })
-                    }
-                  />
-                ),
+              !yo.eliminado_en && (
+                <View
+                  style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}
+                >
+                  {(["pasar", "igualar", "subir", "retirarse"] as const).map(
+                    (tipo) => (
+                      <Boton
+                        key={tipo}
+                        secundario={tipo !== "igualar"}
+                        style={{ flexGrow: 1, flexBasis: "45%" }}
+                        titulo={t(
+                          tipo === "subir"
+                            ? "Apostar / subir"
+                            : tipo === "retirarse"
+                              ? "Retirarse"
+                              : tipo === "igualar"
+                                ? "Igualar"
+                                : "Pasar",
+                        )}
+                        disabled={accion.ocupado}
+                        onPress={() =>
+                          accion.ejecutar("turno_fisico", {
+                            ...datosTurno,
+                            tipo,
+                          })
+                        }
+                      />
+                    ),
+                  )}
+                </View>
               )}
             {virtual && dealer && sala.calle === "reparto" && (
               <Boton
@@ -426,7 +442,14 @@ export function Mesa({ codigo }: { codigo: string }) {
         </>
       ) : (
         <>
-          <MarcadorNivel niveles={sala.niveles} indice={estado.indice} tiempo={tiempo} terminado={estado.terminado} mano={sala.mano} pozo={virtual ? sala.pozo : undefined} />
+          <MarcadorNivel
+            niveles={sala.niveles}
+            indice={estado.indice}
+            tiempo={tiempo}
+            terminado={estado.terminado}
+            mano={sala.mano}
+            pozo={virtual ? sala.pozo : undefined}
+          />
         </>
       )}
       {!!sala.orden.length && (
@@ -492,50 +515,118 @@ export function Mesa({ codigo }: { codigo: string }) {
           <Texto suave>{t("No se pudieron cargar los rangos.")}</Texto>
         )}
         {orden.map((j) => (
-          <EntradaSuave key={j.id}><Tarjeta style={{ padding: 12, gap: 6, borderColor: j.id === sala.turno_id ? tema.acento : tema.borde, borderWidth: j.id === sala.turno_id ? 2 : 1 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-              {sala.orden.includes(j.id) && <Texto suave style={{ fontSize: 16, fontWeight: "600", minWidth: 20 }} condensada>{String(sala.orden.indexOf(j.id) + 1)}</Texto>}
-              <Texto numberOfLines={1} style={{ flex: 1, fontSize: 17, fontWeight: "600" }}>{j.nombre}</Texto>
-              {!esperando && <CifraViva valor={j.fichas} texto={formatoNumero(j.fichas, preferencias.idioma)} style={{ fontSize: 22, fontWeight: "700" }} />}
-            </View>
-            {(j.user_id === sala.host_id || !!roles[j.id] || j.id === sala.turno_id || j.retirado || !!j.eliminado_en || (!j.eliminado_en && j.fichas === 0 && virtual)) && <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
-              {j.id === sala.turno_id && <Etiqueta activa>{t("En turno")}</Etiqueta>}
-              {j.user_id === sala.host_id && <Etiqueta>{t("Host")}</Etiqueta>}
-              {(roles[j.id] ?? "").split(" / ").filter(Boolean).map((rol) => <Etiqueta key={rol}>{rol}</Etiqueta>)}
-              {j.retirado && <Etiqueta>{t("Retirado")}</Etiqueta>}
-              {!!j.eliminado_en && <Etiqueta>{t("Eliminado")}</Etiqueta>}
-              {!j.eliminado_en && j.fichas === 0 && virtual && <View style={{ backgroundColor: tema.error, borderRadius: 4, paddingHorizontal: 8, paddingVertical: 2 }}><Texto style={{ color: tema.textoAccion, fontSize: 12, fontWeight: "600" }}>{t("All-in")}</Texto></View>}
-            </View>}
-            <Texto suave style={{ fontSize: 12 }}>
-              {rangos[j.id] === undefined
-                ? t("Rango no disponible")
-                : rangos[j.id] === null
-                  ? t("Todavía sin puntos")
-                  : t("Rango global #{n}", { n: rangos[j.id]! })}
-            </Texto>
-            {!esperando && (
-              <>
-                {virtual && (
-                  <Texto suave>
-                    {t("Apuesta de esta mano")}: {formatoNumero(j.apuesta_mano, preferencias.idioma)}
+          <EntradaSuave key={j.id}>
+            <Tarjeta
+              style={{
+                padding: 12,
+                gap: 6,
+                borderColor: j.id === sala.turno_id ? tema.acento : tema.borde,
+                borderWidth: j.id === sala.turno_id ? 2 : 1,
+              }}
+            >
+              <View
+                style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+              >
+                {sala.orden.includes(j.id) && (
+                  <Texto
+                    suave
+                    style={{ fontSize: 16, fontWeight: "600", minWidth: 20 }}
+                    condensada
+                  >
+                    {String(sala.orden.indexOf(j.id) + 1)}
                   </Texto>
                 )}
-                {dealer && !virtual && !finalizada && (
-                  <Boton
-                    titulo={t("Actualizar stack físico")}
-                    secundario
-                    onPress={() =>
-                      setEditando({
-                        id: j.id,
-                        nombre: j.nombre,
-                        monto: String(j.fichas),
-                      })
-                    }
+                <Texto
+                  numberOfLines={1}
+                  style={{ flex: 1, fontSize: 17, fontWeight: "600" }}
+                >
+                  {j.nombre}
+                </Texto>
+                {!esperando && (
+                  <CifraViva
+                    valor={j.fichas}
+                    texto={formatoNumero(j.fichas, preferencias.idioma)}
+                    style={{ fontSize: 22, fontWeight: "700" }}
                   />
                 )}
-              </>
-            )}
-          </Tarjeta></EntradaSuave>
+              </View>
+              {(j.user_id === sala.host_id ||
+                !!roles[j.id] ||
+                j.id === sala.turno_id ||
+                j.retirado ||
+                !!j.eliminado_en ||
+                (!j.eliminado_en && j.fichas === 0 && virtual)) && (
+                <View
+                  style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}
+                >
+                  {j.id === sala.turno_id && (
+                    <Etiqueta activa>{t("En turno")}</Etiqueta>
+                  )}
+                  {j.user_id === sala.host_id && (
+                    <Etiqueta>{t("Host")}</Etiqueta>
+                  )}
+                  {(roles[j.id] ?? "")
+                    .split(" / ")
+                    .filter(Boolean)
+                    .map((rol) => (
+                      <Etiqueta key={rol}>{rol}</Etiqueta>
+                    ))}
+                  {j.retirado && <Etiqueta>{t("Retirado")}</Etiqueta>}
+                  {!!j.eliminado_en && <Etiqueta>{t("Eliminado")}</Etiqueta>}
+                  {!j.eliminado_en && j.fichas === 0 && virtual && (
+                    <View
+                      style={{
+                        backgroundColor: tema.error,
+                        borderRadius: 4,
+                        paddingHorizontal: 8,
+                        paddingVertical: 2,
+                      }}
+                    >
+                      <Texto
+                        style={{
+                          color: tema.textoAccion,
+                          fontSize: 12,
+                          fontWeight: "600",
+                        }}
+                      >
+                        {t("All-in")}
+                      </Texto>
+                    </View>
+                  )}
+                </View>
+              )}
+              <Texto suave style={{ fontSize: 12 }}>
+                {rangos[j.id] === undefined
+                  ? t("Rango no disponible")
+                  : rangos[j.id] === null
+                    ? t("Todavía sin puntos")
+                    : t("Rango global #{n}", { n: rangos[j.id]! })}
+              </Texto>
+              {!esperando && (
+                <>
+                  {virtual && (
+                    <Texto suave>
+                      {t("Apuesta de esta mano")}:{" "}
+                      {formatoNumero(j.apuesta_mano, preferencias.idioma)}
+                    </Texto>
+                  )}
+                  {dealer && !virtual && !finalizada && (
+                    <Boton
+                      titulo={t("Actualizar stack físico")}
+                      secundario
+                      onPress={() =>
+                        setEditando({
+                          id: j.id,
+                          nombre: j.nombre,
+                          monto: String(j.fichas),
+                        })
+                      }
+                    />
+                  )}
+                </>
+              )}
+            </Tarjeta>
+          </EntradaSuave>
         ))}
       </Seccion>
       {!esperando && (
@@ -742,7 +833,13 @@ export function Mesa({ codigo }: { codigo: string }) {
         onRequestClose={() => setEditando(null)}
       >
         <View style={estilos.fondo}>
-          <ScrollView contentContainerStyle={[estilos.modal, { backgroundColor: tema.fondo }]} keyboardShouldPersistTaps="handled">
+          <ScrollView
+            contentContainerStyle={[
+              estilos.modal,
+              { backgroundColor: tema.fondo },
+            ]}
+            keyboardShouldPersistTaps="handled"
+          >
             <Campo
               etiqueta={editando?.nombre ?? ""}
               keyboardType="number-pad"
