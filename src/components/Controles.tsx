@@ -90,7 +90,8 @@ export function Boton({
   icono?: NombreIcono;
 }) {
   const { tema } = useTema();
-  const tinta = secundario ? tema.texto : tema.textoAccion;
+  // Deshabilitado: contorno tenue y texto secundario (un relleno claro atenuado se veía gris barro).
+  const tinta = disabled ? tema.textoSecundario : secundario ? tema.texto : tema.textoAccion;
   return (
     <Pressable
       accessibilityRole="button"
@@ -102,9 +103,9 @@ export function Boton({
         estilos.boton,
         { minWidth: 0, flexShrink: 1 },
         {
-          backgroundColor: secundario ? "transparent" : tema.accionPrimaria,
-          borderColor: secundario ? tema.bordeControl : tema.accionPrimaria,
-          opacity: disabled ? 0.4 : pressed ? 0.8 : 1,
+          backgroundColor: secundario || disabled ? "transparent" : tema.accionPrimaria,
+          borderColor: disabled ? tema.borde : secundario ? tema.bordeControl : tema.accionPrimaria,
+          opacity: pressed ? 0.8 : 1,
         },
         compacto && { paddingHorizontal: 14, paddingVertical: 10 },
         style,

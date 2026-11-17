@@ -9,7 +9,7 @@ export function TitulosJugador({ fila, esMvp }: { fila: FilaRanking; esMvp: bool
   return <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 4 }}>
     {!!fila.titulo_personalizado && <Etiqueta>{fila.titulo_personalizado}</Etiqueta>}
     {titulosAutomaticos(fila, esMvp).map(id => <Etiqueta key={id} activa={id === "mvp"}>
-      {t(id === "mvp" ? "MVP" : id === "tiburon" ? "TIBURÓN" : "REY DEL PODIO")}
+      {t(id === "mvp" ? "MVP" : id === "tiburon" ? "Tiburón" : "Rey del podio")}
     </Etiqueta>)}
   </View>;
 }

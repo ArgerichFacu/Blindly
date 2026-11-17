@@ -16,7 +16,7 @@ export function ClasificacionTemporada({ranking,temporada,movimientos}:{ranking:
  return <>
   {temporada && <Texto suave>{t(temporada.estado==="activa"?"Temporada en curso":"Temporada finalizada")} · {fecha(temporada.inicio)}{temporada.fin?` — ${fecha(temporada.fin)}`:""}</Texto>}
   {destacado && <Tarjeta variante="hero" style={{borderColor:tema.acento,gap:10}}>
-   <Etiqueta>{t(datos.mvp?"MVP ACTUAL":"CAMPEÓN DE TEMPORADA")}</Etiqueta>
+   <Etiqueta>{t(datos.mvp?"MVP actual":"Campeón de temporada")}</Etiqueta>
    <View style={{flexDirection:"row",alignItems:"center",gap:14}}>
     <View style={{width:54,height:54,borderRadius:27,borderWidth:1,borderColor:velo(tema.acento,"70"),backgroundColor:velo(tema.acento,"12"),alignItems:"center",justifyContent:"center"}}><Texto style={{fontSize:25,fontWeight:"800",color:tema.acento}}>{destacado.nombre.trim().slice(0,1).toUpperCase()}</Texto></View>
     <Texto style={{flex:1,fontSize:28,fontWeight:"800",color:tema.acento}}>{destacado.nombre}</Texto>

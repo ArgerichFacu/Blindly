@@ -146,7 +146,7 @@ export function EvaluadorMano() {
   return (
     <>
       <Tarjeta>
-        <Etiqueta activa>{t("PROBÁ TU MANO · FREE")}</Etiqueta>
+        <Etiqueta activa>{t("Probá tu mano · Free")}</Etiqueta>
         <Texto suave>
           {t(
             "Elegí dos cartas propias y hasta cinco de la mesa. Tocá una carta para cambiarla.",
