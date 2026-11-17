@@ -3,6 +3,9 @@ import type { Configuracion } from "./mesa";
 import { asegurarSesion } from "./sesion";
 import { supabase } from "./supabase";
 import { identidadUsuario } from "./identidad";
+export type Calle = "preflop" | "flop" | "turn" | "river" | "reparto";
+// Nombre visible de cada calle (clave de textos.ts, con mayúscula inicial).
+export const NOMBRE_CALLE: Record<Calle, string> = { preflop: "Preflop", flop: "Flop", turn: "Turn", river: "River", reparto: "Reparto" };
 export type Sala = {
   id: string;
   codigo: string;
@@ -20,7 +23,7 @@ export type Sala = {
   bb_id: string | null;
   boton_id: string | null;
   turno_id: string | null;
-  calle: "preflop" | "flop" | "turn" | "river" | "reparto";
+  calle: Calle;
   apuesta_actual: number;
   subida_minima: number;
   ciega_mano: number;

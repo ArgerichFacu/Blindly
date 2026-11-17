@@ -31,6 +31,7 @@ import { usePreferencias } from "../lib/Preferencias";
 import { useTema } from "../lib/TemaContext";
 import { VELO_MODAL } from "../lib/temas";
 import { formatoNumero } from "../lib/numeros";
+import { NOMBRE_CALLE } from "../lib/salas";
 import { esMiJugador } from "../lib/identidad";
 import { estadoActual } from "../lib/niveles";
 import { ahoraServidor } from "../lib/tiempoServidor";
@@ -274,7 +275,7 @@ export function Mesa({ codigo }: { codigo: string }) {
                       )}
                 </Texto>
                 <Texto suave style={{ fontSize: 13 }}>
-                  {t(sala.calle)} · {t("Mano {n}", { n: sala.mano })}
+                  {t(NOMBRE_CALLE[sala.calle])} · {t("Mano {n}", { n: sala.mano })}
                 </Texto>
               </View>
               {virtual && yo && (
@@ -462,7 +463,7 @@ export function Mesa({ codigo }: { codigo: string }) {
           turno={sala.turno_id}
           posiciones={sala}
           pozo={!esperando && virtual ? sala.pozo : undefined}
-          calle={!esperando ? sala.calle : undefined}
+          calle={!esperando ? NOMBRE_CALLE[sala.calle] : undefined}
         />
       )}
       {!esperando && !finalizada && (
