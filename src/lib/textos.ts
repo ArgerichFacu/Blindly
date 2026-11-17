@@ -573,10 +573,10 @@ export const textos: Record<string, [string, string]> = {
   "Tus cartas": ["Your cards", "Suas cartas"],
   "Cartas de la mesa": ["Community cards", "Cartas da mesa"],
   "Elegí tus dos cartas": ["Choose your two cards", "Escolha suas duas cartas"],
-  "Las cinco cartas doradas forman tu mejor mano; los kickers también cuentan.":
+  "Las cinco cartas marcadas forman tu mejor mano; los kickers también cuentan.":
     [
-      "The five gold cards form your best hand; kickers count too.",
-      "As cinco cartas douradas formam sua melhor mão; os kickers também contam.",
+      "The five highlighted cards form your best hand; kickers count too.",
+      "As cinco cartas destacadas formam sua melhor mão; os kickers também contam.",
     ],
   "Resultado provisional. Necesitás al menos tres cartas de la mesa para formar una mano de cinco.":
     [
@@ -735,8 +735,8 @@ export const textos: Record<string, [string, string]> = {
     "Arrange players clockwise to match their seats.",
     "Ordene os jogadores no sentido horário, conforme seus assentos.",
   ],
-  Subir: ["Move up", "Mover para cima"],
-  Bajar: ["Move down", "Mover para baixo"],
+  "Mover arriba": ["Move up", "Mover para cima"],
+  "Mover abajo": ["Move down", "Mover para baixo"],
   "Configuración de partida": ["Game setup", "Configuração da partida"],
   "Valor de fichas": ["Chip values", "Valores das fichas"],
   "Modo de juego": ["Game format", "Modo de jogo"],

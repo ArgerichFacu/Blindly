@@ -483,10 +483,10 @@ export function Mesa({ codigo }: { codigo: string }) {
               {entrega.reparto.map((d) => (
                 <Texto key={d.valor}>
                   {t("{n} fichas de {valor}", {
-                    n: d.porJugador,
-                    valor: d.valor,
-                  })}{" "}
-                  · {t("Reserva")}: {d.reserva}
+                    n: formatoNumero(d.porJugador, preferencias.idioma),
+                    valor: formatoNumero(d.valor, preferencias.idioma),
+                  })}
+                  {d.reserva > 0 ? ` · ${t("Reserva")}: ${formatoNumero(d.reserva, preferencias.idioma)}` : ""}
                 </Texto>
               ))}
             </Tarjeta>
