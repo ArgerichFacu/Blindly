@@ -8,6 +8,6 @@ vm.runInNewContext(ts.transpileModule(fs.readFileSync('src/components/FeedClub.t
 function nodos(n){if(!n)return [];if(Array.isArray(n))return n.flatMap(nodos);if(typeof n!=='object')return [n];return [n,...nodos(n.props?.children)];}
 let ui=nodos(exportsModulo.FeedClub({}));assert.ok(ui.includes('La historia del club empieza con su primera partida terminada.'));
 ui=nodos(exportsModulo.FeedClub({eventos:[{id:'p',tipo:'partida',fecha:'2026-10-07T22:00:00Z',precision:'instante',codigo:'ABCDE',jugadores:3},{id:'s',tipo:'temporada',fecha:'2026-10-08',precision:'dia',nombre:'Octubre'},{id:'f',tipo:'fecha',fecha:'2026-10-08T12:00:00Z',precision:'instante',cuando:'2026-10-10T22:00:00Z'}]}));
-for(const texto of ['TORNEO TERMINADO','Terminó la partida ABCDE','3 jugadores','TEMPORADA CERRADA','Terminó Octubre','PRÓXIMA FECHA PROGRAMADA'])assert.ok(ui.includes(texto));
+for(const texto of ['Torneo terminado','Terminó la partida ABCDE','3 jugadores','Temporada cerrada','Terminó Octubre','Próxima fecha programada'])assert.ok(ui.includes(texto));
 assert.ok(ui.includes(new Date('2026-10-08T12:00:00').toLocaleDateString('es')),'Cierre sin hora inventada');
 console.log('Feed UI: vacío, torneos, cierre sin hora ficticia y próxima fecha OK');

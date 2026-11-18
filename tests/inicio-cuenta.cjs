@@ -28,6 +28,7 @@ function escenario(params={inicio:'1'}) {
     '../components/Controles':controls,'../components/LogoBlindly':{LogoBlindly:'Logo'},
     '../lib/Preferencias':{usePreferencias:()=>({t:key=>key,mensajeError:()=> 'error localizado'})},
     '../lib/PlusContext':{usePlus:()=>plusApi},
+    '../lib/TemaContext':{useTema:()=>({tema:{error:'#f00'}})},
     '../lib/InicioContext':{useInicio:()=>inicio},'../lib/identidad':identidad,
     '../lib/supabase':{supabase:{auth:{onAuthStateChange:cb=>{listeners.push(cb);return {data:{subscription:{unsubscribe(){}}}}}}}},
     '../lib/autenticacion':authApi,

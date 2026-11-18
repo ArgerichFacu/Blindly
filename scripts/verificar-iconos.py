@@ -6,10 +6,10 @@ from PIL import Image, ImageDraw
 from pathlib import Path
 import math
 ROOT = Path(__file__).resolve().parents[1]
-names = ["blindly-icon-foreground-v2.png", "blindly-icon-monochrome-v2.png"]
+names = ["blindly-adaptive-foreground.png", "blindly-adaptive-monocromo.png"]
 icons = []
 for name in names:
-    im = Image.open(ROOT / "assets/images" / name)
+    im = Image.open(ROOT / "assets/brand" / name)
     assert im.mode == "RGBA" and im.size == (1024, 1024)
     alpha = im.getchannel("A")
     visible = alpha.point(lambda x: 255 if x > 16 else 0)

@@ -4,6 +4,7 @@ import type { User } from "@supabase/supabase-js";
 import { View, type ScrollView } from "react-native";
 import { Pantalla, Texto, Tarjeta, Campo, Boton, Etiqueta } from "../components/Controles";
 import { LogoBlindly } from "../components/LogoBlindly";
+import { useTema } from "../lib/TemaContext";
 import { asegurarSesion, recuperarConClave, cuentaConClave, eliminarCuenta, PartidaActivaCuenta } from "../lib/sesion";
 import { identidadUsuario } from "../lib/identidad";
 import { registrarEmail, confirmarEmailPassword, entrarEmail, cerrarSesion, solicitarReset, guardarPassword, continuarGoogle, validarPassword, leerPendiente } from "../lib/autenticacion";
@@ -14,7 +15,7 @@ import { useInicio } from "../lib/InicioContext";
 import { nombreVisible } from "../lib/nombreVisible";
 type Modo = "login" | "registro" | "verificar" | "reset" | "password" | "cuenta" | "legacy";
 export default function Cuenta() {
-  const { t, mensajeError } = usePreferencias(), router = useRouter(), plus = usePlus(), inicio = useInicio();
+  const { t, mensajeError } = usePreferencias(), router = useRouter(), plus = usePlus(), inicio = useInicio(), { tema } = useTema();
   const { inicio: origen, volver, liga, codigo: codigoClub, nombre: nombreMesa, seccion, temporada, accion } = useLocalSearchParams<{ inicio?: string; volver?: string; liga?: string; codigo?: string; nombre?: string; seccion?: string; temporada?: string; accion?: string }>();
   const desdeInicio = origen === "1";
   const contextoAuth = useMemo(() => ({ inicio: origen, volver, liga, codigo: codigoClub, nombre: nombreMesa, seccion, temporada }), [origen, volver, liga, codigoClub, nombreMesa, seccion, temporada]);
@@ -153,7 +154,7 @@ export default function Cuenta() {
     {!!aviso && <Tarjeta><Texto accessibilityLiveRegion="polite">{t(aviso)}</Texto></Tarjeta>}
     {!usuario && !sesionCargada ? <Texto>{t("Cargando…")}</Texto> : <>
       {modo === "login" && <Tarjeta>
-        <View style={{ alignItems: "center", gap: 12 }}><LogoBlindly ancho={180}/><Etiqueta>{t("POKER ENTRE AMIGOS")}</Etiqueta></View>
+        <View style={{ alignItems: "center", gap: 12 }}><LogoBlindly ancho={180}/></View>
         <Boton titulo={t("Ingresar con Google")} disabled={ocupado} onPress={google}/>
         <Texto suave style={{ textAlign: "center" }}>{t("o")}</Texto>{campoEmail}{camposPassword}
         <Boton titulo={t(ocupado ? "Cargando…" : "Iniciar sesión")} disabled={ocupado || !email || !password} onPress={entrarConEmail}/>
@@ -181,7 +182,7 @@ export default function Cuenta() {
         <Tarjeta><Texto style={{fontSize:24,fontWeight:"700"}}>{nombreVisible(usuario) || t("Jugador")}</Texto>
           {!esLegacy && <Texto suave>{usuario.email}</Texto>}
           <Etiqueta activa>{t(googleConectado ? "Google conectado" : esLegacy ? "Cuenta legacy protegida" : "Email verificado")}</Etiqueta>
-          <Texto>{t(plus.activo?"PLUS ACTIVO":"Free")}</Texto>
+          <Texto>{t(plus.activo?"Plus activo":"Free")}</Texto>
           <Boton titulo={t("Editar nombre")} secundario disabled={ocupado} onPress={() => router.push("/mi-perfil")}/>
           {plus.gestionable && <Boton titulo={t("Administrar suscripción")} secundario disabled={ocupado} onPress={()=>void ejecutar(plus.gestionar)}/>}
           {esLegacy && <><Texto suave>{t("Protegé tu cuenta vinculando Google o email.")}</Texto><Boton titulo={t("Crear cuenta con email")} secundario disabled={ocupado} onPress={()=>cambiarModo("registro")}/></>}
@@ -200,7 +201,7 @@ export default function Cuenta() {
       {invitado && modo === "login" && <><Tarjeta><Texto suave>{t("Estás jugando como invitado. Guardá tu progreso cuando quieras.")}</Texto><Boton titulo={t("Jugar como invitado")} secundario disabled={ocupado} onPress={()=>void ejecutar(async()=>{ const u=await asegurarSesion(); setUsuario(u); if(await inicio.elegir("invitado",u.id)) { if (desdeInicio) router.dismissTo("/"); else regresar(); } })}/></Tarjeta><Boton titulo={t("Recuperar cuenta antigua")} secundario compacto disabled={ocupado} onPress={()=>cambiarModo("legacy")}/></>}
       {!invitado && desdeInicio && <Boton titulo={t("Continuar con esta cuenta")} disabled={ocupado||inicio.ocupado} onPress={()=>void ejecutar(async()=>{ if(usuario && await inicio.elegir("cuenta",usuario.id))router.dismissTo("/"); })}/>}
       {!invitado && !desdeInicio && <Boton titulo={t(volver?"Continuar con esta cuenta":"Volver al inicio")} secundario disabled={ocupado} onPress={regresar}/>}
-      {protegida && modo === "cuenta" && <Tarjeta style={{borderColor:"#B91C1C"}}><Texto style={{fontWeight:"700"}}>{t("Seguridad")}</Texto><Texto suave>{t("Elimina tu identidad, tus puntos y tu historial. No se puede deshacer.")}</Texto><Texto suave>{t("Eliminar tu cuenta no cancela tu suscripción de Apple o Google. Administrala antes de borrar la cuenta.")}</Texto>
+      {protegida && modo === "cuenta" && <Tarjeta style={{borderColor:tema.error}}><Texto style={{fontWeight:"700"}}>{t("Seguridad")}</Texto><Texto suave>{t("Elimina tu identidad, tus puntos y tu historial. No se puede deshacer.")}</Texto><Texto suave>{t("Eliminar tu cuenta no cancela tu suscripción de Apple o Google. Administrala antes de borrar la cuenta.")}</Texto>
         {confirmarBorrado ? <><Boton titulo={t("Eliminar definitivamente")} disabled={ocupado} onPress={()=>void ejecutar(async()=>{await eliminarCuenta();setUsuario(null);router.replace("/");})}/><Boton titulo={t("Cancelar")} secundario disabled={ocupado} onPress={()=>setConfirmarBorrado(false)}/></> : <Boton titulo={t("Eliminar mi cuenta")} secundario disabled={ocupado} onPress={()=>setConfirmarBorrado(true)}/>}</Tarjeta>}
     </>}
   </Pantalla>;

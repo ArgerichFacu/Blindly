@@ -21,7 +21,7 @@ export const textos: Record<string, [string, string]> = {
   "No hay sonidos con ese nombre.": ["No sounds match that name.", "Nenhum som corresponde a esse nome."],
   "Favoritos y personalización": ["Favorites and personalization", "Favoritos e personalização"],
   "Los sonidos oficiales y favoritos son gratis. Plus permite cambiar el orden y ocultar sonidos.": ["Official sounds and favorites are free. Plus lets you reorder and hide sounds.", "Os sons oficiais e favoritos são gratuitos. Plus permite reordenar e ocultar sons."],
-  "PLUS DEMO": ["PLUS DEMO", "PLUS DEMO"],
+  "Plus demo": ["Plus demo", "Plus demo"],
   "Probá los sonidos y temas de Plus.": ["Try Plus sounds and themes.", "Experimente os sons e temas do Plus."],
   "Los sonidos y la personalización se desbloquean en este dispositivo. Las funciones online requieren una cuenta con Plus verificado.": ["Sounds and personalization are unlocked on this device. Online features require an account with verified Plus access.", "Os sons e a personalização estão liberados neste dispositivo. Os recursos online exigem uma conta com Plus verificado."],
   "Versión de prueba, sin compras ni suscripciones.": ["Test version, without purchases or subscriptions.", "Versão de teste, sem compras ou assinaturas."],
@@ -63,18 +63,18 @@ export const textos: Record<string, [string, string]> = {
   "Carta al paño": ["Card on felt","Carta no feltro"],
   "Barajar": ["Shuffle","Embaralhar"],
   "Última ficha": ["Last chip","Última ficha"],
-  "TARJETA DE JUGADOR": ["PLAYER CARD","CARTÃO DE JOGADOR"],
+  "Tarjeta de jugador": ["Player card", "Cartão de jogador"],
   "Elegí el clima de tu mesa.": ["Set the mood for your table.", "Escolha o clima da sua mesa."],
   "Inicio": ["Home", "Início"],
   "Ligas": ["Leagues", "Ligas"],
   "Perfil": ["Profile", "Perfil"],
   "Config": ["Settings", "Config"],
-  "CUENTA": ["ACCOUNT", "CONTA"],
-  "EXPERIENCIA": ["EXPERIENCE", "EXPERIÊNCIA"],
-  "APRENDER": ["LEARN", "APRENDER"],
+  "Cuenta": ["Account", "Conta"],
+  "Experiencia": ["Experience", "Experiência"],
+  "Aprender": ["Learn", "Aprender"],
   "Una noche. Tu grupo. Que empiece la partida.": ["One night. Your friends. Let the game begin.", "Uma noite. Sua turma. Que comece o jogo."],
   "Unirme con código": ["Join with a code", "Entrar com código"],
-  "TU NOCHE DE POKER": ["YOUR POKER NIGHT", "SUA NOITE DE POKER"],
+  "Tu noche de poker": ["Your poker night", "Sua noite de poker"],
   "Todavía no tenés liga.": ["No league yet.", "Você ainda não tem uma liga."],
   "Convertí las noches de poker en una competencia.": ["Turn your poker nights into a competition.", "Transforme as noites de poker em uma competição."],
   "No pudimos actualizar tus ligas.": ["We couldn't refresh your leagues.", "Não foi possível atualizar suas ligas."],
@@ -103,7 +103,7 @@ export const textos: Record<string, [string, string]> = {
   "Volver a las más recientes": ["Back to the latest games", "Voltar às partidas mais recentes"],
   "Vibraciones de momentos importantes": ["Haptics for important moments", "Vibrações em momentos importantes"],
   "Una vibración breve al confirmar all-in, clubes, títulos y fechas. Podés desactivarla.": ["A brief vibration when confirming all-in, clubs, titles and game nights. You can turn it off.", "Uma vibração breve ao confirmar all-in, clubes, títulos e encontros. Você pode desativá-la."],
-  "GANADORES": ["WINNERS", "VENCEDORES"],
+  "Ganadores": ["Winners", "Vencedores"],
   "+{n} puntos": ["+{n} points", "+{n} pontos"],
   "Personalizar club": ["Customize club", "Personalizar clube"],
   "La identidad se conserva. Para editarla, el owner necesita Plus activo.": ["The identity is preserved. To edit it, the owner needs active Plus.", "A identidade é mantida. Para editá-la, o owner precisa do Plus ativo."],
@@ -122,7 +122,7 @@ export const textos: Record<string, [string, string]> = {
   "Liso": ["Plain", "Liso"],
   "Rayas": ["Stripes", "Listras"],
   "Elegí un color, emblema y fondo válidos para el club.": ["Choose a valid club color, emblem and background.", "Escolha uma cor, emblema e fundo válidos para o clube."],
-  "NUEVO MVP": ["NEW MVP", "NOVO MVP"],
+  "Nuevo MVP": ["New MVP", "Novo MVP"],
   "{nombre} tomó el MVP": ["{nombre} took the MVP", "{nombre} assumiu o MVP"],
   "Al guardar con avisos activados, te pediremos permiso en este dispositivo.": ["When saving with notifications enabled, we will ask for permission on this device.", "Ao salvar com avisos ativados, pediremos permissão neste dispositivo."],
   "Este dispositivo todavía no tiene notificaciones habilitadas.": ["Notifications are not enabled on this device yet.", "As notificações ainda não estão habilitadas neste dispositivo."],
@@ -149,14 +149,14 @@ export const textos: Record<string, [string, string]> = {
   "Actividad del club": ["Club activity", "Atividade do clube"],
   "Lo que pasó en esta temporada y la próxima fecha del club.": ["This season's events and the club's next game night.", "Os acontecimentos desta temporada e o próximo encontro do clube."],
   "La historia del club empieza con su primera partida terminada.": ["The club's story starts with its first completed game.", "A história do clube começa com sua primeira partida concluída."],
-  "TORNEO TERMINADO": ["TOURNAMENT COMPLETED", "TORNEIO CONCLUÍDO"],
-  "TEMPORADA CERRADA": ["SEASON CLOSED", "TEMPORADA ENCERRADA"],
-  "PRÓXIMA FECHA PROGRAMADA": ["NEXT GAME NIGHT SCHEDULED", "PRÓXIMO ENCONTRO AGENDADO"],
+  "Torneo terminado": ["Tournament completed", "Torneio concluído"],
+  "Temporada cerrada": ["Season closed", "Temporada encerrada"],
+  "Próxima fecha programada": ["Next game night scheduled", "Próximo encontro agendado"],
   "Terminó la partida {codigo}": ["Game {codigo} finished", "A partida {codigo} terminou"],
   "Terminó {nombre}": ["{nombre} finished", "{nombre} terminou"],
   "Mostrando los 20 eventos más recientes.": ["Showing the 20 most recent events.", "Mostrando os 20 eventos mais recentes."],
   "Rivalidades": ["Rivalries", "Rivalidades"],
-  "TU NÉMESIS": ["YOUR NEMESIS", "SUA NÊMESIS"],
+  "Tu némesis": ["Your nemesis", "Sua nêmesis"],
   "Compara posiciones finales de torneos de esta temporada. Requiere al menos 3 compartidos.": ["Compares final tournament positions this season. Requires at least 3 shared tournaments.", "Compara posições finais dos torneios desta temporada. Exige pelo menos 3 compartilhados."],
   "Entre tus balances desfavorables, es quien más veces terminó por encima de vos.": ["Among opponents with a winning record against you, this player finished ahead most often.", "Entre seus confrontos desfavoráveis, é quem mais vezes terminou à sua frente."],
   "Todavía faltan torneos compartidos para mostrar rivalidades.": ["More shared tournaments are needed to show rivalries.", "Ainda faltam torneios compartilhados para mostrar rivalidades."],
@@ -174,7 +174,7 @@ export const textos: Record<string, [string, string]> = {
   "Voy": ["I'm going", "Vou"],
   "No puedo": ["I can't make it", "Não posso"],
   "Pendiente": ["Pending", "Pendente"],
-  "Todavía no hay una próxima fecha. Organicen la siguiente noche de póker.": ["No upcoming date yet. Arrange your next poker night.", "Ainda não há um próximo encontro. Organizem a próxima noite de pôquer."],
+  "Todavía no hay una próxima fecha. Organicen la siguiente noche de poker.": ["No upcoming date yet. Arrange your next poker night.", "Ainda não há um próximo encontro. Organizem a próxima noite de pôquer."],
   "Reprogramar fecha": ["Reschedule", "Reagendar"],
   "Programar fecha": ["Schedule a game night", "Agendar encontro"],
   "Cancelar fecha": ["Cancel game night", "Cancelar encontro"],
@@ -198,8 +198,8 @@ export const textos: Record<string, [string, string]> = {
   "El título debe tener entre 2 y 24 caracteres, sin enlaces ni etiquetas.": ["Titles must have 2 to 24 characters, without links or markup.", "O título deve ter de 2 a 24 caracteres, sem links ou marcações."],
   "Blindly Plus es necesario para esta función premium.": ["Blindly Plus is required for this premium feature.", "Blindly Plus é necessário para esta função premium."],
   "MVP": ["MVP", "MVP"],
-  "TIBURÓN": ["SHARK", "TUBARÃO"],
-  "REY DEL PODIO": ["PODIUM KING", "REI DO PÓDIO"],
+  "Tiburón": ["Shark", "Tubarão"],
+  "Rey del podio": ["Podium king", "Rei do pódio"],
   "Títulos automáticos": ["Automatic titles", "Títulos automáticos"],
   "Méritos Free de esta temporada. Se recalculan con cada resultado.": ["Free achievements for this season. Recalculated with each result.", "Conquistas Free desta temporada. Recalculadas a cada resultado."],
   "MVP: puesto 1 de la temporada activa, con el mismo desempate del ranking.": ["MVP: first place in the active season, using the standings tiebreaker.", "MVP: primeiro lugar da temporada ativa, usando o desempate do ranking."],
@@ -207,8 +207,8 @@ export const textos: Record<string, [string, string]> = {
   "REY DEL PODIO: al menos 5 partidas y top 3 en el 80% o más.": ["PODIUM KING: at least 5 games and top 3 in 80% or more.", "REI DO PÓDIO: pelo menos 5 partidas e top 3 em 80% ou mais."],
   "Temporada en curso": ["Season in progress","Temporada em andamento"],
   "Temporada finalizada": ["Season completed","Temporada finalizada"],
-  "MVP ACTUAL": ["CURRENT MVP","MVP ATUAL"],
-  "CAMPEÓN DE TEMPORADA": ["SEASON CHAMPION","CAMPEÃO DA TEMPORADA"],
+  "MVP actual": ["Current MVP", "MVP atual"],
+  "Campeón de temporada": ["Season champion", "Campeão da temporada"],
   "{n} victorias": ["{n} wins","{n} vitórias"],
   "{n} puntos": ["{n} points","{n} pontos"],
   "El puesto 1 del ranking es el MVP. Cambia con los resultados.": ["The player ranked first is the MVP. It changes with results.","O primeiro colocado do ranking é o MVP. Ele muda com os resultados."],
@@ -216,7 +216,7 @@ export const textos: Record<string, [string, string]> = {
   "Subió {n} posiciones": ["Up {n} places","Subiu {n} posições"],
   "Bajó {n} posiciones": ["Down {n} places","Caiu {n} posições"],
   "Mantiene su posición": ["Position unchanged","Mantém sua posição"],
-  "RACE FOR MVP": ["RACE FOR MVP","DISPUTA PELO MVP"],
+  "Race for MVP": ["Race for MVP", "Disputa pelo MVP"],
   "A {n} puntos del líder": ["{n} points behind the leader","A {n} pontos do líder"],
   "Una partida puede cambiar el líder.": ["One game can change the leader.","Uma partida pode mudar o líder."],
   "Ranking en vivo": ["Live standings","Ranking ao vivo"],
@@ -294,7 +294,7 @@ export const textos: Record<string, [string, string]> = {
     "This member is no longer active in the club.",
     "Este membro não está mais ativo no clube.",
   ],
-  "Nuestro club de póker": ["Our poker club", "Nosso clube de pôquer"],
+  "Nuestro club de poker": ["Our poker club", "Nosso clube de pôquer"],
   "Un grupo, muchas temporadas. El historial se queda en el club.": [
     "One group, many seasons. The history stays with the club.",
     "Um grupo, muitas temporadas. O histórico fica no clube.",
@@ -449,7 +449,7 @@ export const textos: Record<string, [string, string]> = {
   ],
   "Probar mis cartas": ["Try my cards", "Testar minhas cartas"],
   "Explorar manos": ["Explore hands", "Explorar mãos"],
-  "Aprender póker": ["Learn poker", "Aprender poker"],
+  "Aprender poker": ["Learn poker", "Aprender poker"],
   "Reglas claras. Cartas reales.": [
     "Clear rules. Real cards.",
     "Regras claras. Cartas reais.",
@@ -458,7 +458,7 @@ export const textos: Record<string, [string, string]> = {
     "Try your cards and find the best five.",
     "Teste suas cartas e encontre as cinco melhores.",
   ],
-  "CÓMO SE JUEGA": ["HOW TO PLAY", "COMO JOGAR"],
+  "Cómo se juega": ["How to play", "Como jogar"],
   "Recibís dos cartas privadas. La mesa puede mostrar hasta cinco cartas compartidas. Gana la mejor mano de cinco, o el último jugador que no se retiró.":
     [
       "You get two private cards. The table can show up to five shared cards. The best five-card hand wins, or the last player who hasn't folded.",
@@ -504,7 +504,7 @@ export const textos: Record<string, [string, string]> = {
       "Fold: leave the hand. Chips already bet remain in the pot.",
       "Desistir (fold): saia da mão. As fichas já apostadas permanecem no pote.",
     ],
-  "EJEMPLO DE IGUALADA": ["CALL EXAMPLE", "EXEMPLO DE CALL"],
+  "Ejemplo de igualada": ["Call example", "Exemplo de call"],
   "La apuesta actual es 500 y ya pusiste 200. Igualar agrega 300; tu total en esa ronda queda en 500.":
     [
       "The current bet is 500 and you've already put in 200. Calling adds 300; your total for this round becomes 500.",
@@ -564,7 +564,7 @@ export const textos: Record<string, [string, string]> = {
     "Choose card {n} from {zona}",
     "Escolher carta {n} de {zona}",
   ],
-  "PROBÁ TU MANO · FREE": ["TRY YOUR HAND · FREE", "TESTE SUA MÃO · FREE"],
+  "Probá tu mano · Free": ["Try your hand · Free", "Teste sua mão · Free"],
   "Elegí dos cartas propias y hasta cinco de la mesa. Tocá una carta para cambiarla.":
     [
       "Choose two hole cards and up to five community cards. Tap a card to change it.",
@@ -573,10 +573,10 @@ export const textos: Record<string, [string, string]> = {
   "Tus cartas": ["Your cards", "Suas cartas"],
   "Cartas de la mesa": ["Community cards", "Cartas da mesa"],
   "Elegí tus dos cartas": ["Choose your two cards", "Escolha suas duas cartas"],
-  "Las cinco cartas doradas forman tu mejor mano; los kickers también cuentan.":
+  "Las cinco cartas marcadas forman tu mejor mano; los kickers también cuentan.":
     [
-      "The five gold cards form your best hand; kickers count too.",
-      "As cinco cartas douradas formam sua melhor mão; os kickers também contam.",
+      "The five highlighted cards form your best hand; kickers count too.",
+      "As cinco cartas destacadas formam sua melhor mão; os kickers também contam.",
     ],
   "Resultado provisional. Necesitás al menos tres cartas de la mesa para formar una mano de cinco.":
     [
@@ -735,8 +735,8 @@ export const textos: Record<string, [string, string]> = {
     "Arrange players clockwise to match their seats.",
     "Ordene os jogadores no sentido horário, conforme seus assentos.",
   ],
-  Subir: ["Move up", "Mover para cima"],
-  Bajar: ["Move down", "Mover para baixo"],
+  "Mover arriba": ["Move up", "Mover para cima"],
+  "Mover abajo": ["Move down", "Mover para baixo"],
   "Configuración de partida": ["Game setup", "Configuração da partida"],
   "Valor de fichas": ["Chip values", "Valores das fichas"],
   "Modo de juego": ["Game format", "Modo de jogo"],
@@ -790,6 +790,33 @@ export const textos: Record<string, [string, string]> = {
   "Editar niveles": ["Edit levels", "Editar níveis"],
   "Nivel {n}": ["Level {n}", "Nível {n}"],
   Ciegas: ["Blinds", "Blinds"],
+  Nivel: ["Level", "Nível"],
+  "Duración": ["Duration", "Duração"],
+  ante: ["ante", "ante"],
+  Recomendado: ["Recommended", "Recomendado"],
+  "Sigue": ["Next", "Próximo"],
+  "de {n}": ["of {n}", "de {n}"],
+  "Stack por jugador": ["Stack per player", "Stack por jogador"],
+  "Por jugador": ["Per player", "Por jogador"],
+  "Ficha": ["Chip", "Ficha"],
+  Host: ["Host", "Host"],
+  Verde: ["Green", "Verde"],
+  "Violeta realeza": ["Royal violet", "Violeta realeza"],
+  "Requiere Plus": ["Requires Plus", "Requer Plus"],
+  "Armá la partida o sumate a una": ["Start a game or join one", "Crie uma partida ou entre em uma"],
+  "Todos ven el mismo reloj, las mismas ciegas y los mismos stacks.": ["Everyone sees the same clock, the same blinds and the same stacks.", "Todos veem o mesmo relógio, os mesmos blinds e os mesmos stacks."],
+  "Escribí el código de la sala o escaneá su QR.": ["Type the room code or scan its QR.", "Digite o código da sala ou escaneie o QR."],
+  "Tus clubes": ["Your clubs", "Seus clubes"],
+  "Un club guarda los resultados de cada noche y arma el ranking de la temporada.": ["A club keeps every night's results and builds the season ranking.", "Um clube guarda os resultados de cada noite e monta o ranking da temporada."],
+  "Unirme a una liga": ["Join a league", "Entrar em uma liga"],
+  "El reloj y las cuentas de tu partida de poker.": ["The clock and the counting for your poker game.", "O relógio e as contas da sua partida de poker."],
+  "Práctica": ["Practice", "Prática"],
+  "Todavía sin puntos": ["No points yet", "Ainda sem pontos"],
+  "Sin anuncios y con más herramientas para tu grupo.": ["No ads and more tools for your group.", "Sem anúncios e com mais ferramentas para sua turma."],
+  "Más herramientas para tu grupo.": ["More tools for your group.", "Mais ferramentas para sua turma."],
+  "Qué incluye": ["What's included", "O que inclui"],
+  "no cuenta": ["doesn't count", "não conta"],
+  Mesa: ["Table", "Mesa"],
   Descanso: ["Break", "Intervalo"],
   "Fin de niveles": ["End of levels", "Fim dos níveis"],
   Pausar: ["Pause", "Pausar"],
@@ -797,6 +824,11 @@ export const textos: Record<string, [string, string]> = {
   Anterior: ["Previous", "Anterior"],
   Siguiente: ["Next", "Próximo"],
   "Mano {n}": ["Hand {n}", "Mão {n}"],
+  Preflop: ["Preflop", "Pré-flop"],
+  Flop: ["Flop", "Flop"],
+  Turn: ["Turn", "Turn"],
+  River: ["River", "River"],
+  Reparto: ["Payout", "Divisão do pote"],
   Pozo: ["Pot", "Pote"],
   "Apuesta de esta mano": ["Bet this hand", "Aposta desta mão"],
   Apostar: ["Bet", "Apostar"],
@@ -1041,7 +1073,6 @@ Object.assign(textos, {
       "Shared standings, points and results for your group. Guests play for free.",
       "Classificação, pontos e resultados compartilhados para seu grupo. Convidados jogam grátis.",
     ],
-  "+ Crear liga": ["+ Create league", "+ Criar liga"],
   "Crear mi liga con Plus": [
     "Create my league with Plus",
     "Criar minha liga com Plus",
@@ -1052,6 +1083,7 @@ Object.assign(textos, {
   ],
   "Sin temporada": ["No season", "Sem temporada"],
   "{n} miembros": ["{n} members", "{n} membros"],
+  "1 miembro": ["1 member", "1 membro"],
   "Última partida: {fecha}": ["Last game: {fecha}", "Última partida: {fecha}"],
   "Sin partidas finalizadas": [
     "No completed games",
@@ -1136,7 +1168,7 @@ Object.assign(textos, {
   "Crear temporada": ["Create season", "Criar temporada"],
   "Reactivar liga": ["Reactivate league", "Reativar liga"],
   "Archivar liga": ["Archive league", "Arquivar liga"],
-  "PARTIDA DE LIGA": ["LEAGUE GAME", "PARTIDA DE LIGA"],
+  "Partida de liga": ["League game", "Partida de liga"],
   "Temporada activa": ["Active season", "Temporada ativa"],
   "Al finalizar, los puntos se sumarán automáticamente al ranking de esta temporada.":
     [
@@ -1338,7 +1370,6 @@ Object.assign(errores, {
 });
 
 Object.assign(textos, {
-  "POKER ENTRE AMIGOS": ["POKER WITH FRIENDS", "POKER ENTRE AMIGOS"],
   "La mesa está lista.\nFaltan ustedes.": [
     "The table is ready.\nBring your friends.",
     "A mesa está pronta.\nSó faltam vocês.",
@@ -1446,12 +1477,12 @@ Object.assign(textos, {
     "Your guide to reading the table.",
     "Seu guia para entender a mesa.",
   ],
-  "DE MAYOR A MENOR": ["HIGHEST TO LOWEST", "DA MAIOR PARA A MENOR"],
+  "De mayor a menor": ["Highest to lowest", "Da maior para a menor"],
   "Diez manos, un vistazo. Tocá una combinación para ver cómo se desempata.": [
     "Ten hands at a glance. Tap a hand to see how ties are broken.",
     "Dez mãos em um olhar. Toque em uma combinação para ver o desempate.",
   ],
-  "LA MANO MÁS ALTA": ["THE HIGHEST HAND", "A MÃO MAIS ALTA"],
+  "La mano más alta": ["The highest hand", "A mão mais alta"],
   "Cómo se desempata": ["How ties are broken", "Como desempatar"],
   "Del 10 al as, todas del mismo palo.": [
     "Ten through ace, all of the same suit.",
@@ -1586,10 +1617,7 @@ Object.assign(textos, {
     "Your points, progress and rank.",
     "Seus pontos, progresso e posição.",
   ],
-  "SOLO VOS PODÉS VER TUS PUNTOS": [
-    "ONLY YOU CAN SEE YOUR POINTS",
-    "SÓ VOCÊ PODE VER SEUS PONTOS",
-  ],
+  "Solo vos podés ver tus puntos": ["Only you can see your points", "Só você pode ver seus pontos"],
   "Puntos acumulados": ["Total points", "Pontos acumulados"],
   "Sin rango": ["Unranked", "Sem classificação"],
   "Rango global #{n}": ["Global rank #{n}", "Posição global #{n}"],
@@ -1788,7 +1816,7 @@ Object.assign(textos, {
       "Blindly Plus expands customization and insights without removing essential features from the free version.",
       "Blindly Plus amplia a personalização e as análises sem remover recursos essenciais da versão gratuita.",
     ],
-  "PLUS ACTIVO": ["PLUS ACTIVE", "PLUS ATIVO"],
+  "Plus activo": ["Plus active", "Plus ativo"],
   "Tu mesa ya es Plus.": ["Your table is now Plus.", "Sua mesa agora é Plus."],
   "Las funciones Plus están habilitadas para esta cuenta.": [
     "Plus features are enabled for this account.",
@@ -2038,7 +2066,6 @@ Object.assign(textos, {
     "This is a reference: every player must join with the code or QR.",
     "Esta é uma referência: cada jogador deve entrar com o código ou QR.",
   ],
-  "MESA HABITUAL": ["REGULAR TABLE", "MESA HABITUAL"],
   "Mesa habitual": ["Regular table", "Mesa habitual"],
   "La sala se creará con la configuración guardada. Podrás ajustarla antes de iniciar.":
     [
@@ -2050,7 +2077,6 @@ Object.assign(textos, {
     "Compare results with people who shared your table.",
     "Compare resultados com quem compartilhou sua mesa.",
   ],
-  "BLINDLY PLUS": ["BLINDLY PLUS", "BLINDLY PLUS"],
   "Descubrí quién terminó más veces arriba, sus victorias y sus podios compartidos.":
     [
       "See who finished ahead more often, with shared wins and podiums.",
@@ -2142,7 +2168,7 @@ Object.assign(textos, {
     "{n} regular players",
     "{n} jogadores habituais",
   ],
-  "SOLO LECTURA": ["READ ONLY", "SOMENTE LEITURA"],
+  "Solo lectura": ["Read only", "Somente leitura"],
   "de stack": ["starting stack", "de stack"],
   "min por nivel": ["min per level", "min por nível"],
   "Crear partida": ["Create game", "Criar partida"],
@@ -2171,7 +2197,7 @@ Object.assign(textos, {
     "A night to remember.",
     "Uma noite para lembrar.",
   ],
-  GANADOR: ["WINNER", "VENCEDOR"],
+  "Ganador": ["Winner", "Vencedor"],
   "Tu resultado: puesto {p} · +{n} puntos": [
     "Your result: place {p} · +{n} points",
     "Seu resultado: posição {p} · +{n} pontos",
@@ -2182,8 +2208,8 @@ Object.assign(textos, {
     "O cartão para compartilhar é um recurso do Blindly Plus.",
   ],
   "Ver resumen de la partida": ["View game recap", "Ver resumo da partida"],
-  "NOCHE DE POKER": ["POKER NIGHT", "NOITE DE POKER"],
-  "JUGADO CON BLINDLY": ["PLAYED WITH BLINDLY", "JOGADO COM BLINDLY"],
+  "Noche de poker": ["Poker night", "Noite de poker"],
+  "Jugado con Blindly": ["Played with Blindly", "Jogado com Blindly"],
   "Partidas jugadas": ["Games played", "Partidas jogadas"],
   "Posición promedio": ["Average position", "Posição média"],
   "Mejor posición": ["Best position", "Melhor posição"],
@@ -2483,14 +2509,7 @@ Object.assign(textos, {
 });
 
 Object.assign(textos, {
-  "FOUNDER TRIAL ACTIVO": [
-    "FOUNDER TRIAL ACTIVE",
-    "FOUNDER TRIAL ATIVO"
-  ],
-  "FOUNDER TRIAL": [
-    "FOUNDER TRIAL",
-    "FOUNDER TRIAL"
-  ],
+  "Founder Trial activo": ["Founder Trial active", "Founder Trial ativo"],
   "PRÓXIMAMENTE": [
     "COMING SOON",
     "EM BREVE"
@@ -2535,10 +2554,7 @@ Object.assign(textos, {
     "Payments are not available yet. You can save your interest for launch.",
     "Os pagamentos ainda não estão disponíveis. Você pode registrar seu interesse para o lançamento."
   ],
-  "PRUEBA FOUNDER": [
-    "FOUNDER TRIAL",
-    "FOUNDER TRIAL"
-  ],
+  "Prueba Founder": ["Founder trial", "Founder trial"],
   "Vas a desbloquear Blindly Plus durante 72 horas.": [
     "You'll unlock Blindly Plus for 72 hours.",
     "Você vai desbloquear Blindly Plus por 72 horas."
@@ -2555,10 +2571,7 @@ Object.assign(textos, {
     "Start trial",
     "Começar experiência"
   ],
-  "PROBAR PLUS GRATIS · 3 DÍAS": [
-    "TRY PLUS FREE · 3 DAYS",
-    "EXPERIMENTAR PLUS GRÁTIS · 3 DIAS"
-  ],
+  "Probar Plus gratis por 3 días": ["Try Plus free for 3 days", "Testar o Plus grátis por 3 dias"],
   "Explorar funciones Plus": [
     "Explore Plus features",
     "Explorar recursos Plus"
@@ -2656,10 +2669,6 @@ Object.assign(textos, {
   "Protegé tu cuenta vinculando Google o email.": [
     "Protect your account by linking Google or email.",
     "Proteja sua conta vinculando Google ou email."
-  ],
-  "BLINDLY PLUS": [
-    "BLINDLY PLUS",
-    "BLINDLY PLUS"
   ],
   "La prueba es opcional: 72 horas, una vez por cuenta. Sin tarjeta ni cobro automático.": [
     "The trial is optional: 72 hours, once per account. No card or automatic charge.",

@@ -31,7 +31,7 @@ export function VolumenAudio({ canal, valor, atenuado, guardar }: { canal: strin
     })}
   </>;
   return <View style={{ gap: 3, opacity: atenuado ? 0.5 : 1 }}>
-    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}><Texto suave style={{ fontSize: 11 }}>{t("Volumen")}</Texto><Texto style={{ fontSize: 13, fontWeight: "700", color: tema.acento }}>{Math.round(actual * 100)}%</Texto></View>
+    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}><Texto suave style={{ fontSize: 12 }}>{t("Volumen")}</Texto><Texto style={{ fontSize: 13, fontWeight: "700", color: tema.acento }}>{Math.round(actual * 100)}%</Texto></View>
     {Platform.OS === "web" ? controlWeb() : <Slider accessibilityLabel={etiqueta} accessibilityValue={{ min: 0, max: 100, now: porcentaje, text: `${porcentaje}%` }} minimumValue={0} maximumValue={1} step={0.01} value={actual} minimumTrackTintColor={tema.acento} maximumTrackTintColor={tema.borde} thumbTintColor={tema.acento} onValueChange={setActual} onSlidingComplete={completar} style={{ width: "100%", height: 44 }}/>}
   </View>;
 }

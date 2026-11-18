@@ -61,7 +61,7 @@ export default function RecapPartida() {
         <>
           <TarjetaRecap ref={tarjeta} recap={recap} />
           <Tarjeta>
-            <Etiqueta>{t(ganadoresRecap(recap).length > 1 ? "GANADORES" : "GANADOR")}</Etiqueta>
+            <Etiqueta>{t(ganadoresRecap(recap).length > 1 ? "Ganadores" : "Ganador")}</Etiqueta>
             <Texto style={{ fontSize: 24, fontWeight: "900" }}>{ganadoresRecap(recap).map(r => r.nombre).join(" · ") || "—"}</Texto>
             {!!recap.nuevo_mvp && <Texto style={{ fontWeight: "800" }}>{t("{nombre} tomó el MVP", { nombre: recap.nuevo_mvp.nombre })}</Texto>}
             <Texto suave>

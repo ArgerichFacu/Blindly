@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal, ScrollView, View } from "react-native";
 import { Boton, Texto } from "./Controles";
 import { useTema } from "../lib/TemaContext";
+import { VELO_MODAL } from "../lib/temas";
 import { usePreferencias } from "../lib/Preferencias";
 type TurnoVirtual = {
   actual: number;
@@ -34,7 +35,7 @@ export function AyudaTurno({ virtual }: { virtual?: TurnoVirtual }) {
         <View
           style={{
             flex: 1,
-            backgroundColor: "rgba(0,0,0,0.7)",
+            backgroundColor: VELO_MODAL,
             justifyContent: "center",
             padding: 20,
           }}
@@ -47,7 +48,7 @@ export function AyudaTurno({ virtual }: { virtual?: TurnoVirtual }) {
               maxWidth: 540,
               alignSelf: "center",
               backgroundColor: tema.fondoTarjeta,
-              borderRadius: 20,
+              borderRadius: 12,
               padding: 18,
               gap: 12,
             }}

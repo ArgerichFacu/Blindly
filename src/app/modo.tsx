@@ -5,10 +5,10 @@ import {
   Pantalla,
   Boton,
   Texto,
-  Tarjeta,
   Acceso,
   Seccion,
 } from "../components/Controles";
+import { TablaNiveles } from "../components/TablaNiveles";
 import { useSala } from "../lib/useSala";
 import { useAccionMesa } from "../lib/useAccionMesa";
 import { usePreferencias } from "../lib/Preferencias";
@@ -74,17 +74,6 @@ export default function ModoJuego() {
   }
   return (
     <Pantalla titulo={t("Modo de juego")}>
-      <Texto>
-        {t("Recomendado: {modo}", {
-          modo: t(
-            recomendado === "deep"
-              ? "Deep stack"
-              : recomendado === "turbo"
-                ? "Turbo"
-                : "Regular",
-          ),
-        })}
-      </Texto>
       <Texto suave>
         {t(
           fichas?.tipo === "fisicas"
@@ -113,15 +102,16 @@ export default function ModoJuego() {
                   ? "Más fichas y tiempo para pensar."
                   : "Elegí tus propios niveles y descansos.",
           )}
-          simbolo={
+          icono={
             id === "turbo"
-              ? "↗"
+              ? "rayo"
               : id === "regular"
-                ? "♠"
+                ? "reloj"
                 : id === "deep"
-                  ? "◷"
-                  : "≡"
+                  ? "capas"
+                  : "lista"
           }
+          insignia={id === recomendado ? t("Recomendado") : undefined}
           activo={seleccion === id}
           onPress={() =>
             id === "personalizado" && !capacidadesPlus(plus).personalizar
@@ -139,20 +129,7 @@ export default function ModoJuego() {
       )}
       {niveles && (
         <Seccion titulo={t("Ver niveles")}>
-          <Tarjeta>
-            {niveles.map((n, i) => (
-              <Texto key={i}>
-                {n.esBreak
-                  ? t("Descanso")
-                  : t("Nivel {n}", {
-                      n: niveles.slice(0, i + 1).filter((x) => !x.esBreak)
-                        .length,
-                    })}
-                : {n.esBreak ? "" : `${n.smallBlind}/${n.bigBlind} · `}
-                {n.minutos} min
-              </Texto>
-            ))}
-          </Tarjeta>
+          <TablaNiveles niveles={niveles} />
         </Seccion>
       )}
       {!!(error || accion.error || mesa.error) && (

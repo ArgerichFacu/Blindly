@@ -5,7 +5,8 @@ const mocks = {
   'react/jsx-runtime': { jsx, jsxs: jsx }, react: {useState:v=>[v,()=>{}]},
   'react-native': { Text: 'Text',TextInput:'TextInput',Pressable:'Pressable',View:'View', StyleSheet: { create: x => x, flatten } },
   'react-native-safe-area-context': {}, './Superficie': {}, '../lib/visual': {RELIEVE:{},SALON:{},velo:c=>c}, '../lib/useVolver': {},
-  '../lib/TemaContext': { useTema: () => ({ tema: { textoFuerte: '#fff' } }) }, '../lib/Preferencias': {},
+  '../lib/TemaContext': { useTema: () => ({ tema: { texto: '#fff', textoFuerte: '#fff' } }) }, '../lib/Preferencias': {},
+  './Icono': { Icono: 'Icono' }, '../lib/tipografia': { estiloFuente: () => ({}) }, '../lib/temas': { RADIOS: { chico: 4, control: 8, panel: 12, pildora: 999 }, TACTIL_MINIMO: 48 },
 };
 const exportsTest = {};
 vm.runInNewContext(ts.transpileModule(fs.readFileSync('src/components/Controles.tsx', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX } }).outputText, { exports: exportsTest, require: k => { assert.ok(k in mocks, k); return mocks[k]; } });

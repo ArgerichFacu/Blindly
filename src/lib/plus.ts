@@ -135,42 +135,42 @@ export async function obtenerOfertaPlus() {
 
 export const BENEFICIOS_PLUS = [
   {
-    simbolo: "♧",
+    icono: "ligas",
     titulo: "Clubes propios ilimitados",
     detalle: "Creá y administrá todos tus clubes propios. Unirte y participar en clubes de otros sigue siendo Free.",
   },
   {
-    simbolo: "♛",
+    icono: "altavoz",
     titulo: "Personalizar botonera · Plus",
     detalle: "Elegí tus sonidos, marcá favoritos y cambiá el orden. Tus ajustes se conservan si vence Plus.",
   },
   {
-    simbolo: "◈",
+    icono: "estadisticas",
     titulo: "Estadísticas avanzadas",
     detalle: "Analizá resultados, evolución y rendimiento de tus partidas.",
   },
   {
-    simbolo: "♾",
+    icono: "historial",
     titulo: "Historial completo",
     detalle: "Revisá todas tus partidas y compará resultados entre amigos.",
   },
   {
-    simbolo: "♣",
+    icono: "mesa",
     titulo: "Mesas habituales",
     detalle: "Guardá la configuración de tu grupo y creá la próxima partida en segundos.",
   },
   {
-    simbolo: "◆",
+    icono: "paleta",
     titulo: "Temas y ambientaciones premium",
     detalle: "Personalizá la mesa, los sonidos y la experiencia del torneo.",
   },
   {
-    simbolo: "♜",
+    icono: "lista",
     titulo: "Estructura personalizada",
     detalle: "Creá tus propios niveles de ciegas y descansos para la mesa.",
   },
   {
-    simbolo: "↗",
+    icono: "compartir",
     titulo: "Recaps para compartir",
     detalle: "Convertí el resultado final en una tarjeta lista para tus redes.",
   },

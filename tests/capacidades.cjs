@@ -9,7 +9,7 @@ const info=(isActive,expirationDate)=>({entitlements:{active:{blindly_plus:{isAc
 assert.equal(tieneEntitlementPlus(info(true,null)),true);
 assert.equal(tieneEntitlementPlus(info(true,new Date(Date.now()+60000).toISOString())),true);
 for(const r of [null,info(false,null),info(true,'malformed'),info(true,new Date(Date.now()-1).toISOString())])assert.equal(tieneEntitlementPlus(r),false);
-const identidad=cargar('src/lib/identidadClub.ts');
+const identidad=cargar('src/lib/identidadClub.ts',{'./temas':cargar('src/lib/temas.ts')});
 assert.equal(identidad.identidadClubSegura({version:1,color:'__proto__',emblema:'picas',banner:'liso'}).color,'oro');
 const segura={version:1,color:'zafiro',emblema:'corazones',banner:'rayas'};
 assert.equal(identidad.identidadClubSegura(segura),segura);

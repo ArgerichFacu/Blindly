@@ -15,7 +15,7 @@ const mocks={
  './Controles':{Boton:'Boton',Texto:'Texto'}, './Icono':{Icono:'Icono'},
  '../lib/ligas':{obtenerInvitacionLiga:async(id,renovar)=>{consultas.push([id,renovar]);return {codigo,vence_en:'2026-12-01T00:00:00Z'};}},
  '../lib/invitaciones':{enlaceInvitacion:c=>`blindly://liga-unirse?codigo=${c}`},
- '../lib/TemaContext':{useTema:()=>({tema:{}})},
+ '../lib/TemaContext':{useTema:()=>({tema:{}})}, '../lib/temas':{VELO_MODAL:'#000000A6'},
  '../lib/Preferencias':{usePreferencias:()=>({t:(k,p)=>p?Object.entries(p).reduce((s,[k,v])=>s.replace(`{${k}}`,v),k):k,mensajeError:e=>e.message,preferencias:{idioma:'es'}})},
 };
 const exportsTest={};vm.runInNewContext(source,{exports:exportsTest,require:k=>{assert.ok(k in mocks,k);return mocks[k];}});

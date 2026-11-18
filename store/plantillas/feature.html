@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+/* Feature graphic 1024×500: sin imágenes de dispositivos, lo importante centrado y lejos de los bordes,
+   fondo de marca (no negro puro). Muestra el reloj de torneo, la idea de la identidad "Marcador". */
+{{FUENTES}}
+html, body { margin: 0; width: 1024px; height: 500px; overflow: hidden; background: {{T_mesa}}; }
+.wrap { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 0 84px; gap: 48px; }
+.izq { display: flex; flex-direction: column; gap: 26px; }
+.izq svg { width: 300px; height: auto; display: block; }
+p { margin: 0; color: {{T_texto}}; font-family: "BarlowCondensed-SemiBold", "Arial Narrow", sans-serif; font-size: 40px; line-height: 1.08; }
+.reloj { justify-self: end; display: flex; flex-direction: column; gap: 12px; }
+.nivel { color: {{T_texto}}; font-family: "BarlowCondensed-SemiBold", sans-serif; font-size: 30px; }
+.tiempo { color: {{T_texto}}; font-family: "BarlowCondensed-Bold", sans-serif; font-size: 168px; line-height: .9; font-variant-numeric: tabular-nums; }
+.barra { display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; width: 380px; }
+.barra i { height: 9px; border-radius: 2px; background: #0E151255; }
+.barra i.on { background: {{T_texto}}; } .barra i.ya { background: {{T_acento}}; }
+.ciegas { color: {{T_texto}}; font-family: "BarlowCondensed-SemiBold", sans-serif; font-size: 34px; }
+</style></head>
+<body>
+  <div class="wrap">
+    <div class="izq">{{WORDMARK}}<p>{{TEXTO}}</p></div>
+    <div class="reloj" aria-hidden="true">
+      <div class="nivel">4 / 12</div>
+      <div class="tiempo">12:45</div>
+      <div class="barra"><i class="on"></i><i class="on"></i><i class="on"></i><i class="ya"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="ciegas">100 / 200</div>
+    </div>
+  </div>
+</body></html>

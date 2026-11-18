@@ -1,6 +1,12 @@
 import { View, StyleSheet, Text } from "react-native";
 import { usePreferencias } from "../lib/Preferencias";
+import { NAIPE, RADIOS } from "../lib/temas";
+import { FUENTES } from "../lib/tipografia";
+import { Palo as DibujoPalo } from "./Icono";
 export type Palo = "♠" | "♥" | "♦" | "♣";
+
+// Naipe plano: papel y tinta fijos (una carta es igual en cualquier tema); el palo es un SVG propio.
+// resaltada=false se usa para las cartas que no cuentan: además de atenuarse, se marcan con texto.
 export function CartaPoker({
   valor,
   palo,
@@ -13,67 +19,35 @@ export function CartaPoker({
   compacta?: boolean;
 }) {
   const rojo = palo === "♥" || palo === "♦",
-    color = rojo ? "#B13646" : "#20362C";
+    color = rojo ? NAIPE.rojo : NAIPE.tinta;
   const { t } = usePreferencias();
+  const nombre = t("{valor} de {palo}", {
+    valor: t(valor === "A" ? "As" : valor === "K" ? "Rey" : valor === "Q" ? "Reina" : valor === "J" ? "Jota" : valor),
+    palo: t(palo === "♠" ? "picas" : palo === "♥" ? "corazones" : palo === "♦" ? "diamantes" : "tréboles"),
+  });
   return (
     <View
       accessible
-      accessibilityLabel={t("{valor} de {palo}", {
-        valor: t(
-          valor === "A"
-            ? "As"
-            : valor === "K"
-              ? "Rey"
-              : valor === "Q"
-                ? "Reina"
-                : valor === "J"
-                  ? "Jota"
-                  : valor,
-        ),
-        palo: t(
-          palo === "♠"
-            ? "picas"
-            : palo === "♥"
-              ? "corazones"
-              : palo === "♦"
-                ? "diamantes"
-                : "tréboles",
-        ),
-      })}
+      accessibilityLabel={resaltada ? nombre : `${nombre}, ${t("no cuenta")}`}
       style={[
         styles.carta,
         {
-          backgroundColor: resaltada ? "#F7F2E5" : "#CBD5CE",
-          borderColor: resaltada ? "#D8B768" : "#8B9C92",
-          transform: [{ translateY: resaltada ? -3 : 0 }],
+          backgroundColor: NAIPE.papel,
+          borderColor: resaltada ? NAIPE.tinta : NAIPE.borde,
+          borderWidth: resaltada ? 2 : 1,
+          opacity: resaltada ? 1 : 0.45,
         },
       ]}
     >
       <View style={styles.esquina}>
-        <Text
-          style={[
-            styles.valor,
-            { color },
-            compacta && { fontSize: 12, lineHeight: 14 },
-          ]}
-        >
-          {valor}
-        </Text>
-        {!compacta && <Text style={[styles.paloChico, { color }]}>{palo}</Text>}
+        <Text style={[styles.valor, { color }, compacta && { fontSize: 13, lineHeight: 15 }]}>{valor}</Text>
+        {!compacta && <DibujoPalo palo={palo} color={color} size={10} />}
       </View>
-      <Text
-        style={[
-          styles.centro,
-          { color },
-          compacta && { fontSize: 19, lineHeight: 22 },
-        ]}
-      >
-        {palo}
-      </Text>
+      <DibujoPalo palo={palo} color={color} size={compacta ? 18 : 24} />
       {!compacta && (
         <View style={[styles.esquina, styles.invertida]}>
           <Text style={[styles.valor, { color }]}>{valor}</Text>
-          <Text style={[styles.paloChico, { color }]}>{palo}</Text>
+          <DibujoPalo palo={palo} color={color} size={10} />
         </View>
       )}
     </View>
@@ -84,16 +58,12 @@ const styles = StyleSheet.create({
     flex: 1,
     maxWidth: 68,
     aspectRatio: 0.69,
-    borderRadius: 8,
-    borderWidth: 1.5,
+    borderRadius: RADIOS.control,
     alignItems: "center",
     justifyContent: "center",
-    boxShadow: "0 4px 8px rgba(0,0,0,0.18)",
   },
-  esquina: { position: "absolute", top: 4, left: 5, alignItems: "center" },
-  valor: { fontSize: 15, lineHeight: 16, fontWeight: "800" },
-  paloChico: { fontSize: 10, lineHeight: 11 },
-  centro: { fontSize: 25, lineHeight: 31 },
+  esquina: { position: "absolute", top: 4, left: 5, alignItems: "center", gap: 1 },
+  valor: { fontSize: 16, lineHeight: 17, fontFamily: FUENTES.condensada },
   invertida: {
     top: undefined,
     left: undefined,

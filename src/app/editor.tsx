@@ -22,6 +22,8 @@ import { usePreferencias } from "../lib/Preferencias";
 import { validarNiveles } from "../lib/mesa";
 import { usePlus } from "../lib/PlusContext";
 import { Boton, Pantalla, Texto } from "../components/Controles";
+import { FUENTES } from "../lib/tipografia";
+import { RADIOS, TACTIL_MINIMO } from "../lib/temas";
 import { useVolver } from "../lib/useVolver";
 
 type Fila = {
@@ -71,6 +73,7 @@ function Campo({
         {etiqueta}
       </Text>
       <TextInput
+        accessibilityLabel={etiqueta}
         style={[
           styles.input,
           {
@@ -179,7 +182,7 @@ export default function Editor() {
   return (
     <SafeAreaView style={[styles.contenedor, { backgroundColor: tema.fondo }]}>
       <View style={styles.encabezado}>
-        <Pressable accessibilityRole="button" accessibilityLabel={t("Cancelar")} onPress={volver}>
+        <Pressable accessibilityRole="button" accessibilityLabel={t("Cancelar")} onPress={volver} style={styles.accionEncabezado}>
           <Text style={[styles.cancelar, { color: tema.textoSuave }]}>
             {t("Cancelar")}
           </Text>
@@ -187,7 +190,7 @@ export default function Editor() {
         <Text style={[styles.titulo, { color: tema.textoFuerte }]}>
           {t("Mis niveles")}
         </Text>
-        <Pressable onPress={guardar}>
+        <Pressable accessibilityRole="button" accessibilityLabel={t("Guardar")} onPress={guardar} style={styles.accionEncabezado}>
           <Text style={[styles.guardar, { color: tema.acento }]}>
             {t("Guardar")}
           </Text>
@@ -213,7 +216,7 @@ export default function Editor() {
                     ? t("Descanso")
                     : t("Nivel {n}", { n: numeroNivel })}
                 </Text>
-                <Pressable onPress={() => borrar(f.id)}>
+                <Pressable accessibilityRole="button" accessibilityLabel={`${t("Borrar")} ${f.esBreak ? t("Descanso") : t("Nivel {n}", { n: numeroNivel })}`} onPress={() => borrar(f.id)} style={styles.accionEncabezado}>
                   <Text style={[styles.borrar, { color: tema.error }]}>
                     {t("Borrar")}
                   </Text>
@@ -229,7 +232,7 @@ export default function Editor() {
                       onChange={(t) => cambiar(f.id, { sb: t })}
                       colorEtiqueta={tema.textoSuave}
                       colorInput={tema.textoFuerte}
-                      colorBorde={tema.textoSuave}
+                      colorBorde={tema.bordeControl}
                       colorFondo={tema.fondo}
                     />
                     <Campo
@@ -238,7 +241,7 @@ export default function Editor() {
                       onChange={(t) => cambiar(f.id, { bb: t })}
                       colorEtiqueta={tema.textoSuave}
                       colorInput={tema.textoFuerte}
-                      colorBorde={tema.textoSuave}
+                      colorBorde={tema.bordeControl}
                       colorFondo={tema.fondo}
                     />
                   </>
@@ -249,7 +252,7 @@ export default function Editor() {
                   onChange={(t) => cambiar(f.id, { min: t })}
                   colorEtiqueta={tema.textoSuave}
                   colorInput={tema.textoFuerte}
-                  colorBorde={tema.textoSuave}
+                  colorBorde={tema.bordeControl}
                   colorFondo={tema.fondo}
                 />
               </View>
@@ -259,7 +262,9 @@ export default function Editor() {
 
         <View style={styles.agregar}>
           <Pressable
-            style={[styles.botonAgregar, { borderColor: tema.textoSuave }]}
+            accessibilityRole="button"
+            accessibilityLabel={t("+ Nivel")}
+            style={[styles.botonAgregar, { borderColor: tema.bordeControl }]}
             onPress={() => agregar(false)}
           >
             <Text style={[styles.textoAgregar, { color: tema.textoSuave }]}>
@@ -267,7 +272,9 @@ export default function Editor() {
             </Text>
           </Pressable>
           <Pressable
-            style={[styles.botonAgregar, { borderColor: tema.textoSuave }]}
+            accessibilityRole="button"
+            accessibilityLabel={t("+ Break")}
+            style={[styles.botonAgregar, { borderColor: tema.bordeControl }]}
             onPress={() => agregar(true)}
           >
             <Text style={[styles.textoAgregar, { color: tema.textoSuave }]}>
@@ -289,32 +296,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
   },
-  titulo: { fontSize: 20, fontWeight: "bold" },
-  cancelar: { fontSize: 17 },
-  guardar: { fontSize: 17, fontWeight: "bold" },
+  accionEncabezado: { minHeight: TACTIL_MINIMO, justifyContent: "center", paddingHorizontal: 4 },
+  titulo: { fontSize: 24, fontFamily: FUENTES.condensada },
+  cancelar: { fontSize: 17, fontFamily: FUENTES.regular },
+  guardar: { fontSize: 17, fontFamily: FUENTES.semi },
   lista: { padding: 16, gap: 12 },
-  fila: { borderRadius: 12, padding: 14, gap: 10 },
-  filaTitulo: { flexDirection: "row", justifyContent: "space-between" },
-  filaNombre: { fontSize: 16, fontWeight: "bold" },
-  borrar: { fontSize: 15 },
+  fila: { borderRadius: RADIOS.panel, padding: 14, gap: 10 },
+  filaTitulo: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  filaNombre: { fontSize: 18, fontFamily: FUENTES.condensada },
+  borrar: { fontSize: 15, fontFamily: FUENTES.media },
   campos: { flexDirection: "row", gap: 10 },
   campo: { flex: 1 },
-  etiquetaCampo: { fontSize: 13, marginBottom: 4 },
+  etiquetaCampo: { fontSize: 14, marginBottom: 4, fontFamily: FUENTES.media },
   input: {
-    borderRadius: 8,
+    borderRadius: RADIOS.control,
     borderWidth: 1,
-    paddingVertical: 8,
+    minHeight: TACTIL_MINIMO,
     paddingHorizontal: 12,
     fontSize: 18,
+    fontFamily: FUENTES.condensadaSemi,
   },
   agregar: { flexDirection: "row", gap: 12, marginTop: 4 },
   botonAgregar: {
     flex: 1,
     alignItems: "center",
-    paddingVertical: 14,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderStyle: "dashed",
+    justifyContent: "center",
+    minHeight: TACTIL_MINIMO,
+    borderRadius: RADIOS.control,
+    borderWidth: 1.5,
   },
-  textoAgregar: { fontSize: 17, fontWeight: "600" },
+  textoAgregar: { fontSize: 16, fontFamily: FUENTES.semi },
 });

@@ -1,0 +1,70 @@
+{
+  "$descripcion": "Capturas de la ficha de Google Play. Cada una sale de una captura real de la app (raw/<idioma>/<id>.png, 1080×2400 del teléfono). Orden: lo más diferencial primero. Títulos cortos, con un beneficio concreto y sin superlativos ni llamados a descargar (política de Play).",
+  "recorte": {
+    "arriba": 96,
+    "alto": 1900
+  },
+  "capturas": [
+    {
+      "id": "reloj",
+      "titulo": {
+        "es": "El mismo reloj en todos los celulares",
+        "en": "The same clock on every phone",
+        "pt": "O mesmo relógio em todos os celulares"
+      }
+    },
+    {
+      "id": "qr",
+      "titulo": {
+        "es": "Tus amigos se suman con un QR",
+        "en": "Friends join with a QR code",
+        "pt": "Seus amigos entram com um QR"
+      }
+    },
+    {
+      "id": "stacks",
+      "titulo": {
+        "es": "Los stacks de todos, a la vista",
+        "en": "Everyone's stack in plain sight",
+        "pt": "Os stacks de todos à vista"
+      }
+    },
+    {
+      "id": "fichas",
+      "titulo": {
+        "es": "Repartí las fichas sin hacer cuentas",
+        "en": "Split the chips without doing the math",
+        "pt": "Divida as fichas sem fazer contas"
+      }
+    },
+    {
+      "id": "niveles",
+      "titulo": {
+        "es": "Ciegas que suben solas, nivel por nivel",
+        "en": "Blinds that go up on their own",
+        "pt": "Blinds que sobem sozinhos, nível a nível"
+      }
+    },
+    {
+      "id": "temas",
+      "titulo": {
+        "es": "Más colores para tu mesa con Plus",
+        "en": "More table colors with Plus",
+        "pt": "Mais cores para sua mesa com o Plus"
+      }
+    },
+    {
+      "id": "manos",
+      "titulo": {
+        "es": "Aprendé qué mano gana",
+        "en": "Learn which hand wins",
+        "pt": "Aprenda qual mão ganha"
+      }
+    }
+  ],
+  "feature": {
+    "es": "El reloj y las cuentas de tu partida de poker",
+    "en": "The clock and the counting for your poker game",
+    "pt": "O relógio e as contas da sua partida de poker"
+  }
+}

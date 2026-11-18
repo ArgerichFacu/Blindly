@@ -9,7 +9,7 @@ export function RivalidadesClub({ datos, pique = false }: { datos?: DetalleLiga[
   return <>
     <Texto suave>{t("Compara posiciones finales de torneos de esta temporada. Requiere al menos 3 compartidos.")}</Texto>
     {datos?.nemesis && <Tarjeta style={{ borderColor: tema.acento }}>
-      <Etiqueta>{t("TU NÉMESIS")}</Etiqueta>
+      <Etiqueta>{t("Tu némesis")}</Etiqueta>
       <Texto style={{ fontSize: 24, fontWeight: "800" }}>{datos.nemesis.nombre}</Texto>
       <Texto>{t("{n} torneos juntos", { n: datos.nemesis.compartidas })}</Texto>
       <Texto>{t("Vos {vos} · Rival {rival} · Empates {empates}", { vos: datos.nemesis.victorias, rival: datos.nemesis.derrotas, empates: datos.nemesis.empates })}</Texto>

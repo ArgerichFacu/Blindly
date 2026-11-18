@@ -3,7 +3,7 @@ import { PasosTutorial } from "./TutorialInteractivo";
 import { useInicio } from "../lib/InicioContext";
 import { usePreferencias } from "../lib/Preferencias";
 
-import { Boton, Etiqueta, Pantalla, Tarjeta, Texto } from "./Controles";
+import { Boton, Pantalla, Tarjeta, Texto } from "./Controles";
 import { LogoBlindly } from "./LogoBlindly";
 
 
@@ -14,9 +14,10 @@ export function Introduccion({ acceso = false, usuarioId, errorSesion }: { acces
     { t } = usePreferencias(),
     router = useRouter();
   return (
-    <Pantalla titulo="blindly." volver={false}>
+    <Pantalla titulo="Blindly" volver={false} cabecera={false}>
       {!inicio.datos || !usuarioId ? (
         <Tarjeta>
+          <LogoBlindly ancho={140} />
           <Texto>
             {t(
               inicio.error
@@ -44,16 +45,14 @@ export function Introduccion({ acceso = false, usuarioId, errorSesion }: { acces
       ) : (
         <>
           <LogoBlindly ancho={200} />
-          <Etiqueta>{t("POKER ENTRE AMIGOS")}</Etiqueta>
           <Texto
             style={{
               fontSize: 36,
               lineHeight: 42,
               fontWeight: "700",
-              letterSpacing: -1,
             }}
           >
-            {t("Tu mesa.\nTu liga.\nTus rivalidades.")}
+            {t("El reloj y las cuentas de tu partida de poker.")}
           </Texto>
           <Texto suave>
             {t(

@@ -5,7 +5,8 @@ function modulo(file,deps={}) {const m={};vm.runInNewContext(ts.transpileModule(
 const ui=modulo('src/components/IdentidadClub.tsx',{
  'react':{useState:initial=>{const i=cursor++;if(!(i in estados))estados[i]=initial;return[estados[i],v=>estados[i]=v];},useRef:initial=>refs[rc++]??(refs[rc-1]={current:initial})},
  'react/jsx-runtime':{jsx,jsxs:jsx,Fragment:'fragment'},'react-native':{View:'view'},'./Controles':{Boton:'button',Texto:'text'},
- '../lib/identidadClub':modulo('src/lib/identidadClub.ts'),
+ '../lib/identidadClub':modulo('src/lib/identidadClub.ts',{'./temas':modulo('src/lib/temas.ts')}),
+ '../lib/TemaContext':{useTema:()=>({tema:{superficie:'#111'}})},'./Icono':{Palo:'Palo'},
  '../lib/Preferencias':{usePreferencias:()=>({t:s=>s,mensajeError:e=>e.message})},
  '../lib/ligas':{guardarIdentidadClub:()=>{llamadas++;return new Promise((res,rej)=>{finalizar=res;rechazar=rej;});}},
 });

@@ -146,7 +146,7 @@ export function EvaluadorMano() {
   return (
     <>
       <Tarjeta>
-        <Etiqueta activa>{t("PROBÁ TU MANO · FREE")}</Etiqueta>
+        <Etiqueta activa>{t("Probá tu mano · Free")}</Etiqueta>
         <Texto suave>
           {t(
             "Elegí dos cartas propias y hasta cinco de la mesa. Tocá una carta para cambiarla.",
@@ -171,7 +171,7 @@ export function EvaluadorMano() {
           <Texto suave>
             {t(
               resultado?.completa
-                ? "Las cinco cartas doradas forman tu mejor mano; los kickers también cuentan."
+                ? "Las cinco cartas marcadas forman tu mejor mano; los kickers también cuentan."
                 : "Resultado provisional. Necesitás al menos tres cartas de la mesa para formar una mano de cinco.",
             )}
           </Texto>
@@ -199,7 +199,7 @@ export function EvaluadorMano() {
                 onPress={() => setValor(v)}
                 style={{
                   width: 44,
-                  minHeight: 44,
+                  minHeight: 48,
                   borderRadius: 10,
                   borderWidth: 1,
                   borderColor: valor === v ? tema.acento : tema.borde,

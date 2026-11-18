@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+/* Captura de tienda 1080×1920 (9:16). Título ≤ 20 % del alto; la app real ocupa el resto.
+   Colores y tipografía de la marca (assets/brand/tokens.json, Barlow). */
+{{FUENTES}}
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: {{T_fondo}}; }
+.titulo { position: absolute; left: 72px; right: 72px; top: 96px; height: 300px; display: flex; flex-direction: column; justify-content: flex-start; gap: 22px; }
+.marca { height: 46px; width: auto; }
+.marca svg { height: 46px; width: auto; display: block; }
+h1 { margin: 0; color: {{T_texto}}; font-family: "BarlowCondensed-Bold", "Arial Narrow", sans-serif; font-weight: normal; font-size: 92px; line-height: 1.02; text-wrap: balance; }
+.telefono { position: absolute; left: 96px; right: 96px; top: 470px; height: 1560px; border-radius: 48px; overflow: hidden; border: 3px solid {{T_bordeControl}}; background: {{T_fondo}}; }
+.telefono img { position: absolute; left: 0; width: 100%; }
+</style></head>
+<body>
+  <div class="titulo">
+    <div class="marca">{{WORDMARK}}</div>
+    <h1>{{TITULO}}</h1>
+  </div>
+  <div class="telefono"><img id="c" src="{{CAPTURA}}" alt=""></div>
+  <script>
+    // Recorte: se saca la barra de estado del teléfono ({{RECORTE_ARRIBA}} px) y se muestra la app debajo.
+    const img = document.getElementById("c"), marco = document.querySelector(".telefono");
+    const escala = marco.clientWidth / 1080;
+    img.style.top = (-{{RECORTE_ARRIBA}} * escala) + "px";
+  </script>
+</body></html>

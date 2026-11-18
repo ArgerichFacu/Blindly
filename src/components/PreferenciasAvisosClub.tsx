@@ -42,7 +42,7 @@ export function PreferenciasAvisosClub({ liga, preferencias, alGuardar, actualiz
     {campos.map(([clave, etiqueta]) => <View key={clave} style={{ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 48 }}>
       <Texto style={{ flex: 1 }}>{t(etiqueta)}</Texto>
       <Switch accessibilityLabel={t(etiqueta)} value={borrador[clave]} disabled={ocupado || !preferencias}
-        onValueChange={valor => cambiar({ [clave]: valor })} trackColor={{ true: tema.acento }} />
+        onValueChange={valor => cambiar({ [clave]: valor })} trackColor={{ false: tema.bordeControl, true: tema.acento }} thumbColor={tema.texto} />
     </View>)}
     <Texto suave>{t("Modo pique cambia el tono, nunca los resultados. Desactivado, los mensajes son neutrales.")}</Texto>
     <Texto>{t("Avisos sociales por semana en este club")}</Texto>

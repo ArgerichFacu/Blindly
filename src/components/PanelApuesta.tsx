@@ -3,6 +3,7 @@ import { View, useWindowDimensions } from "react-native";
 import { Boton, Campo, Texto } from "./Controles";
 import { usePreferencias } from "../lib/Preferencias";
 import { AyudaTurno } from "./AyudaTurno";
+import { formatoNumero } from "../lib/numeros";
 export function PanelApuesta({
   faltan,
   stack,
@@ -87,7 +88,7 @@ export function PanelApuesta({
               ].map((n) => (
                 <Boton
                   key={n}
-                  titulo={n === max ? "All-in" : n.toLocaleString()}
+                  titulo={n === max ? "All-in" : formatoNumero(n, preferencias.idioma)}
                   compacto
                   secundario
                   style={{ flex: 1 }}

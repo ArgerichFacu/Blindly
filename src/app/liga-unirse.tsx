@@ -137,7 +137,7 @@ export default function UnirseClub() {
       {camara ? (
         <>
           <Texto>{t("Apuntá al QR de Blindly")}</Texto>
-          <View style={{ height: 280, overflow: "hidden", borderRadius: 16 }}>
+          <View style={{ height: 280, overflow: "hidden", borderRadius: 12 }}>
             <CameraView
               style={{ flex: 1 }}
               facing="back"

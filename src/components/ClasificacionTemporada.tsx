@@ -6,16 +6,17 @@ import { clasificacion } from "../lib/clasificacion";
 import type { FilaRanking,TemporadaLiga } from "../lib/ligas";
 import { TitulosJugador } from "./TitulosJugador";
 import { velo } from "../lib/visual";
+import { formatoNumero } from "../lib/numeros";
 export function ClasificacionTemporada({ranking,temporada,movimientos}:{ranking:FilaRanking[];temporada:TemporadaLiga|null;movimientos?:Record<string,number>}) {
  const {t,preferencias}=usePreferencias(),{tema}=useTema();
  const datos=clasificacion(ranking,temporada?.estado);
- const numero=(n:number)=>Number(n).toLocaleString(preferencias.idioma,{maximumFractionDigits:3});
+ const numero=(n:number)=>formatoNumero(Number(n),preferencias.idioma,3);
  const fecha=(s:string)=>new Date(`${s}T12:00:00`).toLocaleDateString(preferencias.idioma);
  const destacado=datos.mvp??datos.campeon;
  return <>
   {temporada && <Texto suave>{t(temporada.estado==="activa"?"Temporada en curso":"Temporada finalizada")} · {fecha(temporada.inicio)}{temporada.fin?` — ${fecha(temporada.fin)}`:""}</Texto>}
   {destacado && <Tarjeta variante="hero" style={{borderColor:tema.acento,gap:10}}>
-   <Etiqueta>{t(datos.mvp?"MVP ACTUAL":"CAMPEÓN DE TEMPORADA")}</Etiqueta>
+   <Etiqueta>{t(datos.mvp?"MVP actual":"Campeón de temporada")}</Etiqueta>
    <View style={{flexDirection:"row",alignItems:"center",gap:14}}>
     <View style={{width:54,height:54,borderRadius:27,borderWidth:1,borderColor:velo(tema.acento,"70"),backgroundColor:velo(tema.acento,"12"),alignItems:"center",justifyContent:"center"}}><Texto style={{fontSize:25,fontWeight:"800",color:tema.acento}}>{destacado.nombre.trim().slice(0,1).toUpperCase()}</Texto></View>
     <Texto style={{flex:1,fontSize:28,fontWeight:"800",color:tema.acento}}>{destacado.nombre}</Texto>
@@ -37,7 +38,7 @@ export function ClasificacionTemporada({ranking,temporada,movimientos}:{ranking:
    </Tarjeta>;
   })}</View>}
   {datos.mvp && datos.carrera.length>1 && <Tarjeta>
-   <Etiqueta>{t("RACE FOR MVP")}</Etiqueta>
+   <Etiqueta>{t("Race for MVP")}</Etiqueta>
    {datos.carrera.map(({fila,proporcion,diferencia})=><View key={fila.user_id} style={{gap:5}}>
     <Texto style={{fontWeight:"700"}}>{fila.nombre} · {t("{n} puntos",{n:numero(fila.puntos)})}</Texto>
     <View accessibilityRole="progressbar" accessibilityLabel={fila.nombre} accessibilityValue={{min:0,max:100,now:Math.round(proporcion*100),text:t("{n} puntos",{n:numero(fila.puntos)})}} style={{height:8,backgroundColor:tema.borde,borderRadius:4,overflow:"hidden"}}><View style={{height:8,width:`${proporcion*100}%`,backgroundColor:tema.acento}} /></View>

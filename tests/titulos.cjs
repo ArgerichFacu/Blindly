@@ -10,5 +10,5 @@ assert.deepEqual(titulos(10,4,7),[],'Se pierde al dejar de cumplir la regla');
 assert.deepEqual(titulos(0,0,0,true),['mvp'],'MVP lo autoriza únicamente la clasificación');
 for(const valores of [[NaN,3,4],[5,6,6],[5,4,3],[5,0,6],[-5,0,0],[5,2.5,4]])assert.deepEqual(titulos(...valores),[]);
 const texts=fs.readFileSync('src/lib/textos.ts','utf8');
-for(const titulo of ['MVP','TIBURÓN','REY DEL PODIO'])assert.ok(texts.includes(`"${titulo}":`));
+for(const titulo of ['MVP','Tiburón','Rey del podio'])assert.ok(texts.includes(`"${titulo}":`));
 console.log('Títulos Free: muestra mínima, umbrales, pérdida, coexistencia MVP y métricas inválidas OK');

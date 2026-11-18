@@ -1,6 +1,8 @@
-import { Acabado, Superficie } from "./Superficie";
-import { RELIEVE, SALON, velo } from "../lib/visual";
+import { Superficie } from "./Superficie";
+import { Icono, type NombreIcono } from "./Icono";
 import { useVolver } from "../lib/useVolver";
+import { estiloFuente } from "../lib/tipografia";
+import { RADIOS, TACTIL_MINIMO } from "../lib/temas";
 import { useState, type ReactNode, type RefObject } from "react";
 import {
   ScrollView,
@@ -21,6 +23,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTema } from "../lib/TemaContext";
 import { usePreferencias } from "../lib/Preferencias";
 
+// Identidad "Marcador": superficies planas, botón principal claro, sin degradés ni brillo.
+// Ver docs/brand/BRAND.md.
+
 export function Texto({
   children,
   suave = false,
@@ -29,6 +34,7 @@ export function Texto({
   numberOfLines,
   accessibilityLiveRegion,
   maxFontSizeMultiplier,
+  condensada,
 }: {
   children: ReactNode;
   suave?: boolean;
@@ -37,6 +43,7 @@ export function Texto({
   numberOfLines?: number;
   accessibilityLiveRegion?: "none" | "polite" | "assertive";
   maxFontSizeMultiplier?: number;
+  condensada?: boolean;
 }) {
   const { tema } = useTema();
   const personalizado = StyleSheet.flatten(style);
@@ -53,8 +60,9 @@ export function Texto({
       maxFontSizeMultiplier={maxFontSizeMultiplier}
       style={[
         estilos.texto,
-        { color: suave ? tema.textoSuave : tema.textoFuerte },
+        { color: suave ? tema.textoSecundario : tema.texto },
         style,
+        estiloFuente(personalizado, condensada),
         { lineHeight, includeFontPadding: true, flexShrink: 1, minWidth: 0 },
       ]}
     >
@@ -70,6 +78,7 @@ export function Boton({
   compacto = false,
   style,
   accesibilidad,
+  icono,
 }: {
   titulo: string;
   onPress: () => void;
@@ -78,8 +87,11 @@ export function Boton({
   compacto?: boolean;
   style?: StyleProp<ViewStyle>;
   accesibilidad?: string;
+  icono?: NombreIcono;
 }) {
   const { tema } = useTema();
+  // Deshabilitado: contorno tenue y texto secundario (un relleno claro atenuado se veía gris barro).
+  const tinta = disabled ? tema.textoSecundario : secundario ? tema.texto : tema.textoAccion;
   return (
     <Pressable
       accessibilityRole="button"
@@ -91,29 +103,16 @@ export function Boton({
         estilos.boton,
         { minWidth: 0, flexShrink: 1 },
         {
-          backgroundColor: secundario ? tema.fondoTarjeta : tema.acento,
-          borderColor: secundario ? tema.borde : SALON.oroLuz,
-          borderBottomWidth: 3,
-          borderBottomColor: secundario ? tema.fondo : SALON.oroSombra,
-          transform: [{ scale: pressed ? 0.985 : 1 }],
-          ...(!disabled && (secundario ? RELIEVE.bajo : RELIEVE.panel)),
-          opacity: disabled ? 0.42 : pressed ? 0.76 : 1,
+          backgroundColor: secundario || disabled ? "transparent" : tema.accionPrimaria,
+          borderColor: disabled ? tema.borde : secundario ? tema.bordeControl : tema.accionPrimaria,
+          opacity: pressed ? 0.8 : 1,
         },
-        compacto && {
-          paddingHorizontal: 12,
-          paddingVertical: 9,
-          minHeight: 44,
-        },
+        compacto && { paddingHorizontal: 14, paddingVertical: 10 },
         style,
       ]}
     >
-      <Acabado material={secundario ? "panel" : "oro"} radio={16} />
-      <Text
-        style={[
-          estilos.textoBoton,
-          { color: secundario ? tema.textoFuerte : tema.acentoTexto, flexShrink: 1, minWidth: 0, includeFontPadding: true },
-        ]}
-      >
+      {icono && <Icono nombre={icono} color={tinta} size={20} />}
+      <Text style={[estilos.textoBoton, estiloFuente({ fontSize: 16, fontWeight: "600" }), { color: tinta, flexShrink: 1, minWidth: 0, includeFontPadding: true }]}>
         {titulo}
       </Text>
     </Pressable>
@@ -127,13 +126,13 @@ export function Campo({
   const [focus, setFocus] = useState(false);
   return (
     <View style={estilos.campo}>
-      <Texto suave style={{ fontSize: 12, fontWeight: "600" }}>
+      <Texto suave style={{ fontSize: 14, fontWeight: "500" }}>
         {etiqueta}
       </Texto>
       <TextInput
         {...props}
         accessibilityLabel={etiqueta}
-        placeholderTextColor={tema.textoSuave}
+        placeholderTextColor={tema.textoSecundario}
         selectionColor={tema.acento}
         onFocus={(e) => {
           setFocus(true);
@@ -145,11 +144,13 @@ export function Campo({
         }}
         style={[
           estilos.input,
+          estiloFuente({ fontSize: 17 }),
           {
-            color: tema.textoFuerte,
-            borderColor: focus ? tema.acento : tema.borde,
-            backgroundColor: tema.fondo,
-            boxShadow: focus ? `0 0 0 3px ${velo(tema.acento, "18")}` : "inset 0 2px 4px rgba(0,0,0,0.18)",
+            color: tema.texto,
+            borderColor: focus ? tema.acento : tema.bordeControl,
+            borderWidth: focus ? 2 : 1,
+            padding: focus ? 12 : 13,
+            backgroundColor: tema.superficie,
           },
           props.style,
         ]}
@@ -168,6 +169,7 @@ export function Tarjeta({
 }) {
   return <Superficie variante={variante} style={style}>{children}</Superficie>;
 }
+// Píldora de estado ("Recomendado", "En turno", "Plus"). Sin mayúsculas decorativas.
 export function Etiqueta({
   children,
   activa = false,
@@ -180,21 +182,20 @@ export function Etiqueta({
     <View
       style={{
         alignSelf: "flex-start",
-        backgroundColor: activa ? tema.acento : velo(tema.acento, "0D"),
+        backgroundColor: activa ? tema.acento : "transparent",
         borderWidth: 1,
-        borderColor: velo(tema.acento, "22"),
-        borderRadius: 8,
-        paddingHorizontal: 9,
-        paddingVertical: 4,
+        borderColor: activa ? tema.acento : tema.bordeControl,
+        borderRadius: RADIOS.chico,
+        paddingHorizontal: 8,
+        paddingVertical: 2,
       }}
     >
       <Texto
         style={{
-          fontSize: 10,
-          lineHeight: 15,
-          fontWeight: "800",
-          letterSpacing: 0.8,
-          color: activa ? tema.acentoTexto : tema.textoSuave,
+          fontSize: 12,
+          lineHeight: 18,
+          fontWeight: "600",
+          color: activa ? tema.textoAccion : tema.textoSecundario,
         }}
       >
         {children}
@@ -205,54 +206,54 @@ export function Etiqueta({
 export function Acceso({
   titulo,
   detalle,
-  simbolo,
+  icono,
   onPress,
   activo = false,
   disabled = false,
+  insignia,
 }: {
   titulo: string;
   detalle: string;
-  simbolo?: string;
+  icono?: NombreIcono;
   onPress: () => void;
   activo?: boolean;
   disabled?: boolean;
+  insignia?: string;
 }) {
   const { tema } = useTema();
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={titulo}
+      accessibilityLabel={[titulo, insignia, detalle].filter(Boolean).join(". ")}
       accessibilityState={{ disabled, selected: activo }}
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [
         estilos.acceso,
         {
-          backgroundColor: tema.fondoTarjeta,
+          backgroundColor: tema.superficie,
           borderColor: activo ? tema.acento : tema.borde,
-          ...RELIEVE.bajo,
+          borderWidth: activo ? 2 : 1,
+          padding: activo ? 15 : 16,
           opacity: disabled ? 0.45 : pressed ? 0.8 : 1,
         },
       ]}
     >
-      {simbolo && (
-        <View style={[estilos.simbolo, { backgroundColor: tema.fondo }]}>
-          <Texto
-            style={{ color: tema.acento, fontSize: 22, fontWeight: "600" }}
-          >
-            {simbolo}
-          </Texto>
+      {icono && (
+        <View style={[estilos.simbolo, { backgroundColor: tema.superficieElevada }]}>
+          <Icono nombre={icono} color={activo ? tema.acento : tema.texto} size={22} />
         </View>
       )}
       <View style={{ flex: 1, gap: 4 }}>
-        <Texto style={{ fontSize: 16, fontWeight: "700" }}>{titulo}</Texto>
-        <Texto suave style={{ fontSize: 12, lineHeight: 18 }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
+          <Texto style={{ fontSize: 17, fontWeight: "600" }}>{titulo}</Texto>
+          {!!insignia && <Etiqueta activa>{insignia}</Etiqueta>}
+        </View>
+        <Texto suave style={{ fontSize: 14, lineHeight: 20 }}>
           {detalle}
         </Texto>
       </View>
-      <Texto style={{ color: tema.acento, fontSize: 22 }}>
-        {activo ? "✓" : "›"}
-      </Texto>
+      {activo ? <Icono nombre="check" color={tema.acento} size={22} /> : <Icono nombre="flecha" color={tema.textoSecundario} size={20} />}
     </Pressable>
   );
 }
@@ -272,8 +273,8 @@ export function Seccion({
       style={{
         gap: 12,
         borderTopWidth: 1,
-        borderColor: velo(tema.acento, "24"),
-        paddingTop: 10,
+        borderColor: tema.borde,
+        paddingTop: 8,
       }}
     >
       <Pressable
@@ -282,15 +283,17 @@ export function Seccion({
         accessibilityState={{ expanded: abierta }}
         onPress={() => setAbierta(!abierta)}
         style={{
-          minHeight: 48,
+          minHeight: TACTIL_MINIMO,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
           gap: 10,
         }}
       >
-        <Texto style={{ fontWeight: "600", flex: 1 }}>{titulo}</Texto>
-        <Texto suave>{abierta ? "−" : "+"}</Texto>
+        <Texto style={{ fontSize: 16, fontWeight: "600", flex: 1 }}>{titulo}</Texto>
+        <View style={{ transform: [{ rotate: abierta ? "-90deg" : "90deg" }] }}>
+          <Icono nombre="flecha" color={tema.textoSecundario} size={20} />
+        </View>
       </Pressable>
       {
         <View style={{ display: abierta ? "flex" : "none", gap: 12 }}>
@@ -306,25 +309,23 @@ export function Pasos({ actual }: { actual: number }) {
   return (
     <View style={{ flexDirection: "row", gap: 8, marginBottom: 4 }}>
       {["Invitar", "Asientos", "Preparar"].map((label, i) => (
-        <View key={label} style={{ flex: 1, gap: 7 }}>
+        <View key={label} style={{ flex: 1, gap: 6 }}>
           <View
             style={{
-              height: 3,
-              borderRadius: 3,
-              backgroundColor: i <= actual ? tema.acento : tema.borde,
+              height: 4,
+              borderRadius: 1,
+              backgroundColor: i < actual ? tema.texto : i === actual ? tema.acento : tema.borde,
             }}
           />
-          <Texto
-            suave
-            style={{
-              fontSize: 10,
-              lineHeight: 16,
-              fontWeight: i === actual ? "800" : "400",
-              color: i === actual ? tema.acento : tema.textoSuave,
-            }}
-          >
-            {i < actual ? "✓" : i + 1} {t(label)}
-          </Texto>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+            {i < actual && <Icono nombre="check" color={tema.textoSecundario} size={14} />}
+            <Texto
+              suave={i !== actual}
+              style={{ fontSize: 13, lineHeight: 18, fontWeight: i === actual ? "600" : "400" }}
+            >
+              {i < actual ? t(label) : `${i + 1} ${t(label)}`}
+            </Texto>
+          </View>
         </View>
       ))}
     </View>
@@ -359,7 +360,6 @@ export function Pantalla({
   const { fontScale } = useWindowDimensions();
   return (
     <SafeAreaView edges={enTabs ? ["top", "left", "right"] : ["top", "bottom", "left", "right"]} style={{ flex: 1, backgroundColor: tema.fondo }}>
-      <Acabado material="fondo" />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -375,30 +375,28 @@ export function Pantalla({
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={t("Volver")}
+                hitSlop={4}
                 onPress={onVolver ?? regresar}
-                style={[estilos.volver, RELIEVE.bajo, { borderColor: tema.borde, backgroundColor: tema.fondoTarjeta }]}
+                style={({ pressed }) => [estilos.volver, { borderColor: tema.bordeControl, opacity: pressed ? 0.7 : 1 }]}
               >
-                <Texto maxFontSizeMultiplier={1} style={{ fontSize: 22 }}>‹</Texto>
+                <Icono nombre="volver" color={tema.texto} size={22} />
               </Pressable>
             )}
-            <View style={{ flex: 1, gap: 3 }}>
-              <Texto style={[estilos.titulo, (titulo.length > 20 || fontScale > 1.4) && { fontSize: 23, lineHeight: 30 }]}>{titulo}</Texto>
+            <View style={{ flex: 1, gap: 2 }}>
+              <Texto style={[estilos.titulo, (titulo.length > 20 || fontScale > 1.4) && { fontSize: 24, lineHeight: 30 }]}>{titulo}</Texto>
               {!!subtitulo && (
-                <Texto suave style={{ fontSize: 13, lineHeight: 19 }}>
+                <Texto suave style={{ fontSize: 14, lineHeight: 20 }}>
                   {subtitulo}
                 </Texto>
               )}
             </View>
-            {volver && fontScale <= 1.4 && (
-              <Texto maxFontSizeMultiplier={1} style={{ color: tema.acento, fontSize: 22 }}>♠</Texto>
-            )}
           </View>}
           {children}
         </ScrollView>
         {!!pie && (
           <View
             style={{
-              backgroundColor: tema.fondoTarjeta,
+              backgroundColor: tema.superficie,
               maxHeight: "60%",
               borderTopWidth: 1,
               borderColor: tema.borde,
@@ -413,8 +411,8 @@ export function Pantalla({
 }
 const estilos = StyleSheet.create({
   pagina: {
-    padding: 20,
-    paddingBottom: 28,
+    padding: 16,
+    paddingBottom: 32,
     gap: 16,
     width: "100%",
     maxWidth: 620,
@@ -424,54 +422,52 @@ const estilos = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   volver: {
-    minHeight: 44,
-    width: 44,
+    minHeight: TACTIL_MINIMO,
+    width: TACTIL_MINIMO,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderRadius: 14,
+    borderRadius: RADIOS.control,
   },
   titulo: {
-    fontSize: 27,
-    lineHeight: 35,
+    fontSize: 30,
+    lineHeight: 36,
     fontWeight: "700",
-    letterSpacing: -0.6,
   },
   texto: { fontSize: 14, lineHeight: 21 },
-  textoBoton: { fontSize: 14, fontWeight: "700", textAlign: "center" },
+  textoBoton: { fontSize: 16, textAlign: "center" },
   boton: {
-    minHeight: 52,
+    minHeight: TACTIL_MINIMO,
+    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "center",
-    padding: 14,
-    borderRadius: 16,
-    borderWidth: 1,
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: RADIOS.control,
+    borderWidth: 1.5,
   },
-  campo: { gap: 7, flexGrow: 1, flexShrink: 1, minWidth: 0 },
+  campo: { gap: 6, flexGrow: 1, flexShrink: 1, minWidth: 0 },
   input: {
     fontSize: 17,
-    lineHeight: 26,
+    lineHeight: 24,
     minHeight: 52,
-    borderWidth: 1,
-    borderRadius: 13,
-    padding: 13,
+    borderRadius: RADIOS.control,
   },
-  tarjeta: { padding: 18, borderRadius: 20, gap: 12, borderWidth: 1 },
   acceso: {
     flexDirection: "row",
     alignItems: "center",
     gap: 14,
-    borderWidth: 1,
-    borderRadius: 20,
-    padding: 18,
-    minHeight: 90,
+    borderRadius: RADIOS.panel,
+    minHeight: 80,
   },
   simbolo: {
     height: 44,
     width: 44,
-    borderRadius: 14,
+    borderRadius: RADIOS.control,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -479,8 +475,8 @@ const estilos = StyleSheet.create({
     width: "100%",
     maxWidth: 620,
     alignSelf: "center",
-    paddingHorizontal: 18,
-    paddingVertical: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     gap: 12,
   },
 });

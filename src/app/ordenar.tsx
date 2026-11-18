@@ -63,13 +63,13 @@ export default function Ordenar() {
                   style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}
                 >
                   <Boton
-                    titulo={t("Subir")}
+                    titulo={t("Mover arriba")}
                     secundario
                     disabled={i === 0 || accion.ocupado}
                     onPress={() => mover(i, -1)}
                   />
                   <Boton
-                    titulo={t("Bajar")}
+                    titulo={t("Mover abajo")}
                     secundario
                     disabled={i === orden.length - 1 || accion.ocupado}
                     onPress={() => mover(i, 1)}
@@ -78,7 +78,8 @@ export default function Ordenar() {
                     titulo={t(
                       id === dealer ? "Dealer elegido" : "Elegir dealer",
                     )}
-                    secundario
+                    secundario={id !== dealer}
+                    icono={id === dealer ? "check" : undefined}
                     disabled={accion.ocupado}
                     onPress={() => setDealerElegido(id)}
                   />

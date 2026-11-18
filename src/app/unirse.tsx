@@ -95,7 +95,7 @@ export default function Unirse() {
       {camara ? (
         <>
           <Texto>{t("Apuntá al QR de Blindly")}</Texto>
-          <View style={{ height: 300, overflow: "hidden", borderRadius: 16 }}>
+          <View style={{ height: 300, overflow: "hidden", borderRadius: 12 }}>
             <CameraView
               style={{ flex: 1 }}
               facing="back"

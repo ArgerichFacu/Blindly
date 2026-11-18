@@ -1,16 +1,13 @@
 import { Text, View, StyleSheet, useWindowDimensions } from "react-native";
 import { Texto } from "./Controles";
 import { useTema } from "../lib/TemaContext";
+import { COLORES_ROL } from "../lib/temas";
+import { formatoNumero } from "../lib/numeros";
 import { usePreferencias } from "../lib/Preferencias";
 import { rolesMesa } from "../lib/mesa";
 import type { Jugador } from "../lib/jugadores";
 
-const fichasRol: Record<string, { fondo: string; texto: string }> = {
-  DR: { fondo: "#111827", texto: "#FFFFFF" },
-  BTN: { fondo: "#FBBF24", texto: "#422006" },
-  SB: { fondo: "#94A3B8", texto: "#0F172A" },
-  BB: { fondo: "#2563EB", texto: "#FFFFFF" },
-};
+const fichasRol: Record<string, { fondo: string; texto: string }> = COLORES_ROL;
 
 function FichasRol({ roles }: { roles: string }) {
   const lista = roles.split(" / ").filter(Boolean);
@@ -86,12 +83,12 @@ export function MesaAsientos({
   calle?: string;
 }) {
   const { tema } = useTema(),
-    { t } = usePreferencias(),
+    { t, preferencias } = usePreferencias(),
     roles = rolesMesa(jugadores, orden, dealer, boton, posiciones);
   const larga = orden.length > 6,
     alto = larga ? Math.ceil(orden.length / 2) * 76 + 12 : 292;
   const { fontScale, width } = useWindowDimensions();
-  const lista = fontScale > 1.3 || width < 360 || jugadores.some(j => j.fichas.toLocaleString().length > 6);
+  const lista = fontScale > 1.3 || width < 360 || jugadores.some(j => formatoNumero(j.fichas, preferencias.idioma).length > 6);
   return (
     <View style={[styles.marco, lista ? { width: "100%", gap: 24 } : { height: alto }]}>
       <View
@@ -102,15 +99,15 @@ export function MesaAsientos({
             backgroundColor: tema.pano,
             borderColor: tema.borde,
           },
-          lista && { position: "relative", left: 0, top: 0, width: "100%", height: undefined, minHeight: 120, padding: 20, borderRadius: 24 },
+          lista && { position: "relative", left: 0, top: 0, width: "100%", height: undefined, minHeight: 120, padding: 20, borderRadius: 12 },
         ]}
       >
         <View style={[styles.linea, { borderColor: tema.textoSuave + "30" }]} />
         <Texto
           suave
-          style={{ fontSize: 9, letterSpacing: 2, fontWeight: "700" }}
+          style={{ fontSize: 13, fontWeight: "500" }}
         >
-          {pozo === undefined ? "B L I N D L Y" : t("POZO TOTAL")}
+          {pozo === undefined ? t("Mesa") : t("Pozo")}
         </Texto>
         {pozo !== undefined && (
           <Texto
@@ -122,12 +119,10 @@ export function MesaAsientos({
               fontVariant: ["tabular-nums"],
             }}
           >
-            {pozo.toLocaleString()}
+            {formatoNumero(pozo, preferencias.idioma)}
           </Texto>
         )}
-        <Texto suave style={{ fontSize: 10, letterSpacing: 1 }}>
-          {calle ? t(calle).toUpperCase() : "♠  ♥  ♣  ♦"}
-        </Texto>
+        {!!calle && <Texto suave style={{ fontSize: 13 }}>{t(calle)}</Texto>}
       </View>
       {orden.map((id, i) => {
         const j = jugadores.find((j) => j.id === id);
@@ -159,13 +154,12 @@ export function MesaAsientos({
             <Texto
               numberOfLines={lista ? undefined : 1}
               style={{
-                fontSize: 11,
+                fontSize: 12,
                 lineHeight: 16,
                 fontWeight: "700",
                 color: activo ? tema.acentoTexto : tema.textoFuerte,
               }}
             >
-              {activo ? "▶ " : ""}
               {j?.nombre ?? i + 1}
             </Texto>
             {pozo !== undefined && (
@@ -198,7 +192,7 @@ export function MesaAsientos({
                     fontVariant: ["tabular-nums"],
                   }}
                 >
-                  {j?.fichas.toLocaleString()}
+                  {j ? formatoNumero(j.fichas, preferencias.idioma) : null}
                 </Texto>
               </View>
             )}
@@ -207,7 +201,6 @@ export function MesaAsientos({
               style={{
                 fontSize: 8,
                 lineHeight: 13,
-                letterSpacing: 0.1,
                 color: activo ? tema.acentoTexto : tema.textoSuave,
               }}
             >
@@ -247,11 +240,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000000",
-    shadowOpacity: 0.22,
-    shadowRadius: 2,
-    shadowOffset: { width: 0, height: 1 },
-    elevation: 3,
   },
   fichaInterior: {
     position: "absolute",

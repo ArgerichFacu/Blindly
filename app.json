@@ -4,7 +4,7 @@
     "slug": "blindly",
     "version": "1.39",
     "orientation": "portrait",
-    "icon": "./assets/images/blindly-app-icon.png",
+    "icon": "./assets/brand/blindly-icono-1024.png",
     "scheme": "blindly",
     "userInterfaceStyle": "dark",
     "ios": {
@@ -16,9 +16,9 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#0A1713",
-        "foregroundImage": "./assets/images/blindly-icon-foreground-v2.png",
-        "monochromeImage": "./assets/images/blindly-icon-monochrome-v2.png"
+        "backgroundColor": "#0E1512",
+        "foregroundImage": "./assets/brand/blindly-adaptive-foreground.png",
+        "monochromeImage": "./assets/brand/blindly-adaptive-monocromo.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.blindly.studio",
@@ -35,27 +35,27 @@
     },
     "web": {
       "output": "single",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/brand/blindly-icono-512.png"
     },
     "plugins": [
       [
         "expo-notifications",
         {
           "defaultChannel": "club",
-          "color": "#D5B768"
+          "color": "#5BD08A"
         }
       ],
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#0D1011",
-          "image": "./assets/images/blindly-logo.png",
-          "imageWidth": 360,
+          "backgroundColor": "#0E1512",
+          "image": "./assets/brand/blindly-splash.png",
+          "imageWidth": 200,
           "resizeMode": "contain",
           "dark": {
-            "backgroundColor": "#0D1011",
-            "image": "./assets/images/blindly-logo.png"
+            "backgroundColor": "#0E1512",
+            "image": "./assets/brand/blindly-splash.png"
           }
         }
       ],
@@ -76,6 +76,18 @@
           "recordAudioAndroid": false
         }
       ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Barlow-Regular.ttf",
+            "./assets/fonts/Barlow-Medium.ttf",
+            "./assets/fonts/Barlow-SemiBold.ttf",
+            "./assets/fonts/BarlowCondensed-SemiBold.ttf",
+            "./assets/fonts/BarlowCondensed-Bold.ttf"
+          ]
+        }
+      ],
       "expo-asset",
       "./plugins/with-revenuecat-android",
       "./plugins/with-android-page-sizes",
@@ -87,8 +99,8 @@
       "reactCompiler": true
     },
     "description": "Mesa de poker presencial con turnos, ciegas, fichas y puntuación sincronizados.",
-    "backgroundColor": "#0D1011",
-    "primaryColor": "#0A1713",
+    "backgroundColor": "#0E1512",
+    "primaryColor": "#0E1512",
     "githubUrl": "https://github.com/ArgerichFacu/Blindly",
     "extra": {
       "router": {},
